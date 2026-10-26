@@ -35,6 +35,9 @@ MODELS = [
     ("Kimi K3 (also judge)", "openrouter", "moonshotai/kimi-k3", "moonshotai/mxfp4"),
     ("Kimi K3.1 Pro", "openrouter", "moonshotai/kimi-k3.1-pro", "moonshotai/mxfp4"),
     ("DeepSeek V4.1 Flash 1017", "openrouter", "deepseek/deepseek-v4.1-flash-1017", "deepinfra/fp8"),
+    ("GLM-4.7", "bedrock", "zai.glm-4.7", None), ("GLM-5", "bedrock", "zai.glm-5", None),
+    ("GLM-5.1", "openrouter", "z-ai/glm-5.1", "z-ai/fp8"), ("GLM-5.2", "openrouter", "z-ai/glm-5.2", "z-ai/fp8"),
+    ("GLM-5.3 (also judge)", "bedrock", "global.zai.glm-5.3", None),
     ("Gemini 4 Argon (judge)", "openrouter", "google/gemini-4-argon", "google-vertex/global"),
     ("Qwen3.8 Max Prime (judge)", "openrouter", "qwen/qwen3.8-max-prime", "alibaba"),
 ]
@@ -79,7 +82,9 @@ def bedrock(model, level):
     cmd = ["aws", "bedrock-runtime", "converse", "--model-id", model, "--output", "json",
            "--messages", json.dumps([{"role": "user", "content": [{"text": PROMPT}]}]),
            "--inference-config", json.dumps({"maxTokens": 16000})]
-    if level and "opus-4-5" in model:  # no adaptive thinking on Opus 4.5; effort is a beta there
+    if level and model.startswith(("zai.", "global.zai.")):  # GLM on Bedrock: OpenAI-style reasoning_effort
+        cmd += ["--additional-model-request-fields", json.dumps({"reasoning_effort": level})]
+    elif level and "opus-4-5" in model:  # no adaptive thinking on Opus 4.5; effort is a beta there
         cmd += ["--additional-model-request-fields",
                 json.dumps({"anthropic_beta": ["effort-2025-11-24"], "output_config": {"effort": level},
                             "thinking": {"type": "enabled", "budget_tokens": 8000}})]
@@ -121,10 +126,11 @@ def run(m, level):
     return row
 
 
-jobs = [(m, lv) for m in MODELS for lv in LEVELS]
+only = sys.argv[2] if len(sys.argv) > 2 else ""  # optional: probe only models whose label contains this
+jobs = [(m, lv) for m in MODELS if only in m[0] for lv in LEVELS]
 with ThreadPoolExecutor(10) as ex:
     rows = list(ex.map(lambda j: run(*j), jobs))
-out = root / "data/reasoning-probe.csv"
+out = root / ("data/reasoning-probe.csv" if not only else f"data/reasoning-probe-{only.lower().replace(' ', '-')}.csv")
 with open(out, "w", newline="") as f:
     w = csv.DictWriter(f, fieldnames=list(rows[0]))
     w.writeheader()

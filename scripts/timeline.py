@@ -11,10 +11,10 @@ from pathlib import Path
 root = Path(sys.argv[1])
 rel = root / "data" / "releases"
 
-LABS = ["openai", "anthropic", "moonshot", "deepseek"]
-LAB_NAME = {"openai": "OpenAI", "anthropic": "Anthropic", "moonshot": "Moonshot (Kimi)", "deepseek": "DeepSeek"}
+LABS = ["openai", "anthropic", "moonshot", "deepseek", "glm"]
+LAB_NAME = {"openai": "OpenAI", "anthropic": "Anthropic", "moonshot": "Moonshot (Kimi)", "deepseek": "DeepSeek", "glm": "Z.ai (GLM)"}
 LINE_NAME = {"openai": "GPT main line (Sol from 5.6)", "anthropic": "Opus", "moonshot": "Kimi K",
-             "deepseek": "V3 line, then Flash"}
+             "deepseek": "V3 line, then Flash", "glm": "GLM"}
 
 # Main-line membership and short labels, by model name in the release files.
 MAIN = {
@@ -32,11 +32,12 @@ MAIN = {
                  "DeepSeek-V3.1-Terminus": "Term.", "DeepSeek-V3.2-Exp": "3.2-Exp", "DeepSeek-V3.2": "V3.2",
                  "DeepSeek-V4-Flash (Preview)": "V4-Flash", "DeepSeek-V4-Flash-0731": "0731",
                  "DeepSeek-V4.1-Flash": "V4.1-Flash", "DeepSeek-V4.1-Flash-1017": "1017"},
+    "glm": {"GLM-4.7": "4.7", "GLM-5": "5", "GLM-5.1": "5.1", "GLM-5.2": "5.2", "GLM-5.3": "5.3"},
 }
 # OpenRouter ids the release files left blank (the models are listed under these ids).
 OR_ID = {"Kimi K2 (Kimi-K2-Instruct, Kimi-K2-Base)": "moonshotai/kimi-k2", "Kimi-K2-Instruct-0905": "moonshotai/kimi-k2-0905",
          "DeepSeek-V3.1-Terminus": "deepseek/deepseek-v3.1-terminus", "DeepSeek-V3.2-Exp": "deepseek/deepseek-v3.2-exp"}
-FILE_LAB = {"openai": "openai", "anthropic": "anthropic", "kimi": "moonshot", "deepseek": "deepseek"}
+FILE_LAB = {"openai": "openai", "anthropic": "anthropic", "kimi": "moonshot", "deepseek": "deepseek", "glm": "glm"}
 PRE_LAB = {"gpt": "openai", "o3": "openai", "claude": "anthropic", "kimi": "moonshot", "deepseek": "deepseek"}
 SKIP = {"GPT-4o (alias gpt-4o)"}  # the same model as the GPT-4o 2024-05-13 row
 MIN_CONTEXT = 128_000  # an office week has to fit

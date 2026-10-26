@@ -11,7 +11,7 @@ from pathlib import Path
 root = Path(sys.argv[1])
 START, END, TODAY = dt.date(2026, 1, 1), dt.date(2026, 11, 10), dt.date(2026, 10, 25)
 LABS = [("openai", "OpenAI", "GPT, Sol from 5.6"), ("anthropic", "Anthropic", "Opus"),
-        ("moonshot", "Moonshot", "Kimi K"), ("deepseek", "DeepSeek", "Flash")]
+        ("moonshot", "Moonshot", "Kimi K"), ("deepseek", "DeepSeek", "Flash"), ("glm", "Z.ai", "GLM")]
 NAME = {"GPT-5.2 (Thinking)": "GPT-5.2", "GPT-5.4 (Thinking)": "GPT-5.4", "GPT-5.5 (Thinking)": "GPT-5.5",
         "DeepSeek-V3.2": "V3.2", "DeepSeek-V4-Flash (Preview)": "V4 Flash", "DeepSeek-V4-Flash-0731": "V4 Flash 0731",
         "DeepSeek-V4.1-Flash": "V4.1 Flash", "DeepSeek-V4.1-Flash-1017": "V4.1 Flash 1017"}

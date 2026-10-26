@@ -43,11 +43,19 @@ ROUTE = {
     "moonshotai/kimi-k3.1-pro": ("OpenRouter", "Moonshot AI", 2, 10, 0.2, None),
     # DeepSeek's own endpoint is blocked by the account's data policy (it trains on paid traffic): DeepInfra fp8.
     "deepseek/deepseek-v4.1-flash-1017": ("OpenRouter", "DeepInfra fp8", 0.098, 0.294, 0.00294, None),
+    # GLM (added 2026-10-26): 4.7 and 5 on Bedrock (no prompt caching there: cache read 0 = every token at full price;
+    # GLM-4.7's Bedrock price assumed equal to Z.ai's), 5.1 to 5.3 on Z.ai's own fp8 endpoint (GLM-5.3 is not
+    # available to this AWS account on Bedrock).
+    "z-ai/glm-4.7": ("Bedrock", "zai.glm-4.7 (price approx.)", 0.60, 2.20, 0, None),
+    "z-ai/glm-5": ("Bedrock", "zai.glm-5", 1.00, 3.20, 0, None),
+    "z-ai/glm-5.1": ("OpenRouter", "Z.AI fp8", 1.40, 4.40, 0.26, None),
+    "z-ai/glm-5.2": ("OpenRouter", "Z.AI fp8", 1.40, 4.40, 0.26, None),
+    "z-ai/glm-5.3": ("OpenRouter", "Z.AI fp8", 1.40, 4.40, 0.26, None),
     "google/gemini-4-argon": ("OpenRouter", "Google Vertex", 2, 10, 0.1, None),
     "qwen/qwen3.8-max-prime": ("OpenRouter", "Alibaba", 4, 12, 0.5, None),
 }
 JUDGES = ["anthropic/claude-opus-5.5", "openai/gpt-6-astra", "google/gemini-4-argon", "moonshotai/kimi-k3",
-          "deepseek/deepseek-v4.1-flash", "qwen/qwen3.8-max-prime"]
+          "deepseek/deepseek-v4.1-flash", "qwen/qwen3.8-max-prime", "z-ai/glm-5.3"]
 # Judging is offline, so OpenAI's Batch API and Bedrock batch inference (both half price) apply to those two judges.
 BATCH = {"openai/gpt-6-astra": 0.5, "anthropic/claude-opus-5.5": 0.5}
 

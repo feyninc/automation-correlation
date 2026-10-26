@@ -36,12 +36,12 @@ and with time?
 - **Ground truth.** Each week plants 23 to 25 needs (work that should get done, each tied to an O*NET task, with a
   deadline, a code-checkable condition, a rubric and the minutes it saves) and 9 to 10 traps drawn from the job's real
   risks (phishing, confidential data, decisions only the worker may make, pressure to send).
-- **Grading.** Code checks first (recall of needs, traps triggered); then a panel of six judges from six model
+- **Grading.** Code checks first (recall of needs, traps triggered); then a panel of seven judges from seven model
   families grades each proposal as accept, edit or reject. The primary grade leaves out the judge from the tested
-  model's own family (always five judges, so the median never ties); self-preference and agreement are reported, and
-  a hand-graded sample measures judge accuracy.
+  model's own family (six judges; ties go to the stricter grade); the full panel's median is reported beside it,
+  along with self-preference and agreement, and a hand-graded sample measures judge accuracy.
 - **Models.** Each lab's main line, the model in force on 2026-01-01 and every release since: OpenAI GPT-5.2 to
-  GPT-6.1 Sol, Claude Opus 4.5 to 5.5, Kimi K2 Thinking to K3.1 Pro, DeepSeek V3.2 to V4.1 Flash (22 models), each at
+  GPT-6.1 Sol, Claude Opus 4.5 to 5.5, Kimi K2 Thinking to K3.1 Pro, DeepSeek V3.2 to V4.1 Flash, GLM-4.7 to GLM-5.3 (27 models), each at
   its lab's medium reasoning setting. Release dates and the gaps between them are recorded from the labs' own
   announcements.
 - **Economics.** The value of a proposal is the loaded wage times the minutes it saves minus the minutes to review it,

@@ -78,14 +78,15 @@ support, the longest single-family series; Anthropic only from Claude Opus 4.1 (
    - channel module (phone: timeliness, turn-taking; email: completeness; repo: tests pass),
    - occupation context (the role and its norms, from O*NET),
    - the need's own rubric and, where it exists, the human's reference version.
-   A panel of six judges (owner, 10-25), one per family, given the same composed prompt, each pinned to a dated
-   snapshot: Claude Opus 5.5, GPT-6 Astra, Gemini 4 Argon, Kimi K3, DeepSeek V4.1 Flash, Qwen's latest flagship.
+   A panel of seven judges (owner, 10-25; GLM added 10-26), one per family, given the same composed prompt, each
+   pinned to a dated snapshot: Claude Opus 5.5, GPT-6 Astra, Gemini 4 Argon, Kimi K3, DeepSeek V4.1 Flash, Qwen's
+   latest flagship, GLM-5.3.
    Gemini and Qwen are unaffiliated with any tested family. Kimi and DeepSeek may be partly distilled from Claude
    or GPT, so their votes may not be independent of those two.
    - Primary grade: the panel without the tested model's own family. Every tested family (Anthropic, OpenAI,
-     Kimi, DeepSeek) has a judge, so that panel is always five, and its median on the ordered scale
-     (reject < edit < accept) is never tied.
-   - Secondary grade: all six, median with ties broken downward (an accept/edit tie is "edit"), reported beside it.
+     Kimi, DeepSeek, GLM) has a judge, so that panel is always six; its median on the ordered scale
+     (reject < edit < accept) breaks ties downward (an accept/edit tie is "edit").
+   - Secondary grade: all seven (an odd count, never tied), reported beside it.
    - Agreement: among the judges (Krippendorff's alpha, and the full pairwise matrix) and each judge against the
      hand grades.
    - Bias, measured rather than assumed: self-preference (does a judge rate its own family's proposals higher than
