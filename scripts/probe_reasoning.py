@@ -37,7 +37,7 @@ MODELS = [
     ("DeepSeek V4.1 Flash 1017", "openrouter", "deepseek/deepseek-v4.1-flash-1017", "deepinfra/fp8"),
     ("GLM-4.7", "bedrock", "zai.glm-4.7", None), ("GLM-5", "bedrock", "zai.glm-5", None),
     ("GLM-5.1", "openrouter", "z-ai/glm-5.1", "z-ai/fp8"), ("GLM-5.2", "openrouter", "z-ai/glm-5.2", "z-ai/fp8"),
-    ("GLM-5.3 (also judge)", "bedrock", "global.zai.glm-5.3", None),
+    ("GLM-5.3 (also judge)", "openrouter", "z-ai/glm-5.3", "z-ai/fp8"),
     ("Gemini 4 Argon (judge)", "openrouter", "google/gemini-4-argon", "google-vertex/global"),
     ("Qwen3.8 Max Prime (judge)", "openrouter", "qwen/qwen3.8-max-prime", "alibaba"),
 ]
