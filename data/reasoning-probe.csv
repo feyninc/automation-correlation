@@ -1,0 +1,107 @@
+model,route,level,ok,error,reasoning_tokens,output_tokens,reasoning_visible_chars,answer,provider,seconds
+GPT-5.2,openai,default,True,,0,44,0,"Overlaps: A–B, A–C, B–C; longest no-meeting stretch (9:00–14:00): 13:15–14:00 (45 min).",,2.8
+GPT-5.2,openai,low,True,,286,350,0,Overlaps: A–B (10:15–10:30) and B–C (10:45–11:00); longest no-meeting stretch between 9:00–14:00 is 13:15–14:00 (45 min).,,6.6
+GPT-5.2,openai,medium,True,,280,344,0,Overlaps: A–B (10:15–10:30) and B–C (10:45–11:00); longest no-meeting stretch between 9:00–14:00 is 13:15–14:00 (45 min).,,6.1
+GPT-5.2,openai,high,True,,239,303,0,Overlaps: A–B (10:15–10:30) and B–C (10:45–11:00); longest no-meeting stretch between 9:00–14:00 is 13:15–14:00 (45 min).,,5.7
+GPT-5.4,openai,default,True,,0,30,0,"Overlaps: A-B, B-C; longest no-meeting stretch: 13:15-14:00 (45 min).",,2.2
+GPT-5.4,openai,low,True,,133,182,0,Overlapping pairs: A–B and B–C; longest no-meeting stretch between 9:00 and 14:00 is 13:15–14:00 (45 minutes).,,4.0
+GPT-5.4,openai,medium,True,,225,274,0,Overlapping pairs: A–B and B–C; longest no-meeting stretch between 9:00 and 14:00 is 13:15–14:00 (45 minutes).,,4.7
+GPT-5.4,openai,high,True,,265,312,0,Overlapping pairs: A-B and B-C; longest no-meeting stretch between 9:00 and 14:00 is 13:15-14:00 (45 minutes).,,5.4
+GPT-5.5,openai,default,True,,202,255,0,"Overlapping pairs: A-B (10:15-10:30), B-C (10:45-11:00); longest no-meeting stretch: 13:15-14:00 (45 min).",,4.4
+GPT-5.5,openai,low,True,,139,178,0,"Overlapping pairs: A–B, B–C; longest no-meeting stretch: 13:15–14:00 (45 minutes).",,4.1
+GPT-5.5,openai,medium,True,,176,215,0,Overlapping pairs: A–B and B–C; longest no-meeting stretch: 13:15–14:00 (45 minutes).,,2.5
+GPT-5.5,openai,high,True,,211,250,0,Overlapping pairs: A–B and B–C; longest no-meeting stretch: 13:15–14:00 (45 minutes).,,3.4
+GPT-5.6 Sol,openai,default,True,,137,191,0,Overlaps: A–B (10:15–10:30) and B–C (10:45–11:00); longest meeting-free stretch: 13:15–14:00 (45 minutes).,,3.0
+GPT-5.6 Sol,openai,low,True,,117,171,0,Overlaps: A–B (10:15–10:30) and B–C (10:45–11:00); longest meeting-free stretch: 13:15–14:00 (45 minutes).,,2.4
+GPT-5.6 Sol,openai,medium,True,,121,159,0,Overlapping pairs: A–B and B–C; longest meeting-free stretch: 13:15–14:00 (45 minutes).,,2.9
+GPT-5.6 Sol,openai,high,True,,116,154,0,Overlapping pairs: A–B and B–C; longest meeting-free stretch: 13:15–14:00 (45 minutes).,,2.5
+GPT-6 Sol,openai,default,True,,61,100,0,Overlapping pairs: A–B and B–C. Longest meeting-free stretch: 13:15–14:00 (45 minutes).,,1.7
+GPT-6 Sol,openai,low,True,,54,90,0,A–B and B–C overlap; the longest meeting-free stretch is 13:15–14:00 (45 minutes).,,1.7
+GPT-6 Sol,openai,medium,True,,70,106,0,A–B and B–C overlap; the longest meeting-free stretch is 13:15–14:00 (45 minutes).,,1.8
+GPT-6 Sol,openai,high,True,,109,147,0,Overlapping pairs: A–B and B–C; longest meeting-free stretch: 13:15–14:00 (45 minutes).,,1.9
+GPT-6.1 Sol,openai,default,True,,33,87,0,"Overlapping pairs: A–B (10:15–10:30), B–C (10:45–11:00); longest meeting-free stretch: 13:15–14:00 (45 minutes).",,2.0
+GPT-6.1 Sol,openai,low,True,,23,61,0,Overlapping pairs: A–B and B–C; longest meeting-free stretch: 13:15–14:00 (45 minutes).,,2.0
+GPT-6.1 Sol,openai,medium,True,,33,71,0,Overlapping pairs: A–B and B–C; longest meeting-free stretch: 13:15–14:00 (45 minutes).,,2.5
+GPT-6.1 Sol,openai,high,True,,44,82,0,Overlapping pairs: A–B and B–C; longest meeting-free stretch: 13:15–14:00 (45 minutes).,,2.5
+GPT-6 Astra (judge),openai,default,True,,35,73,0,Overlapping pairs: A–B and B–C; longest meeting-free stretch: 13:15–14:00 (45 minutes).,,2.2
+GPT-6 Astra (judge),openai,low,True,,18,72,0,"Overlapping pairs: A–B (10:15–10:30), B–C (10:45–11:00); longest meeting-free stretch: 13:15–14:00 (45 minutes).",,2.2
+GPT-6 Astra (judge),openai,medium,True,,32,86,0,"Overlapping pairs: A–B (10:15–10:30), B–C (10:45–11:00); longest meeting-free stretch: 13:15–14:00 (45 minutes).",,2.1
+GPT-6 Astra (judge),openai,high,True,,58,96,0,Overlapping pairs: A–B and B–C; longest meeting-free stretch: 13:15–14:00 (45 minutes).,,2.0
+Opus 4.5,bedrock,default,True,,0,134,0,"Overlapping pairs: A&B (10:15-10:30), B&C (10:45-11:00), A&C (10:45-10:30, i.e., A ends at 10:30, C starts at 10:45 so no overlap); correct overlaps are **A&B, ",,4.3
+Opus 4.5,bedrock,low,False,aws: [ERROR]: An error occurred (ValidationException) when calling the Converse operation: The model returned the following errors: output_config.effort: Extra inputs are not permitted,,,,,,1.1
+Opus 4.5,bedrock,medium,False,aws: [ERROR]: An error occurred (ValidationException) when calling the Converse operation: The model returned the following errors: output_config.effort: Extra inputs are not permitted,,,,,,1.1
+Opus 4.5,bedrock,high,False,aws: [ERROR]: An error occurred (ValidationException) when calling the Converse operation: The model returned the following errors: output_config.effort: Extra inputs are not permitted,,,,,,4.4
+Opus 4.6,bedrock,default,True,,0,188,0,"**Overlapping pairs: A & B (10:15-10:30), B & C (10:45-11:00), A & C (10:45-10:30 — actually A ends at 10:30 and C starts at 10:45, so no overlap there).** Let ",,5.9
+Opus 4.6,bedrock,low,True,,0,199,0,"A&B (10:15-10:30), B&C (10:45-11:00), A&C (10:45-10:30… wait)
+
+Let me recheck:
+
+A: 9:00-10:30, B: 10:15-11:00, C: 10:45-12:00, D: 12:30-13:15.
+
+Overlapping pair",,6.4
+Opus 4.6,bedrock,medium,True,,present,439,631,"**Overlapping pairs:** A & B (10:15–10:30) and B & C (10:45–11:00). **Longest meeting-free stretch:** 13:15–14:00 (45 minutes), since A/B/C chain-cover 9:00–12:",,11.3
+Opus 4.6,bedrock,high,True,,present,469,619,"**Overlapping pairs: A & B (10:15-10:30) and B & C (10:45-11:00); the longest meeting-free stretch is 13:15-14:00 (45 minutes), since A-B-C chain covers 9:00-12",,9.3
+Opus 4.7,bedrock,default,True,,0,43,0,Overlaps: A&B (10:15–10:30); longest free stretch: 13:15–14:00 (45 min).,,4.1
+Opus 4.7,bedrock,low,True,,0,31,0,A&B overlap; longest free stretch 13:15–14:00 (45 min).,,4.0
+Opus 4.7,bedrock,medium,True,,0,46,0,"Overlapping pairs: A&B, B&C; longest meeting-free stretch: 13:15–14:00 (45 min).",,4.1
+Opus 4.7,bedrock,high,True,,0,55,0,"Overlaps: A&B (10:15–10:30), B&C (10:45–11:00); longest free stretch: 13:15–14:00 (45 min).",,4.0
+Opus 4.8,bedrock,default,True,,0,56,0,A&B (10:15–10:30) and B&C (10:45–11:00) overlap; longest meeting-free stretch is 13:15–14:00 (45 min).,,2.1
+Opus 4.8,bedrock,low,True,,present,242,0,Overlapping pairs: A&B (10:15–10:30) and B&C (10:45–11:00); the longest meeting-free stretch is 13:15–14:00 (45 minutes).,,4.7
+Opus 4.8,bedrock,medium,True,,present,231,0,Overlaps: A&B (10:15–10:30) and B&C (10:45–11:00); longest meeting-free stretch is 13:15–14:00 (45 minutes).,,5.4
+Opus 4.8,bedrock,high,True,,present,221,0,Overlapping pairs: A&B (10:15–10:30) and B&C (10:45–11:00); longest meeting-free stretch is 13:15–14:00 (45 minutes).,,5.3
+Opus 5,bedrock,default,True,,present,321,0,"Overlapping pairs: A–B (10:15–10:30) and B–C (10:45–11:00); the longest meeting-free stretch is 13:15–14:00 (45 minutes), since 9:00–12:00 is covered continuous",,6.9
+Opus 5,bedrock,low,True,,present,174,0,A–B (10:15–10:30) and B–C (10:45–11:00) overlap; the longest meeting‑free stretch is 13:15–14:00 (45 minutes).,,5.8
+Opus 5,bedrock,medium,True,,present,224,0,"A–B (10:15–10:30) and B–C (10:45–11:00) overlap; the longest meeting-free stretch is 13:15–14:00 (45 minutes), beating the 12:00–12:30 gap.",,4.9
+Opus 5,bedrock,high,True,,present,269,0,"Overlapping pairs: A–B (10:15–10:30) and B–C (10:45–11:00); the longest meeting-free stretch is 13:15–14:00 (45 minutes), beating the 12:00–12:30 gap.",,5.1
+Opus 5.5 (also judge),bedrock,default,True,,present,182,0,**Overlapping pairs:** A & B (10:15–10:30) and B & C (10:45–11:00). **Longest free stretch:** 13:15–14:00 (45 minutes).,,4.0
+Opus 5.5 (also judge),bedrock,low,True,,present,204,0,**Overlapping pairs:** A & B (10:15–10:30) and B & C (10:45–11:00); **longest meeting-free stretch:** 13:15–14:00 (45 minutes).,,4.4
+Opus 5.5 (also judge),bedrock,medium,True,,present,183,0,**Overlapping pairs:** A & B (10:15–10:30) and B & C (10:45–11:00). **Longest free stretch:** 13:15–14:00 (45 minutes).,,4.1
+Opus 5.5 (also judge),bedrock,high,True,,present,235,0,**Overlapping pairs:** A–B (10:15–10:30) and B–C (10:45–11:00). **Longest free stretch:** 13:15–14:00 (45 minutes).,,4.5
+DeepSeek V3.2,azure,default,True,,,29,0,"Overlapping pairs: (A,B), (B,C); longest free stretch: 12:00-12:30 (30 minutes).",,0.5
+DeepSeek V3.2,azure,low,True,,,2388,7314,Overlapping pairs: A-B and B-C; longest no-meeting stretch: 45 minutes (13:15-14:00).,,12.1
+DeepSeek V3.2,azure,medium,True,,,1724,5583,A-B and B-C overlap; longest gap: 45 minutes.,,10.5
+DeepSeek V3.2,azure,high,True,,,2181,6897,A-B and B-C overlap; longest free stretch: 45 minutes.,,12.6
+DeepSeek V4 Flash,azure,default,True,,,39,0,A overlaps with B and C; B overlaps with C; D has no overlap. The longest gap with no meeting is from 13:15 to 14:00 (45 minutes).,,0.9
+DeepSeek V4 Flash,azure,low,True,,,886,2524,"Overlapping pairs: A-B, B-C; longest gap: 45 minutes.",,27.1
+DeepSeek V4 Flash,azure,medium,True,,,968,2532,A-B and B-C overlap; longest stretch with no meeting is 45 minutes (13:15-14:00).,,6.6
+DeepSeek V4 Flash,azure,high,True,,,1269,3377,"Overlapping pairs: A and B, B and C; longest stretch with no meeting: 45 minutes from 13:15 to 14:00.",,5.9
+DeepSeek V4 Flash 0731,azure,default,True,,,30,0,"A-B, A-C, B-C overlap. Longest no-meeting stretch: 13:15–14:00 (45 min).",,0.8
+DeepSeek V4 Flash 0731,azure,low,True,,,1089,2670,Overlaps: A-B and B-C; longest no-meeting stretch is 45 minutes (13:15–14:00).,,3.8
+DeepSeek V4 Flash 0731,azure,medium,True,,,907,2303,Overlaps: A-B and B-C; longest gap is 13:15–14:00 (45 min).,,2.9
+DeepSeek V4 Flash 0731,azure,high,True,,,427,1000,Overlapping pairs: A–B and B–C; longest no-meeting stretch: 13:15–14:00 (45 min).,,1.8
+DeepSeek V4.1 Flash (also judge),azure,default,True,,,43,0,"Overlaps: A-B (10:15-10:30), B-C (10:45-11:00); longest free stretch: 13:15-14:00 (45 min).",,1.2
+DeepSeek V4.1 Flash (also judge),azure,low,True,,,375,825,Overlapping pairs: A–B and B–C; longest meeting-free stretch: 13:15–14:00 (45 min).,,1.9
+DeepSeek V4.1 Flash (also judge),azure,medium,True,,,403,960,Overlapping pairs: A–B and B–C; longest meeting-free stretch: 13:15–14:00 (45 min).,,2.8
+DeepSeek V4.1 Flash (also judge),azure,high,True,,,256,544,Overlaps: A–B and B–C; longest meeting-free stretch: 13:15–14:00 (45 min).,,2.0
+Kimi K2.5,azure,default,True,,,2197,5986,A-B and B-C overlap; the longest free stretch is 45 minutes from 13:15 to 14:00.,,13.1
+Kimi K2.5,azure,low,True,,,1861,4805,A-B and B-C overlap; longest gap is 45 minutes (13:15–14:00).,,7.8
+Kimi K2.5,azure,medium,True,,,2286,5738,A-B and B-C overlap; the longest stretch with no meeting is 13:15-14:00 (45 minutes).,,13.9
+Kimi K2.5,azure,high,True,,,2811,7251,A-B and B-C overlap; the longest stretch with no meeting is 13:15–14:00 (45 minutes).,,15.7
+Kimi K2.6,azure,default,True,,,2687,7858,Overlapping pairs: A-B and B-C; longest stretch with no meeting: 13:15–14:00 (45 minutes).,,16.3
+Kimi K2.6,azure,low,True,,,2419,6676,A-B and B-C overlap; the longest stretch with no meeting is 13:15–14:00 (45 minutes).,,15.6
+Kimi K2.6,azure,medium,True,,,1011,2660,Overlapping pairs: A–B and B–C; longest free stretch: 13:15–14:00 (45 minutes).,,3.5
+Kimi K2.6,azure,high,True,,,1462,3851,A-B and B-C overlap; the longest stretch with no meeting is 45 minutes from 13:15 to 14:00.,,8.1
+Kimi K2 Thinking,openrouter,default,True,,2907,2932,8117,A-B and B-C overlap; longest gap is 45 minutes from 13:15 to 14:00.,Novita,59.7
+Kimi K2 Thinking,openrouter,low,True,,4236,4262,11932,A-B and B-C overlap; longest stretch with no meeting is 45 minutes (13:15–14:00).,Novita,86.3
+Kimi K2 Thinking,openrouter,medium,True,,628,658,1723,Overlapping pairs: A-B and B-C; longest stretch with no meeting is 13:15–14:00 (45 minutes).,Novita,8.3
+Kimi K2 Thinking,openrouter,high,True,,2682,2705,7394,A-B and B-C overlap; longest gap is 13:15-14:00 (45 minutes).,Novita,59.1
+Kimi K3 (also judge),openrouter,default,True,,295,338,607,Overlapping pairs: A–B and B–C; longest free stretch is 13:15–14:00 (45 minutes).,Moonshot AI,7.6
+Kimi K3 (also judge),openrouter,low,True,,204,248,417,Overlapping pairs: A–B and B–C; longest meeting-free stretch is 13:15–14:00 (45 min).,Moonshot AI,6.0
+Kimi K3 (also judge),openrouter,medium,True,,308,351,703,Overlapping pairs: A–B and B–C; longest free stretch is 13:15–14:00 (45 min).,Moonshot AI,6.8
+Kimi K3 (also judge),openrouter,high,True,,328,387,764,Overlapping pairs: A–B (10:15–10:30) and B–C (10:45–11:00); longest gap is 13:15–14:00 (45 min).,Moonshot AI,8.3
+Kimi K3.1 Pro,openrouter,default,True,,277,321,706,Overlapping pairs: A–B and B–C; longest meeting-free stretch: 13:15–14:00 (45 minutes).,Moonshot AI,7.2
+Kimi K3.1 Pro,openrouter,low,True,,214,275,545,Overlapping pairs: A–B (10:15–10:30) and B–C (10:45–11:00); longest meeting-free stretch: 13:15–14:00 (45 minutes).,Moonshot AI,5.7
+Kimi K3.1 Pro,openrouter,medium,True,,203,247,525,Overlapping pairs: A–B and B–C; longest meeting-free stretch: 13:15–14:00 (45 minutes).,Moonshot AI,6.7
+Kimi K3.1 Pro,openrouter,high,True,,151,212,300,Overlapping pairs: A–B (10:15–10:30) and B–C (10:45–11:00); longest meeting-free stretch: 13:15–14:00 (45 minutes).,Moonshot AI,6.7
+DeepSeek V4.1 Flash 1017,openrouter,default,False,"HTTP 404: {""error"":{""message"":""No endpoints found for deepseek/deepseek-v4.1-flash-1017. Every candidate endpoint was removed during routing: Filter by Tier Endpoint Rows removed deepinfra/fp8/flex (Excluded tier endpoint rows the request did not opt into); Filter by Guardrails removed deepseek (Paid model tr",,,,,,0.1
+DeepSeek V4.1 Flash 1017,openrouter,low,False,"HTTP 404: {""error"":{""message"":""No endpoints found for deepseek/deepseek-v4.1-flash-1017. Every candidate endpoint was removed during routing: Filter by Tier Endpoint Rows removed deepinfra/fp8/flex (Excluded tier endpoint rows the request did not opt into); Filter by Guardrails removed deepseek (Paid model tr",,,,,,0.0
+DeepSeek V4.1 Flash 1017,openrouter,medium,False,"HTTP 404: {""error"":{""message"":""No endpoints found for deepseek/deepseek-v4.1-flash-1017. Every candidate endpoint was removed during routing: Filter by Tier Endpoint Rows removed deepinfra/fp8/flex (Excluded tier endpoint rows the request did not opt into); Filter by Guardrails removed deepseek (Paid model tr",,,,,,0.1
+DeepSeek V4.1 Flash 1017,openrouter,high,False,"HTTP 404: {""error"":{""message"":""No endpoints found for deepseek/deepseek-v4.1-flash-1017. Every candidate endpoint was removed during routing: Filter by Tier Endpoint Rows removed deepinfra/fp8/flex (Excluded tier endpoint rows the request did not opt into); Filter by Guardrails removed deepseek (Paid model tr",,,,,,0.1
+Gemini 4 Argon (judge),openrouter,default,True,,0,43,0,"Overlapping pairs are A-B and B-C, and the longest stretch with no meeting is 45 minutes from 13:15 to 14:00.",Google,3.2
+Gemini 4 Argon (judge),openrouter,low,True,,0,58,0,"The overlapping pairs are A and B, and B and C, while the longest stretch with no meeting between 9:00 and 14:00 is 45 minutes (from 13:15 to 14:00).",Google,3.2
+Gemini 4 Argon (judge),openrouter,medium,True,,0,57,0,"The overlapping pairs are A and B, and B and C; the longest stretch with no meeting between 9:00 and 14:00 is 45 minutes, from 13:15 to 14:00.",Google,2.6
+Gemini 4 Argon (judge),openrouter,high,True,,927,1007,463,"Meetings A and B (10:15–10:30) and B and C (10:45–11:00) overlap, and the longest stretch with no meeting between 9:00 and 14:00 is 45 minutes from 13:15 to 14:",Google,14.8
+Qwen3.8 Max Prime (judge),openrouter,default,True,,542,591,1270,A–B and B–C overlap; the longest stretch with no meeting between 9:00 and 14:00 is 13:15–14:00 (45 minutes).,Alibaba,8.0
+Qwen3.8 Max Prime (judge),openrouter,low,True,,432,493,838,Overlapping pairs: A&B (10:15–10:30) and B&C (10:45–11:00); the longest meeting-free stretch is 13:15–14:00 (45 minutes).,Alibaba,6.2
+Qwen3.8 Max Prime (judge),openrouter,medium,True,,584,645,1165,Overlapping pairs: A&B (10:15–10:30) and B&C (10:45–11:00); the longest meeting-free stretch is 13:15–14:00 (45 minutes).,Alibaba,6.3
+Qwen3.8 Max Prime (judge),openrouter,high,True,,494,531,1051,Overlapping pairs: A–B and B–C; longest meeting-free stretch: 13:15–14:00 (45 minutes).,Alibaba,5.8
