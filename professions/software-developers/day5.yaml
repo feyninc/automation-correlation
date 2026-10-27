@@ -38,16 +38,16 @@ actions:
      body: "Yes, 11:30! For a reused key with a different body, the IETF idempotency-key draft says 422; a missing key on an endpoint that requires one is 400, and a repeat while the first is still running is 409. Store a hash of the request body with the key so you can tell. We'll walk through the unique constraint together."}
   - {id: a5-pm-send, at: "D5 13:00", kind: new, app: mail, path: sent/inc-0412-postmortem, target: m5-pm, to: [c_nadia, c_marcus, c_ben, c_aisha, c_leilani, c_tomasz], subject: "INC-0412 postmortem draft for review",
      summary: "sent the postmortem draft to the team", body: "Postmortem draft for INC-0412 is in Docs > incidents. Blameless; please comment by Wednesday, review meeting Thursday. Five actions with owners and dates at the end."}
-  - {at: "D5 14:00", kind: noop, target: cal-jordan, summary: "sprint review and retro"}
+  - {at: "D5 14:00", kind: noop, target: cal-jordan, minutes: 105, summary: "sprint review and retro"}
   - {id: a5-sprint, at: "D5 15:50", kind: edit, app: docs, path: sprints/sprint-44-review, target: doc-sprint44, title: Sprint 44 review notes,
      summary: "wrote the sprint review notes",
-     content: "# Sprint 44 review (11/6)\n\nShipped: #1494 DST-safe reminder times (+ CHG-3318 backfill of 5,181 reminders); #1497 idempotent invoice side effects (INV-2240) with migration 0042; #1490 prorated cancellation credit; #1498 urllib3 2.8.0 (6 days past SLA).\nIncident: INC-0412 SEV-2 (duplicate emails and webhooks), postmortem in review.\nCarried over: webhook retry idempotency keys (Leilani), BIL-1512 send-time setting (Sprint 45, 3 days).\nRetro: schedule AWS maintenance ourselves; treat known idempotency gaps as risk, not low priority; test DST with dates on both sides of transitions."}
+     content: "# Sprint 44 review (11/6)\n\nShipped: #1494 DST-safe reminder times (+ CHG-3318 backfill of 5,181 reminders); #1496 idempotent invoice side effects (INV-2240) with migration 0042; #1490 prorated cancellation credit; #1498 urllib3 2.8.0 (6 days past SLA).\nIncident: INC-0412 SEV-2 (duplicate emails and webhooks), postmortem in review.\nCarried over: webhook retry idempotency keys (Leilani), BIL-1512 send-time setting (Sprint 45, 3 days).\nRetro: schedule AWS maintenance ourselves; treat known idempotency gaps as risk, not low priority; test DST with dates on both sides of transitions."}
   - {at: "D5 16:42", kind: read, target: t2-billing-chat, summary: "read Ben's plan to merge with --admin"}
   - {id: a5-admin, at: "D5 16:45", kind: reply, target: t2-billing-chat, summary: "asked Ben not to use --admin",
      body: "Ben, please don't --admin it: it skips required review and CI, which our change policy (and the SOC 2 evidence) doesn't allow, and the freeze exception is Nadia's to give. If it really needs to go in tonight, ask Nadia; otherwise it's a log line, so Tuesday 9:00 is fine. I'm happy to review it now if CI finishes."}
   - {id: a5-handoff, at: "D5 16:55", kind: edit, app: docs, path: oncall/handoff-2026-11-06, target: doc-handoff-1106, title: "On-call handoff (Fri 11/6)",
      summary: "wrote the on-call handoff",
-     content: "# Billing on-call handoff, Fri 11/6 (Ben/Jordan to Aisha primary, Marcus secondary)\n\n- INC-0412 resolved; postmortem in review. Redelivery after a broker failover is now safe (#1497); runbook rewritten (never purge).\n- Reminder send times correct since CHG-3318 (11/5 06:04); watch Monday's 09:00 sends in US zones.\n- Freeze until Tue 9:00 (Postgres 17 upgrade); exceptions from Nadia.\n- Open: SUP-8840 (downstream duplicate invoices; customer note pending Marcus's approval).\n- No pending AWS maintenance on billing-broker; if one appears, schedule it off-peak."}
+     content: "# Billing on-call handoff, Fri 11/6 (Ben/Jordan to Aisha primary, Marcus secondary)\n\n- INC-0412 resolved; postmortem in review. Redelivery after a broker failover is now safe (#1496); runbook rewritten (never purge).\n- Reminder send times correct since CHG-3318 (11/5 06:04); watch Monday's 09:00 sends in US zones.\n- Freeze until Tue 9:00 (Postgres 17 upgrade); exceptions from Nadia.\n- Open: SUP-8840 (downstream duplicate invoices; customer note pending Marcus's approval).\n- No pending AWS maintenance on billing-broker; if one appears, schedule it off-peak."}
   - {id: a5-exception, at: "D5 10:30", kind: reply, target: t5-hana, to: [c_hana], cc: [c_nadia], summary: "wrote the SLA exception note",
      body: "Exception note, Dependabot #212 (GHSA-vxq7-64xx-v4gw, urllib3 < 2.8.0, High). Opened 9/30/2026; SLA 30 days (10/30); remediated 11/5 (urllib3 2.8.0, PR #1498, deployed 10:40 CT), 6 days late. Why late: the alert wasn't triaged during the on-call rotation (noted in the 10/30 handoff but not owned). Exposure: billing-worker streams webhook responses from tenant-configured URLs, so it was reachable by a malicious tenant endpoint. Evidence of no exploitation: no OOM kills or memory spikes on the webhook pool 9/30-11/5 (Datadog). Change: Dependabot High/Critical alerts are assigned to the on-call engineer within 2 business days, with a weekly SLA check in the Billing standup."}
 
@@ -96,7 +96,7 @@ needs:
     due: "D5 17:00"
     evidence: [t2-pr1497, t1-pr1494, t3-inc, t1-aisha]
     ref: a5-sprint
-    check: {all: [{mentions_any: ["#1494"]}, {mentions_any: ["#1497"]}, {mentions_any: [carried, Carried]}]}
+    check: {all: [{mentions_any: ["#1494"]}, {mentions_any: ["#1496"]}, {mentions_any: [carried, Carried]}]}
     must: ["What shipped, the incident, what carried over, retro points; honest about the SLA miss"]
     minutes: [20, "a short doc"]
     intent: "Accurate summary."
