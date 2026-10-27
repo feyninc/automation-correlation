@@ -480,7 +480,8 @@ async def grade_log(log, run: cfgmod.RunConfig, judges, gate: asyncio.Semaphore)
         tot_cost = spec.price.cost(usage) if usage and spec and spec.price else 0.0
         mm = ep.economics.minutes_model
         qs = s.metadata.get("questions", [])
-        q_min = sum(len(q["question"].split()) / mm.read_wpm + mm.question_answer_s / 60 for q in qs)
+        q_min = sum(len(q["question"].split()) / mm.read_wpm + (0 if q.get("away") else mm.question_answer_s / 60)
+                    for q in qs)                                  # a question asked while the worker is away is only read
         rows.append({"model": spec.name if spec else model_name, "profession": s.id, "epoch": s.epoch,
                      "ticks": s.metadata.get("ticks"), "proposals": len(props_raw),
                      "questions": len(qs), "questions_cost_usd": round(q_min * ep.economics.loaded_hourly / 60, 4),

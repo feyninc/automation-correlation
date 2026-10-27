@@ -21,7 +21,7 @@ from inspect_ai.util import sandbox, store
 from . import config as cfgmod
 from . import prompts, providers  # importing providers also patches Inspect
 from .apps import FileOut, render_world, thread_file
-from .schema import Episode, fmt, seconds, show
+from .schema import WEEKDAYS, Episode, fmt, seconds, show
 from .world import DAYS, Event, events, feed_lines, ticks
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -119,7 +119,27 @@ class Sim:
                 return t
         return None
 
+    def presence(self, t: int) -> str:
+        """Whether the worker is at work at t, and if not, when they are next in."""
+        day, sec = t // 86400 + 1, t % 86400
+        a, b = self.ep.worker.day_hours(day)
+        hm = lambda x: f"{x // 3600:02d}:{x % 3600 // 60:02d}"
+        if a <= sec < b:
+            return f"{self.first} is at work until {hm(b)}."
+        if sec < a:
+            return f"{self.first} is not at work yet; in at {hm(a)}."
+        if day < 5:
+            return f"{self.first} has left for the day; back {WEEKDAYS[day]} {hm(self.ep.worker.day_hours(day + 1)[0])}."
+        return f"{self.first} has left for the week."
+
+    def at_work(self, t: int) -> bool:
+        a, b = self.ep.worker.day_hours(t // 86400 + 1)
+        return a <= t % 86400 < b
+
     async def ask(self, question: str, t: int) -> str:
+        if not self.at_work(t):
+            self.questions.append({"t": fmt(t), "question": question, "answer": "", "away": True, "usage": None})
+            return f"{self.presence(t)} The question waits until then; nobody can answer it now."
         visible = [n for n in self.ep.needs if seconds(n.discoverable_at) <= t]
         intents = "\n".join(f"- {n.title}: {n.worker_intent}" for n in visible) or "- (nothing specific yet)"
         recent = feed_lines(self.feed[-25:]) or "(nothing yet)"
@@ -266,11 +286,14 @@ def workweek_agent(run_path: str = "config/run.yaml", start: str = "D1 00:00", e
                                         profession_prompt=ep.profession_prompt.strip())
         for day in range(1, 6):
             day_start, day_end = ep.worker.day_hours(day)
-            day_ticks = [x for x in ticks(day, cadence, day_start, day_end) if s0 <= x <= s1]
+            day_ticks = [x for x in ticks(day, cadence, 0, 86400 - cadence) if s0 <= x <= s1]   # around the clock
             if not day_ticks:
                 continue
             messages: list = [ChatMessageSystem(content=system),
-                              ChatMessageUser(content=prompts.DAY_START.format(date=DAYS[day - 1]))]
+                              ChatMessageUser(content=prompts.DAY_START.format(
+                                  date=DAYS[day - 1], time=show(day_ticks[0]).split()[1], first_name=sim.first,
+                                  arrive=f"{day_start // 3600:02d}:{day_start % 3600 // 60:02d}",
+                                  leave=f"{day_end // 3600:02d}:{day_end % 3600 // 60:02d}"))]
             tick_starts: list[int] = []
             resume = -1
             for t in day_ticks:
@@ -285,7 +308,8 @@ def workweek_agent(run_path: str = "config/run.yaml", start: str = "D1 00:00", e
                     call_note = " A live call is in progress (see the feed)."
                 end_of_day = t % 86400 == day_end
                 text = (prompts.END_OF_DAY.format(when=show(t), first_name=sim.first, n_new=len(new)) if end_of_day else
-                        prompts.TICK.format(when=show(t), n_new=len(new), call_note=call_note))
+                        prompts.TICK.format(when=show(t), n_new=len(new), call_note=call_note,
+                                            presence=sim.presence(t)))
                 tick_starts.append(len(messages))
                 if len(tick_starts) > KEEP_TOOL_OUTPUT_TICKS:
                     elide(messages, tick_starts[-KEEP_TOOL_OUTPUT_TICKS - 1])

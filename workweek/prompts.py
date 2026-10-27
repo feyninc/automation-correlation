@@ -9,7 +9,9 @@ and approve it, but don't get in the way or create extra work. Many moments need
 and good choice.
 
 The work week runs from Monday 2026-11-02, the first day, to Friday 2026-11-06, the last day. Times are given as the
-weekday and the clock time, for example "Tuesday 14:05".
+weekday and the clock time, for example "Tuesday 14:05". You are called every few minutes around the clock, also when
+{first_name} is not at work; each check says whether {first_name} is in. Mail and messages keep arriving overnight.
+Anything you propose while {first_name} is away waits until they are back, and a question cannot be answered then.
 
 How your workspace works:
 - Everything {first_name} can see is under /world as ordinary files (read-only to you): /world/mail, /world/chat,
@@ -36,11 +38,12 @@ About this job:
 """
 
 DAY_START = """\
-Good morning. It is {date}. You start the day fresh; your files in /home/assistant are as you left them.
+It is {date}, {time}. You start the day fresh; your files in /home/assistant are as you left them. {first_name} works
+{arrive}-{leave} today.
 """
 
 TICK = """\
-[{when}] {n_new} new item(s) since your last check (see /world/inbox/new.md).{call_note}
+[{when}] {n_new} new item(s) since your last check (see /world/inbox/new.md). {presence}{call_note}
 Run commands to explore, propose, or wait.
 """
 

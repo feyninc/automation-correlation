@@ -30,24 +30,48 @@ how fast is it changing across model releases?
 Eleven O*NET 31.0 occupations across observed exposure (0.07 to 0.70). Each is one working week, Monday 2026-11-02
 to Friday 2026-11-06, at a fictional employer with real rules, regulators, standards and software.
 
-| Profession (SOC) | Employer and arcs | Needs | Need minutes | Traps | Worker actions | Calls | Words |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| Customer service (43-4051) | fiber ISP: outage, credits batch error, cancellation script change | 101 | 233 | 20 | 115 | 22 | 11,626 |
-| Market research (13-1161) | B2B SaaS: survey cleaning to readout, launch, accruals | 73 | 971 | 21 | 103 | 0 | 9,079 |
-| Admin assistants (43-6014) | engineering firm: ops review and site tour, travel, legal hold | 72 | 320 | 17 | 97 | 9 | 6,919 |
-| PR specialists (27-3031) | hospital system: embargoed gift, ER-death inquiry | 65 | 573 | 17 | 101 | 3 | 7,793 |
-| Accountants (13-2011) | distributor: October close, bank rec, cutoff, bill-and-hold | 47 | 563 | 17 | 77 | 1 | 5,347 |
-| Paralegals (23-2011) | law firm: federal discovery, deadlines, privilege log | 45 | 419 | 10 | 58 | 5 | 4,924 |
-| Software developers (15-1252) | billing SaaS: DST bug, review, CVE, incident | 40 | 752 | 12 | 74 | 0 | 5,230 |
-| Event planners (13-1121) | association: conference guarantees, attrition, event day | 35 | 305 | 7 | 56 | 3 | 3,281 |
-| Operations managers (11-1021) | distribution center: OSHA, FLSA, FMLA, peak staffing | 33 | 403 | 9 | 55 | 1 | 3,885 |
-| Claims adjusters (13-1031) | Texas auto: Stowers demand, hail total loss, SIU | 31 | 362 | 7 | 49 | 3 | 3,393 |
-| Budget analysts (13-2031) | state agency: allotments, fiscal note, grant rates | 25 | 474 | 7 | 42 | 0 | 3,063 |
-| **Total** | | **567** | **5,375** | **144** | **827** | **47** | |
+| Profession (SOC) | Employer and arcs | Needs | Need minutes | Traps | Worker actions | Live calls | Inbound/day | Hours present | Needs' share of hours |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Customer service (43-4051) | fiber ISP: outage, credits batch error, cancellation script change | 554 | 972 | 81 | 576 | 174 | 85 | 45.8 | 35% |
+| PR specialists (27-3031) | hospital system: embargoed gift, ER-death inquiry | 190 | 1,279 | 33 | 260 | 15 | 170 | 46.8 | 46% |
+| Claims adjusters (13-1031) | Texas auto: Stowers demand, hail total loss, SIU, ~40 more claims | 180 | 1,440 | 28 | 284 | 20 | 80 | 44.8 | 54% |
+| Admin assistants (43-6014) | engineering firm: ops review and site tour, travel, legal hold | 176 | 916 | 30 | 274 | 20 | 233 | 42.5 | 36% |
+| Event planners (13-1121) | association: conference, attrition, event day, 2027 pipeline | 152 | 947 | 24 | 218 | 20 | 128 | 49.5 | 32% |
+| Paralegals (23-2011) | law firm: federal discovery, deadlines, a trial, ~15 matters | 148 | 1,576 | 24 | 186 | 10 | 98 | 44.2 | 59% |
+| Accountants (13-2011) | distributor: October close, bank rec, cutoff, bill-and-hold | 117 | 1,515 | 28 | 169 | 5 | 109 | 47.0 | 54% |
+| Market research (13-1161) | B2B SaaS: survey cleaning to readout, launch, accruals | 117 | 1,598 | 29 | 175 | 0 | 89 | 45.0 | 59% |
+| Operations managers (11-1021) | distribution center: OSHA, FLSA, FMLA, peak staffing | 110 | 742 | 21 | 190 | 15 | 272 | 48.0 | 26% |
+| Budget analysts (13-2031) | state agency: allotments, fiscal notes, grant rates | 94 | 1,228 | 16 | 126 | 5 | 79 | 42.8 | 48% |
+| Software developers (15-1252) | billing SaaS: DST bug, code reviews, CVE, incident | 84 | 1,385 | 18 | 163 | 0 | 143 | 43.9 | 53% |
+| **Total** | | **1,922** | **13,598** | **332** | **2,621** | **284** | | | |
 
-Need counts differ more than workload: call-heavy jobs have many one-line needs (a spoken answer is 0.3 minutes),
-analyst jobs fewer, larger ones (a readout deck is 180 minutes). Need minutes, not counts, are the comparable size
-measure; the planned ~100 needs per week was reached only for customer service (owner's target, 10-26; see section 10).
+Each day's work fills 81-101% of the hours present (the build report's time budget: the needs the worker does, other
+timed work such as meetings and calls the assistant cannot join, lunch, and 20 s to skim each inbound item). Needs are
+26-59% of the hours present: the rest of the day is meetings, calls, in-person work and reading. So the value the
+benchmark can find is bounded by that share; value per worker-week is reported against the hours present, and the
+press-enter rate is over the planned work. Need counts differ more than workload: call-heavy jobs have many one-line
+needs (a spoken answer is 0.3 minutes), analyst jobs fewer, larger ones.
+
+### How the weeks were built
+
+The first version of each week (10-26 to 10-27) was written by hand from primary sources. On 10-27 each was brought to
+realistic volume (owner: "volume 100% needs fixing", hours to fill the day) by a subagent per profession (two for
+customer service) working from one spec: daily email, chat and call targets from the volume research (section 10),
+the time budget at 80-110% every day, about one new trap per eight needs, verified sources for every rule a need
+turns on, every number computed and written in the day file's header, intents without hindsight. The new material is
+in `day1b.yaml`..`day5b.yaml`; the first version is unchanged except for corrections. Each week was then reviewed
+before commit: the audit (compile, time budget, volume, intents, placeholders, findability, source links), every
+header figure recomputed, the rules a need turns on checked against the statute or regulation text, the code in the
+developer week run (19 tests pass on Friday's repository), and checks that only accepted the worker's own wording
+widened. The review found no arithmetic error in the new material except one deadline count (claims payments due
+11/16, not 11/13); the builds and the review found errors in the first versions, now fixed: an indirect-cost base on
+the pre-2024 2 CFR 200.1 rule, a fiscal note missing 2031-33, a UTC conversion after the DST change, PR numbers out of
+order, a battery-backup reply that contradicted 47 CFR 9.20, a wrong Ins. Code subsection, unquoted "#" that cut
+YAML values short, and several stale links.
+
+Known simplifications: HB 1214 has a bill number on 11/2, before Washington's pre-filing would give it one; market
+research and software development have no phone app, so their calls are timed activity only; traffic is about half of
+email, below the 60% machine-generated share measured in consumer mail.
 
 ### The form
 
@@ -115,12 +139,12 @@ prorations, deadlines) were computed by script and are shown in each day file's 
 Everything a model, judge or the simulated worker reads gives times as the weekday and clock time ("Monday 11:05");
 the week runs from Monday 2026-11-02, the first day, to Friday 2026-11-06, the last. Internally times are "D1 11:05".
 
-A worker in Microsoft 365 receives about 117 emails and 153 chat messages a day (Microsoft Work Trend Index 2025).
-The weeks carry 6 to 19 inbound items a day (mail, chat, tickets, calls and new or updated documents; claims adjusters
-6.6, customer service 19.4, mean 11.4), about one-fifteenth to one-forty-fifth of that, keeping every item that
-carries work or risk plus some noise. Worker actions are the visible outputs (8 to 23 a day, against the ~30 planned),
-not every keystroke; calls and meetings the model cannot see appear as `noop` actions in the feed. The planned work is
-0.8 to 3.2 hours of each 8-hour day, so value is per benchmark week, not per worker-week (section 10).
+A worker in Microsoft 365 receives about 117 emails and 153 chat messages a day (Microsoft Work Trend Index 2025). The
+weeks carry 79 to 272 inbound items a day by profession (mail, chat, tickets and calls), from the per-occupation
+targets of the volume research (contact centers 24-46 calls a day; claims caseloads of 100-140; Google's median of four
+code reviews a week; the rest judgment calls bounded by the Microsoft figures). Recurring automated mail is templated
+(`traffic:`), human mail and chat are written. Calls and meetings the assistant cannot join appear as timed `noop`
+actions in the feed.
 
 ## 4. The world (`workweek/apps.py`)
 
@@ -134,10 +158,13 @@ version of each document; a call's turns, then the worker's case note), plus `/w
 
 ## 5. The engine (`workweek/engine.py`, an Inspect AI task)
 
-- **Clock:** simulated, from the worker's arrival to departure each day (`worker.hours`, default 08:00 to 17:00), a
-  tick every `cadence_minutes` (default 5), the departure tick an end-of-day turn. Before each tick the engine writes
-  the world as of that moment. Nothing waits on a model: the clock stops while it works, and every timing question
-  (did a call line arrive in time?) is answered offline in grading from the tokens it used.
+- **Clock:** simulated, around the clock from Monday 00:00 to Friday 23:55, a tick every `cadence_minutes` (default 5;
+  owner, 10-27: "an agent never sleeps"). Each tick says whether the worker is at work (`worker.hours` per day) and
+  when they are next in; mail and traffic that arrive overnight reach the assistant when they arrive, and what it
+  proposes while the worker is away waits for them. The worker's departure tick is an end-of-day turn. A question
+  asked while the worker is away is not answered (it costs the worker only its reading). Before each tick the engine
+  writes the world as of that moment. Nothing waits on a model: the clock stops while it works, and every timing
+  question (did a call line arrive in time?) is answered offline in grading from the tokens it used.
 - **Agent:** one conversation per day; each tick is a multi-turn tool loop ending at `wait` or after
   `max_tool_calls_per_tick` (25). Tool output older than 6 ticks is elided. Tools: `bash` (Docker, no network,
   non-root), `propose(target, action, drafts[1-3], note)` with actions reply, new, forward, edit, schedule, update,

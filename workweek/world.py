@@ -81,13 +81,13 @@ def coverage(ep: Episode, cadence_s: int) -> dict:
         total += 1
         a, b = seconds(n.discoverable_at), seconds(n.deadline)
         day = a // 86400 + 1
-        if any(a <= t <= b for d in range(day, 6) for t in ticks(d, cadence_s, *ep.worker.day_hours(d))):
+        if any(a <= t <= b for d in range(day, 6) for t in ticks(d, cadence_s, 0, 86400 - cadence_s)):
             reach += 1
     call_turns, reachable_turns = 0, 0
     for t in live_calls(ep):
         start = seconds(t.exchanges[0].at)
         day = start // 86400 + 1
-        first_tick = next((x for x in ticks(day, cadence_s, *ep.worker.day_hours(day)) if x >= start), None)
+        first_tick = next((x for x in ticks(day, cadence_s, 0, 86400 - cadence_s) if x >= start), None)
         for x in t.exchanges:
             if x.author != "worker":
                 call_turns += 1
