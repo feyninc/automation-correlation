@@ -114,8 +114,9 @@ def _call(raw: dict) -> Thread:
 def _traffic(tf: dict, worker: dict) -> list[Thread]:
     """Recurring low-information items (system notifications, digests, channel chatter), expanded deterministically:
     `per_day` items on each of `days`, spread over the worker's hours with a jitter seeded by the id, cycling through
-    `items` ({n} is the item's running number). With `group: true` they are exchanges in one thread (a chat channel),
-    otherwise each is a thread of its own under `path`."""
+    `items` ({n} is the item's running number). An item with `days` appears only on those days (for anything tied to
+    a date: a reminder, a calendar reply, a status change); the rest are true on any day. With `group: true` they are
+    exchanges in one thread (a chat channel), otherwise each is a thread of its own under `path`."""
     rng = random.Random(tf["id"])
     hours = worker.get("hours", {})
     threads: dict[str, Thread] = {}
@@ -127,9 +128,15 @@ def _traffic(tf: dict, worker: dict) -> list[Thread]:
         hi = int(b[:2]) * 60 + int(b[3:]) - 5
         k = int(tf["per_day"])
         slots = sorted(lo + (hi - lo) * (i + rng.random()) / k for i in range(k))
-        for minute in slots:
+        eligible = [it for it in tf["items"] if day in it.get("days", [day])]
+        if not eligible:
+            continue
+        dated = [it for it in eligible if "days" in it]            # an item tied to today comes first
+        order = dated + [it for it in eligible if "days" not in it]
+        for j, minute in enumerate(slots):
             n += 1
-            item = tf["items"][(n - 1) % len(tf["items"])]
+            item = order[j] if j < len(dated) else order[len(dated) + (n - 1) % max(1, len(order) - len(dated))] \
+                if len(order) > len(dated) else order[j % len(order)]
             at = f"D{day} {int(minute) // 60:02d}:{int(minute) % 60:02d}"
             fill = lambda x: str(x).replace("{n}", str(n))
             tid = tf["id"] if tf.get("group") else f"{tf['id']}-{n}"
