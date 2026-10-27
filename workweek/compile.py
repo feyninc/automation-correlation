@@ -429,6 +429,18 @@ def merge_days(folder: str | Path) -> Episode:
                                    "worker_actions": acts, "needs": needs, "traps": traps})
 
 
+def _canonical(ep: Episode) -> dict:
+    """The episode with every list of records in id order, so day-splitting order doesn't count as a change."""
+    d = ep.model_dump(mode="json")
+    d["meta"].pop("sha256", None)
+    for k in ("threads", "documents", "worker_actions", "needs", "traps", "contacts"):
+        d[k] = sorted(d[k], key=lambda r: r["id"])
+    for t in d["threads"]:
+        t["exchanges"] = sorted(t["exchanges"], key=lambda x: (x["at"], x["id"]))
+        t["state_changes"] = sorted(t["state_changes"], key=lambda c: c["at"])
+    return d
+
+
 def build(path: str | Path) -> tuple[Episode, list[str]]:
     path = Path(path)
     form = load_form(path)
@@ -441,7 +453,7 @@ def build(path: str | Path) -> tuple[Episode, list[str]]:
     for name, part in split_days(ep).items():
         (out / name).write_text(json.dumps(part, indent=1, ensure_ascii=False) + "\n")
     back = merge_days(out)
-    if back.model_dump(mode="json")["needs"] != ep.model_dump(mode="json")["needs"] or len(back.threads) != len(ep.threads):
+    if _canonical(back) != _canonical(ep):
         errs.append("split/merge round trip changed the episode")
     (out.parent / "report.md").write_text(report(ep, errs, warns))
     return ep, errs
