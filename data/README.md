@@ -4,8 +4,9 @@
   `onet/db_31_0_text/` (git-ignored); the compiler reads task statements, ratings and the occupation list from it.
 - `aei/job_exposure.csv`: "observed exposure" by 6-digit SOC, Anthropic Economic Index `labor_market_impacts/`
   (Massenkoff and McCrory, "Labor market impacts", 2026-03-05). `aei/task_penetration.csv`: observed usage by O*NET
-  task, from the same release (only 1,354 of its 17,998 tasks have any usage above 0). `aei/wage_data.csv` is the 2025-02-10 release's wage table; its salaries are older and
-  patchy (none for computer occupations), so wages come from BLS OEWS instead. See `aei/README.md`.
+  task, from the same release (only 1,354 of its 17,998 tasks have any usage above 0). `aei/wage_data.csv` is the
+  2025-02-10 release's wage table; its salaries are older and patchy (none for computer occupations), so wages come
+  from BLS OEWS instead. See `aei/README.md`.
 - `wages-onetonline-2026-10-26.csv`: BLS OEWS May 2025 medians (released 2026-05-15, the newest OEWS) and the
   2025-35 projections, read from O*NET OnLine's summary pages, saved in `onetonline/`. bls.gov refuses this computer
   (403/503), which is why the figures come through O*NET OnLine.
