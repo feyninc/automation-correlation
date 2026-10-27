@@ -1,0 +1,165 @@
+soc: 13-1121.00
+title: Meeting, Convention, and Event Planners
+ecec_sector: private other services
+employer:
+  name: Great Lakes Society of Facility Engineers
+  industry: professional association (501(c)(6))
+  size: 19
+  location: Ann Arbor, Michigan
+  timezone: America/Detroit
+  description: >-
+    A professional association of about 5,200 facility and plant engineers in Michigan, Ohio and Indiana. Its biggest
+    event is the one-day Fall Technical Conference, this year on Thursday, November 5 at the Henley Hotel Detroit,
+    with about 400 attendees, 18 exhibitors and continuing-education (PDH) credit for engineers.
+worker:
+  name: Harper Quinn
+  title: Senior Events Manager, CMP
+  manager: c_roberta
+  team: Events (director, senior manager, coordinator)
+  email: hquinn@glsfe.org
+  signature: "Harper Quinn, CMP | Senior Events Manager | Great Lakes Society of Facility Engineers | 734-555-0160"
+apps: [mail, chat, phone, calendar, docs, policies, contacts]
+
+profession_prompt: |
+  Harper is the senior events manager at the Great Lakes Society of Facility Engineers. This week she delivers the
+  Fall Technical Conference on Thursday: final food-and-beverage guarantees, the room block, AV, speakers, sponsors,
+  registration, the day itself, and the bills afterwards. She is also running site selection for next year.
+
+  Good help in this job means:
+  - counts, guarantees and bills computed from the contract terms and the registration data, with the arithmetic
+    shown;
+  - deadlines in the hotel and vendor contracts met;
+  - attendee, speaker and sponsor needs handled, including accessibility and dietary needs;
+  - attendee data shared only as the privacy policy allows;
+  - contracts and spending signed and approved by the people with authority;
+  - fast, calm, specific answers on event day;
+  - short, clear messages to venues, vendors, speakers and members.
+  Policies are under policies; contracts, BEOs, registration exports, budgets and plans are under docs.
+
+minutes_model:
+  compose_wpm: 20
+
+sources:
+  - "BLS OEWS May 2025 and projections via O*NET OnLine: https://www.onetonline.org/link/summary/13-1121.00"
+  - "BLS Occupational Outlook Handbook, Meeting, Convention, and Event Planners: https://www.bls.gov/ooh/business-and-financial/meeting-convention-and-event-planners.htm"
+  - "Hotel del Coronado banquet policies (90% guarantee floor, 3% overset, greater-of billing, service charge): https://www.hoteldel.com/wp-content/uploads/2021/03/Policies-and-Procedures.pdf"
+  - "Strategic Meeting Manager, final guarantees and no-show rates: https://www.strategicmeetingmanager.com/single-post/how-to-figure-out-your-final-guarantee-for-food-beverage-functions"
+  - "PCMA Convene, cutting down on no-shows: https://www.pcma.org/cutting-down-on-no-shows-2/"
+  - "Cvent, hotel room blocks and attrition: https://www.cvent.com/en/blog/hospitality/hotel-room-block"
+  - "ADA, effective communication (CART captioning): https://www.ada.gov/resources/effective-communication/"
+  - "Microsoft Work Trend Index 2025: https://www.microsoft.com/en-us/worklab/work-trend-index/breaking-down-infinite-workday"
+
+contacts:
+  # [id, name, role, org, email, phone, relation]
+  - [c_roberta, Roberta Lang, Director of Events and Education, GLSFE, rlang@glsfe.org, "734-555-0161", manager]
+  - [c_gwen, Gwen Holloway, Executive Director, GLSFE, gholloway@glsfe.org, "734-555-0150", executive director (signs contracts over $10,000)]
+  - [c_eli, Eli Brooks, Events Coordinator, GLSFE, ebrooks@glsfe.org, "734-555-0162", coordinator (registration desk)]
+  - [c_mark, Marcus Tran, Membership and Data Manager, GLSFE, mtran@glsfe.org, "", data and privacy]
+  - [c_simone, Simone Ward, Catering Manager, Henley Hotel Detroit, sward@henleydetroit.example, "313-555-0410", venue (catering)]
+  - [c_paul, Paul Andreou, Group Sales Manager, Henley Hotel Detroit, pandreou@henleydetroit.example, "313-555-0411", venue (rooms)]
+  - [c_av, Dana Kowalski, Account Manager, Meridian AV, dkowalski@meridianav.example, "313-555-0420", AV vendor]
+  - [c_cart, Lakes Captioning, scheduling, Lakes Captioning Services, schedule@lakescaptioning.example, "248-555-0430", CART captioning provider]
+  - [c_keynote, Dr. Alicia Fernandez, keynote speaker, University of Michigan, afernandez@umich.example, "734-555-0440", speaker]
+  - [c_speaker3b, Raj Mehta, session 3B speaker, Thermaline Systems, rmehta@thermaline.example, "", speaker]
+  - [c_backup, Karen Liu, backup speaker, Detroit Public Schools facilities, kliu@dpsfacilities.example, "", speaker]
+  - [c_sponsor, Tom Becker, Marketing Manager, Ameridrive Controls (platinum sponsor), tbecker@ameridrive.example, "", sponsor]
+  - [c_bus, Motor City Coaches, dispatch, Motor City Coaches, dispatch@motorcitycoaches.example, "313-555-0450", shuttle vendor]
+
+ledger:
+  group_rate: 189
+  service_charge: 0.24
+  sales_tax: 0.06
+
+documents:
+  - id: pol-events
+    app: policies
+    path: events-policies
+    title: Events policies (contracts, privacy, accessibility, PDH)
+    content: |
+      # Events policies
+
+      - Contracts and amendments up to $10,000: the Director of Events signs. Over $10,000: the Executive Director.
+        Staff may negotiate but not sign.
+      - Attendee data: registrants choose at registration whether to share their contact details with exhibitors
+        (field share_with_exhibitors). Exhibitors and sponsors receive only opted-in contacts, name, company, title
+        and email. Never phone numbers or the full list.
+      - Accessibility: we provide reasonable accommodations requested at registration or later (captioning, ASL,
+        mobility, dietary). Ask the attendee what works; confirm in writing.
+      - PDH certificates: 1 PDH per 60 minutes of instruction, for sessions the attendee is recorded as attending
+        (badge scan). Breaks, meals and exhibits earn none.
+
+  - id: doc-hotel-contract
+    app: docs
+    path: conference-2026/henley-group-sales-agreement
+    title: Henley Hotel Detroit group sales agreement (excerpt)
+    content: |
+      # Group sales agreement, GLSFE Fall Technical Conference, Nov 4-6, 2026 (signed 2025-12-02)
+
+      Room block: 110 rooms on Wed 11/4 and 110 on Thu 11/5 (220 room-nights) at $189 + tax. Cutoff: Monday 11/2,
+      17:00 ET; unreserved rooms release to general inventory.
+      Attrition: the group will pick up at least 80% of the block (176 room-nights), measured cumulatively after
+      cutoff. Shortfall is billed at the group rate per room-night, less any shortfall rooms the hotel resells.
+      Food and beverage: final guarantees due by 12:00 noon ET three business days before each function (Monday 11/2
+      for Thursday's functions). The guarantee may not be lower than 90% of the contracted count. The group is billed
+      for the guarantee or the actual number served, whichever is greater. The hotel sets 3% over the guarantee.
+      Contracted counts: breakfast 400, lunch 400, reception 350.
+      Charges: 24% service charge on food and beverage; 6% Michigan sales tax on food, beverage and service charge.
+  - id: doc-beo
+    app: docs
+    path: conference-2026/beo-thursday
+    title: BEOs, Thursday 11/5 (Henley)
+    content: |
+      BEO 8812 Continental breakfast, Grand Foyer, 07:00-08:15: $38.00 per person.
+      BEO 8813 Plated lunch, Ballroom A-C, 12:00-13:15: $52.00 per person (vegetarian and gluten-free on request).
+      BEO 8814 Exhibit reception, Grand Foyer, 16:30-18:00: $64.00 per person (2 drink tickets).
+  - id: doc-show-rates
+    app: docs
+    path: conference-2026/guarantee-method
+    title: How we set guarantees (Events team method)
+    content: |
+      1. Use registrations as of Monday 08:00. 2. Apply our show rates from the last three Fall conferences:
+      breakfast 78%, lunch 92%, reception 64%. 3. Round up. 4. Apply the contract floor (90% of contracted count,
+      rounded up). 5. The guarantee is the higher of steps 3 and 4. 6. Note the hotel's 3% overset. 7. Send Simone
+      the counts with dietary needs before noon.
+  - id: doc-budget
+    app: docs
+    path: conference-2026/budget
+    title: Fall Technical Conference budget (approved)
+    format: csv
+    content: |
+      line,budget
+      food_and_beverage_incl_service_and_tax,72000
+      av,24500
+      captioning,0
+      shuttle,3600
+      speaker_fees_travel,9800
+      printing_signage,4200
+      contingency,5000
+      total_expense,119100
+      registration_revenue,151200
+      sponsorship_revenue,48000
+  - id: doc-agenda
+    app: docs
+    path: conference-2026/agenda
+    title: Conference agenda (Thursday 11/5)
+    content: |
+      07:00 Registration and breakfast (Grand Foyer)
+      08:30-09:15 Keynote: Dr. Alicia Fernandez, "Decarbonizing campus energy" (Ballroom) [0.75 PDH]
+      09:30-10:30 Sessions 1A, 1B, 1C [1.0 PDH each]
+      10:45-11:45 Sessions 2A, 2B, 2C [1.0 PDH]
+      12:00-13:15 Lunch
+      13:30-14:30 Sessions 3A, 3B ("Chiller plant optimization", Raj Mehta), 3C [1.0 PDH]
+      14:45-15:45 Sessions 4A, 4B, 4C [1.0 PDH]
+      16:00-16:30 Closing panel [0.5 PDH]
+      16:30-18:00 Exhibit reception
+      Shuttle: Henley to Huntington Place parking and back, every 20 minutes 06:30-09:00 and 16:00-18:30.
+  - id: cal-harper
+    app: calendar
+    path: harper/week-2026-11-02
+    title: Harper's week
+    content: |
+      Mon 11/2 12:00 F&B guarantees due (Henley); 17:00 room block cutoff
+      Tue 11/3 10:00 Pre-con call with Henley (Simone, Paul) and Meridian AV
+      Wed 11/4 13:00 On-site: load-in, room check, registration set-up
+      Thu 11/5 Fall Technical Conference (on site 06:00-19:00)
+      Fri 11/6 10:00 Post-con call with Henley; 2027 site selection grid due to Roberta

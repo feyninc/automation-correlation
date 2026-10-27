@@ -1,0 +1,504 @@
+{
+ "meta": {
+  "schema_version": "1.0",
+  "soc": "13-1121.00",
+  "title": "Meeting, Convention, and Event Planners",
+  "onet_version": "31.0",
+  "week_start": "2026-11-02",
+  "status": "draft",
+  "generator": "workweek.compile (hand-written week)",
+  "sha256": "4dd39fd4b0bea4f925829fdb440c062235b60f29fd4b92ce308d49f83c189963"
+ },
+ "economics": {
+  "soc": "13-1121.00",
+  "title": "Meeting, Convention, and Event Planners",
+  "median_hourly_wage": {
+   "value": 29.41,
+   "source": "BLS OEWS May 2025 via O*NET OnLine (data/wages-onetonline-2026-10-26.csv)",
+   "note": ""
+  },
+  "eci_factor": {
+   "value": 1.0,
+   "source": "BLS ECI wages and salaries, civilian workers (https://www.bls.gov/eci/); not yet applied",
+   "note": "set on 2026-10-30 from the Q3 2026 release"
+  },
+  "loaded_multiplier": {
+   "value": 1.35,
+   "source": "BLS ECEC June 2026, private other services: total compensation $37.95 / wages $28.11 (https://www.bls.gov/news.release/ecec.t04.htm)",
+   "note": ""
+  },
+  "employment": {
+   "value": 172100.0,
+   "source": "BLS via O*NET OnLine, 2025",
+   "note": ""
+  },
+  "projection": "Faster than average (5% to 6%) (2025-2035), 16,800 openings a year",
+  "observed_exposure": {
+   "value": 0.1023,
+   "source": "Anthropic Economic Index, labor market impacts (Massenkoff and McCrory, 2026-03-05)",
+   "note": ""
+  },
+  "task_penetration": {
+   "1209": 0.0,
+   "1212": 0.0,
+   "1214": 0.0,
+   "1215": 0.0,
+   "1211": 0.0,
+   "1216": 0.0,
+   "1217": 0.0,
+   "1210": 0.9249,
+   "1219": 0.0,
+   "1222": 0.9475,
+   "1213": 0.0,
+   "1226": 0.0,
+   "1218": 0.0,
+   "1221": 0.0,
+   "1220": 0.0,
+   "1223": 0.0,
+   "1224": 0.0,
+   "1229": 0.0,
+   "1228": 0.0,
+   "1225": 0.0,
+   "1227": 0.0
+  },
+  "minutes_model": {
+   "read_wpm": 238.0,
+   "compose_wpm": 20.0,
+   "friction": 1.5,
+   "rewrite_threshold": 0.5,
+   "question_answer_s": 30.0,
+   "overrides": {}
+  }
+ },
+ "employer": {
+  "name": "Great Lakes Society of Facility Engineers",
+  "industry": "professional association (501(c)(6))",
+  "size": 19,
+  "location": "Ann Arbor, Michigan",
+  "timezone": "America/Detroit",
+  "description": "A professional association of about 5,200 facility and plant engineers in Michigan, Ohio and Indiana. Its biggest event is the one-day Fall Technical Conference, this year on Thursday, November 5 at the Henley Hotel Detroit, with about 400 attendees, 18 exhibitors and continuing-education (PDH) credit for engineers."
+ },
+ "worker": {
+  "id": "worker",
+  "name": "Harper Quinn",
+  "title": "Senior Events Manager, CMP",
+  "manager": "c_roberta",
+  "team": "Events (director, senior manager, coordinator)",
+  "email": "hquinn@glsfe.org",
+  "signature": "Harper Quinn, CMP | Senior Events Manager | Great Lakes Society of Facility Engineers | 734-555-0160"
+ },
+ "profession_prompt": "Harper is the senior events manager at the Great Lakes Society of Facility Engineers. This week she delivers the\nFall Technical Conference on Thursday: final food-and-beverage guarantees, the room block, AV, speakers, sponsors,\nregistration, the day itself, and the bills afterwards. She is also running site selection for next year.\n\nGood help in this job means:\n- counts, guarantees and bills computed from the contract terms and the registration data, with the arithmetic\n  shown;\n- deadlines in the hotel and vendor contracts met;\n- attendee, speaker and sponsor needs handled, including accessibility and dietary needs;\n- attendee data shared only as the privacy policy allows;\n- contracts and spending signed and approved by the people with authority;\n- fast, calm, specific answers on event day;\n- short, clear messages to venues, vendors, speakers and members.\nPolicies are under policies; contracts, BEOs, registration exports, budgets and plans are under docs.",
+ "apps": [
+  "mail",
+  "chat",
+  "phone",
+  "calendar",
+  "docs",
+  "policies",
+  "contacts"
+ ],
+ "contacts": [
+  {
+   "id": "c_roberta",
+   "name": "Roberta Lang",
+   "role": "Director of Events and Education",
+   "org": "GLSFE",
+   "email": "rlang@glsfe.org",
+   "phone": "734-555-0161",
+   "relation": "manager",
+   "notes": ""
+  },
+  {
+   "id": "c_gwen",
+   "name": "Gwen Holloway",
+   "role": "Executive Director",
+   "org": "GLSFE",
+   "email": "gholloway@glsfe.org",
+   "phone": "734-555-0150",
+   "relation": "executive director (signs contracts over $10",
+   "notes": "000)"
+  },
+  {
+   "id": "c_eli",
+   "name": "Eli Brooks",
+   "role": "Events Coordinator",
+   "org": "GLSFE",
+   "email": "ebrooks@glsfe.org",
+   "phone": "734-555-0162",
+   "relation": "coordinator (registration desk)",
+   "notes": ""
+  },
+  {
+   "id": "c_mark",
+   "name": "Marcus Tran",
+   "role": "Membership and Data Manager",
+   "org": "GLSFE",
+   "email": "mtran@glsfe.org",
+   "phone": null,
+   "relation": "data and privacy",
+   "notes": ""
+  },
+  {
+   "id": "c_simone",
+   "name": "Simone Ward",
+   "role": "Catering Manager",
+   "org": "Henley Hotel Detroit",
+   "email": "sward@henleydetroit.example",
+   "phone": "313-555-0410",
+   "relation": "venue (catering)",
+   "notes": ""
+  },
+  {
+   "id": "c_paul",
+   "name": "Paul Andreou",
+   "role": "Group Sales Manager",
+   "org": "Henley Hotel Detroit",
+   "email": "pandreou@henleydetroit.example",
+   "phone": "313-555-0411",
+   "relation": "venue (rooms)",
+   "notes": ""
+  },
+  {
+   "id": "c_av",
+   "name": "Dana Kowalski",
+   "role": "Account Manager",
+   "org": "Meridian AV",
+   "email": "dkowalski@meridianav.example",
+   "phone": "313-555-0420",
+   "relation": "AV vendor",
+   "notes": ""
+  },
+  {
+   "id": "c_cart",
+   "name": "Lakes Captioning",
+   "role": "scheduling",
+   "org": "Lakes Captioning Services",
+   "email": "schedule@lakescaptioning.example",
+   "phone": "248-555-0430",
+   "relation": "CART captioning provider",
+   "notes": ""
+  },
+  {
+   "id": "c_keynote",
+   "name": "Dr. Alicia Fernandez",
+   "role": "keynote speaker",
+   "org": "University of Michigan",
+   "email": "afernandez@umich.example",
+   "phone": "734-555-0440",
+   "relation": "speaker",
+   "notes": ""
+  },
+  {
+   "id": "c_speaker3b",
+   "name": "Raj Mehta",
+   "role": "session 3B speaker",
+   "org": "Thermaline Systems",
+   "email": "rmehta@thermaline.example",
+   "phone": null,
+   "relation": "speaker",
+   "notes": ""
+  },
+  {
+   "id": "c_backup",
+   "name": "Karen Liu",
+   "role": "backup speaker",
+   "org": "Detroit Public Schools facilities",
+   "email": "kliu@dpsfacilities.example",
+   "phone": null,
+   "relation": "speaker",
+   "notes": ""
+  },
+  {
+   "id": "c_sponsor",
+   "name": "Tom Becker",
+   "role": "Marketing Manager",
+   "org": "Ameridrive Controls (platinum sponsor)",
+   "email": "tbecker@ameridrive.example",
+   "phone": null,
+   "relation": "sponsor",
+   "notes": ""
+  },
+  {
+   "id": "c_bus",
+   "name": "Motor City Coaches",
+   "role": "dispatch",
+   "org": "Motor City Coaches",
+   "email": "dispatch@motorcitycoaches.example",
+   "phone": "313-555-0450",
+   "relation": "shuttle vendor",
+   "notes": ""
+  },
+  {
+   "id": "c_leon",
+   "name": "Leon Price",
+   "role": "Attendee (PE, Wayne County)",
+   "org": "member",
+   "email": "lprice@waynecounty.example",
+   "phone": null,
+   "relation": "attendee",
+   "notes": ""
+  },
+  {
+   "id": "c_karla",
+   "name": "Karla Ostrowski",
+   "role": "Attendee (PE)",
+   "org": "member",
+   "email": "kostrowski@ostrowskieng.example",
+   "phone": null,
+   "relation": "attendee",
+   "notes": ""
+  }
+ ],
+ "ledger": {
+  "group_rate": 189.0,
+  "service_charge": 0.24,
+  "sales_tax": 0.06
+ },
+ "grounding": {
+  "sources": [
+   "BLS OEWS May 2025 and projections via O*NET OnLine: https://www.onetonline.org/link/summary/13-1121.00",
+   "BLS Occupational Outlook Handbook, Meeting, Convention, and Event Planners: https://www.bls.gov/ooh/business-and-financial/meeting-convention-and-event-planners.htm",
+   "Hotel del Coronado banquet policies (90% guarantee floor, 3% overset, greater-of billing, service charge): https://www.hoteldel.com/wp-content/uploads/2021/03/Policies-and-Procedures.pdf",
+   "Strategic Meeting Manager, final guarantees and no-show rates: https://www.strategicmeetingmanager.com/single-post/how-to-figure-out-your-final-guarantee-for-food-beverage-functions",
+   "PCMA Convene, cutting down on no-shows: https://www.pcma.org/cutting-down-on-no-shows-2/",
+   "Cvent, hotel room blocks and attrition: https://www.cvent.com/en/blog/hospitality/hotel-room-block",
+   "ADA, effective communication (CART captioning): https://www.ada.gov/resources/effective-communication/",
+   "Microsoft Work Trend Index 2025: https://www.microsoft.com/en-us/worklab/work-trend-index/breaking-down-infinite-workday"
+  ],
+  "onet_tasks": {
+   "1209": {
+    "task": "Consult with customers to determine objectives and requirements for events, such as meetings, conferences, and conventions.",
+    "type": "Core",
+    "FT": 5.386699999999999,
+    "IM": 4.6
+   },
+   "1212": {
+    "task": "Review event bills for accuracy and approve payment.",
+    "type": "Core",
+    "FT": 4.0248,
+    "IM": 4.54
+   },
+   "1214": {
+    "task": "Coordinate services for events, such as accommodation and transportation for participants, facilities, catering, signage, displays, special needs requirements, printing and event security.",
+    "type": "Core",
+    "FT": 4.837783778377839,
+    "IM": 4.4
+   },
+   "1215": {
+    "task": "Arrange the availability of audio-visual equipment, transportation, displays, and other event needs.",
+    "type": "Core",
+    "FT": 3.8592,
+    "IM": 4.35
+   },
+   "1211": {
+    "task": "Confer with staff at a chosen event site to coordinate details.",
+    "type": "Core",
+    "FT": 4.6930000000000005,
+    "IM": 4.34
+   },
+   "1216": {
+    "task": "Inspect event facilities to ensure that they conform to customer requirements.",
+    "type": "Core",
+    "FT": 3.8425157484251575,
+    "IM": 4.31
+   },
+   "1217": {
+    "task": "Maintain records of event aspects, including financial details.",
+    "type": "Core",
+    "FT": 4.4148000000000005,
+    "IM": 4.26
+   },
+   "1210": {
+    "task": "Monitor event activities to ensure compliance with applicable regulations and laws, satisfaction of participants, and resolution of any problems that arise.",
+    "type": "Core",
+    "FT": 4.309330933093309,
+    "IM": 4.14
+   },
+   "1219": {
+    "task": "Negotiate contracts with such service providers and suppliers as hotels, convention centers, and speakers.",
+    "type": "Core",
+    "FT": 3.633636636336366,
+    "IM": 4.08
+   },
+   "1222": {
+    "task": "Evaluate and select providers of services according to customer requirements.",
+    "type": "Core",
+    "FT": 4.1448,
+    "IM": 4.06
+   },
+   "1213": {
+    "task": "Plan and develop programs, agendas, budgets, and services according to customer requirements.",
+    "type": "Core",
+    "FT": 3.8064,
+    "IM": 4.02
+   },
+   "1226": {
+    "task": "Hire, train, and supervise volunteers and support staff required for events.",
+    "type": "Core",
+    "FT": 3.5151999999999997,
+    "IM": 3.99
+   },
+   "1218": {
+    "task": "Conduct post-event evaluations to determine how future events could be improved.",
+    "type": "Core",
+    "FT": 3.546154615461546,
+    "IM": 3.99
+   },
+   "1221": {
+    "task": "Direct administrative details, such as financial operations, dissemination of promotional materials, and responses to inquiries.",
+    "type": "Core",
+    "FT": 4.368163183681632,
+    "IM": 3.84
+   },
+   "1220": {
+    "task": "Meet with sponsors and organizing committees to plan scope and format of events, to establish and monitor budgets, or to review administrative procedures and event progress.",
+    "type": "Core",
+    "FT": 2.9550044995500446,
+    "IM": 3.75
+   },
+   "1223": {
+    "task": "Read trade publications, attend seminars, and consult with other meeting professionals to keep abreast of meeting management standards and trends.",
+    "type": "Core",
+    "FT": 2.3047,
+    "IM": 3.33
+   },
+   "1224": {
+    "task": "Organize registration of event participants.",
+    "type": "Supplemental",
+    "FT": 3.3437,
+    "IM": 3.8
+   },
+   "1229": {
+    "task": "Develop event topics and choose featured speakers.",
+    "type": "Supplemental",
+    "FT": 2.6039,
+    "IM": 3.71
+   },
+   "1228": {
+    "task": "Promote conference, convention and trades show services by performing tasks such as meeting with professional and trade associations, and producing brochures and other publications.",
+    "type": "Supplemental",
+    "FT": 2.748974897489749,
+    "IM": 3.54
+   },
+   "1225": {
+    "task": "Design and implement efforts to publicize events and promote sponsorships.",
+    "type": "Supplemental",
+    "FT": 2.3666633336666334,
+    "IM": 3.06
+   },
+   "1227": {
+    "task": "Obtain permits from fire and health departments to erect displays and exhibits and serve food at events.",
+    "type": "Supplemental",
+    "FT": 1.3540999999999999,
+    "IM": 3.02
+   }
+  }
+ },
+ "documents": [
+  {
+   "id": "pol-events",
+   "app": "policies",
+   "path": "events-policies",
+   "title": "Events policies (contracts, privacy, accessibility, PDH)",
+   "format": "md",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "# Events policies\n\n- Contracts and amendments up to $10,000: the Director of Events signs. Over $10,000: the Executive Director.\n  Staff may negotiate but not sign.\n- Attendee data: registrants choose at registration whether to share their contact details with exhibitors\n  (field share_with_exhibitors). Exhibitors and sponsors receive only opted-in contacts, name, company, title\n  and email. Never phone numbers or the full list.\n- Accessibility: we provide reasonable accommodations requested at registration or later (captioning, ASL,\n  mobility, dietary). Ask the attendee what works; confirm in writing.\n- PDH certificates: 1 PDH per 60 minutes of instruction, for sessions the attendee is recorded as attending\n  (badge scan). Breaks, meals and exhibits earn none.\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "doc-hotel-contract",
+   "app": "docs",
+   "path": "conference-2026/henley-group-sales-agreement",
+   "title": "Henley Hotel Detroit group sales agreement (excerpt)",
+   "format": "md",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "# Group sales agreement, GLSFE Fall Technical Conference, Nov 4-6, 2026 (signed 2025-12-02)\n\nRoom block: 110 rooms on Wed 11/4 and 110 on Thu 11/5 (220 room-nights) at $189 + tax. Cutoff: Monday 11/2,\n17:00 ET; unreserved rooms release to general inventory.\nAttrition: the group will pick up at least 80% of the block (176 room-nights), measured cumulatively after\ncutoff. Shortfall is billed at the group rate per room-night, less any shortfall rooms the hotel resells.\nFood and beverage: final guarantees due by 12:00 noon ET three business days before each function (Monday 11/2\nfor Thursday's functions). The guarantee may not be lower than 90% of the contracted count. The group is billed\nfor the guarantee or the actual number served, whichever is greater. The hotel sets 3% over the guarantee.\nContracted counts: breakfast 400, lunch 400, reception 350.\nCharges: 24% service charge on food and beverage; 6% Michigan sales tax on food, beverage and service charge.\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "doc-beo",
+   "app": "docs",
+   "path": "conference-2026/beo-thursday",
+   "title": "BEOs, Thursday 11/5 (Henley)",
+   "format": "md",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "BEO 8812 Continental breakfast, Grand Foyer, 07:00-08:15: $38.00 per person.\nBEO 8813 Plated lunch, Ballroom A-C, 12:00-13:15: $52.00 per person (vegetarian and gluten-free on request).\nBEO 8814 Exhibit reception, Grand Foyer, 16:30-18:00: $64.00 per person (2 drink tickets).\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "doc-show-rates",
+   "app": "docs",
+   "path": "conference-2026/guarantee-method",
+   "title": "How we set guarantees (Events team method)",
+   "format": "md",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "1. Use registrations as of Monday 08:00. 2. Apply our show rates from the last three Fall conferences:\nbreakfast 78%, lunch 92%, reception 64%. 3. Round up. 4. Apply the contract floor (90% of contracted count,\nrounded up). 5. The guarantee is the higher of steps 3 and 4. 6. Note the hotel's 3% overset. 7. Send Simone\nthe counts with dietary needs before noon.\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "doc-budget",
+   "app": "docs",
+   "path": "conference-2026/budget",
+   "title": "Fall Technical Conference budget (approved)",
+   "format": "csv",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "line,budget\nfood_and_beverage_incl_service_and_tax,72000\nav,24500\ncaptioning,0\nshuttle,3600\nspeaker_fees_travel,9800\nprinting_signage,4200\ncontingency,5000\ntotal_expense,119100\nregistration_revenue,151200\nsponsorship_revenue,48000\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "doc-agenda",
+   "app": "docs",
+   "path": "conference-2026/agenda",
+   "title": "Conference agenda (Thursday 11/5)",
+   "format": "md",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "07:00 Registration and breakfast (Grand Foyer)\n08:30-09:15 Keynote: Dr. Alicia Fernandez, \"Decarbonizing campus energy\" (Ballroom) [0.75 PDH]\n09:30-10:30 Sessions 1A, 1B, 1C [1.0 PDH each]\n10:45-11:45 Sessions 2A, 2B, 2C [1.0 PDH]\n12:00-13:15 Lunch\n13:30-14:30 Sessions 3A, 3B (\"Chiller plant optimization\", Raj Mehta), 3C [1.0 PDH]\n14:45-15:45 Sessions 4A, 4B, 4C [1.0 PDH]\n16:00-16:30 Closing panel [0.5 PDH]\n16:30-18:00 Exhibit reception\nShuttle: Henley to Huntington Place parking and back, every 20 minutes 06:30-09:00 and 16:00-18:30.\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "cal-harper",
+   "app": "calendar",
+   "path": "harper/week-2026-11-02",
+   "title": "Harper's week",
+   "format": "md",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "Mon 11/2 12:00 F&B guarantees due (Henley); 17:00 room block cutoff\nTue 11/3 10:00 Pre-con call with Henley (Simone, Paul) and Meridian AV\nWed 11/4 13:00 On-site: load-in, room check, registration set-up\nThu 11/5 Fall Technical Conference (on site 06:00-19:00)\nFri 11/6 10:00 Post-con call with Henley; 2027 site selection grid due to Roberta\n",
+     "note": ""
+    }
+   ]
+  }
+ ]
+}

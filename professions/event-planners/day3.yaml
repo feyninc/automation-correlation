@@ -1,0 +1,173 @@
+# Wednesday 2026-11-04, load-in. Session 3A's room is set for 80 but 118 registrants chose it. The room block's
+# extended cutoff passes at noon. The keynote speaker's flight is delayed to late evening. Volunteers need their
+# briefing. Karen sends her 3B details. An exhibitor plans to bring its own wine to the reception.
+#
+# Pickup at noon: 171 room-nights; floor 176; shortfall 5 x $189 = $945 before resale.
+
+documents:
+  - id: doc-session-picks
+    app: docs
+    path: conference-2026/session-selections
+    title: Session selections (Cvent, Wed 08:00)
+    format: csv
+    at: "D3 08:00"
+    author: c_eli
+    content: |
+      session,room,set,capacity_theater,selected
+      1A,Salon 1,theater 80,130,92
+      2A,Salon 1,theater 80,130,101
+      3A,Salon 1,theater 80,130,118
+      3B,Salon 2,theater 60,90,44
+      4A,Salon 1,theater 80,130,86
+  - id: doc-karen
+    app: docs
+    path: conference-2026/session-3b-karen-liu
+    title: Session 3B (replacement) details
+    at: "D3 09:40"
+    author: c_backup
+    content: |
+      Title: Retro-commissioning chiller plants in K-12 buildings. Speaker: Karen Liu, PE, Detroit Public Schools
+      Community District. Abstract (49 words): How a 104-building district found 18% chiller-plant savings through
+      retro-commissioning, trend analysis and low-cost control fixes. Objectives: (1) identify common chiller-plant
+      faults from trend data; (2) prioritize low-cost control fixes; (3) verify savings. 60 minutes of instruction.
+
+threads:
+  - id: t3-paul
+    app: mail
+    path: inbox/pickup-noon
+    title: Pickup at cutoff
+    x:
+      - {at: "D3 12:10", from: c_paul, to: [worker], subject: "Final pickup at extended cutoff", body: "Harper, final pickup at noon: 171 room-nights (Wed 91, Thu 80). The rest of the block is released. Paul"}
+  - id: t3-keynote
+    app: mail
+    path: inbox/keynote-flight
+    title: Flight delay
+    x:
+      - {at: "D3 14:20", from: c_keynote, to: [worker], subject: "Flight delayed",
+         body: "Harper, my flight from Boston is now landing DTW at 23:40 instead of 17:10. I should still make the 8:30 keynote but wanted you to know. Alicia"}
+  - id: t3-exhibitor
+    app: chat
+    path: "@eli/dm"
+    title: Eli Brooks (DM)
+    x:
+      - {at: "D3 15:30", from: c_eli, body: "Ameridrive asked if they can bring 4 cases of their own wine to pour at their booth during the reception. ok?"}
+
+actions:
+  - {at: "D3 08:10", kind: read, target: doc-session-picks, summary: "checked session selections against room sets"}
+  - {id: a3-reset, at: "D3 08:30", kind: reply, target: t1-simone, to: [c_simone], cc: [c_av], summary: "asked the hotel to reset Salon 1",
+     body: "Simone, Salon 1 is set theater for 80, but 92-118 people chose its sessions (3A has 118). Could you reset it to theater for 130 (its capacity) before 07:00 tomorrow? Dana, please check the screen size and the second projector for a 130 set, and keep the captioning monitor front left."}
+  - {at: "D3 09:45", kind: read, target: doc-karen, summary: "read Karen's session details"}
+  - {id: a3-agenda, at: "D3 10:00", kind: edit, target: doc-agenda, summary: "updated the agenda for 3B",
+     content: "07:00 Registration and breakfast (Grand Foyer)\n08:30-09:15 Keynote: Dr. Alicia Fernandez, \"Decarbonizing campus energy\" (Ballroom) [0.75 PDH]\n09:30-10:30 Sessions 1A, 1B, 1C [1.0 PDH each]\n10:45-11:45 Sessions 2A, 2B, 2C [1.0 PDH]\n12:00-13:15 Lunch\n13:30-14:30 Sessions 3A, 3B (\"Retro-commissioning chiller plants in K-12 buildings\", Karen Liu, PE, replacing Raj Mehta), 3C [1.0 PDH]\n14:45-15:45 Sessions 4A, 4B, 4C [1.0 PDH]\n16:00-16:30 Closing panel [0.5 PDH]\n16:30-18:00 Exhibit reception\nShuttle: Henley to Huntington Place parking and back, every 20 minutes 06:30-09:00 and 16:00-18:30."}
+  - {id: a3-3b-notice, at: "D3 10:15", kind: new, app: mail, path: sent/3b-change-notice, target: m3-3b, to: [c_eli], subject: "3B change: app update and email to the 44 registrants",
+     summary: "asked Eli to update the app and tell the 3B registrants",
+     body: "Eli, please update the app with Karen Liu's 3B session (title, abstract, objectives in Docs), keep it at 1.0 PDH, and email the 44 people who chose 3B: new speaker and topic, same time and room, and they can switch sessions at the desk."}
+  - {at: "D3 12:15", kind: read, target: t3-paul, summary: "read the final pickup"}
+  - {id: a3-pickup, at: "D3 12:30", kind: new, app: chat, path: "@roberta/dm", target: t1-roberta, to: [c_roberta], summary: "updated Roberta on attrition",
+     body: "Final pickup 171 room-nights; floor 176, so 5 short: at most $945 (5 x $189), less anything the Henley resells from the released rooms. Down from $4,536 on Monday."}
+  - {at: "D3 13:00", kind: noop, target: cal-harper, summary: "load-in, room check and registration set-up"}
+  - {at: "D3 14:25", kind: read, target: t3-keynote, summary: "read the keynote's delay"}
+  - {id: a3-keynote, at: "D3 14:45", kind: reply, target: t3-keynote, to: [c_keynote], cc: [c_roberta], summary: "set a keynote fallback",
+     body: "Thanks for the heads-up, Alicia, and safe travels. A car will meet you at DTW whatever time you land (I'll text you the driver's number), and the Henley has a late check-in for you. Please send your slides tonight so AV can load them. If anything slips further, our plan B is to swap: the closing panel moves to 08:30 and your keynote to 16:00, so text me by 06:30 if you won't make 8:00."}
+  - {id: a3-volunteers, at: "D3 16:00", kind: edit, app: docs, path: conference-2026/volunteer-briefing, target: doc-volunteers, title: Volunteer briefing (Thursday),
+     summary: "wrote the volunteer briefing",
+     content: "# Volunteer briefing, Thursday 11/5 (6 volunteers + Eli)\n\n06:30 Check in at registration; badges and radios.\nRoles: registration desk (3 until 09:30, then 1), session doors scanning badges for PDH (one per room, sessions 1-4), Ballroom seat help (reserved seats front left for Leon Price, captioning; wheelchair space for Joanne Pike), shuttle greeter at Huntington Place 06:30-09:00.\nWalk-ins: send to Eli (payment by card only).\nPDH: every attendee's badge must be scanned at the door of every session; no scan, no credit.\nIssues: food and dietary to Simone (313-555-0410); AV to Dana; anything else to Harper (734-555-0160).\nNo outside alcohol at the reception (hotel license)."}
+  - {at: "D3 15:35", kind: read, target: t3-exhibitor, summary: "read Eli's question"}
+  - {id: a3-wine, at: "D3 15:45", kind: reply, target: t3-exhibitor, to: [c_eli], summary: "said no outside alcohol",
+     body: "No: the Henley's liquor license and our contract don't allow outside alcohol. If Ameridrive wants to host wine at their booth, the hotel can sell it as a sponsored bar; I'll ask Simone for a price. Can you let Tom know?"}
+
+needs:
+  - id: n3-reset
+    title: Reset Salon 1 for the numbers who chose it
+    kind: follow_up
+    task: 1216
+    from: "D3 08:00"
+    due: "D3 17:00"
+    evidence: [doc-session-picks]
+    ref: a3-reset
+    check: {all: [{to_includes: c_simone}, {mentions_any: [Salon 1]}, {number_equals: {value: 130}}]}
+    must: ["3A has 118 for a room set for 80; reset to 130 (capacity); AV adjusted"]
+    minutes: [6, "a room check"]
+    intent: "Before people stand in the aisles."
+  - id: n3-agenda
+    title: Agenda and PDH record for the new 3B
+    kind: update
+    task: 1213
+    from: "D3 09:40"
+    due: "D3 17:00"
+    evidence: [doc-karen, doc-agenda, pol-events]
+    ref: a3-agenda
+    check: {all: [{mentions_any: [Karen Liu]}, {mentions_any: ["3B"]}, {mentions_any: ["1.0 PDH"]}]}
+    must: ["New title and speaker; 60 minutes of instruction, 1.0 PDH"]
+    minutes: [8, "an agenda update"]
+    intent: "Accurate for certificates."
+  - id: n3-3b-notice
+    title: Tell the 3B registrants
+    kind: follow_up
+    task: 1224
+    from: "D3 09:40"
+    due: "D3 17:00"
+    evidence: [doc-session-picks, doc-karen]
+    ref: a3-3b-notice
+    check: {all: [{to_includes: c_eli}, {number_equals: {value: 44}}, {mentions_any: [app]}]}
+    must: ["App updated; the 44 told; they can switch"]
+    minutes: [4, "a request"]
+    intent: "No surprises."
+  - id: n3-pickup
+    title: Final attrition exposure
+    kind: reconcile
+    task: 1217
+    from: "D3 12:10"
+    due: "D3 17:00"
+    evidence: [t3-paul, doc-hotel-contract]
+    ref: a3-pickup
+    check: {all: [{to_includes: c_roberta}, {number_equals: {value: 171}}, {number_equals: {value: 945}}]}
+    must: ["171 vs 176: 5 short, at most $945 less resale"]
+    minutes: [3, "a quick update"]
+    intent: "Much better."
+  - id: n3-keynote
+    title: A fallback for the late keynote
+    kind: reply
+    task: 1214
+    from: "D3 14:20"
+    due: "D3 17:00"
+    evidence: [t3-keynote, doc-agenda]
+    ref: a3-keynote
+    check: {all: [{to_includes: c_keynote}, {mentions_any: [car, driver]}, {mentions_any: [swap, plan B, "16:00"]}]}
+    must: ["Car at DTW, late check-in, slides tonight", "A concrete swap plan and a decision time"]
+    minutes: [8, "a contingency plan"]
+    intent: "Plan B ready."
+  - id: n3-volunteers
+    title: Volunteer briefing
+    kind: doc
+    task: 1226
+    from: "D3 08:00"
+    due: "D3 18:00"
+    evidence: [doc-agenda, doc-reg, pol-events]
+    ref: a3-volunteers
+    check: {all: [{mentions_any: [badge, scan]}, {mentions_any: [PDH]}, {mentions_any: [Leon, captioning]}]}
+    must: ["Roles and times, badge scanning for PDH, accessibility seating, escalation contacts"]
+    minutes: [25, "a briefing doc"]
+    intent: "They need it before 6:30."
+  - id: n3-wine
+    title: No outside alcohol
+    kind: reply
+    task: 1210
+    from: "D3 15:30"
+    due: "D3 18:00"
+    evidence: [t3-exhibitor, doc-hotel-contract]
+    ref: a3-wine
+    check: {all: [{to_includes: c_eli}, {mentions_any: [license, "outside alcohol"]}]}
+    must: ["Not allowed under the hotel's license; offer a sponsored bar"]
+    must_not: ["Allows it"]
+    minutes: [3, "a short reply"]
+    intent: "License."
+
+traps:
+  - id: tr3-wine
+    title: Allowing the exhibitor's own wine
+    kind: human_only_decision
+    evidence: [t3-exhibitor]
+    check: {all: [{to_includes: c_eli}, {mentions_any: [wine]}, {mentions_any: ["that's fine", "ok", "sure", "go ahead"]}, {not: {mentions_any: [license, "No:"]}}]}
+    correct: "The hotel's liquor license forbids outside alcohol."
+    severity: medium

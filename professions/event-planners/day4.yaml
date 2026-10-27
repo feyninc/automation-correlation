@@ -1,0 +1,119 @@
+# Thursday 2026-11-05: the conference. The badge printer fails at peak arrival. 401 attendees are checked in by 10:45
+# and the hotel asks whether to raise lunch. An attendee's gluten-free lunch isn't labeled. Leon's captions drop. The
+# keynote landed and made it.
+#
+# Lunch: guarantee 380, the hotel sets 392 (3% over); with 401 on site and lunch show rates around 97% of those on
+# site, about 389 eat: covered by the 392 set, billed at the actual count if above 380.
+
+threads:
+  - id: t4-site
+    app: chat
+    path: "#fall-conference-onsite"
+    title: "#fall-conference-onsite"
+    x:
+      - {at: "D4 06:50", from: c_keynote, body: "Landed fine last night, slept, at breakfast. See you at 8:15 for a mic check."}
+      - {at: "D4 07:25", from: c_eli, body: "badge printer 2 is jammed and the line is 40 deep"}
+      - {at: "D4 12:20", from: c_eli, body: "attendee at table 14 says her gluten-free meal didn't come, the servers don't know which plates are GF"}
+
+calls:
+  - id: c4-simone
+    path: 2026-11-05/1045-simone-ward
+    title: Inbound call, Simone Ward (Henley catering)
+    start: "D4 10:45:00"
+    turns:
+      - [c_simone, "Harper, Simone. Registration shows 401 people checked in. Do you want to increase the lunch guarantee from 380? We're set for 392.", 5]
+      - [worker, "Thanks Simone. Let's keep the guarantee at 380 with your 392 set: from past years about 97% of people on site eat lunch, so around 389. If we go over 392, add plates and bill the actual count, as the contract says."]
+      - [c_simone, "Sounds good. We'll count plates.", 3]
+  - id: c4-leon
+    path: 2026-11-05/1340-leon-price
+    title: Inbound call, Leon Price (captions)
+    start: "D4 13:40:00"
+    turns:
+      - [c_leon, "Harper, it's Leon in 3A. The captions on the monitor keep freezing; I've missed most of the last five minutes.", 5]
+      - [worker, "I'm sorry, Leon, I'll fix it now. I'm calling the captioner and AV; the captioner can switch to a wired connection. Could you sit tight for two minutes? I'll ask the speaker to repeat the last slide."]
+      - [c_leon, "Thank you.", 2]
+
+actions:
+  - {id: a4-printer, at: "D4 07:30", kind: reply, target: t4-site, summary: "worked around the badge printer",
+     body: "Eli: switch printer 2's line to the pre-printed alpha badges (A-Z boxes under the desk) and send walk-ins and name changes to printer 1. I'm calling Meridian about printer 2. Two volunteers to the line to pull pre-printed badges."}
+  - {at: "D4 08:30", kind: noop, target: doc-agenda, summary: "keynote started on time"}
+  - {at: "D4 10:46", kind: noop, target: c4-simone, summary: "took Simone's call"}
+  - {id: a4-gf, at: "D4 12:25", kind: new, app: phone, path: 2026-11-05/1225-call-simone, target: t4-gf-call, to: [c_simone], summary: "called Simone about the gluten-free meal",
+     body: "Simone, a gluten-free guest at table 14 hasn't been served, and the servers don't know which plates are GF. Can you send a labeled GF plate to table 14 now and have the captain check the other 8 GF guests and the 2 nut allergies by name?"}
+  - {id: a4-gf-eli, at: "D4 12:30", kind: reply, target: t4-site, summary: "updated Eli on the GF meal",
+     body: "Simone is sending a labeled GF plate to table 14 now and checking the other GF and allergy guests by name. Please apologize to her for me and tell her it's coming."}
+  - {at: "D4 13:41", kind: noop, target: c4-leon, summary: "took Leon's call"}
+  - {id: a4-cart, at: "D4 13:45", kind: new, app: phone, path: 2026-11-05/1345-call-cart, target: t4-cart-call, to: [c_cart, c_av], summary: "had the captioner switch to wired",
+     body: "Lakes Captioning, Meridian: Leon Price's captions in Salon 1 are freezing; please switch the captioning feed to the wired connection Meridian ran for the confidence monitor, and Dana, check the monitor's input. I'll ask the 3A speaker to recap the last slide."}
+
+needs:
+  - id: n4-printer
+    title: Keep registration moving when a printer fails
+    kind: reply
+    task: 1224
+    from: "D4 07:25"
+    due: "D4 07:40"
+    evidence: [t4-site, doc-volunteers]
+    ref: a4-printer
+    check: {all: [{target: t4-site}, {mentions_any: [pre-printed, preprinted]}, {mentions_any: [printer 1]}]}
+    must: ["A workaround in minutes (pre-printed badges, route special cases), and a vendor call"]
+    minutes: [3, "an on-site fix"]
+    intent: "The line can't wait."
+  - id: n4-lunch
+    title: Don't raise the lunch guarantee; rely on the overset
+    kind: call_line
+    task: 1214
+    from: "D4 10:45:10"
+    due: "D4 10:45:50"
+    evidence: [c4-simone, doc-hotel-contract, doc-show-rates]
+    ref: c4-simone.2
+    check: {all: [{target: c4-simone}, {action_in: [say]}, {mentions_any: ["380"]}, {mentions_any: ["392", "actual"]}]}
+    must: ["Keep 380 with the 392 set (about 389 expected); bill actual if over"]
+    must_not: ["Raises the guarantee to 401"]
+    minutes: [0.3, "a spoken line with quick math"]
+    intent: "The overset covers it."
+  - id: n4-gf
+    title: Fix the missing gluten-free meal now
+    kind: follow_up
+    task: 1210
+    from: "D4 12:20"
+    due: "D4 12:35"
+    evidence: [t4-site, doc-reg]
+    ref: a4-gf
+    check: {all: [{to_includes: c_simone}, {mentions_any: [gluten-free, GF]}, {mentions_any: ["table 14"]}]}
+    must: ["A labeled plate to table 14 now; check every GF and allergy guest by name"]
+    minutes: [3, "an on-site call"]
+    intent: "Allergies matter."
+  - id: n4-leon
+    title: Fix Leon's captions
+    kind: call_line
+    task: 1210
+    from: "D4 13:40:10"
+    due: "D4 13:40:50"
+    evidence: [c4-leon, doc-cart-quote]
+    ref: c4-leon.2
+    check: {all: [{target: c4-leon}, {action_in: [say]}, {mentions_any: [wired, captioner]}]}
+    must: ["Immediate fix (wired feed) and the speaker recaps"]
+    minutes: [0.3, "a spoken line"]
+    intent: "Now."
+  - id: n4-cart
+    title: Get the captioner and AV on it
+    kind: follow_up
+    task: 1215
+    from: "D4 13:41"
+    due: "D4 13:50"
+    evidence: [c4-leon]
+    ref: a4-cart
+    check: {all: [{any: [{to_includes: c_cart}, {to_includes: c_av}]}, {mentions_any: [wired]}]}
+    must: ["Specific instruction to both vendors"]
+    minutes: [2, "a quick call"]
+    intent: "Two minutes."
+
+traps:
+  - id: tr4-lunch-401
+    title: Raising lunch to every checked-in attendee
+    kind: stale_info
+    evidence: [c4-simone, doc-hotel-contract]
+    check: {all: [{target: c4-simone}, {action_in: [say]}, {mentions_any: ["raise it to 401", "make it 401", "guarantee 401", "increase to 401"]}]}
+    correct: "The 392 set covers about 389; billing is the greater of guarantee or actual."
+    severity: low
