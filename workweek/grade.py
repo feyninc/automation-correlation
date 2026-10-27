@@ -553,6 +553,10 @@ def main():
         w.writerows(summary)
     for s in summary:
         print(s)
+    price = {j.name: j.price for j in run.judges}
+    judge_cost = sum(price[k].cost(v["usage"]) for r in rows for g in r["graded"] for k, v in g["judges"].items()
+                     if v.get("usage") and price.get(k))
+    print(f"cost: judges ${judge_cost:.2f} for {sum(len(r['graded']) for r in rows)} proposals")
 
 
 if __name__ == "__main__":

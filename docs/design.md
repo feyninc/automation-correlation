@@ -69,6 +69,11 @@ continue an earlier thread (same id, new exchanges, optional state change) or ad
   the worker thinks when the need appears: no hindsight about later days, and the method rather than a computed
   answer (a 10-27 review removed five hindsight intents, one of which gave away a need's answer, and five computed
   credit amounts; 10 of 567 intents still contain a number a check needs, all facts the worker was told).
+- **Traffic**: recurring low-information items (system notifications, digests, channel chatter) as templates
+  (`traffic:`: app, path, sender, `per_day`, varied `items`), expanded deterministically over the worker's hours;
+  real systems send templated mail, and machine-generated mail is over 60% of email traffic (Ailon et al. 2013).
+- **Hours and time**: `worker.hours` per day and `lunch_minutes`; an action may carry `minutes` for timed work the
+  assistant cannot help with (a meeting, a call it cannot see, an inspection).
 - **Traps**: a check that fires on a harmful proposal, the correct behavior, severity, an optional dollar bound with
   its source, and `worker_mistakes` (the worker's own actions the trap is allowed to match).
 
@@ -88,7 +93,9 @@ audit fails the build on:
 4. two threads or documents that render to the same file; a thread in a document app or the reverse;
 5. a split/merge round trip that changes the episode (the per-day JSON must rebuild the same episode).
 
-The build report lists counts per day and app, the task mix against O*NET frequency and importance, and warnings.
+The build report lists counts per day and app, the time budget per day (the needs the worker does, other timed work,
+lunch and 20 s to skim each inbound item, against the minutes present; a warning outside 80-110%), the task mix
+against O*NET frequency and importance, and warnings.
 A separate findability check (run during the build-out) looked for identifiers and numbers a need's check expects that
 appear nowhere the model could see before the deadline; it found one real gap (a deductible known only from the
 worker's call), now fixed, and otherwise only derived figures.
@@ -104,6 +111,9 @@ week was run: the planted bugs fail the new tests and the fixes pass. Numbers in
 prorations, deadlines) were computed by script and are shown in each day file's header comment.
 
 ### Realism and scale
+
+Everything a model, judge or the simulated worker reads gives times as the weekday and clock time ("Monday 11:05");
+the week runs from Monday 2026-11-02, the first day, to Friday 2026-11-06, the last. Internally times are "D1 11:05".
 
 A worker in Microsoft 365 receives about 117 emails and 153 chat messages a day (Microsoft Work Trend Index 2025).
 The weeks carry 6 to 19 inbound items a day (mail, chat, tickets, calls and new or updated documents; claims adjusters
@@ -180,8 +190,10 @@ version of each document; a call's turns, then the worker's case note), plus `/w
    recorded separately and not charged to the model.
 6. **Call timing (offline):** a line proposed on a call counts only if it would have reached the worker in time. The
    engine records, with each proposal, the output tokens of every model call since the caller's line and the time
-   its tools took; the grader converts tokens to seconds with the model's p50 time to first token and throughput on
-   its route (`scripts/speed.py`, OpenRouter's endpoint stats, `data/openrouter/speed-<date>.csv`), adds the worker
+   its tools took; the grader converts tokens to seconds with the model's p50 time to first token and throughput:
+   OpenRouter's week averages for 2026-10-20 to 2026-10-27, best provider, at the run's reasoning levels, read by the
+   owner from the model pages (`run.speed_file`, `data/openrouter/speed-week-2026-10-20.csv`; `scripts/speed.py`
+   snapshots the last 30 minutes per route as a cross-check, `speed-snapshot-2026-10-27.csv`), adds the worker
    reading the line's first 10 words, and compares with the caller's patience (strict) or the caller's line plus
    patience (streaming, as if the assistant heard the line as it was spoken: an upper bound). A late line is dropped
    before the worker sees it, as any assistant would once the worker has started answering: it earns no need and
@@ -269,7 +281,8 @@ and profession: ticks, proposals, questions, needs caught, traps fired, press-en
 Claude Opus 4.5 to 5.5; Kimi K2 Thinking to K3.1 Pro; DeepSeek V3.2 to V4.1 Flash 1017; GLM-4.7 to 5.3), from
 `scripts/timeline.py`. Routes: OpenAI's API for GPT; Bedrock for Claude and GLM-4.7/5; Azure Foundry for DeepSeek and
 Kimi where offered; OpenRouter with a pinned provider and no fallback otherwise. Every model runs at its lab's
-medium reasoning setting, set on every call (owner, 10-26):
+medium reasoning setting, set on every call (owner, 10-26), except DeepSeek, which has no medium and runs at high
+(owner, 10-27):
 
 | Model (route) | Default, observed | Medium is sent as |
 | --- | --- | --- |
@@ -277,9 +290,10 @@ medium reasoning setting, set on every call (owner, 10-26):
 | GPT-5.5, 5.6 Sol, 6 Sol, 6.1 Sol, 6 Astra (OpenAI) | reasoning | same |
 | Opus 4.5 (Bedrock) | no thinking | effort beta, `effort: "medium"`, thinking with an 8,000-token budget |
 | Opus 4.6 to 5.5 (Bedrock) | 4.6-4.8 no thinking; 5, 5.5 adaptive | adaptive thinking, `effort: "medium"` |
-| DeepSeek V3.2 to V4.1 Flash (Azure) | no thinking | `reasoning_effort: "medium"` |
+| DeepSeek V3.2 to V4.1 Flash (Azure) | no thinking | `reasoning_effort: "high"` (no medium) |
 | Kimi K2.5, K2.6 (Azure) | thinks | `reasoning_effort: "medium"` |
-| Kimi K2 Thinking, K3, K3.1 Pro; DeepSeek V4.1 Flash 1017 (OpenRouter) | thinks | `reasoning: {effort: "medium"}` |
+| Kimi K2 Thinking, K3, K3.1 Pro (OpenRouter) | thinks | `reasoning: {effort: "medium"}` |
+| DeepSeek V4.1 Flash 1017 (OpenRouter, DeepInfra fp8) | thinks | `reasoning: {effort: "high"}` (no medium) |
 | GLM-4.7, GLM-5 (Bedrock) | thinks only at high | `reasoning_effort: "high"` (GLM thinking is on/off; `workweek/providers.py` passes it, which Inspect's Bedrock route did not) |
 | GLM-5.1 to 5.3, Gemini 4 Argon, Qwen3.8 Max Prime (OpenRouter) | varies | `reasoning: {effort: "medium"}` |
 
@@ -293,13 +307,19 @@ it does not measure how much a model thinks on real work. Caveats:
 - GLM has only thinking on or off (Z.ai's API), so its "medium" is "thinking on". On Bedrock `reasoning_effort` low and
   medium leave it off and high turns it on (`data/reasoning-probe-glm.csv`); Z.ai's own `thinking: {type: enabled}`
   is ignored there.
-- DeepSeek documents low, high and max for V4; what Azure does with medium is not documented.
+- DeepSeek documents low, high and max for V4, no medium, so DeepSeek runs at high.
 - Defaults differ even by host (DeepSeek V4.1 Flash thinks by default on DeepInfra, not on Azure), so a setting is
   always sent.
 - Reasoning token counts are not comparable across routes: OpenAI and OpenRouter report them, Bedrock and Azure bill
   them inside output tokens.
 - GLM-4.7 and GLM-5 on Bedrock sometimes write a tool call as text in GLM's own syntax instead of a structured call;
   `workweek/providers.py` recovers those, and each run records how many (`recovered_tool_calls`).
+
+The judges are each provider's best model at medium (owner, 10-27): Claude Opus 5.5 (Bedrock), GPT-6 Astra (OpenAI,
+through the Batch API), Gemini 4 Argon (OpenRouter, Google Vertex), Kimi K3.1 Pro (OpenRouter, Moonshot), DeepSeek
+V4.1 Flash 1017 at high (OpenRouter, DeepInfra), Qwen3.8 Max Prime (OpenRouter, Alibaba) and GLM-5.3 (OpenRouter,
+Z.ai). The simulated worker is Gemini 4 Argon at medium. A smoke test on 10-27 (`data/smoke-models.csv`) had every
+tested model, judge and the simulated worker make its tool call on its route at these settings.
 
 `workweek.config.load()` refuses duplicate names, unknown families, a model string without a provider prefix, a
 missing price, judge weights that do not sum to 1, two judges from one family, a dropout that leaves no weight, and a

@@ -3,7 +3,8 @@
     uv run python scripts/run.py --models all --professions all --start "D1 09:00" --end "D1 09:10" --log-dir logs/sample
 
 --models and --professions take "all" or comma-separated names (model names from config/run.yaml; profession folder
-names under professions/). Grade the logs afterwards with `python -m workweek.grade <log-dir>`.
+names under professions/). The full run goes in batches of three professions, so each batch's cost is known before
+the next starts; the run prints what each sample cost. Grade the logs afterwards with `python -m workweek.grade`.
 """
 import argparse
 
@@ -37,12 +38,19 @@ def main():
     logs = inspect_eval(workweek(professions=a.professions, start=a.start, end=a.end), model=models,
                         log_dir=a.log_dir, max_samples=a.max_samples, max_tasks=a.max_models, display="none",
                         fail_on_error=False, retry_on_error=2)
+    total = worker = 0.0
     for spec, log in zip(specs, logs):
         print(f"{spec.name}: {log.status}" + (f" ({log.error.message[:200]})" if log.error else ""))
         for s in log.samples or []:
             md = s.metadata
+            usage = {k: u.model_dump() for k, u in (s.model_usage or {}).items()}
+            cost = spec.price.cost(usage[spec.model]) if spec.model in usage else 0.0
+            sim = sum(cfg.user_model.price.cost(u) for k, u in usage.items() if k == cfg.user_model.model)
+            total, worker = total + cost, worker + sim
             print(f"  {s.id}: ticks {md.get('ticks')}, proposals {len(md.get('proposals', []))}, "
-                  f"questions {len(md.get('questions', []))}" + (f", error {s.error.message[:120]}" if s.error else ""))
+                  f"questions {len(md.get('questions', []))}, ${cost:.2f}"
+                  + (f", error {s.error.message[:120]}" if s.error else ""))
+    print(f"cost: tested models ${total:.2f}, simulated worker ${worker:.2f} (judging is priced by workweek.grade)")
 
 
 if __name__ == "__main__":
