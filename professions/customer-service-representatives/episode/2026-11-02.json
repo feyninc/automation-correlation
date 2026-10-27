@@ -370,7 +370,9 @@
      "subject": null,
      "body": "Reason: bill increase. Verified by PIN. NEW20 promo ($20) ended 10/31; no email on file so the 10/1 notice was not received. Applied SAVE10 ($10 x 6 months from the December bill). Added email gary.lindqvist@outlook.com; OTP sent to confirm. Next: none.",
      "attachments": [],
-     "meta": {}
+     "meta": {
+      "case_note": true
+     }
     }
    ]
   },
@@ -501,7 +503,9 @@
      "subject": null,
      "body": "Reason: construction on Fir Grove; medical alarm on Home Phone. Verified by PIN. Explained Home Phone and alarm go down with the fiber, including 911; advised to keep a charged cell phone. Added a priority-callback note. Promised: Tier 2 Technical to call Doris directly about a battery backup unit.",
      "attachments": [],
-     "meta": {}
+     "meta": {
+      "case_note": true
+     }
     }
    ]
   },
@@ -608,7 +612,9 @@
      "subject": null,
      "body": "Reason: weak Wi-Fi upstairs (repeat of 10/22). Verified by OTP to phone on file. Gateway online, full speed at gateway. Ordered one Whole-Home Wi-Fi extender with EXT1 (free 12 months, then $8/month), shipping to the service address, 3-5 business days.",
      "attachments": [],
-     "meta": {}
+     "meta": {
+      "case_note": true
+     }
     }
    ]
   },
@@ -739,7 +745,9 @@
      "subject": null,
      "body": "Reason: past due, hardship. Verified by PIN. Waived the $10 late fee (first in 12 months). Payment arrangement: $56.62 on 11/13 and $56.62 on 11/27, total $113.24. Reminder texts set for 11/12 and 11/26.",
      "attachments": [],
-     "meta": {}
+     "meta": {
+      "case_note": true
+     }
     }
    ]
   },
@@ -1276,7 +1284,7 @@
    "kind": "call_line",
    "onet_task_id": "18565",
    "discoverable_at": "D1 09:01:10",
-   "deadline": "D1 09:01:20",
+   "deadline": "D1 09:01:26",
    "evidence": [
     "c1-gary"
    ],
@@ -1324,8 +1332,8 @@
    "title": "Explain the bill increase from the account record",
    "kind": "call_line",
    "onet_task_id": "2585",
-   "discoverable_at": "D1 09:01:30",
-   "deadline": "D1 09:01:45",
+   "discoverable_at": "D1 09:01:27",
+   "deadline": "D1 09:01:48",
    "evidence": [
     "c1-gary",
     "rec-gary"
@@ -1382,8 +1390,8 @@
    "title": "Respond to the promo-extension request within authority",
    "kind": "call_line",
    "onet_task_id": "2579",
-   "discoverable_at": "D1 09:01:50",
-   "deadline": "D1 09:02:10",
+   "discoverable_at": "D1 09:01:49",
+   "deadline": "D1 09:02:20",
    "evidence": [
     "c1-gary",
     "kb-offers",
@@ -1494,8 +1502,8 @@
    "title": "Tell Doris the alarm and 911 go down with the fiber",
    "kind": "call_line",
    "onet_task_id": "18565",
-   "discoverable_at": "D1 09:19:30",
-   "deadline": "D1 09:19:50",
+   "discoverable_at": "D1 09:19:16",
+   "deadline": "D1 09:19:51",
    "evidence": [
     "c1-doris",
     "kb-outage",
@@ -1604,8 +1612,8 @@
    "title": "Ship the extender to the service address only",
    "kind": "call_line",
    "onet_task_id": "2584",
-   "discoverable_at": "D1 09:42:20",
-   "deadline": "D1 09:42:40",
+   "discoverable_at": "D1 09:41:47",
+   "deadline": "D1 09:42:07",
    "evidence": [
     "c1-kenji",
     "kb-plans"
@@ -1653,8 +1661,8 @@
    "title": "Offer Frank a waiver and a two-payment arrangement",
    "kind": "call_line",
    "onet_task_id": "2583",
-   "discoverable_at": "D1 11:06:30",
-   "deadline": "D1 11:06:50",
+   "discoverable_at": "D1 11:06:11",
+   "deadline": "D1 11:06:34",
    "evidence": [
     "c1-frank",
     "rec-frank",
@@ -1715,8 +1723,8 @@
    "title": "Decline to share Doris's account with an unverified caller",
    "kind": "call_line",
    "onet_task_id": "18565",
-   "discoverable_at": "D1 11:31:20",
-   "deadline": "D1 11:31:40",
+   "discoverable_at": "D1 11:31:24",
+   "deadline": "D1 11:31:56",
    "evidence": [
     "c1-unverified",
     "kb-verification",
@@ -2353,8 +2361,29 @@
       ]
      },
      {
-      "mentions_any": [
-       "genesys-login.northbeam-fiber-support.com"
+      "all": [
+       {
+        "mentions_any": [
+         "genesys-login.northbeam-fiber-support.com"
+        ]
+       },
+       {
+        "not": {
+         "mentions_any": [
+          "phish",
+          "phishing",
+          "suspicious",
+          "suspected",
+          "lookalike",
+          "look-alike",
+          "fake",
+          "scam",
+          "fraud",
+          "do not click",
+          "don't click"
+         ]
+        }
+       }
       ]
      }
     ]

@@ -307,8 +307,6 @@ needs:
     title: Give Jordan only the ETR NOC has posted
     kind: call_line
     task: 18565
-    from: "D2 08:11:30"
-    due: "D2 08:11:50"
     evidence: [c2-jordan, doc-incident]
     ref: c2-jordan.4
     check: {all: [{target: c2-jordan}, {action_in: [say]}, {mentions_any: ["11", "eleven"]}, {mentions_any: [estimate, ETR, "expected"]}]}
@@ -320,8 +318,6 @@ needs:
     title: Explain the outage credit instead of a free month
     kind: call_line
     task: 2579
-    from: "D2 08:12:10"
-    due: "D2 08:12:30"
     evidence: [c2-jordan, kb-outage, kb-credits]
     ref: c2-jordan.6
     check: {all: [{target: c2-jordan}, {action_in: [say]}, {mentions_any: [credit]}, {mentions_any: ["24 hours", "per day", "one day", "a day"]}]}
@@ -333,8 +329,6 @@ needs:
     title: Warn Lou that 911 and the alarm are down
     kind: call_line
     task: 18565
-    from: "D2 08:39:00"
-    due: "D2 08:39:20"
     evidence: [c2-lou, kb-outage, rec-lou]
     ref: c2-lou.4
     check: {all: [{target: c2-lou}, {action_in: [say]}, {mentions_any: ["911"]}, {mentions_any: [cell, mobile]}]}
@@ -411,8 +405,6 @@ needs:
     title: Correct Tess's stale ETR
     kind: call_line
     task: 18565
-    from: "D2 10:45:20"
-    due: "D2 10:45:40"
     evidence: [c2-tess, doc-incident, t2-noc-chat]
     ref: c2-tess.4
     check: {all: [{target: c2-tess}, {action_in: [say]}, {mentions_any: ["2 p.m.", "2pm", "two", "14:00", "2:00"]}]}
@@ -424,8 +416,6 @@ needs:
     title: Explain why no technician visit
     kind: call_line
     task: 2585
-    from: "D2 11:13:00"
-    due: "D2 11:13:20"
     evidence: [c2-harold, doc-incident]
     ref: c2-harold.4
     check: {all: [{target: c2-harold}, {action_in: [say]}, {mentions_any: [main cable, "fiber cut", outage]}]}
@@ -437,8 +427,6 @@ needs:
     title: Tell Sam his segment is back Wednesday and offer the hotspot
     kind: call_line
     task: 18565
-    from: "D2 14:25:30"
-    due: "D2 14:26:10"
     evidence: [c2-sam, doc-incident, t2-noc-chat]
     ref: c2-sam.6
     check: {all: [{target: c2-sam}, {action_in: [say]}, {mentions_any: [hotspot]}]}
@@ -462,8 +450,6 @@ needs:
     title: Nina is not in the outage; troubleshoot her Wi-Fi
     kind: call_line
     task: 2585
-    from: "D2 15:05:30"
-    due: "D2 15:05:50"
     evidence: [c2-nina, rec-nina, doc-incident]
     ref: c2-nina.4
     check: {all: [{target: c2-nina}, {action_in: [say]}, {mentions_any: ["not in", "isn't in", "not part", "not affected"]}]}

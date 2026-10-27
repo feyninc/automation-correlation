@@ -251,8 +251,6 @@ needs:
     title: Confirm Greg's credit is short and what happens next
     kind: call_line
     task: 2580
-    from: "D5 09:12:30"
-    due: "D5 09:13:10"
     evidence: [c5-greg, rec-greg, doc-incident, doc-credit-policy, c3-greg]
     ref: c5-greg.4
     check: {all: [{target: c5-greg}, {action_in: [say]}, {mentions_any: [correction, billing team, Billing Operations]}, {any: [{number_equals: {value: 2.50, tol: 0.01}}, {mentions_any: [two fifty]}]}]}
@@ -324,8 +322,6 @@ needs:
     title: Tell Jordan the second day comes Monday
     kind: call_line
     task: 2581
-    from: "D5 14:20:30"
-    due: "D5 14:21:10"
     evidence: [c5-jordan, rec-jordan, t5-billing-ops]
     ref: c5-jordan.4
     check: {all: [{target: c5-jordan}, {action_in: [say]}, {mentions_any: [Monday]}]}
@@ -449,8 +445,6 @@ needs:
     title: Add Karen and decline to send June's PIN
     kind: call_line
     task: 2584
-    from: "D5 11:06:00"
-    due: "D5 11:06:40"
     evidence: [c5-june, kb-verification, rec-june]
     ref: c5-june.6
     check: {all: [{target: c5-june}, {action_in: [say]}, {mentions_any: [authorized user, added]}, {mentions_any: ["can't send", "cannot send", "can't email", "passcode", "share it"]}]}

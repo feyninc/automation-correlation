@@ -104,6 +104,10 @@ class Thread(_M):
     state_changes: list[StateChange] = []   # later changes (a reply marks it solved, a customer reopens it)
     exchanges: list[Exchange]
 
+    def call_end(self) -> int:
+        """When a call's last spoken turn is; case notes written afterwards don't extend it."""
+        return max(seconds(x.at) for x in self.exchanges if not x.meta.get("case_note"))
+
     def state_at(self, t: int) -> dict[str, Any]:
         out = dict(self.state)
         for c in sorted(self.state_changes, key=lambda c: seconds(c.at)):

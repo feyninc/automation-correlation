@@ -24,6 +24,13 @@ class Price(BaseModel):
     cache_read: float = 0.0
     cache_write: float | None = None
 
+    def cost(self, usage: dict) -> float:
+        """USD for an Inspect ModelUsage dump; its input_tokens already exclude cache reads and writes."""
+        write = self.input if self.cache_write is None else self.cache_write
+        return (usage.get("input_tokens", 0) * self.input + usage.get("output_tokens", 0) * self.output
+                + (usage.get("input_tokens_cache_read") or 0) * self.cache_read
+                + (usage.get("input_tokens_cache_write") or 0) * write) / 1e6
+
 
 class Speed(BaseModel):
     ttft_p50_s: float | None = None

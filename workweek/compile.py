@@ -110,6 +110,15 @@ def _call(raw: dict) -> Thread:
                   state=raw.get("state", {}), exchanges=xs)
 
 
+def call_line_window(th: Thread, xid: str) -> tuple[str, str]:
+    """A worker's call line is needed from the caller turn it answers until just before the caller speaks again."""
+    xs = [x for x in th.exchanges if not x.meta.get("case_note")]
+    i = next(k for k, x in enumerate(xs) if x.id == xid)
+    start = next(seconds(x.at) for x in reversed(xs[:i]) if x.author != "worker")
+    after = next((seconds(x.at) for x in xs[i + 1:] if x.author != "worker"), seconds(xs[i].at) + 30)
+    return fmt(start), fmt(after - 1)
+
+
 def expand(form: dict) -> Episode:
     contacts = [Contact(id=c[0], name=c[1], role=c[2], org=c[3], email=c[4] or None, phone=(c[5] if len(c) > 5 else None) or None,
                         relation=c[6] if len(c) > 6 else "", notes=c[7] if len(c) > 7 else "")
@@ -153,7 +162,8 @@ def expand(form: dict) -> Episode:
                                       exchanges=[])
             th = threads[tgt]
             x = Exchange(id=f"{tgt}.w{len(th.exchanges) + 1}", at=a["at"], author="worker", to=a.get("to", []),
-                         cc=a.get("cc", []), subject=a.get("subject"), body=str(a["body"]).strip(), attachments=a.get("att", []))
+                         cc=a.get("cc", []), subject=a.get("subject"), body=str(a["body"]).strip(), attachments=a.get("att", []),
+                         meta={"case_note": True} if th.live and kind == "update" else {})
             th.exchanges.append(x)
             th.exchanges.sort(key=lambda e: seconds(e.at))
             prod = x.id
@@ -181,6 +191,8 @@ def expand(form: dict) -> Episode:
     needs = []
     for n in form["needs"]:
         ref = n.get("ref")
+        if ref in turns:
+            n = {**n, **dict(zip(("from", "due"), call_line_window(threads[ref.rsplit(".", 1)[0]], ref)))}
         if ref and produced.get(ref):
             p = produced[ref]
             reference = Reference(document_version=p) if "@" in p else Reference(exchange_id=p)

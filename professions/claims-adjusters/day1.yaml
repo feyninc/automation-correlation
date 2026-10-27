@@ -133,8 +133,6 @@ needs:
     title: Explain the total loss settlement with the lien
     kind: call_line
     task: 21423
-    from: "D1 11:00:10"
-    due: "D1 11:00:50"
     evidence: [c1-carla, doc-ccc, pol-form, doc-declarations]
     ref: c1-carla.2
     check: {all: [{target: c1-carla}, {action_in: [say]}, {any: [{number_equals: {value: 7260}}, {mentions_any: ["seven thousand two hundred sixty"]}]}, {mentions_any: [credit union, lienholder, payoff]}]}
@@ -145,8 +143,6 @@ needs:
     title: Offer the valuation, comps review and appraisal
     kind: call_line
     task: 21421
-    from: "D1 11:00:50"
-    due: "D1 11:01:30"
     evidence: [c1-carla, pol-form, pol-guidelines]
     ref: c1-carla.4
     check: {all: [{target: c1-carla}, {action_in: [say]}, {mentions_any: [report]}, {mentions_any: [appraisal]}]}

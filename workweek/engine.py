@@ -18,7 +18,7 @@ from inspect_ai.tool import ToolInfo, ToolParam, ToolParams
 from inspect_ai.util import sandbox, store
 
 from . import config as cfgmod
-from . import prompts, providers  # noqa: F401  (providers patches Inspect)
+from . import prompts, providers  # importing providers also patches Inspect
 from .apps import FileOut, render_world, thread_file
 from .schema import Episode, fmt, seconds
 from .world import DAYS, Event, events, feed_lines, ticks
@@ -27,6 +27,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SANDBOX = ("docker", str(ROOT / "workweek/sandbox/compose.yaml"))
 MAX_TOOL_OUTPUT = 12000
 KEEP_TOOL_OUTPUT_TICKS = 6
+READ_KEPT = 12                 # most recent world files read, kept with each proposal for the judges
 
 TOOLS = [
     ToolInfo(name="bash", description="Run a shell command in your workspace (read-only /world, writable /home/assistant). Returns stdout and stderr.",
@@ -70,6 +71,7 @@ class Sim:
         self.ep, self.run = ep, run
         self.start, self.end = start, end
         self.written: dict[str, bytes] = {}
+        self.read: list[str] = []   # world files named in bash commands, most recent last (the judges see them)
         self.feed: list[Event] = []
         self.last = -1
         self.proposals: list[dict] = []
@@ -77,6 +79,7 @@ class Sim:
         self.call: str | None = None          # thread id of the joined call
         self.call_done: set[str] = set()
         self.ticks_run = 0
+        self.recovered = 0          # tool calls recovered from GLM-syntax text
         self.tick_index = 0
         self.first = ep.worker.name.split()[0]
         self.user_model: Model = get_model(run.user_model.model, config=GenerateConfig(**run.generate_for(run.user_model)),
@@ -97,6 +100,16 @@ class Sim:
                 await sb.write_file(p, f.data)
                 self.written[p] = f.data
         await sb.exec(["chmod", "-R", "a+rX", "/world"])
+
+    def note_reads(self, command: str) -> None:
+        """Remember which world files a command names, by full path or by their last two path parts."""
+        for f in self.written:
+            if f.startswith("/world/inbox/"):
+                continue
+            if f in command or "/".join(f.split("/")[-2:]) in command:
+                if f in self.read:
+                    self.read.remove(f)
+                self.read.append(f)
 
     def call_thread(self, path: str):
         for t in self.ep.threads:
@@ -124,6 +137,7 @@ async def run_tool(sim: Sim, call, t: int) -> tuple[str, bool]:
     a = call.arguments or {}
     name = call.function
     if name == "bash":
+        sim.note_reads(str(a.get("command", "")))
         r = await sandbox().exec(["bash", "-lc", str(a.get("command", ""))], user="assistant",
                                  cwd="/home/assistant", timeout=60)
         out = (r.stdout or "") + (("\n[stderr]\n" + r.stderr) if r.stderr else "")
@@ -143,7 +157,7 @@ async def run_tool(sim: Sim, call, t: int) -> tuple[str, bool]:
         pid = f"p{len(sim.proposals) + 1:04d}"
         sim.proposals.append({"id": pid, "t": fmt(t), "tick": sim.ticks_run, "target": a.get("target", ""),
                               "action": a.get("action", ""), "drafts": drafts, "note": a.get("note", ""),
-                              "in_call": sim.call})
+                              "in_call": sim.call, "read": sim.read[-READ_KEPT:]})
         return f"Saved proposal {pid} with {len(drafts)} draft(s). {sim.first} will review it; nothing was sent.", False
     if name == "ask_worker":
         q = str(a.get("question", "")).strip()
@@ -154,7 +168,7 @@ async def run_tool(sim: Sim, call, t: int) -> tuple[str, bool]:
         th = sim.call_thread(str(a.get("path", "")))
         if not th:
             return "No live call at that path.", False
-        if th.id in sim.call_done or seconds(th.exchanges[-1].at) < t:
+        if th.id in sim.call_done or th.call_end() < t:
             return "That call has ended.", False
         if seconds(th.exchanges[0].at) > t:
             return "That call has not started.", False
@@ -179,8 +193,13 @@ def elide(messages: list, keep_from: int) -> None:
 async def agent_turn(sim: Sim, model: Model, messages: list, t: int, budget: int) -> None:
     for _ in range(budget):
         out = await model.generate(messages, tools=TOOLS)
-        messages.append(out.message)
         calls = out.message.tool_calls or []
+        if not calls:
+            calls = providers.recover_tool_calls(out.message.text, {t.name for t in TOOLS})
+            if calls:
+                out.message.tool_calls = calls
+                sim.recovered += len(calls)
+        messages.append(out.message)
         if not calls:
             messages.append(ChatMessageUser(content=prompts.NO_TOOL.format(first_name=sim.first)))
             return
@@ -197,10 +216,15 @@ async def follow_call(sim: Sim, model: Model, messages: list, t: int) -> int:
     """Run a joined call turn by turn from time t; returns the time the call ended or was left."""
     th = next(x for x in sim.ep.threads if x.id == sim.call)
     path = thread_file(th)
-    for i, x in enumerate(th.exchanges):
+    xs = [x for x in th.exchanges if not x.meta.get("case_note")]
+    # a caller turn spoken at or before joining that the worker has not answered yet is still the model's to answer
+    pending = next((i for i in range(len(xs) - 1, -1, -1) if xs[i].author != "worker" and seconds(xs[i].at) <= t
+                    and (i + 1 == len(xs) or seconds(xs[i + 1].at) > t)), None)
+    for i, x in enumerate(xs):
         s = seconds(x.at)
-        if s <= t or x.author == "worker":
+        if x.author == "worker" or (s <= t and i != pending):
             continue
+        s = max(s, t)
         if s > sim.end:
             break
         await sim.sync(s, events(sim.ep, sim.last, s))
@@ -213,7 +237,7 @@ async def follow_call(sim: Sim, model: Model, messages: list, t: int) -> int:
             return s
     sim.call_done.add(th.id)
     sim.call = None
-    return min(seconds(th.exchanges[-1].at), sim.end)
+    return min(th.call_end(), sim.end)
 
 
 @solver
@@ -245,7 +269,7 @@ def workweek_agent(run_path: str = "config/run.yaml", start: str = "D1 08:00", e
                 sim.last = t
                 live = [e for e in sim.feed if e.text.startswith("live ") and e.at <= t]
                 call_note = ""
-                if any(sim.call_thread(e.path) and seconds(sim.call_thread(e.path).exchanges[-1].at) >= t for e in live):
+                if any(sim.call_thread(e.path) and sim.call_thread(e.path).call_end() >= t for e in live):
                     call_note = " A live call is in progress (see the feed)."
                 end_of_day = t % 86400 == 17 * 3600
                 text = (prompts.END_OF_DAY.format(when=fmt(t), first_name=sim.first, n_new=len(new)) if end_of_day else
@@ -264,6 +288,7 @@ def workweek_agent(run_path: str = "config/run.yaml", start: str = "D1 08:00", e
         state.metadata["proposals"] = sim.proposals
         state.metadata["questions"] = sim.questions
         state.metadata["ticks"] = sim.ticks_run
+        state.metadata["recovered_tool_calls"] = sim.recovered
         state.completed = True
         return state
 

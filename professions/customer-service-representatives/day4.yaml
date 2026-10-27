@@ -325,8 +325,6 @@ needs:
     title: Say the v7 line before any offer to Walter
     kind: call_line
     task: 18565
-    from: "D4 08:21:30"
-    due: "D4 08:22:10"
     evidence: [c4-walter, doc-cancel-v7, rec-walter]
     ref: c4-walter.4
     check: {all: [{target: c4-walter}, {action_in: [say]}, {mentions_any: ["cancel at any time", "cancel anytime"]}]}
@@ -338,8 +336,6 @@ needs:
     title: Offer Walter a plan that fits his use
     kind: call_line
     task: 2586
-    from: "D4 08:21:30"
-    due: "D4 08:22:10"
     evidence: [c4-walter, rec-walter, kb-plans, kb-offers]
     ref: c4-walter.4
     check: {all: [{target: c4-walter}, {action_in: [say]}, {any: [{mentions_any: [Fiber 300, SAVE10]}, {number_equals: {value: 55}}, {number_equals: {value: 65}}, {mentions_any: [fifty-five, sixty-five]}]}]}
@@ -363,8 +359,6 @@ needs:
     title: Explain the duplicated 911 surcharge to Ruth
     kind: call_line
     task: 2579
-    from: "D4 09:04:30"
-    due: "D4 09:05:10"
     evidence: [c4-ruth, rec-ruth, t1-billing-ops]
     ref: c4-ruth.4
     check: {all: [{target: c4-ruth}, {action_in: [say]}, {mentions_any: ["November 9", "11/9", "9th"]}]}
@@ -376,8 +370,6 @@ needs:
     title: Recognize the one-ring scam and tell Tanya
     kind: call_line
     task: 2585
-    from: "D4 10:19:00"
-    due: "D4 10:19:40"
     evidence: [c4-tanya, rec-tanya, doc-home-phone]
     ref: c4-tanya.6
     check: {all: [{target: c4-tanya}, {action_in: [say]}, {mentions_any: [scam, "one-ring", "one ring"]}, {mentions_any: [Jamaica, international]}]}
@@ -389,8 +381,6 @@ needs:
     title: Send the $38.40 to billing instead of promising it
     kind: call_line
     task: 2582
-    from: "D4 10:19:00"
-    due: "D4 10:19:40"
     evidence: [c4-tanya, rec-tanya, kb-credits]
     ref: c4-tanya.6
     check: {all: [{target: c4-tanya}, {action_in: [say]}, {mentions_any: [billing team, review, Tier 2, specialist]}]}
@@ -402,8 +392,6 @@ needs:
     title: Offer the free international block
     kind: call_line
     task: 2586
-    from: "D4 10:19:40"
-    due: "D4 10:20:20"
     evidence: [c4-tanya, doc-home-phone, rec-tanya]
     ref: c4-tanya.8
     check: {all: [{target: c4-tanya}, {action_in: [say]}, {mentions_any: [block]}]}
@@ -489,8 +477,6 @@ needs:
     title: Verify Amara without the compromised PIN
     kind: call_line
     task: 2585
-    from: "D4 13:02:30"
-    due: "D4 13:03:10"
     evidence: [c4-amara, kb-verification, rec-amara]
     ref: c4-amara.2
     check: {all: [{target: c4-amara}, {action_in: [say]}, {mentions_any: [code, passcode, OTP]}, {mentions_any: ["never", "wasn't us", "not us"]}]}
@@ -502,8 +488,6 @@ needs:
     title: Tell Amara about the attempt and reset her PIN
     kind: call_line
     task: 2585
-    from: "D4 13:03:10"
-    due: "D4 13:04:00"
     evidence: [c4-amara, rec-amara]
     ref: c4-amara.4
     check: {all: [{target: c4-amara}, {action_in: [say]}, {mentions_any: [new PIN, "change your PIN", "reset"]}]}
@@ -526,8 +510,6 @@ needs:
     title: Tell Mike the arrangement is above Tier 1 and who will call
     kind: call_line
     task: 2583
-    from: "D4 13:40:30"
-    due: "D4 13:41:10"
     evidence: [c4-mike, rec-mike, kb-arrangements, kb-credits]
     ref: c4-mike.4
     check: {all: [{target: c4-mike}, {action_in: [say]}, {any: [{number_equals: {value: 280.48, tol: 0.01}}, {mentions_any: ["two hundred eighty"]}]}, {mentions_any: [billing, specialist, Tier 2]}]}

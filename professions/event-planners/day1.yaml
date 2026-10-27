@@ -194,8 +194,6 @@ needs:
     title: Ask the hotel to hold the rooms past cutoff
     kind: call_line
     task: 1219
-    from: "D1 15:00:10"
-    due: "D1 15:00:50"
     evidence: [c1-paul, doc-hotel-contract]
     ref: c1-paul.2
     check: {all: [{target: c1-paul}, {action_in: [say]}, {mentions_any: [hold, extend]}, {mentions_any: [resell, resold]}]}
@@ -206,8 +204,6 @@ needs:
     title: Roberta signs the amendment
     kind: call_line
     task: 1219
-    from: "D1 15:00:50"
-    due: "D1 15:01:30"
     evidence: [c1-paul, pol-events]
     ref: c1-paul.4
     check: {all: [{target: c1-paul}, {action_in: [say]}, {mentions_any: [Roberta, writing, amendment]}]}

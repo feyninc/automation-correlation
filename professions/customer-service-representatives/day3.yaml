@@ -227,8 +227,6 @@ needs:
     title: Tell Greg the credit amount and that it is automatic now
     kind: call_line
     task: 2579
-    from: "D3 10:03:30"
-    due: "D3 10:04:00"
     evidence: [c3-greg, doc-credit-policy, rec-greg, kb-outage]
     ref: c3-greg.4
     check: {all: [{target: c3-greg}, {action_in: [say]}, {any: [{number_equals: {value: 5.00, tol: 0.01}}, {mentions_any: [five dollars]}]}, {mentions_any: [automatic, automatically, Friday]}]}
@@ -265,8 +263,6 @@ needs:
     title: Say the cancel-at-any-time sentence before the offer (California)
     kind: call_line
     task: 18565
-    from: "D3 11:10:20"
-    due: "D3 11:11:00"
     evidence: [c3-vera, kb-cancel, rec-vera]
     ref: c3-vera.5
     check: {all: [{target: c3-vera}, {action_in: [say]}, {mentions_any: ["cancel at any time", "cancel anytime"]}]}
@@ -278,8 +274,6 @@ needs:
     title: Explain the final bill and the gateway return
     kind: call_line
     task: 2584
-    from: "D3 11:11:00"
-    due: "D3 11:11:40"
     evidence: [c3-vera, kb-cancel, rec-vera]
     ref: c3-vera.7
     check: {all: [{target: c3-vera}, {action_in: [say]}, {mentions_any: ["30 days", "thirty days"]}, {mentions_any: [return, box]}]}
@@ -327,8 +321,6 @@ needs:
     title: Give Ivy her credit amount
     kind: call_line
     task: 2579
-    from: "D3 15:45:30"
-    due: "D3 15:46:00"
     evidence: [c3-ivy-call, rec-ivy, kb-outage]
     ref: c3-ivy-call.4
     check: {all: [{target: c3-ivy-call}, {action_in: [say]}, {any: [{number_equals: {value: 3.17, tol: 0.01}}, {mentions_any: [three seventeen, "three dollars and seventeen cents"]}]}]}
@@ -439,8 +431,6 @@ needs:
     title: Explain why the neighbor's credit differs
     kind: call_line
     task: 2585
-    from: "D3 15:46:00"
-    due: "D3 15:46:30"
     evidence: [c3-ivy-call, doc-incident]
     ref: c3-ivy-call.6
     check: {all: [{target: c3-ivy-call}, {action_in: [say]}, {mentions_any: [plan, "how long", "two days", Chemawa]}]}

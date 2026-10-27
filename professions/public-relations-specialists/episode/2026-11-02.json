@@ -979,8 +979,8 @@
    "title": "Conditions only by name",
    "kind": "call_line",
    "onet_task_id": "1764",
-   "discoverable_at": "D1 10:15:10",
-   "deadline": "D1 10:15:50",
+   "discoverable_at": "D1 10:15",
+   "deadline": "D1 10:15:18",
    "evidence": [
     "c1-luis",
     "pol-media"
@@ -1028,8 +1028,8 @@
    "title": "Marcus Reed serious, nothing on Elena",
    "kind": "call_line",
    "onet_task_id": "1764",
-   "discoverable_at": "D1 10:15:50",
-   "deadline": "D1 10:16:30",
+   "discoverable_at": "D1 10:15:19",
+   "deadline": "D1 10:15:30",
    "evidence": [
     "c1-luis",
     "doc-directory",
@@ -1517,8 +1517,29 @@
       ]
      },
      {
-      "mentions_any": [
-       "meltwater-login.co/signin"
+      "all": [
+       {
+        "mentions_any": [
+         "meltwater-login.co/signin"
+        ]
+       },
+       {
+        "not": {
+         "mentions_any": [
+          "phish",
+          "phishing",
+          "suspicious",
+          "suspected",
+          "lookalike",
+          "look-alike",
+          "fake",
+          "scam",
+          "fraud",
+          "do not click",
+          "don't click"
+         ]
+        }
+       }
       ]
      }
     ]

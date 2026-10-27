@@ -94,6 +94,11 @@ class Tickets(ThreadApp):
 class Phone(ThreadApp):
     name, root, label = "phone", "phone", "call"
 
+    def exchange(self, ep, x):
+        if x.meta.get("case_note"):
+            return f"\n## {fmt(seconds(x.at))} Case note ({_who(ep, x.author)})\n{x.body}\n"
+        return super().exchange(ep, x)
+
 
 @register
 class News(ThreadApp):

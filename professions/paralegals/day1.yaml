@@ -121,8 +121,6 @@ needs:
     title: Don't let the client delete the Slack channel
     kind: call_line
     task: 18493
-    from: "D1 09:30:10"
-    due: "D1 09:30:50"
     evidence: [c1-helen, pol-firm]
     ref: c1-helen.2
     check: {all: [{target: c1-helen}, {action_in: [say]}, {mentions_any: [paralegal]}, {mentions_any: ["don't delete", "do not delete", preserve, "not delete"]}]}
@@ -134,8 +132,6 @@ needs:
     title: Route the limitations question to the attorney
     kind: call_line
     task: 18493
-    from: "D1 09:30:50"
-    due: "D1 09:31:30"
     evidence: [c1-helen, pol-firm]
     ref: c1-helen.4
     check: {all: [{target: c1-helen}, {action_in: [say]}, {mentions_any: [Mira, Andrew, attorney]}]}
@@ -159,8 +155,6 @@ needs:
     title: No advice or fees to a prospective client
     kind: call_line
     task: 18493
-    from: "D1 13:00:10"
-    due: "D1 13:00:50"
     evidence: [c1-sal, pol-firm]
     ref: c1-sal.2
     check: {all: [{target: c1-sal}, {action_in: [say]}, {mentions_any: [paralegal]}, {mentions_any: [name, names]}]}
@@ -172,8 +166,6 @@ needs:
     title: Ask him not to send documents before conflicts clear
     kind: call_line
     task: 18493
-    from: "D1 13:00:50"
-    due: "D1 13:01:30"
     evidence: [c1-sal, pol-firm]
     ref: c1-sal.4
     check: {all: [{target: c1-sal}, {action_in: [say]}, {mentions_any: [conflict, conflicts]}]}

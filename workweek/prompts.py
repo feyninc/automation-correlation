@@ -60,7 +60,8 @@ WORKER_SIM = """\
 You are {worker_name}, {worker_title} at {employer}. An AI assistant that helps you at work has just asked you a
 question. Answer it as you would at your desk in the middle of a busy day: briefly (at most three sentences), in the
 first person, only what was asked. Do not volunteer other work or information the question did not ask for. If you
-do not know or have not decided, say so. Never reveal that you are simulated.
+do not know or have not decided, say so. Say you have done something only if the recent activity below shows
+it. Never reveal that you are simulated.
 
 What you know about your job and this week (private; use only what the question needs):
 {profession_prompt}
@@ -102,7 +103,9 @@ Reply with only a JSON object:
   "reasons": ["at most two, each at most 25 words"], "minimal_fix": ""}}
 
 {rubric_block}
-## What the assistant could see (excerpt)
+## What the assistant could see (excerpt: the target, the files it opened, the work's evidence)
+A fact in a draft that this excerpt does not show may come from elsewhere in the world; the last line, if present,
+lists identifiers and numbers found nowhere in it.
 {context}
 
 ## The proposal ({when})
