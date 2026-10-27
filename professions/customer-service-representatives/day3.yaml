@@ -118,7 +118,7 @@ threads:
     title: "Re: Battery backup request"
     x:
       - {at: "D3 11:20", from: c_jamal, to: [worker], subject: "Re: Battery backup request",
-         body: "We don't stock battery backups for the gateway any more. For medical alarms we recommend the customer ask the alarm company for a cellular alarm unit; LifeLine offers one. I can call her and explain if you want, just tell me which customer. Jamal"}
+         body: "Techs don't carry batteries any more, but she can buy a backup battery for the gateway: the 8-hour unit is $39.99 and a 24-hour pack $89.99 (we have to offer both). For a medical alarm we also recommend asking the alarm company for a cellular alarm unit, which doesn't depend on the fiber at all; LifeLine offers one. I can call her and walk her through both if you want, just tell me which customer. Jamal"}
   - id: t3-team-chat
     app: chat
     path: "#team4/wednesday"
@@ -218,7 +218,7 @@ actions:
   - {at: "D3 14:12", kind: read, target: t3-ivy, summary: "opened Ivy Tran's chat about her outage credit"}
   - {id: a3-ivy, at: "D3 14:20", kind: reply, target: t3-ivy, to: [c_ivy], summary: "replied to Ivy Tran about her credit",
      body: "Hi Ivy, outage credits for yesterday's incident are applied automatically in Friday's batch and will show on your December statement. I'll check the amount for you on a call so I can verify your account first. Marisol"}
-  - {id: a3-cal, at: "D3 14:55", kind: noop, target: doc-calibration, summary: "went to the QA calibration session (phones paused)"}
+  - {id: a3-cal, at: "D3 14:55", kind: noop, target: doc-calibration, minutes: 45, summary: "went to the QA calibration session (phones paused)"}
   - {id: a3-ivy-note, at: "D3 15:52", kind: update, target: c3-ivy-call, summary: "wrote the case note for Ivy Tran's call",
      body: "INC-20261103-0042, KZN-1, out 11/3 06:42 to 13:35 (1 day). Verified by PIN. Expected credit $3.17 (2 Gig, 1 x $95/30), automatic in Friday's batch. Explained segment differences."}
 
@@ -411,10 +411,10 @@ needs:
     evidence: [t3-jamal, c1-doris]
     ref_text: "Jamal will call Doris directly about a cellular alarm unit from her alarm company."
     check: {all: [{mentions_any: [cellular, LifeLine]}, {mentions_any: [Doris, Whitaker]}]}
-    must: ["The recommendation is a cellular alarm unit from the alarm company; Jamal calls Doris directly"]
-    must_not: ["Tells Doris a battery backup is coming"]
+    must: ["The options: an 8-hour or 24-hour backup battery to buy, and a cellular alarm unit from the alarm company; Jamal calls Doris directly"]
+    must_not: ["Tells Doris a battery is on its way before she has chosen one"]
     minutes: [2, "a short note"]
-    intent: "Jamal will call her; no battery backups."
+    intent: "Jamal will call her about the batteries and a cellular alarm."
   - id: n3-v7-tomorrow
     title: Remind about the v7 script, live Thursday 08:00
     kind: prep

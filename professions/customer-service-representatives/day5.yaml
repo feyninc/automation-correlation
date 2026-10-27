@@ -107,7 +107,7 @@ threads:
     title: "Re: Battery backup request (Doris Whitaker)"
     x:
       - {at: "D5 09:30", from: c_jamal, to: [worker], subject: "Re: Battery backup request",
-         body: "Talked to Doris yesterday afternoon. LifeLine is sending her a cellular alarm unit, installed 11/12; until then she keeps her cell phone charged by the bed. Closing my side. Jamal"}
+         body: "Talked to Doris yesterday afternoon. She ordered the 8-hour backup battery ($39.99, ships Monday 11/9), and LifeLine is sending her a cellular alarm unit, installed 11/12; until then she keeps her cell phone charged by the bed. Closing my side. Jamal"}
   - id: t5-lena-tanya
     app: mail
     path: inbox/re-credit-review-NB-40299018
@@ -220,7 +220,7 @@ actions:
      body: "Wendy, I think the batch gave every KZN-3 account one day instead of two. KZN-3 was restored 11/4 09:52 (27 h 10 min, two started 24 h periods), but Greg Halvorsen NB-40350277, Jordan Mehta NB-40342281, Sam Whitfield NB-40333107 and Tess Navarro NB-40381102 all show one day (Tess $3.17 instead of $6.33). It looks like the batch used Tuesday 13:35 for all segments. I've sent a correction form for Greg; should we do forms for every KZN-3 caller or will you rerun the segment? Marisol"}
   - {at: "D5 09:32", kind: read, target: t5-jamal, summary: "read Jamal's update on Doris Whitaker"}
   - {id: a5-doris-note, at: "D5 09:38", kind: update, target: c1-doris, summary: "added Jamal's update to Doris Whitaker's case",
-     body: "Update 11/6: Tier 2 Technical (Jamal Whitfield) called Doris on 11/5. No battery backups stocked; LifeLine is sending a cellular alarm unit, installed 11/12. Until then she keeps her cell phone charged. Closed."}
+     body: "Update 11/6: Tier 2 Technical (Jamal Whitfield) called Doris on 11/5. She ordered the 8-hour backup battery ($39.99, ships 11/9); LifeLine is sending a cellular alarm unit, installed 11/12. Until then she keeps her cell phone charged. Closed."}
   - {at: "D5 09:42", kind: read, target: t5-lena-tanya, summary: "read Lena's note: Tanya's $38.40 credited"}
   - {id: a5-tanya, at: "D5 09:50", kind: new, app: mail, path: sent/credit-NB-40299018, target: m5-tanya, to: [c_tanya],
      subject: "Your $38.40 credit", summary: "emailed Tanya Brooks that her credit was approved",
@@ -426,7 +426,7 @@ needs:
     evidence: [t5-jamal, c1-doris]
     ref: a5-doris-note
     check: {all: [{target: c1-doris}, {mentions_any: [cellular, LifeLine]}]}
-    must: ["Jamal's outcome: LifeLine cellular unit 11/12; no battery backup"]
+    must: ["Jamal's outcome: 8-hour battery ordered (ships 11/9) and a LifeLine cellular unit on 11/12"]
     minutes: [1, "a case note update"]
     intent: "Close the loop on Doris."
   - id: n5-tanya
