@@ -20,48 +20,52 @@ and with time?
 
 ## Method
 
-- **Occupations.** 11 white-collar O*NET 31.0 occupations whose work runs through email, chat and documents, spread
-  across observed exposure from 0.07 (budget analysts) to 0.70 (customer service representatives), from general and
-  operations managers to software developers. Wages and employment are BLS OEWS May 2025 (via O*NET OnLine), to be
-  aged with the Employment Cost Index; loaded labor cost uses BLS Employer Costs for Employee Compensation (June 2026).
-- **Episodes.** For each occupation, one simulated working week (Monday 2026-11-02 to Friday 11-06): a fictional
-  employer, contacts and systems, about 110 items (emails, chats, tickets, documents, sheets, calendar, calls), and
-  about 60 scripted actions by the human worker. Each week is researched from O*NET task statements and work context,
-  regulators, professional standards and industry benchmarks, with its sources in `research.md`.
-- **The loop.** After each human action the model sees what happened and may read, propose or wait; at 5 PM it gets a
-  turn to prepare for the next day; on phone calls it may propose the worker's next line within the caller's
-  patience, on a simulated clock. Nothing the model writes is delivered: every action is a proposal, so the week stays
-  identical for every model. An optional arm exposes a send command under an instruction to only draft, to count
-  overstepping.
-- **Ground truth.** Each week plants 23 to 25 needs (work that should get done, each tied to an O*NET task, with a
-  deadline, a code-checkable condition, a rubric and the minutes it saves) and 9 to 10 traps drawn from the job's real
-  risks (phishing, confidential data, decisions only the worker may make, pressure to send).
-- **Grading.** Code checks first (recall of needs, traps triggered); then a panel of seven judges from seven model
-  families grades each proposal as accept, edit or reject. The primary grade leaves out the judge from the tested
-  model's own family (six judges; ties go to the stricter grade); the full panel's median is reported beside it,
-  along with self-preference and agreement, and a hand-graded sample measures judge accuracy.
+The full design is [`docs/design.md`](docs/design.md).
+
+- **Occupations.** 11 O*NET 31.0 occupations whose work runs through email, chat, calls and documents, spread across
+  observed exposure from 0.07 (budget analysts) to 0.70 (customer service representatives). Wages are BLS OEWS May
+  2025 medians, loaded with BLS ECEC (June 2026) and aged with the Employment Cost Index.
+- **Weeks.** For each occupation, one working week (Monday 2026-11-02 to Friday 11-06) at a fictional employer with
+  real rules, regulators and software, written by hand from primary sources: 25 to 101 needs (567 in all, 5,375
+  minutes of work, each tied to an O*NET task with a window, a code check, a rubric, the minutes it takes and the
+  worker's own version) and 7 to 21 traps (144) drawn from the job's real risks. A compiler audits every week: each
+  need's check passes on the worker's own version, no trap fires on what the worker did, and the files round-trip.
+- **The loop.** An Inspect AI task on a simulated clock: every 5 minutes the model sees the world as files (mail,
+  chat, tickets, calls, documents, what the worker just did) and may read, propose up to three drafts, ask the worker
+  (a simulated worker answers), join a live call or wait. Nothing it writes is delivered, so the week is identical
+  for every model.
+- **Grading.** Code checks match proposals to needs and traps; a panel of seven judges from seven model families
+  scores each proposal 0-100 (the chance the worker sends it unchanged) and writes the minimal fix. The tested
+  model's own family is left out of the weighted mean. The edit distance to that fix gives the worker's fix time.
+- **Value.** Loaded wage times (minutes saved x score - reading - expected fixing) minus token cost, per worker-week.
 - **Models.** Each lab's main line, the model in force on 2026-01-01 and every release since: OpenAI GPT-5.2 to
-  GPT-6.1 Sol, Claude Opus 4.5 to 5.5, Kimi K2 Thinking to K3.1 Pro, DeepSeek V3.2 to V4.1 Flash, GLM-4.7 to GLM-5.3 (27 models), each at
-  its lab's medium reasoning setting. Release dates and the gaps between them are recorded from the labs' own
-  announcements.
-- **Economics.** The value of a proposal is the loaded wage times the minutes it saves minus the minutes to review it,
-  minus its token cost. Prices are recorded both at launch and at run time.
+  GPT-6.1 Sol, Claude Opus 4.5 to 5.5, Kimi K2 Thinking to K3.1 Pro, DeepSeek V3.2 to V4.1 Flash, GLM-4.7 to GLM-5.3
+  (27 models), each at its lab's medium reasoning setting.
 
-## Status
+## Status (2026-10-27)
 
-Design, data, model selection and the 11 drafted weeks are in place; the engine, the grader and a pilot run are next.
-The drafts still need review of their needs and traps before they are frozen.
+All 11 weeks are written and compile with 0 audit errors; the engine and grader run end to end on all 27 models. Next:
+hand grades for judge agreement, the pilot that sizes the full run, then the full run.
 
 ## Layout
 
 | Path | What it is |
 | --- | --- |
-| `docs/` | `architecture.md`, `episode-schema.md`, `episode-brief.md` (how the weeks were drafted), `episode-review.md`, `reasoning.md`, model timeline charts |
-| `episodes/<soc>/` | the week (`episode.json`), its sources (`research.md`) and the scripts that built it (`build/`) |
-| `scripts/` | `validate_episode.py`, `cost_estimate.py`, `probe_reasoning.py`, `timeline.py`, `timeline_2026.py`, `screen_occupations.py` |
-| `data/` | O*NET 31.0 (zipped), Anthropic Economic Index tables, BLS wages via O*NET OnLine, release timelines, OpenRouter catalog snapshots, probe and cost outputs; see `data/README.md` |
+| `professions/<name>/` | one week: `week.yaml` and `day1.yaml`..`day5.yaml` (hand-written), `episode/` and `report.md` (compiled) |
+| `workweek/` | schema, compiler and audit, the world, the engine (Inspect AI task), checks, grader, config, provider patches, sandbox image |
+| `config/run.yaml` | models, routes, prices, judges, the simulated worker, run settings |
+| `scripts/` | `run.py`, `smoke_models.py`, `probe_reasoning.py`, `timeline.py`, `screen_occupations.py` |
+| `data/` | O*NET, Economic Index, wages, ECEC, ECI, release timelines, probe outputs; see `data/README.md` |
+| `docs/` | `design.md`, the model timeline chart |
 
-Credentials and account details live outside the repository (`~/.config/automation-correlation/`).
+Credentials live outside the repository (`~/.config/automation-correlation/`).
 
+## Commands
+
+    uv sync
     unzip data/onet/db_31_0_text.zip -d data/onet
-    python3 -I scripts/validate_episode.py . episodes/*/episode.json
+    docker build -t workweek-sandbox:1 workweek/sandbox
+    uv run python -m workweek.compile professions/claims-adjusters        # compile and audit one week
+    uv run python scripts/run.py --models "GPT-5.5" --professions claims-adjusters \
+        --start "D1 09:00" --end "D1 09:30" --log-dir logs/try                # run a window
+    uv run python -m workweek.grade logs/try                                 # grade it into results/
