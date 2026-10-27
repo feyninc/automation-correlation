@@ -410,31 +410,34 @@ most of these tasks.
 Spent on 2026-10-27: about $17 on tested models for the three samples, under $0.05 on the simulated worker, and about
 $7 to $11 per full grading of the claims sample (several gradings while fixing the grader); about $60 in all.
 
-The full run is extrapolated from the claims sample (27 models, 10 minutes) and a one-day pilot (Claude Opus 4.8 and
-GPT-6.1 Sol, DeepSeek V4.1 Flash; claims and customer service, D1 08:00-17:00; `logs/pilot-day1`):
+The full run is sized from the volume pilot (`logs/pilot-volume-d1`, 10-27): Claude Opus 4.8, GPT-6.1 Sol and
+DeepSeek V4.1 Flash on the expanded budget-analyst and operations-manager weeks, Monday 00:00-23:55, the 24-hour clock.
+Budget analysts are the lightest week (79 inbound items a day), operations managers the heaviest (272).
 
-- A full day costs 15-20 times a 10-minute window, not 54: after the first look a model makes about 1.5 calls a tick,
-  and prompt caching covers most input (90-95% of input tokens read from cache on Bedrock and OpenAI). Input
-  per call grows through the day (Opus 4.8: 9k tokens a call in the first quarter of the day, 27k in the last).
-- Cost rises with the day's inbound items, with an elasticity of 0.6 (Opus 4.8) to 1.2 (DeepSeek V4.1 Flash)
-  between claims (6.6 items a day) and customer service (19.4). Realistic volume (section 3) multiplies the inbound
-  items, so it multiplies cost by about that factor to the power 0.6-1.2.
-- Tested models, one seed (27 models x 11 professions x 5 days), at today's volume: $3,200-5,800 (mid $4,400). Routes
-  without prompt caching (DeepSeek V3.2 on Azure, GLM-4.7 and GLM-5 on Bedrock) cost more than their prices suggest.
-- Judges: 11-27 proposals a profession-day (pilot), so 16,000-40,000 a seed; at $0.16 a proposal (seven judges, the
-  packet) $2,600-6,400 (mid $4,500). GPT-6 Astra now judges through OpenAI's Batch API at half price, about a sixth
-  off the judge cost; Inspect batches only OpenAI's, Anthropic's own and Google's own APIs, so the Bedrock, Azure and
-  OpenRouter judges cannot.
-- Per seed in all, at today's volume: $5,800-12,200 (mid about $8,900); three seeds $17,000-37,000. OpenRouter's credit
-  tops up automatically.
-- By billing, per seed at today's volume: Bedrock credits $2,900-5,800, Azure credits $300-600, OpenAI credits
-  $900-1,800, OpenRouter $1,700-4,000 (the only cash). The shares come from the three samples (tested models: Bedrock
-  59%, OpenAI 22%, Azure 10%, OpenRouter 8% of $16.72, every model on the same windows, Kimi K3 at its OpenRouter
-  cost) and the claims grading (judges: Opus 5.5 about 38%, GPT-6 Astra at its batch price about 8%, the five
-  OpenRouter judges about 55%). Opus is the costliest family on both sides, so Bedrock carries the most; most of the
-  cash is judging.
-- Wall clock: a day took 11-14 minutes for GPT-6.1 Sol and Opus 4.8 (both professions in parallel) and 79 minutes for
-  DeepSeek V4.1 Flash on Azure, which sets the pace of a full run.
+| Model | Profession | Calls | Input (cache share) | Output | Proposals | Cost | Wall clock |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Claude Opus 4.8 | budget analysts | 495 | 26.7M (91%) | 77k | 26 | $29.61 | 48 min |
+| Claude Opus 4.8 | operations managers | 636 | 46.7M (85%) | 100k | 56 | $64.88 | 60 min |
+| GPT-6.1 Sol | budget analysts | 445 | 11.0M (92%) | 16k | 26 | $2.90 | 24 min |
+| GPT-6.1 Sol | operations managers | 597 | 23.8M (84%) | 33k | 68 | $9.74 | 43 min |
+| DeepSeek V4.1 Flash | budget analysts | 501 | 28.9M (96%) | 91k | 17 | $1.30 | 53 min |
+
+- Tested models, one seed (27 models x 55 profession-days): about $29,000. Each model is priced on its family's
+  pilot tokens (Claude on Opus 4.8's, GPT on GPT-6.1 Sol's, the rest on DeepSeek's budget day scaled by the 1.87
+  budget-to-operations ratio the other two show), at its own prices, with full input price on the routes that do not
+  cache (DeepSeek V3.2 on Azure, GLM-4.7 and GLM-5 on Bedrock). The six Claude models are $14,700 of it; GLM-5 and
+  GLM-4.7 on Bedrock $3,700, because they do not cache.
+- Judges: 38.6 proposals a profession-day, so about 57,000 a seed; at $0.16 a proposal about $9,200.
+- Per seed in all: about $38,000, on the mean of the lightest and heaviest week; three seeds about $115,000. A
+  batch of three professions is 3/11 of a seed, about $10,400.
+- By billing, per seed: Bedrock credits about $23,000 (Claude, Kimi K3, GLM-4.7/5, the Opus judge), OpenAI credits
+  $4,400, Azure credits $2,400, OpenRouter $8,300 (the only cash; $5,000 of it judging). Judge shares are from the
+  claims grading (Opus 5.5 about 38%, GPT-6 Astra at its batch price about 8%, the five OpenRouter judges about 55%).
+- The clock: 24-34% of a day's input tokens go to ticks before 7:00 and after 18:00, when the worker is away and a
+  model mostly waits; each such tick is one call over the whole context, which is longest late in the day.
+- Caveats: one day (Monday) of two professions; customer service, with 30-40 live calls a day, is not in the pilot;
+  the judge cost per proposal is from the claims grading.
+- Wall clock: a profession-day took 24-60 minutes; the batch's slowest model sets its pace.
 
 ## 10. Open
 
@@ -442,4 +445,4 @@ GPT-6.1 Sol, DeepSeek V4.1 Flash; claims and customer service, D1 08:00-17:00; `
   is over that work, not the whole job, unless scaled by task time shares.
 - ECI factor on 2026-10-30.
 - Hand grades (about 100 proposals) and judge agreement; the friction (1.5) and rewrite threshold (0.5) sensitivity.
-- Seeds (3 planned) and the pilot that sizes the full run.
+- How many seeds: at about $38,000 a seed (section 9), the owner's decision.
