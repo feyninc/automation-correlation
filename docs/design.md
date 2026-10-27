@@ -21,7 +21,7 @@ how fast is it changing across model releases?
 | `professions/<name>/` | one profession: `week.yaml` (job, people, policies, standing documents) and `day1.yaml`..`day5.yaml` (what happens each day), written by hand; `episode/` (compiled: `profession.json` plus one JSON per date) and `report.md` (build report), generated |
 | `workweek/` | `schema.py` (Pydantic models), `compile.py` (forms to episodes, the audit), `apps.py` (the world as files), `world.py` (events, feed, ticks), `engine.py` (the Inspect AI task), `prompts.py`, `checks.py` (the shared check evaluator), `grade.py` (offline grading), `config.py`, `creds.py`, `providers.py`, `sandbox/` (Docker image) |
 | `config/run.yaml` | models, prices, judges and weights, the simulated worker, run settings |
-| `scripts/` | `run.py` (run models x professions over a window), `smoke_models.py` (one tool call per route), `probe_reasoning.py`, `timeline.py` (release timeline and model set), `screen_occupations.py` |
+| `scripts/` | `run.py` (run models x professions over a window), `smoke_models.py` (one tool call per route), `probe_reasoning.py`, `speed.py` (OpenRouter speed snapshot for offline timing), `timeline.py` (release timeline and model set), `screen_occupations.py` |
 | `data/` | O*NET 31.0, Economic Index tables, BLS wages via O*NET OnLine, ECEC June 2026 multipliers, the ECI factor, release timelines, probe outputs (`data/README.md`) |
 | `logs/`, `results/` | run output (git-ignored) |
 

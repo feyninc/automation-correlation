@@ -54,7 +54,7 @@ hand grades for judge agreement, the pilot that sizes the full run, then the ful
 | `professions/<name>/` | one week: `week.yaml` and `day1.yaml`..`day5.yaml` (hand-written), `episode/` and `report.md` (compiled) |
 | `workweek/` | schema, compiler and audit, the world, the engine (Inspect AI task), checks, grader, config, provider patches, sandbox image |
 | `config/run.yaml` | models, routes, prices, judges, the simulated worker, run settings |
-| `scripts/` | `run.py`, `smoke_models.py`, `probe_reasoning.py`, `timeline.py`, `screen_occupations.py` |
+| `scripts/` | `run.py`, `smoke_models.py`, `probe_reasoning.py`, `speed.py`, `timeline.py`, `screen_occupations.py` |
 | `data/` | O*NET, Economic Index, wages, ECEC, ECI, release timelines, probe outputs; see `data/README.md` |
 | `docs/` | `design.md`, the model timeline chart |
 
