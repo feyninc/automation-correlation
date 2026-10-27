@@ -316,8 +316,14 @@ and profession: ticks, proposals, questions, needs caught, traps fired, press-en
 
 27 models: each lab's main line, the model in force on 2026-01-01 and every release since (OpenAI GPT-5.2 to 6.1 Sol;
 Claude Opus 4.5 to 5.5; Kimi K2 Thinking to K3.1 Pro; DeepSeek V3.2 to V4.1 Flash 1017; GLM-4.7 to 5.3), from
-`scripts/timeline.py`. Routes: OpenAI's API for GPT; Bedrock for Claude and GLM-4.7/5; Azure Foundry for DeepSeek and
-Kimi where offered; OpenRouter with a pinned provider and no fallback otherwise. Every model runs at its lab's
+`scripts/timeline.py`. Routes: OpenAI's API for GPT; Bedrock for Claude, Kimi K3 and GLM-4.7/5; Azure Foundry for DeepSeek
+and Kimi where offered; OpenRouter with a pinned provider and no fallback otherwise. Credits come first (owner, 10-27):
+the 10-27 catalogs have no Kimi K2 Thinking, K3, K3.1 Pro, DeepSeek V4.1 Flash 1017 or any GLM on Azure; Bedrock has
+Kimi K2 Thinking, K3 and GLM-5.3 but not K3.1 Pro, GLM-5.1, 5.2 or DeepSeek V4.1 Flash 1017. Kimi K2 Thinking stays on
+OpenRouter: on Bedrock, every answer after a tool result (8 of 8 tries) came back with its reasoning as text, usually
+an unclosed `<think>`, which cannot be separated from the answer. GLM-5.3 on Bedrock has a 0 quota and is refused
+("not available for this account"). Kimi K3 moved to Bedrock after a tool-call test, the same prompt caching as
+Moonshot's API (18,081 of 18,117 input tokens read from cache) and the reasoning setting passed through. Every model runs at its lab's
 medium reasoning setting, set on every call (owner, 10-26), except DeepSeek, which has no medium and runs at high
 (owner, 10-27):
 
@@ -329,7 +335,8 @@ medium reasoning setting, set on every call (owner, 10-26), except DeepSeek, whi
 | Opus 4.6 to 5.5 (Bedrock) | 4.6-4.8 no thinking; 5, 5.5 adaptive | adaptive thinking, `effort: "medium"` |
 | DeepSeek V3.2 to V4.1 Flash (Azure) | no thinking | `reasoning_effort: "high"` (no medium) |
 | Kimi K2.5, K2.6 (Azure) | thinks | `reasoning_effort: "medium"` |
-| Kimi K2 Thinking, K3, K3.1 Pro (OpenRouter) | thinks | `reasoning: {effort: "medium"}` |
+| Kimi K3 (Bedrock) | thinks | `reasoning_effort: "medium"` (passed by `workweek/providers.py`; K3 thinks at every setting, on Moonshot's API too) |
+| Kimi K2 Thinking, K3.1 Pro (OpenRouter) | thinks | `reasoning: {effort: "medium"}` |
 | DeepSeek V4.1 Flash 1017 (OpenRouter, DeepInfra fp8) | thinks | `reasoning: {effort: "high"}` (no medium) |
 | GLM-4.7, GLM-5 (Bedrock) | thinks only at high | `reasoning_effort: "high"` (GLM thinking is on/off; `workweek/providers.py` passes it, which Inspect's Bedrock route did not) |
 | GLM-5.1 to 5.3, Gemini 4 Argon, Qwen3.8 Max Prime (OpenRouter) | varies | `reasoning: {effort: "medium"}` |
@@ -363,9 +370,10 @@ run's cost split the same way:
 
 | Billing | Tested models | Judges and the simulated worker |
 | --- | --- | --- |
-| Bedrock credits | Claude Opus 4.5, 4.6, 4.7, 4.8, 5, 5.5; GLM-4.7, GLM-5 (8) | judge Claude Opus 5.5 |
+| Bedrock credits | Claude Opus 4.5, 4.6, 4.7, 4.8, 5, 5.5; Kimi K3; GLM-4.7, GLM-5 (9) | judge Claude Opus 5.5 |
 | Azure credits | Kimi K2.5, K2.6; DeepSeek V3.2, V4 Flash, V4 Flash 0731, V4.1 Flash (6) | none |
-| Paid (OpenAI API, OpenRouter) | GPT-5.2, 5.4, 5.5, 5.6 Sol, 6 Sol, 6.1 Sol; Kimi K2 Thinking, K3, K3.1 Pro; DeepSeek V4.1 Flash 1017; GLM-5.1, 5.2, 5.3 (13) | judges GPT-6 Astra, Gemini 4 Argon, Kimi K3.1 Pro, DeepSeek V4.1 Flash 1017, Qwen3.8 Max Prime, GLM-5.3; the simulated worker (Gemini 4 Argon) |
+| OpenAI credits | GPT-5.2, 5.4, 5.5, 5.6 Sol, 6 Sol, 6.1 Sol (6) | judge GPT-6 Astra (Batch API) |
+| OpenRouter (paid) | Kimi K2 Thinking, K3.1 Pro; DeepSeek V4.1 Flash 1017; GLM-5.1, 5.2, 5.3 (6) | judges Gemini 4 Argon, Kimi K3.1 Pro, DeepSeek V4.1 Flash 1017, Qwen3.8 Max Prime, GLM-5.3; the simulated worker (Gemini 4 Argon) |
 
 `workweek.config.load()` refuses duplicate names, unknown families, a model string without a provider prefix, a
 missing price, judge weights that do not sum to 1, two judges from one family, a dropout that leaves no weight, and a
@@ -417,12 +425,14 @@ GPT-6.1 Sol, DeepSeek V4.1 Flash; claims and customer service, D1 08:00-17:00; `
   packet) $2,600-6,400 (mid $4,500). GPT-6 Astra now judges through OpenAI's Batch API at half price, about a sixth
   off the judge cost; Inspect batches only OpenAI's, Anthropic's own and Google's own APIs, so the Bedrock, Azure and
   OpenRouter judges cannot.
-- Per seed in all, at today's volume: $5,800-12,200 (mid about $8,900); three seeds $17,000-37,000. About $2,300 a
-  seed runs through OpenRouter (8 tested models, 4 judges, the simulated worker); its credit tops up automatically.
-- By billing, per seed at today's volume: Bedrock credits $2,800-5,900, Azure credits $350-650, paid $2,600-5,700.
-  The shares come from the three samples (tested models: Bedrock 57%, paid 32%, Azure 11% of $16.73, every model
-  on the same windows) and the claims grading (judges: Opus 5.5 on Bedrock about 40%, the six paid judges about 60%,
-  with GPT-6 Astra at its batch price). Opus is the costliest family on both sides, so Bedrock carries the most.
+- Per seed in all, at today's volume: $5,800-12,200 (mid about $8,900); three seeds $17,000-37,000. OpenRouter's credit
+  tops up automatically.
+- By billing, per seed at today's volume: Bedrock credits $2,900-5,800, Azure credits $300-600, OpenAI credits
+  $900-1,800, OpenRouter $1,700-4,000 (the only cash). The shares come from the three samples (tested models: Bedrock
+  59%, OpenAI 22%, Azure 10%, OpenRouter 8% of $16.72, every model on the same windows, Kimi K3 at its OpenRouter
+  cost) and the claims grading (judges: Opus 5.5 about 38%, GPT-6 Astra at its batch price about 8%, the five
+  OpenRouter judges about 55%). Opus is the costliest family on both sides, so Bedrock carries the most; most of the
+  cash is judging.
 - Wall clock: a day took 11-14 minutes for GPT-6.1 Sol and Opus 4.8 (both professions in parallel) and 79 minutes for
   DeepSeek V4.1 Flash on Azure, which sets the pace of a full run.
 

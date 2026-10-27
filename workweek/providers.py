@@ -2,7 +2,8 @@
 
 GLM on Bedrock: Inspect sends reasoning settings to Bedrock only for Claude and Nova. Z.ai's models on Bedrock take
 an OpenAI-style `reasoning_effort` in additionalModelRequestFields (only "high" turns thinking on; see
-docs/design.md, section 7), so pass it through for `zai.` model ids.
+docs/design.md, section 7), so pass it through for `zai.` model ids. Kimi K3 on Bedrock accepts it the same way (it thinks at every setting, as on
+Moonshot's own API), so it is passed for `moonshotai.` ids too, keeping the setting on every call.
 
 GLM tool calls in text: GLM-4.7 and GLM-5 on Bedrock sometimes writes a tool call in its native syntax
 (`<tool_call>name<arg_key>k</arg_key><arg_value>v</arg_value></tool_call>`) as text instead of a structured call.
@@ -24,7 +25,7 @@ _orig = _bedrock.BedrockAPI.reasoning_config
 def _reasoning_config(self, config):
     out = _orig(self, config)
     name = self.model_name.split("/")[-1]
-    if name.startswith(("zai.", "global.zai.", "us.zai.")) and config.reasoning_effort:
+    if re.sub(r"^(global|us)\.", "", name).startswith(("zai.", "moonshotai.")) and config.reasoning_effort:
         out = {**out, "reasoning_effort": config.reasoning_effort}
     return out
 
