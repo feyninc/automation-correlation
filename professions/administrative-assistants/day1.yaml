@@ -189,7 +189,7 @@ calls:
 actions:
   - {at: "D1 08:15", kind: read, target: t1-maren, summary: "read Maren's note about the expense report"}
   - {at: "D1 08:22", kind: read, target: t1-buckeye, summary: "opened Buckeye's invoice"}
-  - {at: "D1 08:30", kind: noop, target: cal-renee, summary: "front desk cover until 09:00"}
+  - {at: "D1 08:30", kind: noop, target: cal-renee, minutes: 45, summary: "front desk cover until 09:00"}
   - {at: "D1 09:10", kind: read, target: t1-hotel-vm, summary: "listened to the Lennox voicemail"}
   - {id: a1-expense, at: "D1 09:40", kind: edit, target: doc-concur-draft, summary: "corrected and completed Maren's expense report",
      content: "# Concur expense report ER-11082 (ready to submit)\n\n| Date | Type | Detail | Amount |\n| --- | --- | --- | --- |\n| 10/28 | Mileage | 372 mi x $0.76 (IRS rate from 7/1/2026) | $282.72 |\n| 10/28 | Hotel | Hampton Inn Pittsburgh Downtown, $139.00 + tax (GSA cap $144) | $158.46 |\n| 10/29 | Parking | client site | $12.00 |\n| 10/28-10/29 | Meals | M&IE $80: 10/28 $60 (75%), 10/29 $60 less lunch provided $22 = $38 | $98.00 |\nTotal $551.18. Receipts: hotel, parking."}
@@ -207,7 +207,7 @@ actions:
   - {id: a1-invoice, at: "D1 11:20", kind: reply, target: t1-buckeye, to: [c_buckeye], summary: "queried the $55 call-out on Buckeye's invoice",
      body: "Hello, thank you for invoice BR-20931. PO 4500-1187 covers 2 maintenance visits and the ink kit, $752.00. The $55.00 emergency call-out on 10/22 was service ticket SV-6631, which your technician recorded as warranty work, no charge. Please send a corrected invoice for $752.00 and I'll route it for approval. Renee Castell, Corwin Leffel Engineers"}
   - {at: "D1 13:45", kind: read, target: t1-ray, summary: "read Bramhall's site visitor rules"}
-  - {at: "D1 14:00", kind: noop, target: cal-renee, summary: "took notes at the Water group weekly"}
+  - {at: "D1 14:00", kind: noop, target: cal-renee, minutes: 60, summary: "took notes at the Water group weekly"}
   - {id: a1-carla-hr, at: "D1 14:30", kind: new, app: mail, path: sent/verification-call-greg-tobin, target: m1-verif, to: [c_hollis], subject: "Verification call for Greg Tobin",
      summary: "told HR about the verification call",
      body: "Hollis, FYI: Carla Medina from Ridgeline Mortgage (888-555-0161) called at 14:20 to verify Greg Tobin's employment and salary. I confirmed nothing and gave her hrverify@ and 317-555-0120. Renee"}

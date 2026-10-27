@@ -106,7 +106,7 @@ calls:
       - [worker, "Hi Owen, it's the Lennox at 211 North High Street, self-parking at the hotel. Tomorrow we start at 8:30 in suite 400; you're opening with the safety moment. Your garage pass is under your name at our building's gate."]
       - [c_owen, "Perfect. See you then.", 2]
 actions:
-  - {at: "D3 08:00", kind: noop, target: t2-buckeye-svc, summary: "let the Buckeye technician in for the plotter"}
+  - {at: "D3 08:00", kind: noop, target: t2-buckeye-svc, minutes: 15, summary: "let the Buckeye technician in for the plotter"}
   - {id: a3-ppe, at: "D3 08:50", kind: new, app: mail, path: sent/thursday-site-visit-rules, target: m3-ppe, to: [c_tom, c_felicia, c_owen], cc: [c_dan, c_maren, c_greg],
      subject: "Thursday's Westerville site tour: please bring boots", summary: "sent the visitors Bramhall's site rules",
      body: "Hi all, for Thursday afternoon's tour of the Westerville WTP expansion, Bramhall requires: steel- or composite-toe boots (they don't lend boots, so please pack yours) and long pants; photo ID; and the 15-minute orientation video before you arrive: bramhallbuilds.com/orient, code WWTP26. They lend hard hats, glasses and vests. Van leaves the office at 13:00. Your garage pass is under your name at the gate. Renee"}
@@ -128,7 +128,7 @@ actions:
      body: "Will do. Attachment C (2027 compensation worksheet) is marked confidential for the closed session (you, Maren and Felicia), so I'll print 13 packets with A and B, and 3 sealed copies of C for the three of you. OK?"}
   - {id: a3-chairs, at: "D3 12:15", kind: reply, target: t1-maren, to: [c_maren], cc: [c_carol], summary: "routed the chair purchase to Carol",
      body: "The chairs are $780, over my $500 card limit, and splitting it into two orders isn't allowed. I've copied Carol: Carol, can you approve a purchase request for 6 Staples task chairs at $130 ($780) for the new-hire pod? I can send the cart link. Should still arrive by next week."}
-  - {at: "D3 12:00", kind: noop, target: cal-renee, summary: "front desk cover"}
+  - {at: "D3 12:00", kind: noop, target: cal-renee, minutes: 60, summary: "front desk cover"}
   - {id: a3-names, at: "D3 12:40", kind: new, app: mail, path: sent/bramhall-visitor-names, target: m3-names, to: [c_ray], subject: "Visitor names for Thursday 11/5 tour (Corwin Leffel)",
      summary: "sent Bramhall the visitor names",
      body: "Hi Ray, visitor names for tomorrow's 13:30 tour: Dan Reuter, Maren Holt, Greg Tobin (Corwin Leffel Columbus); Tom Brandt, Felicia Nunez, Owen Pryce, Maya Lindqvist (Corwin Leffel HQ); Sharon Vale (Vale Communications, writing a case study for the City). That's 8; Dan may add Kevin Shah, in which case could a second escort be available? Everyone has the orientation video. Renee Castell"}
