@@ -1,7 +1,8 @@
-"""Model release timeline: merge the release files, pick the benchmark set, draw the chart.
+"""Model release timeline and the benchmark's model set.
 
-Selection rule: for each lab, its main line only; at each calendar quarter's end, the newest main-line model that
-OpenRouter still serves. A quarter with no new release repeats the previous model.
+Merges the per-lab release files in data/releases/ into data/releases/all.csv, then takes each lab's main line from
+2026 Q1 (the model in force on 2026-01-01 and every release since) and writes data/models.csv and
+docs/model-timeline-2026.html.
 
     python3 -I scripts/timeline.py <project root>
 """
@@ -114,122 +115,143 @@ with open(root / "data/releases/all.csv", "w", newline="") as f:
                     r["openrouter_id"], "yes" if r["served"] else "no", " ".join(r["quarters"]),
                     r["price_in"], r["price_out"], r["confidence"]])
 
-with open(root / "data/models-quarterly.csv", "w", newline="") as f:
-    w = csv.writer(f)
-    w.writerow(["quarter", "quarter_end", "lab", "line", "model", "openrouter_id", "release_date", "age_days_at_quarter_end"])
-    for q, lab, r in sorted(picks, key=lambda p: (p[0], LABS.index(p[1]))):
-        w.writerow([qlabel(q), q, lab, LINE_NAME[lab], r["model"], r["openrouter_id"], r["date"], (q - r["date"]).days])
+START, END, TODAY = dt.date(2026, 1, 1), dt.date(2026, 11, 10), dt.date(2026, 10, 25)
+LABS = [("openai", "OpenAI", "GPT, Sol from 5.6"), ("anthropic", "Anthropic", "Opus"),
+        ("moonshot", "Moonshot", "Kimi K"), ("deepseek", "DeepSeek", "Flash"), ("glm", "Z.ai", "GLM")]
+NAME = {"GPT-5.2 (Thinking)": "GPT-5.2", "GPT-5.4 (Thinking)": "GPT-5.4", "GPT-5.5 (Thinking)": "GPT-5.5",
+        "DeepSeek-V3.2": "V3.2", "DeepSeek-V4-Flash (Preview)": "V4 Flash", "DeepSeek-V4-Flash-0731": "V4 Flash 0731",
+        "DeepSeek-V4.1-Flash": "V4.1 Flash", "DeepSeek-V4.1-Flash-1017": "V4.1 Flash 1017"}
+def short(m):
+    return NAME.get(m, m.replace("Claude ", "").replace("Kimi ", ""))
 
-# ---- chart ----
-X0, X1 = dt.date(2024, 2, 1), dt.date(2026, 11, 15)
-W, LEFT, RIGHT = 1240, 170, 30
-LANE, TOP = 118, 70
-H = TOP + LANE * len(LABS) + 46
-def x(d):
-    return LEFT + (d - X0).days / (X1 - X0).days * (W - LEFT - RIGHT)
-
-svg = [f'<svg viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" aria-labelledby="t d">',
-       '<title id="t">Model releases by lab, 2024 to 2026</title>',
-       '<desc id="d">Each lab\'s releases on one time axis; the main line filled, other tiers hollow; the benchmark set larger.</desc>']
-for q in QUARTERS + [dt.date(2024, 3, 31), dt.date(2023, 12, 31)]:
-    if X0 <= q <= X1:
-        svg.append(f'<line x1="{x(q):.1f}" x2="{x(q):.1f}" y1="{TOP - 10}" y2="{H - 40}" class="grid"/>')
-for q in QUARTERS:
-    mid = q - dt.timedelta(days=45)
-    svg.append(f'<text x="{x(mid):.1f}" y="{H - 24}" class="tick" text-anchor="middle">Q{(q.month - 1) // 3 + 1}</text>')
-for y in (2024, 2025, 2026):
-    d = max(dt.date(y, 1, 1), X0)
-    svg.append(f'<text x="{x(d) + 4:.1f}" y="{H - 8}" class="year">{y}</text>')
-svg.append(f'<text x="{x(dt.date(2026, 10, 25)):.1f}" y="{TOP - 16}" class="tick" text-anchor="middle">today</text>')
-svg.append(f'<line x1="{x(dt.date(2026, 10, 25)):.1f}" x2="{x(dt.date(2026, 10, 25)):.1f}" y1="{TOP - 10}" y2="{H - 40}" class="axis"/>')
-
-for i, lab in enumerate(LABS):
-    yc = TOP + LANE * i + 44
-    svg.append(f'<text x="12" y="{yc + 4}" class="lab">{LAB_NAME[lab]}</text>')
-    svg.append(f'<text x="12" y="{yc + 20}" class="sub">{html.escape(LINE_NAME[lab])}</text>')
-    svg.append(f'<line x1="{LEFT}" x2="{W - RIGHT}" y1="{yc}" y2="{yc}" class="axis"/>')
-    svg.append(f'<text x="{LEFT - 8}" y="{yc + 40}" class="sub" text-anchor="end">other tiers</text>')
-    k = 0
-    for r in [r for r in rows if r["lab"] == lab]:
-        if r["date"] < X0:
-            continue
-        tip = html.escape(f'{r["model"]} | {r["date"]} | {"main line" if r["main"] else "other tier"}'
-                          f'{" | not on OpenRouter" if not r["served"] else ""}'
-                          f'{" | benchmark: " + ", ".join(r["quarters"]) if r["quarters"] else ""}'
-                          f'{" | launch $" + r["price_in"] + " / $" + r["price_out"] + " per M" if r["price_in"] else ""}')
-        cx = x(r["date"])
-        if not r["main"]:
-            svg.append(f'<g class="pt" data-tip="{tip}"><circle cx="{cx:.1f}" cy="{yc + 36}" r="12" class="hit"/>'
-                       f'<circle cx="{cx:.1f}" cy="{yc + 36}" r="3" class="other"/></g>')
-            continue
-        sel = bool(r["quarters"])
-        cls = "sel" if sel else ("main" if r["served"] and r["context"] >= MIN_CONTEXT else "gone")
-        rad = 6 if sel else 4.5
-        ly = yc - 13 if k % 2 == 0 else yc + 21
-        k += 1
-        svg.append(f'<g class="pt" data-tip="{tip}"><circle cx="{cx:.1f}" cy="{yc}" r="14" class="hit"/>'
-                   f'<circle cx="{cx:.1f}" cy="{yc}" r="{rad}" class="{cls}"/></g>')
-        svg.append(f'<text x="{cx:.1f}" y="{ly}" text-anchor="middle" class="{"lbl-sel" if sel else "lbl"}">'
-                   f'{html.escape(r["short"])}</text>')
-svg.append("</svg>")
-
-table = ["<table><thead><tr><th>Lab</th><th>Model</th><th>Released</th><th>Line</th><th>Days since previous</th>"
-         "<th>Benchmark quarters</th><th>On OpenRouter</th><th>Launch $/M in / out</th></tr></thead><tbody>"]
+# In-place updates (same API name and price), kept because DeepSeek reports large agentic gains for them
+# (Hugging Face model card for 0731, the Change Log for 1017).
+UPDATE = {"DeepSeek-V4-Flash-0731", "DeepSeek-V4.1-Flash-1017"}
+rows = [r for r in csv.DictReader(open(root / "data/releases/all.csv")) if r["main_line"] == "yes"]
 for r in rows:
-    table.append(f'<tr><td>{LAB_NAME[r["lab"]]}</td><td>{html.escape(r["model"])}</td><td>{r["date"]}</td>'
-                 f'<td>{"main" if r["main"] else "other"}</td><td class="n">{r.get("gap_days", "")}</td>'
-                 f'<td>{", ".join(r["quarters"])}</td><td>{"yes" if r["served"] else "no"}</td>'
-                 f'<td class="n">{r["price_in"]}{" / " + r["price_out"] if r["price_in"] else ""}</td></tr>')
+    r["date"] = dt.date.fromisoformat(r["release_date"])
+lanes = {}
+for lab, _, _ in LABS:
+    mine = sorted((r for r in rows if r["lab"] == lab), key=lambda r: r["date"])
+    before = [r for r in mine if r["date"] < START]
+    # The set: the model in force on January 1, then every release since.
+    lanes[lab] = (before[-2] if len(before) > 1 else None, before[-1:] + [r for r in mine if r["date"] >= START])
+
+with open(root / "data/models.csv", "w", newline="") as f:
+    w = csv.writer(f)
+    w.writerow(["lab", "model", "release_date", "role", "days_since_previous", "previous", "openrouter_id",
+                "launch_input_usd_per_m", "launch_output_usd_per_m"])
+    for lab, _, _ in LABS:
+        prev, rel = lanes[lab]
+        for r in rel:
+            role = "in force 2026-01-01" if r["date"] < START else ("in-place update" if r["model"] in UPDATE else "release")
+            w.writerow([lab, r["model"], r["date"], role, (r["date"] - prev["date"]).days if prev else "",
+                        prev["model"] if prev else "", r["openrouter_id"],
+                        r["launch_input_usd_per_m"], r["launch_output_usd_per_m"]])
+            prev = r
+
+W, LEFT, RIGHT, TOP, LANE = 1240, 190, 40, 40, 132
+H = TOP + LANE * len(LABS) + 40
+def x(d):
+    return LEFT + (d - START).days / (END - START).days * (W - LEFT - RIGHT)
+
+s = [f'<svg viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" aria-labelledby="t">',
+     '<title id="t">Main-line model releases by lab, 2026</title>']
+months = [dt.date(2026, m, 1) for m in range(1, 12)]
+for m in months:
+    s.append(f'<line x1="{x(m):.1f}" x2="{x(m):.1f}" y1="{TOP - 8}" y2="{H - 34}" class="{"q" if m.month in (1, 4, 7, 10) else "grid"}"/>')
+    mid = m + dt.timedelta(days=15)
+    if mid < END:
+        s.append(f'<text x="{x(mid):.1f}" y="{H - 16}" class="tick" text-anchor="middle">{m.strftime("%b")}</text>')
+for qd, ql in ((dt.date(2026, 1, 1), "Q1"), (dt.date(2026, 4, 1), "Q2"), (dt.date(2026, 7, 1), "Q3"), (dt.date(2026, 10, 1), "Q4")):
+    s.append(f'<text x="{x(qd) + 4:.1f}" y="{TOP - 14}" class="qlab">{ql}</text>')
+s.append(f'<line x1="{x(TODAY):.1f}" x2="{x(TODAY):.1f}" y1="{TOP - 8}" y2="{H - 34}" class="today"/>')
+s.append(f'<text x="{x(TODAY) + 4:.1f}" y="{H - 38}" class="tick">today</text>')
+
+for i, (lab, title, line) in enumerate(LABS):
+    yc = TOP + LANE * i + 70
+    prev, rel = lanes[lab]
+    s.append(f'<text x="14" y="{yc - 6}" class="lab">{title}</text>')
+    s.append(f'<text x="14" y="{yc + 10}" class="sub">{line}</text>')
+    s.append(f'<line x1="{LEFT}" x2="{x(TODAY):.1f}" y1="{yc}" y2="{yc}" class="axis"/>')
+    last_x, below = None, False
+    for j, r in enumerate(rel):
+        cx = x(max(r["date"], START))
+        gap = (r["date"] - (rel[j - 1]["date"] if j else prev["date"])).days if (j or prev) else None
+        close = last_x is not None and cx - last_x < 70
+        below = close and not below
+        if j and not close:
+            s.append(f'<text x="{(last_x + cx) / 2:.1f}" y="{yc + 16}" class="gap" text-anchor="middle">{gap} d</text>')
+        if r["date"] < START:
+            ny, dy = yc + 32, yc + 46
+        elif below:
+            ny, dy = yc + 26, yc + 40
+        else:
+            ny, dy = yc - 26, yc - 12
+        tip = html.escape(f'{r["model"]} | released {r["date"]} | {gap} days after the previous'
+                          + (f' | launch ${r["launch_input_usd_per_m"]} / ${r["launch_output_usd_per_m"]} per M'
+                             if r["launch_input_usd_per_m"] else ""))
+        s.append(f'<g class="pt" data-tip="{tip}"><circle cx="{cx:.1f}" cy="{yc}" r="14" class="hit"/>'
+                 f'<circle cx="{cx:.1f}" cy="{yc}" r="5.5" class="{"inforce" if r["date"] < START else "dot"}"/></g>')
+        s.append(f'<text x="{cx - (6 if r["date"] < START else 0):.1f}" y="{ny}" class="name" '
+                 f'text-anchor="{"start" if r["date"] < START else "middle"}">{html.escape(short(r["model"]))}</text>')
+        when = r["date"].strftime("%b %-d") + (", 2025" if r["date"] < START else "")
+        when += " (update)" if r["model"] in UPDATE else ""
+        anchor = "start" if r["date"] < START else "middle"
+        s.append(f'<text x="{cx - (6 if anchor == "start" else 0):.1f}" y="{dy}" class="date" text-anchor="{anchor}">{when}</text>')
+        last_x = cx
+s.append("</svg>")
+
+table = ['<table><thead><tr><th>Lab</th><th>Model</th><th>Released</th><th>Days since previous</th>'
+         '<th>Launch $/M in / out</th></tr></thead><tbody>']
+for lab, title, _ in LABS:
+    prev, rel = lanes[lab]
+    for r in rel:
+        table.append(f'<tr><td>{title}</td><td>{html.escape(r["model"])}</td><td>{r["date"]}</td>'
+                     f'<td class="n">{(r["date"] - prev["date"]).days if prev else ""}</td>'
+                     f'<td class="n">{r["launch_input_usd_per_m"]} / {r["launch_output_usd_per_m"]}</td></tr>')
+        prev = r
 table.append("</tbody></table>")
 
-page = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Model releases</title>
-<style>
+page = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Main-line releases, 2026</title><style>
 .viz-root {{ color-scheme: light; --surface-1:#fcfcfb; --page:#f9f9f7; --text-primary:#0b0b0b; --text-secondary:#52514e;
-  --muted:#898781; --grid:#e1e0d9; --axis:#c3c2b7; --series-1:#2a78d6; --series-2:#eb6834; --border:rgba(11,11,11,0.10); }}
+  --muted:#898781; --grid:#e1e0d9; --axis:#c3c2b7; --series-1:#2a78d6; --border:rgba(11,11,11,0.10); }}
 @media (prefers-color-scheme: dark) {{ :root:where(:not([data-theme="light"])) .viz-root {{ color-scheme: dark;
   --surface-1:#1a1a19; --page:#0d0d0d; --text-primary:#f0efec; --text-secondary:#c3c2b7; --grid:#2c2c2a; --axis:#383835;
-  --series-1:#3987e5; --series-2:#d95926; --border:rgba(255,255,255,0.10); }} }}
+  --series-1:#3987e5; --border:rgba(255,255,255,0.10); }} }}
 body {{ margin:0; background:var(--page); font-family:system-ui,-apple-system,"Segoe UI",sans-serif; }}
 .viz-root {{ background:var(--page); color:var(--text-primary); padding:24px; }}
 .card {{ background:var(--surface-1); border:1px solid var(--border); border-radius:8px; padding:20px 20px 8px; max-width:{W}px; }}
-h1 {{ font-size:18px; font-weight:600; margin:0 0 4px; }} p.sub {{ margin:0 0 12px; color:var(--text-secondary); font-size:13px; }}
-.legend {{ display:flex; gap:20px; font-size:12px; color:var(--text-secondary); margin:0 0 4px; }}
-.legend span {{ display:inline-flex; align-items:center; gap:6px; }}
-.sw {{ width:10px; height:10px; border-radius:50%; display:inline-block; }}
-svg text {{ font-family:inherit; }}
-.grid {{ stroke:var(--grid); stroke-width:1; }} .axis {{ stroke:var(--axis); stroke-width:1; }}
-.tick {{ fill:var(--muted); font-size:11px; }} .year {{ fill:var(--text-secondary); font-size:11px; font-weight:600; }}
-.lab {{ fill:var(--text-primary); font-size:13px; font-weight:600; }} .sub {{ fill:var(--muted); font-size:11px; }}
-.sel {{ fill:var(--series-2); stroke:var(--surface-1); stroke-width:2; }}
-.main {{ fill:var(--series-1); stroke:var(--surface-1); stroke-width:2; }}
-.gone {{ fill:var(--surface-1); stroke:var(--series-1); stroke-width:1.5; }}
-.other {{ fill:none; stroke:var(--muted); stroke-width:1.2; }}
-.hit {{ fill:transparent; }} .pt:hover circle:not(.hit), .pt:focus circle:not(.hit) {{ stroke:var(--text-primary); }}
-.lbl {{ fill:var(--text-secondary); font-size:10.5px; }} .lbl-sel {{ fill:var(--text-primary); font-size:11px; font-weight:600; }}
+h1 {{ font-size:18px; font-weight:600; margin:0 0 4px; }} p.sub {{ margin:0 0 8px; color:var(--text-secondary); font-size:13px; }}
+svg text {{ font-family:inherit; }} .grid {{ stroke:var(--grid); stroke-width:1; }} .q {{ stroke:var(--axis); stroke-width:1; }}
+.axis {{ stroke:var(--axis); stroke-width:1; }} .today {{ stroke:var(--text-secondary); stroke-width:1; }}
+.tick {{ fill:var(--muted); font-size:11px; }} .qlab {{ fill:var(--text-secondary); font-size:11px; font-weight:600; }}
+.lab {{ fill:var(--text-primary); font-size:14px; font-weight:600; }} .sub {{ fill:var(--muted); font-size:11px; }}
+.dot {{ fill:var(--series-1); stroke:var(--surface-1); stroke-width:2; }} .hit {{ fill:transparent; }}
+.inforce {{ fill:var(--surface-1); stroke:var(--series-1); stroke-width:2.5; }}
+.upd {{ fill:var(--surface-1); stroke:var(--muted); stroke-width:1.5; }}
+.pt:hover .dot, .pt:focus .dot {{ stroke:var(--text-primary); }}
+.name {{ fill:var(--text-primary); font-size:12px; font-weight:600; }} .date {{ fill:var(--text-secondary); font-size:11px; }}
+.name, .date {{ paint-order:stroke; stroke:var(--surface-1); stroke-width:4px; stroke-linejoin:round; }}
+.gap {{ fill:var(--muted); font-size:10.5px; font-variant-numeric:tabular-nums; }}
 #tip {{ position:fixed; pointer-events:none; background:var(--surface-1); color:var(--text-primary); border:1px solid var(--border);
-  border-radius:6px; padding:6px 8px; font-size:12px; display:none; max-width:360px; box-shadow:0 2px 8px rgba(0,0,0,.08); }}
-table {{ border-collapse:collapse; font-size:12px; margin-top:20px; background:var(--surface-1); }}
+  border-radius:6px; padding:6px 8px; font-size:12px; display:none; max-width:380px; }}
+table {{ border-collapse:collapse; font-size:12px; margin-top:12px; background:var(--surface-1); }}
 th, td {{ text-align:left; padding:4px 10px; border-bottom:1px solid var(--grid); }} td.n {{ font-variant-numeric:tabular-nums; }}
 th {{ color:var(--text-secondary); font-weight:600; }} details {{ margin-top:16px; color:var(--text-secondary); font-size:13px; }}
-</style></head><body><div class="viz-root">
-<div class="card"><h1>Model releases by lab, 2024 to 2026</h1>
-<p class="sub">Each lab's main line on its lane; other tiers below it. Larger orange dots: the benchmark set, the newest
-main-line model OpenRouter serves at each quarter's end. Vertical rules are quarter ends.</p>
-<div class="legend"><span><i class="sw" style="background:var(--series-2)"></i>Benchmark set</span>
-<span><i class="sw" style="background:var(--series-1)"></i>Main line, not selected</span>
-<span><i class="sw" style="border:1.5px solid var(--series-1)"></i>Main line, not servable (retired, or context under 128k)</span>
-<span><i class="sw" style="border:1.2px solid var(--muted)"></i>Other tier</span></div>
-{''.join(svg)}</div>
-<details><summary>Table view</summary>{''.join(table)}</details>
-<div id="tip"></div></div>
-<script>
-const tip=document.getElementById('tip');
+</style></head><body><div class="viz-root"><div class="card">
+<h1>Main-line model releases by lab, 2026</h1>
+<p class="sub">Each lab's main line: the model in force on January 1 (ring, labelled below), then every release since,
+with the days between them.
+DeepSeek's two in-place updates are included for their reported agentic gains.
+Release dates are first public availability, from each lab's own announcements.</p>
+{''.join(s)}</div><details><summary>Table view</summary>{''.join(table)}</details><div id="tip"></div></div>
+<script>const tip=document.getElementById('tip');
 document.querySelectorAll('.pt').forEach(g=>{{ g.setAttribute('tabindex','0');
-  const show=e=>{{ tip.textContent=g.dataset.tip; tip.style.display='block';
-    const r=g.getBoundingClientRect(); tip.style.left=Math.min(r.left, innerWidth-380)+'px'; tip.style.top=(r.bottom+6)+'px'; }};
-  g.addEventListener('mouseenter',show); g.addEventListener('focus',show);
-  g.addEventListener('mouseleave',()=>tip.style.display='none'); g.addEventListener('blur',()=>tip.style.display='none'); }});
+ const show=()=>{{ tip.textContent=g.dataset.tip; tip.style.display='block'; const r=g.getBoundingClientRect();
+  tip.style.left=Math.min(r.left, innerWidth-400)+'px'; tip.style.top=(r.bottom+6)+'px'; }};
+ g.addEventListener('mouseenter',show); g.addEventListener('focus',show);
+ g.addEventListener('mouseleave',()=>tip.style.display='none'); g.addEventListener('blur',()=>tip.style.display='none'); }});
 </script></body></html>"""
-(root / "docs").mkdir(exist_ok=True)
-(root / "docs/model-timeline.html").write_text(page)
-print(len(rows), "releases;", len({id(p[2]) for p in picks}), "benchmark models over", len(QUARTERS), "quarters")
+(root / "docs/model-timeline-2026.html").write_text(page)
+print(sum(len(v[1]) for v in lanes.values()), "releases since", START)
