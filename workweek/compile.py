@@ -20,7 +20,7 @@ import yaml
 
 from . import checks
 from .apps import REGISTRY
-from .schema import (Contact, Document, Economics, Employer, Episode, Exchange, Meta, Minutes, MinutesModel, Need,
+from .schema import (Contact, Document, Economics, Employer, Episode, Exchange, Meta, Minutes, MinutesModel, Need, StateChange,
                      Reference, Rubric, Sourced, Thread, Trap, Version, Worker, WorkerAction, fmt, seconds)
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -132,8 +132,10 @@ def expand(form: dict) -> Episode:
     for t in form.get("threads", []):
         th = threads.get(t["id"])
         if th is None:
-            th = threads[t["id"]] = Thread(id=t["id"], app=t["app"], path=t["path"], title=t["title"], exchanges=[])
-        th.state.update(t.get("state", {}))     # a later day's entry for the same id continues the thread
+            th = threads[t["id"]] = Thread(id=t["id"], app=t["app"], path=t["path"], title=t["title"],
+                                           state=t.get("state", {}), exchanges=[])
+        elif t.get("state"):                    # a later day's entry for the same id continues the thread
+            th.state_changes.append(StateChange(at=t["x"][0]["at"], set=t["state"]))
         n0 = len(th.exchanges)
         th.exchanges += [_exchange(x, t["id"], n0 + i) for i, x in enumerate(t["x"], 1)]
     for c in form.get("calls", []):
@@ -164,7 +166,7 @@ def expand(form: dict) -> Episode:
             d.versions.sort(key=lambda v: seconds(v.at))
             prod = f"{tgt}@{d.versions.index(next(v for v in d.versions if v.at == a['at'] and v.author == 'worker'))}"
         if "update_state" in a and tgt in threads:
-            threads[tgt].state.update(a["update_state"])
+            threads[tgt].state_changes.append(StateChange(at=a["at"], set=a["update_state"]))
         produced[aid] = prod
         actions.append(WorkerAction(id=aid, at=a["at"], kind=kind, target=tgt, produces=prod,
                                     summary=a["summary"], note=a.get("note", "")))
@@ -374,8 +376,15 @@ def split_days(ep: Episode) -> dict[str, dict]:
         by: dict[int, list] = defaultdict(list)
         for x in t["exchanges"]:
             by[max(1, _day(x["at"]))].append(x)
-        for i, xs in by.items():
-            days[i]["threads"].append({**{k: v for k, v in t.items() if k != "exchanges"}, "exchanges": xs})
+        changes: dict[int, list] = defaultdict(list)
+        for c in t["state_changes"]:
+            changes[max(1, _day(c["at"]))].append(c)
+        first = min(by)
+        for i in sorted(set(by) | set(changes)):
+            rec = {k: v for k, v in t.items() if k not in ("exchanges", "state_changes")}
+            if i != first:
+                rec["state"] = {}
+            days[i]["threads"].append({**rec, "state_changes": changes.get(i, []), "exchanges": by.get(i, [])})
     for d in data["documents"]:
         by = defaultdict(list)
         for v in d["versions"]:
@@ -405,6 +414,7 @@ def merge_days(folder: str | Path) -> Episode:
         for t in day["threads"]:
             if t["id"] in threads:
                 threads[t["id"]]["exchanges"] += t["exchanges"]
+                threads[t["id"]]["state_changes"] += t["state_changes"]
             else:
                 threads[t["id"]] = t
         for d in day["documents"]:

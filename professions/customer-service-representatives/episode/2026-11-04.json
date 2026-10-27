@@ -8,6 +8,7 @@
    "title": "#outages INC-20261103-0042",
    "live": false,
    "state": {},
+   "state_changes": [],
    "exchanges": [
     {
      "id": "t3-noc.1",
@@ -29,6 +30,7 @@
    "title": "#team4",
    "live": false,
    "state": {},
+   "state_changes": [],
    "exchanges": [
     {
      "id": "t3-team-chat.1",
@@ -72,6 +74,7 @@
    "title": "Outage credits for INC-20261103-0042 - automatic, no manual credits from 10:00",
    "live": false,
    "state": {},
+   "state_changes": [],
    "exchanges": [
     {
      "id": "t3-billing-ops.1",
@@ -100,6 +103,7 @@
    "title": "Re: Battery backup request",
    "live": false,
    "state": {},
+   "state_changes": [],
    "exchanges": [
     {
      "id": "t3-jamal.1",
@@ -136,6 +140,7 @@
    "title": "Re: Equipment fee reversal: return mis-scanned, NB-40122953",
    "live": false,
    "state": {},
+   "state_changes": [],
    "exchanges": [
     {
      "id": "t3-lena-curtis.1",
@@ -159,6 +164,7 @@
    "title": "Re: Your QA evaluation, 10/29 call",
    "live": false,
    "state": {},
+   "state_changes": [],
    "exchanges": [
     {
      "id": "t3-tomas.1",
@@ -184,6 +190,7 @@
    "title": "Tier 2 Technical: low optical power, NB-40321184 (Monmouth), now down",
    "live": false,
    "state": {},
+   "state_changes": [],
    "exchanges": [
     {
      "id": "m3-megan-t2.w1",
@@ -207,6 +214,7 @@
    "title": "Inbound call, Greg Halvorsen (credit for KZN-3)",
    "live": true,
    "state": {},
+   "state_changes": [],
    "exchanges": [
     {
      "id": "c3-greg.1",
@@ -300,6 +308,7 @@
    "title": "Outbound callback, Vera Castellanos (cancellation, California)",
    "live": true,
    "state": {},
+   "state_changes": [],
    "exchanges": [
     {
      "id": "c3-vera.1",
@@ -417,6 +426,7 @@
    "title": "Inbound call, Ivy Tran (credit amount)",
    "live": true,
    "state": {},
+   "state_changes": [],
    "exchanges": [
     {
      "id": "c3-ivy-call.1",
@@ -510,6 +520,7 @@
    "title": "Voicemail from Vera Castellanos (cancel)",
    "live": false,
    "state": {},
+   "state_changes": [],
    "exchanges": [
     {
      "id": "t3-vera-vm.1",
@@ -532,11 +543,15 @@
    "path": "billing/88412-followup",
    "title": "#88412 Re: $150 equipment fee",
    "live": false,
-   "state": {
-    "status": "solved",
-    "priority": "high",
-    "channel": "email"
-   },
+   "state": {},
+   "state_changes": [
+    {
+     "at": "D3 10:55",
+     "set": {
+      "status": "solved"
+     }
+    }
+   ],
    "exchanges": [
     {
      "id": "t2-curtis-followup.w3",
@@ -564,6 +579,7 @@
     "priority": "normal",
     "channel": "chat"
    },
+   "state_changes": [],
    "exchanges": [
     {
      "id": "t3-ivy.1",
@@ -599,11 +615,22 @@
    "path": "tech/88502",
    "title": "#88502 Internet keeps dropping (Monmouth)",
    "live": false,
-   "state": {
-    "status": "escalated",
-    "priority": "high",
-    "channel": "email"
-   },
+   "state": {},
+   "state_changes": [
+    {
+     "at": "D3 08:20",
+     "set": {
+      "status": "open",
+      "priority": "high"
+     }
+    },
+    {
+     "at": "D3 08:41",
+     "set": {
+      "status": "escalated"
+     }
+    }
+   ],
    "exchanges": [
     {
      "id": "t2-megan.2",

@@ -89,14 +89,27 @@ class Exchange(_M):
     meta: dict[str, Any] = {}
 
 
+class StateChange(_M):
+    at: Time
+    set: dict[str, Any]
+
+
 class Thread(_M):
     id: str
     app: str
     path: str                   # bucketed name inside the app, e.g. "#ops/peak-staffing"
     title: str
     live: bool = False          # a phone call: exchanges arrive faster than the tick
-    state: dict[str, Any] = {}  # ticket status, priority, ...
+    state: dict[str, Any] = {}  # ticket status, priority, ... when the thread first appears
+    state_changes: list[StateChange] = []   # later changes (a reply marks it solved, a customer reopens it)
     exchanges: list[Exchange]
+
+    def state_at(self, t: int) -> dict[str, Any]:
+        out = dict(self.state)
+        for c in sorted(self.state_changes, key=lambda c: seconds(c.at)):
+            if seconds(c.at) <= t:
+                out.update(c.set)
+        return out
 
     @field_validator("path")
     @classmethod

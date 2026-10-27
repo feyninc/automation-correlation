@@ -55,8 +55,9 @@ class ThreadApp(App):
     def render(self, ep: Episode, t: Thread, upto: int) -> str:
         xs = [x for x in t.exchanges if seconds(x.at) <= upto]
         head = f"# {t.title}\n"
-        if t.state:
-            head += "State: " + ", ".join(f"{k}={v}" for k, v in t.state.items()) + "\n"
+        state = t.state_at(upto)
+        if state:
+            head += "State: " + ", ".join(f"{k}={v}" for k, v in state.items()) + "\n"
         return head + "\n".join(self.exchange(ep, x) for x in xs) + "\n"
 
     def exchange(self, ep: Episode, x: Exchange) -> str:
