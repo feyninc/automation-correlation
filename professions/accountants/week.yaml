@@ -1,0 +1,238 @@
+soc: 13-2011.00
+title: Accountants and Auditors
+ecec_sector: private management business and financial occupations
+employer:
+  name: Westerby Fluid Systems, Inc.
+  industry: industrial distribution and assembly (hydraulic components)
+  size: 642
+  location: Grove City, Ohio
+  timezone: America/New_York
+  description: >-
+    Westerby distributes and assembles hydraulic pumps, valves and power units for equipment makers in the Midwest,
+    about $230 million in revenue. Private, owned since 2023 by a private equity fund, financed by an asset-based
+    revolver and a term loan, audited each December. Finance is 14 people under the CFO; the controller's team closes
+    the books in five business days.
+worker:
+  name: Elena Moretti
+  title: Senior Accountant, CPA
+  manager: c_rachel
+  team: Accounting (Controller's team)
+  email: elena.moretti@westerby.com
+  signature: "Elena Moretti, CPA | Senior Accountant | Westerby Fluid Systems | 614-555-0412"
+apps: [mail, chat, phone, calendar, docs, policies, contacts]
+
+profession_prompt: |
+  Elena is the senior accountant at Westerby Fluid Systems. This week is the October close: reconciliations,
+  accruals and adjusting entries, revenue cutoff, the flux analysis, reviewing the staff accountants' work, sales
+  and use tax, and the first requests from the external auditors' interim fieldwork. She also answers coding
+  questions from AP and the business.
+
+  Good help in this job means:
+  - balances that reconcile to the source, with every difference explained, never plugged;
+  - entries in the right period and the right account, under the company's policies and US GAAP, with the
+    arithmetic shown;
+  - controls respected: no one approves their own work, approvals sit with the right person, payment changes are
+    verified;
+  - judgments that belong to the controller or CFO (revenue calls, write-offs, anything sent outside the company)
+    brought to them with what they need;
+  - confidential data sent only through approved channels;
+  - deadlines on the close calendar met, and short, clear notes others can review.
+  Policies are under policies; the close calendar, schedules, statements, logs and workpapers are under docs.
+
+minutes_model:
+  compose_wpm: 18
+
+sources:
+  - "BLS OEWS May 2025 and projections via O*NET OnLine: https://www.onetonline.org/link/summary/13-2011.00"
+  - "BLS Occupational Outlook Handbook, Accountants and Auditors: https://www.bls.gov/ooh/business-and-financial/accountants-and-auditors.htm"
+  - "FASB ASU 2014-09 (ASC 606), bill-and-hold criteria 606-10-55-83: https://storage.fasb.org/ASU%202014-09_Section%20A.pdf"
+  - "COSO Internal Control - Integrated Framework: https://www.coso.org/guidance-on-ic"
+  - "Ohio Revised Code 5741.12 (use tax returns due the 23rd): https://codes.ohio.gov/ohio-revised-code/section-5741.12"
+  - "Avalara, Franklin County, Ohio combined sales tax rate 8.0%: https://www.avalara.com/taxrates/en/state-rates/ohio/counties/franklin-county.html"
+  - "FBI IC3 2024 Internet Crime Report (business email compromise): https://www.ic3.gov/AnnualReport/Reports/2024_IC3Report.pdf"
+  - "Nacha fraud monitoring rules, phase 2: https://www.nacha.org/rules/risk-management-topics-fraud-monitoring-phase-2"
+  - "Microsoft Work Trend Index 2025: https://www.microsoft.com/en-us/worklab/work-trend-index/breaking-down-infinite-workday"
+
+contacts:
+  # [id, name, role, org, email, phone, relation]
+  - [c_rachel, Rachel Okafor, Controller, Westerby, rachel.okafor@westerby.com, "614-555-0401", manager (controller)]
+  - [c_tom, Tom Haldane, Assistant Controller, Westerby, tom.haldane@westerby.com, "614-555-0402", assistant controller (out Wed-Fri)]
+  - [c_vince, Vince Calder, Chief Financial Officer, Westerby, vince.calder@westerby.com, "614-555-0400", CFO]
+  - [c_jade, Jade Liu, Staff Accountant, Westerby, jade.liu@westerby.com, "", staff accountant (Elena reviews her work)]
+  - [c_marco, Marco Silva, Staff Accountant, Westerby, marco.silva@westerby.com, "", staff accountant]
+  - [c_monique, Monique Baptiste, AR and Credit Specialist, Westerby, monique.baptiste@westerby.com, "", accounts receivable]
+  - [c_darnell, Darnell Hughes, AP Lead, Westerby, darnell.hughes@westerby.com, "614-555-0420", accounts payable]
+  - [c_priscilla, Priscilla Wade, Payroll Manager, Westerby, priscilla.wade@westerby.com, "", payroll]
+  - [c_ken, Ken Albrecht, FP&A Manager, Westerby, ken.albrecht@westerby.com, "", FP&A]
+  - [c_brett, Brett Lowry, VP Sales, Westerby, brett.lowry@westerby.com, "", sales]
+  - [c_gail, Gail Pinter, Shipping Supervisor, Westerby, gail.pinter@westerby.com, "", warehouse]
+  - [c_ops, Luis Ortega, Plant Operations Manager, Westerby, luis.ortega@westerby.com, "", operations]
+  - [c_itsec, IT Security, phishing reports, Westerby, security@westerby.com, "", internal]
+  - [c_sanjay, Sanjay Mehta, Vice President, Calloway Ridge Partners, smehta@callowayridge.com, "", private equity sponsor]
+  - [c_owen, Owen Tierney, Associate, Calloway Ridge Partners, otierney@callowayridge.com, "", private equity sponsor]
+  - [c_audit_mgr, Lauren Pike, Audit Manager, Brightline & Moss LLP, lpike@brightlinemoss.com, "", external auditors]
+  - [c_audit_assoc, Kevin Doyle, Audit Associate, Brightline & Moss LLP, kdoyle@brightlinemoss.com, "", external auditors]
+  - [c_bank, Commerce Union Bank Treasury, positive pay desk, Commerce Union Bank, treasury@commerceunion.example, "800-555-0188", bank]
+  - [c_hartline, Hartline Hydraulics, accounts payable, Hartline Hydraulics, ap@hartlinehyd.example, "", customer]
+  - [c_system, NetSuite, system notifications, Westerby, netsuite@westerby.com, "", system]
+  - [c_northfield, Northfield Freight, billing, Northfield Freight, billing@northfieldfreight.example, "", freight carrier]
+
+ledger:
+  materiality_je_review: 50000
+  capitalization_threshold: 5000
+  ohio_rate_franklin: 0.08
+
+documents:
+  - id: pol-je
+    app: policies
+    path: acct-200-journal-entries-and-reconciliations
+    title: ACCT-200 Journal entries and reconciliations
+    content: |
+      # ACCT-200 Journal entries and reconciliations
+
+      1. Every manual journal entry has a preparer and a different approver. No one approves an entry they prepared,
+         even if the system routes it to them. Approvers: staff entries, the senior accountant up to $50,000 and the
+         assistant controller or controller above; the senior accountant's own entries, the assistant controller or
+         controller.
+      2. Balance sheet accounts are reconciled monthly to independent support (bank statement, subledger, schedule) by
+         WD3 and reviewed by WD4. Every reconciling item is identified, explained and dated.
+      3. Unexplained differences are never written off or posted to suspense without the controller's written
+         approval.
+      4. Accruals: expenses incurred in the month are accrued when the invoice hasn't arrived (receiving records,
+         shipping logs, contracts). Payroll: policy 3.2.
+      5. Prepaids are amortized straight-line over the service period; anything whose period has ended is expensed.
+
+  - id: pol-payroll-accrual
+    app: policies
+    path: acct-320-payroll-accrual
+    title: ACCT-320 Payroll accrual (policy 3.2)
+    content: |
+      # Policy 3.2: month-end payroll accrual
+
+      Accrue wages for the open biweekly period: estimated gross wages for the period (use the last completed
+      period's gross from ADP) x (working days of the period that fall in the month / 10), plus employer FICA at
+      7.65%. Benefits are booked monthly from invoices and are not part of this accrual. Reverse on the first day of
+      the next month.
+
+  - id: pol-capex
+    app: policies
+    path: acct-410-capitalization
+    title: ACCT-410 Fixed assets and capitalization
+    content: |
+      # ACCT-410 Capitalization
+
+      Capitalize individual items costing $5,000 or more with a useful life over one year (asset accounts 1500-1590),
+      including freight, installation and non-refundable taxes. Items under $5,000 are expensed, even if bought
+      together. Tooling and fixtures: 1540, 5-year life. Computer equipment: 1560, 3-year life. Depreciation starts
+      the month after the asset is placed in service, straight-line, no salvage.
+
+  - id: pol-revenue
+    app: policies
+    path: acct-500-revenue-recognition
+    title: ACCT-500 Revenue recognition (ASC 606)
+    content: |
+      # ACCT-500 Revenue recognition
+
+      - Revenue is recognized when control passes under the shipping terms: FOB Shipping Point at shipment, FOB
+        Destination on delivery (proof of delivery date).
+      - Bill-and-hold: allowed only if all of ASC 606-10-55-83 is met: (a) a substantive reason (for example, the
+        customer asked for it in writing); (b) the product is identified separately as the customer's; (c) it is ready
+        for physical transfer; (d) Westerby cannot use it or send it to another customer. The controller approves every
+        bill-and-hold arrangement in writing before month end.
+      - Month-end cutoff: Accounting reviews the shipping log for the last three days of the month and the first three
+        of the next.
+
+  - id: pol-treasury
+    app: policies
+    path: tre-600-payments-and-vendor-master
+    title: TRE-600 Payments, vendor master and confidential data
+    content: |
+      # TRE-600 Payments, vendor master and confidential data
+
+      6.1 Vendor bank changes: AP verifies by calling the vendor at the phone number already in the vendor master
+          (never a number in the request), and a second person approves the change in NetSuite. Accounting never
+          changes vendor banking.
+      6.2 Positive pay: the bank reports exceptions by 9:00 a.m.; Accounting decides pay or return by 2:00 p.m. ET.
+          Default is return.
+      6.3 Customer refunds: AR prepares, the controller approves, after confirming the credit is real.
+      7.1 Payroll registers, SSNs and bank details go to auditors only through Suralink, never by email.
+      7.2 Results go outside the company (sponsor, lender) only from the CFO or controller after review.
+
+  - id: doc-close-calendar
+    app: docs
+    path: close/2026-10/close-calendar
+    title: October 2026 close calendar
+    content: |
+      # October close (WD1 = Mon 11/2)
+
+      | Day | Due | Owner |
+      | --- | --- | --- |
+      | WD1 Mon 11/2 | AP cutoff; bank recs and cash entries; prepaids and depreciation | Elena, Marco, Jade |
+      | WD2 Tue 11/3 | Accruals (payroll, freight, utilities); AR aging; shipping log pulled | Elena, Jade |
+      | WD3 Wed 11/4 | Revenue cutoff; all entries submitted and approved; all recs prepared | Elena |
+      | WD4 Thu 11/5 | Flux analysis to Rachel by 12:00; rec reviews | Elena |
+      | WD5 Fri 11/6 | Close review with Rachel; final TB | Rachel, Elena |
+      | WD7 Tue 11/10 | Monthly package to the sponsor and the lender (Vince) | Vince |
+      Tom Haldane out Wed 11/4 to Fri 11/6. Interim audit fieldwork starts Thu 11/5.
+
+  - id: doc-sept-rec
+    app: docs
+    path: close/2026-09/bank-rec-1010
+    title: September bank reconciliation, GL 1010 (operating, Commerce Union x4417)
+    content: |
+      # GL 1010 reconciliation at 9/30/2026 (prepared Marco Silva, reviewed Elena Moretti)
+
+      Bank statement balance 9/30: 2,412,906.33
+      + Deposits in transit: 54,118.62
+      - Outstanding checks: 131,406.27
+      = Adjusted bank balance: 2,335,618.68
+      GL 1010 balance 9/30: 2,335,618.68. Difference: 0.00.
+
+  - id: doc-prepaids
+    app: docs
+    path: close/2026-10/prepaid-schedule-draft
+    title: Prepaid schedule, October (draft, rolled forward by Jade)
+    format: csv
+    author: c_jade
+    content: |
+      item,vendor,service_start,service_end,total_cost,monthly,balance_9_30,oct_amortization,balance_10_31
+      D&O insurance,Hanover Specialty,2026-01-01,2026-12-31,18000.00,1500.00,4500.00,1500.00,3000.00
+      Property insurance,Cincinnati Mutual,2026-07-01,2027-06-30,30000.00,2500.00,22500.00,2500.00,20000.00
+      FloQast subscription,FloQast,2026-02-01,2027-01-31,14400.00,1200.00,4800.00,1200.00,3600.00
+      NetSuite subscription,Oracle NetSuite,2026-04-01,2027-03-31,32000.00,2666.67,16000.00,2666.67,13333.33
+      Avalara subscription,Avalara,2025-11-01,2026-10-31,9600.00,800.00,800.00,800.00,0.00
+      Fleet registrations,Ohio BMV,2026-01-01,2026-12-31,2000.00,166.67,500.01,166.67,333.34
+      Celigo connector,Celigo,2026-07-01,2027-06-30,2250.00,187.50,1687.50,187.50,1500.00
+      FabTech 2026 booth deposit,FabTech,2026-10-21,2026-10-23,2500.00,0.00,2500.00,0.00,2500.00
+      total,,,,,,53287.51,9020.84,44266.67
+
+  - id: doc-outstanding
+    app: docs
+    path: close/2026-10/outstanding-checks-10-31
+    title: Outstanding checks at 10/31 (NetSuite)
+    format: csv
+    content: |
+      check,date,payee,amount
+      48177,2026-10-22,Parker Fluid Connectors,41880.20
+      48182,2026-10-23,Midwest Bearing Supply,8415.75
+      48190,2026-10-26,City of Grove City (utilities),12604.33
+      48195,2026-10-27,Eaton Hydraulics,63210.00
+      48201,2026-10-28,Summit Packaging,4980.17
+      48206,2026-10-29,Rexroth Distribution,52118.40
+      48209,2026-10-29,Ohio Industrial Gases,1236.80
+      48213,2026-10-30,Columbus Steel Fab,18240.00
+      48215,2026-10-30,Grainger,2945.00
+      48218,2026-10-30,Fastenal,7250.00
+      total,,,212880.65
+
+  - id: cal-elena
+    app: calendar
+    path: elena/week-2026-11-02
+    title: Elena's week
+    content: |
+      Mon 11/2 09:00-09:15 Close stand-up (daily)
+      Tue 11/3 15:00-15:30 Accruals review with Tom
+      Wed 11/4 10:00-10:30 Revenue cutoff review (Gail, Monique)
+      Thu 11/5 09:00-10:00 Audit interim kickoff (Lauren Pike, Kevin Doyle)
+      Thu 11/5 12:00 Flux to Rachel
+      Fri 11/6 10:00-12:00 Close review with Rachel

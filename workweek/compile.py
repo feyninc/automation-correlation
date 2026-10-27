@@ -164,13 +164,19 @@ def expand(form: dict) -> Episode:
             d = docs[tgt]
             d.versions.append(Version(at=a["at"], author="worker", content=str(a["content"]), note=a.get("summary", "")))
             d.versions.sort(key=lambda v: seconds(v.at))
-            prod = f"{tgt}@{d.versions.index(next(v for v in d.versions if v.at == a['at'] and v.author == 'worker'))}"
+            prod = (tgt, a["at"])        # resolved to a version index once every version is in
         if "update_state" in a and tgt in threads:
             threads[tgt].state_changes.append(StateChange(at=a["at"], set=a["update_state"]))
         produced[aid] = prod
-        actions.append(WorkerAction(id=aid, at=a["at"], kind=kind, target=tgt, produces=prod,
+        actions.append(WorkerAction(id=aid, at=a["at"], kind=kind, target=tgt, produces=None if isinstance(prod, tuple) else prod,
                                     summary=a["summary"], note=a.get("note", "")))
 
+    for aid, prod in list(produced.items()):
+        if isinstance(prod, tuple):
+            d = docs[prod[0]]
+            produced[aid] = f"{prod[0]}@{next(i for i, v in enumerate(d.versions) if v.at == prod[1] and v.author == 'worker')}"
+    for a in actions:
+        a.produces = produced[a.id]
     turns = {x.id for t in threads.values() if t.live for x in t.exchanges if x.author == "worker"}
     needs = []
     for n in form["needs"]:
