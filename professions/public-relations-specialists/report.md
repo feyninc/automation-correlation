@@ -1,14 +1,14 @@
 # Public Relations Specialists (27-3031.00): build report
 
-65 needs, 17 traps, 101 worker actions, 60 threads, 24 documents, 7,793 words.
+65 needs, 17 traps, 101 worker actions, 54 threads, 24 documents, 7,793 words.
 
 | day | chat exchanges | chat threads | mail exchanges | mail threads | needs | news exchanges | news threads | phone exchanges | phone threads | worker actions |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | D1 | 3 | 2 | 13 | 10 | 15 | 1 | 1 | 6 | 1 | 22 |
-| D2 | 4 | 2 | 15 | 9 | 14 | 0 | 0 | 6 | 1 | 23 |
-| D3 | 8 | 3 | 15 | 8 | 14 | 0 | 0 | 6 | 1 | 24 |
-| D4 | 2 | 1 | 18 | 10 | 11 | 1 | 1 | 0 | 0 | 18 |
-| D5 | 1 | 1 | 14 | 9 | 11 | 0 | 0 | 0 | 0 | 14 |
+| D2 | 4 | 1 | 15 | 9 | 14 | 0 | 0 | 6 | 1 | 23 |
+| D3 | 8 | 0 | 15 | 8 | 14 | 0 | 0 | 6 | 1 | 24 |
+| D4 | 2 | 0 | 18 | 10 | 11 | 1 | 1 | 0 | 0 | 18 |
+| D5 | 1 | 0 | 14 | 9 | 11 | 0 | 0 | 0 | 0 | 14 |
 
 ## Task mix against O*NET
 

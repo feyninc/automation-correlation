@@ -27,7 +27,7 @@ threads:
     x:
       - {at: "D5 09:10", from: c_mira, to: [worker], cc: [c_ben], subject: "Privilege log: final",
          body: "Tessa, good catches. 0006 and 0009: we'll produce both (Litigation Support to Bates them for production today). Take them off the log and serve the log on Kara this afternoon. Also, I'm out next Friday, so please start pulling the facts for the joint status report due 11/13. Mira"}
-  - id: t5-ben
+  - id: t3-ben
     app: chat
     path: "@ben/dm"
     title: Ben Yoder (DM)
@@ -69,7 +69,7 @@ actions:
      summary: "served the privilege log and the new production",
      body: "Counsel, attached is Plaintiff's privilege log (10 entries), served by email per Dkt. 28 para. 16, together with Plaintiff's production volume LAKESHORE-VOL004 (2 documents). We look forward to receiving Corvane's log today. Tessa Novak, on behalf of Mira Desai", att: [doc-privlog]}
   - {at: "D5 10:10", kind: read, target: doc-rfp-responses, summary: "proofed Ben's draft responses"}
-  - {id: a5-ben, at: "D5 10:50", kind: reply, target: t5-ben, to: [c_ben], summary: "flagged the objections problem to Ben",
+  - {id: a5-ben, at: "D5 10:50", kind: reply, target: t3-ben, to: [c_ben], summary: "flagged the objections problem to Ben",
      body: "Formatting fixed. One substantive point for you and Mira: Rule 34(b)(2)(C) requires each objection to state whether responsive materials are being withheld on that basis, and courts here disfavor boilerplate general objections. RFP 7 and RFP 15 don't say whether anything is withheld, and RFP 15 has no response at all. Also RFP 7's 'non-privileged' needs to match the privilege log. Your call on the wording; the deadline is 11/16."}
   - {at: "D5 14:01", kind: noop, target: c5-sal, summary: "took Sal Ferraro's call"}
   - {id: a5-sal-note, at: "D5 14:10", kind: new, app: mail, path: sent/ferraro-call-note, target: m5-sal-note, to: [c_andrew], subject: "Sal Ferraro called back",
@@ -83,7 +83,7 @@ actions:
      content: "date,hours,narrative\n2026-11-02,0.3,Compute response deadline to Corvane's first discovery under FRCP 6(a) and 6(d); prepare docketing request\n2026-11-03,0.4,Analyze minute order (Dkt. 44); prepare docketing request and scheduling conflict memo\n2026-11-03,0.2,Review Corvane VOL003 flag; arrange sequestration of inadvertently produced document; notify M. Desai\n2026-11-04,1.8,Prepare privilege log (12 entries) from production review; identify entries for attorney determination\n2026-11-04,0.6,Draft notice of deposition of R. Tamura\n2026-11-04,0.4,Prepare and serve FRCP 45(a)(4) notice of subpoena to Ferris Integrations\n2026-11-05,1.1,Cite-check motion to compel against exhibits and meet-and-confer record\n2026-11-05,0.3,Draft non-engagement letter (Ferraro) [non-Lakeshore: intake]\n2026-11-06,0.5,Review draft responses to Corvane RFPs for Rule 34(b)(2)(C) compliance\n2026-11-06,0.7,Gather facts for joint status report\n(Not billed: reporter and room booking, process server dispatch, Litigation Support requests, time entry.)"}
 
   - {at: "D5 11:02", kind: noop, target: c5-ferris, summary: "took Ferris's call"}
-  - {id: a5-ferris, at: "D5 11:10", kind: new, app: chat, path: "@ben/dm", target: t5-ben, to: [c_ben], summary: "asked Ben to call Ferris about costs",
+  - {id: a5-ferris, at: "D5 11:10", kind: new, app: chat, path: "@ben/dm", target: t3-ben, to: [c_ben], summary: "asked Ben to call Ferris about costs",
      body: "Lynn at Ferris Integrations (records, 630-555-0370) called about the subpoena: PDFs are fine with us, and I'm sending a secure upload link. She asked who pays copying costs; I said you'd call today."}
   - {id: a5-corvane-log, at: "D5 16:50", kind: new, app: mail, path: sent/corvane-log-deficiencies, target: m5-corvane-log, to: [c_mira], cc: [c_ben], subject: "Corvane's privilege log: first-pass deficiencies",
      summary: "listed the deficiencies in Corvane's log",
@@ -120,7 +120,7 @@ needs:
     task: 23994
     from: "D5 10:05"
     due: "D5 17:00"
-    evidence: [t5-ben, doc-rfp-responses, doc-privlog]
+    evidence: [t3-ben, doc-rfp-responses, doc-privlog]
     ref: a5-ben
     check: {all: [{to_includes: c_ben}, {mentions_any: ["34(b)(2)(C)"]}, {mentions_any: [withheld]}]}
     must: ["Each objection must say whether anything is withheld; RFP 15 has no response; consistency with the log", "Ben and Mira decide the wording"]

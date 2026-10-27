@@ -118,10 +118,10 @@ actions:
   - {id: a4-kevin, at: "D4 13:15", kind: reply, target: t4-kevin, to: [c_audit_assoc], cc: [c_audit_mgr], summary: "kept the payroll register in Suralink",
      body: "Hi Kevin, our policy is that payroll registers with SSNs go only through Suralink, never email, so Priscilla will upload it there against request 3 (due 11/9). The October bank rec is under review today; I'll upload it to request 1 tomorrow with September's. If Suralink is still slow, let's ask Lauren about a secure alternative. Elena"}
   - {at: "D4 14:05", kind: read, target: doc-fa-rec, summary: "reviewed Marco's fixed asset rec"}
-  - {id: a4-fa, at: "D4 14:25", kind: reply, target: t2-marco, to: [c_marco], summary: "sent Marco review notes on the fixed asset rec",
+  - {id: a4-fa, at: "D4 14:25", kind: reply, target: t1-marco, to: [c_marco], summary: "sent Marco review notes on the fixed asset rec",
      body: "Review notes on the FA rec: the 3,072.00 difference is the use tax on the Hoosier fixture (JE-10310 item 3), so the fixture's cost is 41,472.00 and the rollforward ends at 31,445,692.00, no difference. And per ACCT-410, depreciation starts the month after it's placed in service, so no October depreciation on the fixture; from November it's 41,472.00 / 60 = 691.20 a month. Please take the 640.00 out of October and update."}
   - {at: "D4 15:05", kind: read, target: doc-ar-rec, summary: "reviewed Jade's AR rec"}
-  - {id: a4-ar, at: "D4 15:20", kind: reply, target: t2-jade, to: [c_jade], summary: "sent Jade review notes on the AR rec",
+  - {id: a4-ar, at: "D4 15:20", kind: reply, target: t1-jade, to: [c_jade], summary: "sent Jade review notes on the AR rec",
      body: "The 18,430.00 isn't timing: your aging was pulled 11/3, before Monique reversed the duplicate Hartline import (CR-55102) on 11/4. Please rerun the aging; it should now total 17,560,484.55 and tie to the GL. We can't sign off a rec with 'timing' as the explanation without the item."}
   - {id: a4-ken, at: "D4 16:10", kind: reply, target: t4-ken, to: [c_ken], summary: "gave Ken the post-cutoff revenue",
      body: "Use 19,331,480.25, not the flash: we reversed 80,819.75 of FOB Destination sales delivered in November, and Cascade isn't in October. It's still preliminary until tomorrow's close review with Rachel, so label it that way."}
@@ -187,7 +187,7 @@ needs:
     task: 21516
     from: "D4 15:00"
     due: "D4 17:00"
-    evidence: [doc-ar-rec, doc-ar-aging, t3-monique]
+    evidence: [doc-ar-rec, doc-ar-aging, t2-monique]
     ref: a4-ar
     check: {all: [{to_includes: c_jade}, {mentions_any: [CR-55102]}, {mentions_any: [rerun, "re-run", pull]}]}
     must: ["The 18,430.00 is the reversed duplicate, not timing; rerun the aging to tie"]

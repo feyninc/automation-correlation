@@ -1,6 +1,6 @@
 # Paralegals and Legal Assistants (23-2011.00): build report
 
-45 needs, 10 traps, 58 worker actions, 39 threads, 23 documents, 4,924 words.
+45 needs, 10 traps, 58 worker actions, 38 threads, 23 documents, 4,924 words.
 
 | day | chat exchanges | chat threads | mail exchanges | mail threads | needs | phone exchanges | phone threads | worker actions |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -8,7 +8,7 @@
 | D2 | 0 | 0 | 11 | 8 | 10 | 0 | 0 | 9 |
 | D3 | 3 | 2 | 7 | 4 | 8 | 3 | 1 | 13 |
 | D4 | 3 | 0 | 10 | 7 | 7 | 0 | 0 | 13 |
-| D5 | 3 | 1 | 6 | 6 | 10 | 7 | 2 | 12 |
+| D5 | 3 | 0 | 6 | 6 | 10 | 7 | 2 | 12 |
 
 ## Task mix against O*NET
 

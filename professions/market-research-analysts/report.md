@@ -1,14 +1,14 @@
 # Market Research Analysts and Marketing Specialists (13-1161.00): build report
 
-73 needs, 21 traps, 103 worker actions, 59 threads, 54 documents, 9,079 words.
+73 needs, 21 traps, 103 worker actions, 44 threads, 54 documents, 9,079 words.
 
 | day | chat exchanges | chat threads | mail exchanges | mail threads | needs | news exchanges | news threads | worker actions |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | D1 | 10 | 4 | 11 | 8 | 18 | 1 | 1 | 24 |
-| D2 | 10 | 6 | 11 | 5 | 14 | 2 | 2 | 20 |
-| D3 | 15 | 6 | 13 | 7 | 14 | 0 | 0 | 22 |
-| D4 | 10 | 4 | 15 | 6 | 12 | 0 | 0 | 19 |
-| D5 | 13 | 6 | 10 | 4 | 15 | 0 | 0 | 18 |
+| D2 | 10 | 5 | 11 | 5 | 14 | 2 | 2 | 20 |
+| D3 | 15 | 1 | 13 | 7 | 14 | 0 | 0 | 22 |
+| D4 | 10 | 0 | 15 | 6 | 12 | 0 | 0 | 19 |
+| D5 | 13 | 1 | 10 | 4 | 15 | 0 | 0 | 18 |
 
 ## Task mix against O*NET
 

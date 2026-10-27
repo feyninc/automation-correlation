@@ -80,13 +80,13 @@ threads:
     title: ADP summary for the accrual
     x:
       - {at: "D2 08:30", from: c_priscilla, to: [worker], subject: "ADP summary for October accrual", body: "Here's the last period summary for your accrual. Priscilla", att: [doc-adp]}
-  - id: t2-jade
+  - id: t1-jade
     app: chat
     path: "@jade/dm"
     title: Jade Liu (DM)
     x:
       - {at: "D2 09:30", from: c_jade, body: "Resubmitted JE-10301: amortization 11,520.84 incl. FabTech to 6620, balance 41,766.67. Avalara renewal invoice is coming 11/5."}
-  - id: t2-marco
+  - id: t1-marco
     app: chat
     path: "@marco/dm"
     title: Marco Silva (DM)
@@ -131,10 +131,10 @@ actions:
   - {id: a2-payroll, at: "D2 09:15", kind: edit, app: docs, path: close/2026-10/je-accrued-expenses, target: doc-je-accrued, title: "JE-10310 accrued expenses, October (Elena)",
      summary: "prepared the payroll and freight accruals",
      content: "# JE-10310 Accrued expenses at 10/31/2026 (prepared Elena Moretti; reverses 11/1)\n\n1. Payroll (policy 3.2): last period gross 1,118,640.00 x 5/10 working days in October (10/26-10/30) = 559,320.00; employer FICA 7.65% = 42,787.98; total 602,107.98. Dr 6100 wages 559,320.00, Dr 6150 payroll taxes 42,787.98 / Cr 2210 accrued payroll 602,107.98.\n2. Northfield Freight, October (61 shipments, carrier portal; invoice 11/5): Dr 5400 freight out 27,300.00 / Cr 2200 accrued liabilities 27,300.00.\nTotal 629,407.98."}
-  - {at: "D2 09:35", kind: read, target: t2-jade, summary: "read Jade's resubmission"}
-  - {id: a2-jade, at: "D2 09:40", kind: reply, target: t2-jade, to: [c_jade], summary: "approved Jade's corrected JE-10301",
+  - {at: "D2 09:35", kind: read, target: t1-jade, summary: "read Jade's resubmission"}
+  - {id: a2-jade, at: "D2 09:40", kind: reply, target: t1-jade, to: [c_jade], summary: "approved Jade's corrected JE-10301",
      body: "Approved JE-10301 (11,520.84; balance 41,766.67). Thanks!"}
-  - {id: a2-marco, at: "D2 09:50", kind: reply, target: t2-marco, to: [c_marco], summary: "approved Marco's fee entry",
+  - {id: a2-marco, at: "D2 09:50", kind: reply, target: t1-marco, to: [c_marco], summary: "approved Marco's fee entry",
      body: "Approved JE-10305. Next: let's confirm the Hartline duplicate with Monique's aging."}
   - {at: "D2 10:05", kind: read, target: doc-ar-aging, summary: "read the AR aging"}
   - {at: "D2 11:05", kind: read, target: doc-avalara-use, summary: "read Avalara's use tax worksheet"}
@@ -211,7 +211,7 @@ needs:
     task: 21529
     from: "D2 09:30"
     due: "D2 17:00"
-    evidence: [t2-jade, t2-marco, pol-je]
+    evidence: [t1-jade, t1-marco, pol-je]
     ref: a2-jade
     check: {all: [{to_includes: c_jade}, {mentions_any: [approved, approve]}, {number_equals: {value: 11520.84, tol: 0.01}}]}
     must: ["Approves the corrected JE-10301 (staff entry under $50,000)"]

@@ -1,14 +1,14 @@
 # Secretaries and Administrative Assistants, Except Legal, Medical, and Executive (43-6014.00): build report
 
-72 needs, 17 traps, 97 worker actions, 69 threads, 31 documents, 6,919 words.
+72 needs, 17 traps, 97 worker actions, 61 threads, 31 documents, 6,919 words.
 
 | day | chat exchanges | chat threads | mail exchanges | mail threads | needs | phone exchanges | phone threads | worker actions |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | D1 | 5 | 3 | 13 | 11 | 17 | 13 | 4 | 22 |
-| D2 | 3 | 1 | 18 | 13 | 18 | 12 | 3 | 22 |
-| D3 | 4 | 1 | 13 | 9 | 13 | 3 | 1 | 19 |
-| D4 | 8 | 4 | 12 | 7 | 13 | 3 | 1 | 16 |
-| D5 | 8 | 4 | 6 | 6 | 11 | 3 | 1 | 18 |
+| D2 | 3 | 0 | 18 | 13 | 18 | 12 | 3 | 22 |
+| D3 | 4 | 0 | 13 | 9 | 13 | 3 | 1 | 19 |
+| D4 | 8 | 1 | 12 | 7 | 13 | 3 | 1 | 16 |
+| D5 | 8 | 1 | 6 | 6 | 11 | 3 | 1 | 18 |
 
 ## Task mix against O*NET
 

@@ -73,7 +73,7 @@ threads:
     x:
       - {at: "D5 10:45", from: c_darnell, to: [worker], subject: "Two invoices: Northfield and Avalara",
          body: "Elena, how should I code these? (1) Northfield Freight inv NF-110526 dated 11/5, October services, $27,410.00. (2) Avalara renewal, inv AV-2026-11, $10,200.00 for 11/1/2026-10/31/2027. Darnell"}
-  - id: t5-recs
+  - id: t1-jade
     app: chat
     path: "@jade/dm"
     title: Jade Liu (DM)
@@ -112,7 +112,7 @@ actions:
      body: "Vince, reviewed TB is in Docs > close. Judgment calls and one-offs in October: (1) Cascade PO 88120 (212,400.00) not recognized: fails bill-and-hold, Rachel's decision; revenue on December delivery. (2) Revenue cutoff: 80,819.75 of FOB Destination sales moved to November. (3) FabTech 2,500 deposit expensed (the show was in October). (4) Bank fees include September's 1,245 analysis charge. (5) Use tax 3,072 on the Hoosier fixture, capitalized. (6) Four laptops 4,720 expensed under the threshold. Revenue 19,331,480.25; gross margin 27.82%. Elena"}
   - {id: a5-ap, at: "D5 11:00", kind: reply, target: t5-ap, to: [c_darnell], summary: "told AP how to code the two invoices",
      body: "(1) Northfield NF-110526: 27,300.00 against the October accrual (2200, reversed 11/1, so post the full invoice to 5400 in November and the reversal nets it); the 110.00 over our estimate is November expense. (2) Avalara: prepaid 1400 for 10,200.00, amortized 850.00 a month from November; I'll add it to the prepaid schedule."}
-  - {id: a5-recs, at: "D5 09:50", kind: reply, target: t5-recs, to: [c_jade], summary: "signed off the AR and fixed asset recs",
+  - {id: a5-recs, at: "D5 09:50", kind: reply, target: t1-jade, to: [c_jade], summary: "signed off the AR and fixed asset recs",
      body: "Thanks! Reviewed and signed off: AR 1200 ties (17,560,484.55), and Marco's FA rollforward now ends at 31,445,692.00 with no October depreciation on the fixture."}
   - {id: a5-log, at: "D5 14:15", kind: reply, target: t5-darnell-log, to: [c_darnell], summary: "asked AP to document the rejected change requests",
      body: "The NetSuite log only has actual changes, so it's right that Parker isn't in it, but please attach a short list of change requests you rejected or couldn't verify this year (including this week's Parker emails and how you verified). The auditors will ask how the callback control works, and that's the evidence."}
@@ -139,7 +139,7 @@ needs:
     task: 21516
     from: "D5 09:00"
     due: "D5 17:00"
-    evidence: [t5-hartline, doc-hartline-stmt, t3-monique, pol-treasury]
+    evidence: [t5-hartline, doc-hartline-stmt, t2-monique, pol-treasury]
     ref: a5-hartline
     check: {all: [{to_includes: c_hartline}, {mentions_any: [twice, duplicate, "our error"]}, {number_equals: {value: 22104.50, tol: 0.01}}]}
     must: ["Explains the duplicate posting; nothing to refund; current balance $22,104.50"]
@@ -225,7 +225,7 @@ needs:
     task: 21516
     from: "D5 09:40"
     due: "D5 12:00"
-    evidence: [t5-recs, doc-ar-rec, doc-fa-rec]
+    evidence: [t1-jade, doc-ar-rec, doc-fa-rec]
     ref: a5-recs
     check: {all: [{to_includes: c_jade}, {mentions_any: [signed off, "sign off"]}, {number_equals: {value: 17560484.55, tol: 0.01}}]}
     must: ["Checks the tie-outs before signing"]

@@ -100,7 +100,7 @@ threads:
     x:
       - {at: "D2 16:00", from: c_jamal, to: [worker], cc: [c_hannah], subject: "Gov. Hartley quote for Thursday",
          body: "Erin, here's the Governor's quote for the release: 'Every Nebraska child deserves care close to home. This $12.5 million state investment will keep families together while their kids get well.' -- Gov. Patricia Hartley. Please use as is. Jamal Ortiz, Press Secretary"}
-  - id: t2-doug-status
+  - id: t2-doug
     app: chat
     path: "@doug/dm"
     title: Doug Brenner (DM)
@@ -164,7 +164,7 @@ actions:
   - {at: "D2 16:05", kind: read, target: t2-jamal, summary: "read the Governor's quote"}
   - {id: a2-jamal, at: "D2 16:20", kind: reply, target: t2-jamal, to: [c_jamal], cc: [c_hannah], summary: "asked the Governor's office to confirm the grant amount",
      body: "Thank you, Jamal, it's a lovely quote. One check before it goes in: our grant agreement with DHHS and the Foundation's final table both say $12 million, and the quote says $12.5 million. Could you confirm which is right, or would the Governor be OK with '$12 million'? Erin"}
-  - {id: a2-status, at: "D2 14:40", kind: reply, target: t2-doug-status, to: [c_doug], summary: "updated Doug on embargo agreements",
+  - {id: a2-status, at: "D2 14:40", kind: reply, target: t2-doug, to: [c_doug], summary: "updated Doug on embargo agreements",
      body: "Signed: Business Journal (briefing Wed 9), AP (Wed 11), KPRB (Wed 10). Ledger: Dana says she'll sign tonight; she gets nothing until she does (briefing Wed 1 pending). NC9 asked and I declined (excluded until Dec. 1)."}
   - {id: a2-victor, at: "D2 15:30", kind: reply, target: t2-victor, to: [c_victor], summary: "gave Victor cost per bed and PBH's share (embargoed)",
      body: "Hi Victor, under the same embargo (10 a.m. CT Thursday): $64 million for 48 beds is about $1.33 million a bed. PBH is putting in $28 million from capital; the rest is the $20 million Kessler gift, the $12 million state grant and $4 million from other donors. Erin"}
@@ -328,7 +328,7 @@ needs:
     task: 1770
     from: "D2 14:30"
     due: "D2 16:00"
-    evidence: [t2-doug-status, doc-embargo-log, t2-luis]
+    evidence: [t2-doug, doc-embargo-log, t2-luis]
     ref: a2-status
     check: {all: [{to_includes: c_doug}, {mentions_any: [Ledger, Dana]}, {mentions_any: [signed]}]}
     must: ["Three signed with briefing times; Ledger pending; NC9 declined"]

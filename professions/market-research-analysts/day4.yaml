@@ -99,13 +99,13 @@ threads:
     x:
       - {at: "D4 09:40", from: c_nadia, to: [worker], subject: "Re: ARB-AP26: Van Westendorp tables for Plus",
          body: "Rerun on the 400 valid attached. Sorry about that. Nadia", att: [doc-wtp-400]}
-  - id: t4-owen
+  - id: t2-owen
     app: chat
     path: "@owen/dm"
     title: Owen Fisk (DM)
     x:
       - {at: "D4 11:20", from: c_owen, body: "help! prospect (12 AP users, ~2,000 invoices a month) says Kitecount is way cheaper at $45/user. what do I say? call in 30 min"}
-  - id: t4-raymond
+  - id: t2-raymond
     app: chat
     path: "@raymond/dm"
     title: Raymond Oduya (DM)
@@ -125,7 +125,7 @@ threads:
     x:
       - {at: "D4 14:00", from: c_nadia, to: [worker], subject: "First 6 interviews scheduled",
          body: "Hi Leah, the first 6 follow-up interviews are booked for next week (schedule attached), from the Q31 opt-ins. Invites go to respondents tomorrow at noon unless you want changes. Nadia", att: [doc-schedule]}
-  - id: t4-cf
+  - id: t1-tyler
     app: chat
     path: "#close-faster"
     title: "#close-faster"
@@ -147,7 +147,7 @@ threads:
     x:
       - {at: "D4 12:30", from: c_tom, to: [worker], subject: "Re: October report + launch budget",
          body: "Great first day! LinkedIn is carrying the launch. Can we go +20% today? Just reply yes and we'll set it. Tom"}
-  - id: t4-sofia
+  - id: t2-sofia
     app: chat
     path: "#arb-ap26-readout"
     title: "#arb-ap26-readout"
@@ -163,18 +163,18 @@ actions:
   - {id: a4-joyce, at: "D4 09:25", kind: reply, target: t4-joyce, to: [c_joyce], summary: "asked Joyce to hold the original Penmore invoice",
      body: "Hi Joyce, please don't pay PEN-26-1187: it bills 438 completes and the SOW pays the 400 valid only, $23,200.00. Penmore is reissuing it. Approval is Corinne's; I'll ask her to approve the corrected one when it arrives. Leah"}
   - {at: "D4 09:45", kind: read, target: doc-wtp-400, summary: "read the rerun WTP tables"}
-  - {id: a4-24h, at: "D4 10:05", kind: reply, target: t4-cf, summary: "posted the 24-hour read",
+  - {id: a4-24h, at: "D4 10:05", kind: reply, target: t1-tyler, summary: "posted the 24-hour read",
      body: "Close Faster, 24 hours: 118 registrations (Zoom). By source (HubSpot, UTM): LinkedIn 71, email 29, organic 11, other 7. Email: 19,009 sent, 18,702 delivered (307 bounced, 1.6%), 40.0% opens (inflated by Apple Mail privacy, treat as directional), 411 clicks (2.2% of delivered), 38 unsubscribes. LinkedIn's 79 includes 27 view-through conversions; by click it's 52, and HubSpot credits 71 to LinkedIn UTMs. We report Zoom and HubSpot."}
   - {id: a4-mbr, at: "D4 10:00", kind: noop, target: cal-week, summary: "presented pacing at the MBR"}
-  - {id: a4-raymond, at: "D4 11:30", kind: reply, target: t4-raymond, to: [c_raymond], summary: "gave Raymond the Close Faster gap",
+  - {id: a4-raymond, at: "D4 11:30", kind: reply, target: t2-raymond, to: [c_raymond], summary: "gave Raymond the Close Faster gap",
      body: "At October's run rate (~133 MQLs a week) we land about 1,750 for Q4, so Close Faster needs to add about 50 net-new MQLs; it's planned for 120, so there's room if it delivers half."}
-  - {id: a4-owen, at: "D4 11:28", kind: reply, target: t4-owen, to: [c_owen], summary: "gave Owen the current Kitecount pricing",
+  - {id: a4-owen, at: "D4 11:28", kind: reply, target: t2-owen, to: [c_owen], summary: "gave Owen the current Kitecount pricing",
      body: "$45/user is old: since 11/2 Kitecount charges $0.95 per invoice (unlimited users, $500 minimum). At ~2,000 invoices a month that's about $1,900 a month, vs $540 under the old per-user price for 12 users. Ask them what they pay when volume grows. Source: kitecount.com/pricing (captured 11/3); battlecard update is with Hiro."}
   - {id: a4-g2, at: "D4 12:40", kind: reply, target: t4-g2, to: [c_marta], cc: [c_elise], summary: "drafted the neutral G2 review invite",
      body: "Draft invite: 'Hi {first name}, would you share an honest review of Arbeline on G2? Positive, negative or in between, it all helps other finance teams decide. As a thank-you for your time, everyone who completes a review gets a $25 gift card, whatever rating they give. G2 will show that your review was incentivized.' Send to every admin on the invite list, not a hand-picked set. Over to Elise."}
   - {id: a4-tom-budget, at: "D4 12:45", kind: reply, target: t4-tom-budget, to: [c_tom], cc: [c_corinne], summary: "told Tom the budget decision is Corinne's",
      body: "Hi Tom, budget changes are Corinne's call; copying her with the 24-hour read (LinkedIn: 71 registrations by HubSpot UTM, 52 by LinkedIn post-click). Please don't change budgets until she confirms. Leah"}
-  - {id: a4-sofia, at: "D4 13:10", kind: reply, target: t4-sofia, to: [c_sofia], summary: "confirmed the close-time numbers are means",
+  - {id: a4-sofia, at: "D4 13:10", kind: reply, target: t2-sofia, to: [c_sofia], summary: "confirmed the close-time numbers are means",
      body: "Means: 6.3 days (n=244) vs 8.6 (n=156), Q20 'days to close last month'. Label: 'Average days to close the books, last month'. Medians are 6 and 9 if you need them."}
   - {id: a4-blog, at: "D4 13:40", kind: reply, target: t1-grant, to: [c_grant], cc: [c_monica], summary: "sent Grant the blog stat corrections",
      body: "Hi Grant, stat check on the draft (valid n=400): (1) 73% is the non-automation subgroup; for 'finance leaders' overall it's 64% (256/400). (2) 2.3 days faster (6.3 vs 8.6) holds and is significant. (3) Please drop '29% more likely': 31% vs 24% isn't a statistically significant difference (37/118 vs 15/62, p about 0.3). (4) 45% planning an ERP change (180/400) holds. (5) Methodology: remove the margin of error; it doesn't apply to an opt-in panel. Use: 'Online survey of 400 US finance decision-makers at companies with $50M-$1B revenue, recruited from opt-in B2B panels, Oct 19-30, 2026; results are not weighted.' These are signed off once the readout's done tomorrow. Leah"}
@@ -198,9 +198,9 @@ needs:
     task: 5438
     from: "D4 10:00"
     due: "D4 11:00"
-    evidence: [doc-send-summary, doc-li-claimed, t4-cf, doc-campaign-brief, doc-utm]
+    evidence: [doc-send-summary, doc-li-claimed, t1-tyler, doc-campaign-brief, doc-utm]
     ref: a4-24h
-    check: {all: [{target: t4-cf}, {number_equals: {value: 118}}, {number_equals: {value: 71}}]}
+    check: {all: [{target: t1-tyler}, {number_equals: {value: 118}}, {number_equals: {value: 71}}]}
     must: ["118 registrations (Zoom) split by UTM source 71 / 29 / 11 / 7", "Delivery 18,702 of 19,009, 40.0% opens (MPP caveat), 2.2% clicks", "Why LinkedIn's 79 differs (27 view-throughs)"]
     must_not: ["Reports LinkedIn's 79 as the registration count"]
     minutes: [25, "three exports reconciled into a short read"]
@@ -236,7 +236,7 @@ needs:
     task: 5441
     from: "D4 11:20"
     due: "D4 11:50"
-    evidence: [t4-owen, doc-kitecount-pricing, t2-alert]
+    evidence: [t2-owen, doc-kitecount-pricing, t2-alert]
     ref: a4-owen
     check: {all: [{to_includes: c_owen}, {mentions_any: ["0.95"]}, {any: [{number_equals: {value: 1900}}, {mentions_any: ["1,900"]}]}]}
     must: ["$45/user is out of date; $0.95 per invoice since 11/2", "For 2,000 invoices: about $1,900 a month", "The volume question to ask"]
@@ -249,7 +249,7 @@ needs:
     task: 5436
     from: "D4 11:15"
     due: "D4 13:00"
-    evidence: [t4-raymond, doc-mql-tracker, doc-campaign-brief, doc-pacing]
+    evidence: [t2-raymond, doc-mql-tracker, doc-campaign-brief, doc-pacing]
     ref: a4-raymond
     check: {all: [{to_includes: c_raymond}, {any: [{number_equals: {value: 50, tol: 15}}, {number_equals: {value: 1750, tol: 40}}]}]}
     must: ["At the October run rate Q4 lands about 1,750; Close Faster needs about 50 net-new MQLs (planned 120)"]
@@ -337,9 +337,9 @@ needs:
     task: 5434
     from: "D4 13:00"
     due: "D4 15:00"
-    evidence: [t4-sofia, doc-respondents, doc-questionnaire]
+    evidence: [t2-sofia, doc-respondents, doc-questionnaire]
     ref: a4-sofia
-    check: {all: [{target: t4-sofia}, {mentions_any: [means, mean, average]}, {number_equals: {value: 6.3, tol: 0.01}}]}
+    check: {all: [{target: t2-sofia}, {mentions_any: [means, mean, average]}, {number_equals: {value: 6.3, tol: 0.01}}]}
     must: ["Means 6.3 (n=244) vs 8.6 (n=156), with the question wording for the label"]
     minutes: [4, "a quick check"]
     intent: "Means."
@@ -348,13 +348,13 @@ traps:
     title: Reporting LinkedIn's 79 as registrations
     kind: stale_info
     evidence: [doc-li-claimed, doc-send-summary]
-    check: {all: [{target: t4-cf}, {number_equals: {value: 79}}, {not: {mentions_any: [view-through, view, post-view, "27"]}}]}
+    check: {all: [{target: t1-tyler}, {number_equals: {value: 79}}, {not: {mentions_any: [view-through, view, post-view, "27"]}}]}
     correct: "Zoom's 118 is the count; LinkedIn's 79 includes 27 view-throughs."
     severity: low
   - id: tr4-stale-kitecount
     title: Telling Owen Kitecount is $45 a user
     kind: stale_info
-    evidence: [t4-owen, doc-battlecard, doc-kitecount-pricing]
+    evidence: [t2-owen, doc-battlecard, doc-kitecount-pricing]
     check: {all: [{to_includes: c_owen}, {mentions_any: ["$45"]}, {not: {mentions_any: ["0.95", old, "no longer", changed, "out of date"]}}]}
     correct: "$0.95 per invoice since 11/2."
     severity: medium

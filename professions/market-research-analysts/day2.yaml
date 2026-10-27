@@ -90,7 +90,7 @@ threads:
     title: "#arb-ap26-readout"
     x:
       - {at: "D2 10:30", from: c_sofia, body: "Readout chart template is in the deck. Leah, I need final numbers for the pain-point and close-time charts by Wednesday noon so I can finish Thursday morning."}
-  - id: t2-tyler
+  - id: t1-tyler
     app: chat
     path: "#close-faster"
     title: "#close-faster"
@@ -141,7 +141,7 @@ actions:
      summary: "wrote the Q16 tables", content: "# Q16 \"Our AP team spends too much time on manual invoice entry\": % agree (valid n=400)\n\n| Group | n | Agree | % |\n| --- | --- | --- | --- |\n| All | 400 | 256 | 64.0% |\n| Uses AP automation | 244 | 142 | 58.2% |\n| No AP automation | 156 | 114 | 73.1% |\n| $50M-$250M | 146 | 88 | 60.3% |\n| $250M-$500M | 166 | 107 | 64.5% |\n| $500M-$1B | 88 | 61 | 69.3% |\n\nUsers vs non-users: z = 3.02, p = 0.002. Band differences are not significant at 95% (chi-square p about 0.37).\nOpt-in panel: no margin of sampling error is reported."}
   - {id: a2-q16, at: "D2 15:25", kind: reply, target: t2-hiro, to: [c_hiro], summary: "sent Hiro the Q16 splits",
      body: "Q16 (manual entry is a pain), valid n=400: 64.0% overall. Non-users 73.1% (114/156) vs users 58.2% (142/244), a real difference (p=0.002). By band: 60.3% / 64.5% / 69.3% from smallest to largest, but the band differences aren't significant. So the pain is about automation, not size. Tables in Docs > research > ARB-AP26 > tables-q16."}
-  - {at: "D2 16:12", kind: read, target: t2-tyler, summary: "read Tyler's seed test note"}
+  - {at: "D2 16:12", kind: read, target: t1-tyler, summary: "read Tyler's seed test note"}
   - {id: a2-joyce, at: "D2 13:45", kind: reply, target: t2-joyce, to: [c_joyce], cc: [c_corinne], summary: "checked the Capterra invoice and left approval to Corinne",
      body: "Hi Joyce, I've checked it against Capterra's October click report: 1,075 clicks, $2,418.75, matches. Approval has to come from Corinne as budget owner; Corinne, could you approve when you're out of meetings so it makes Thursday's run? Leah"}
   - {id: a2-tom-utm, at: "D2 15:10", kind: reply, target: t2-tom-utm, to: [c_tom], summary: "sent Tom the UTMs for the LinkedIn ads",
@@ -260,9 +260,9 @@ needs:
     task: 5444
     from: "D2 16:10"
     due: "D3 09:45"
-    evidence: [t2-tyler, doc-email-build, pol-email]
+    evidence: [t1-tyler, doc-email-build, pol-email]
     ref_text: "Tyler, thanks. Please ping me when the footer address is in; I'll check the final build before 10:00 so we don't send without it."
-    check: {all: [{any: [{to_includes: c_tyler}, {target: t2-tyler}]}, {mentions_any: [footer, address]}]}
+    check: {all: [{any: [{to_includes: c_tyler}, {target: t1-tyler}]}, {mentions_any: [footer, address]}]}
     must: ["Confirms the address goes in before 10:00 and offers a final check"]
     minutes: [1, "a chat reply"]
     intent: "I'll double-check it in the morning."

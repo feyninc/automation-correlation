@@ -44,7 +44,7 @@ threads:
     x:
       - {at: "D3 08:15", from: c_system, to: [worker], subject: "Approval required: JE-10310 (632,479.98)",
          body: "Journal JE-10310 'Accrued expenses October' (632,479.98), created by Elena Moretti, requires your approval. Approver: Elena Moretti (delegate for Tom Haldane, out of office). Approve | Reject"}
-  - id: t3-monique
+  - id: t2-monique
     app: chat
     path: "@monique/dm"
     title: Monique Baptiste (DM)
@@ -70,7 +70,7 @@ threads:
     x:
       - {at: "D3 09:00", from: c_rachel, to: [worker], subject: "October bonus accrual",
          body: "Elena, please book October's bonus accrual: the 2026 pool is budgeted at $1,200,000 and we're accruing it evenly over the year; Jan-Sep we've accrued $900,000. I'll approve. Rachel"}
-  - id: t3-marco-je
+  - id: t1-marco
     app: chat
     path: "@marco/dm"
     title: Marco Silva (DM)
@@ -97,8 +97,8 @@ actions:
   - {id: a3-billhold, at: "D3 11:40", kind: new, app: mail, path: sent/cascade-bill-and-hold, target: m3-billhold, to: [c_rachel], cc: [c_brett],
      subject: "Cascade PO 88120 ($212,400): bill-and-hold assessment", summary: "sent Rachel the bill-and-hold analysis",
      body: "Rachel, Brett asked to invoice Cascade PO 88120 ($212,400.00) in October as bill-and-hold. Against ASC 606-10-55-83: (a) substantive reason: met, Cascade asked in writing on 10/28 to hold until their plant is ready; (b) identified separately as Cascade's: not met, the 12 units are in general finished goods, not tagged or segregated; (c) ready for transfer: yes; (d) we can't use them or send them elsewhere: not met, 2 of the 12 were picked for Pemberton on 11/2. So it doesn't qualify for October, and the terms are FOB Destination anyway. My recommendation: no October revenue. If Cascade wants the arrangement going forward, we'd need segregated, tagged units and your written approval before month end. Your call. Elena"}
-  - {at: "D3 11:05", kind: read, target: t3-monique, summary: "read Monique's question about the Hartline credit"}
-  - {id: a3-monique, at: "D3 11:15", kind: reply, target: t3-monique, to: [c_monique], summary: "told Monique to reverse the duplicate import",
+  - {at: "D3 11:05", kind: read, target: t2-monique, summary: "read Monique's question about the Hartline credit"}
+  - {id: a3-monique, at: "D3 11:15", kind: reply, target: t2-monique, to: [c_monique], summary: "told Monique to reverse the duplicate import",
      body: "Yes, it's a duplicate: the bank imported the same 18,430.00 wire as CR-55102 on 10/30 after Marco's manual JE-10288 on 10/29. Please don't apply it to November; reverse/delete CR-55102 dated 10/30 so both cash and AR come out. That clears the last item on the bank rec. And let's switch the import to auto-match against manual wire entries."}
   - {id: a3-owen, at: "D3 14:15", kind: reply, target: t3-owen, to: [c_owen], cc: [c_rachel, c_vince], summary: "redirected the sponsor's request to Vince and Rachel",
      body: "Hi Owen, we're mid-close and October isn't reviewed yet, so I can't send numbers. Vince sends the reviewed package on Tuesday 11/10 (WD7); I've copied him and Rachel in case they want to give Sanjay something earlier. Elena"}
@@ -109,7 +109,7 @@ actions:
   - {id: a3-bonus, at: "D3 09:30", kind: new, app: mail, path: sent/je-10312-bonus, target: m3-bonus, to: [c_rachel], subject: "JE-10312 October bonus accrual for your approval",
      summary: "prepared the bonus accrual and sent it to Rachel",
      body: "Rachel, JE-10312: October bonus accrual 100,000.00 (pool 1,200,000.00 / 12; YTD after October 1,000,000.00). Dr 6180 bonus expense / Cr 2220 accrued bonus. In your approval queue."}
-  - {id: a3-marco-je, at: "D3 13:40", kind: reply, target: t3-marco-je, to: [c_marco], summary: "routed Marco's reclass to Rachel",
+  - {id: a3-marco-je, at: "D3 13:40", kind: reply, target: t1-marco, to: [c_marco], summary: "routed Marco's reclass to Rachel",
      body: "62,000.00 is over my 50,000 limit, so with Tom out it has to be Rachel. I've reassigned it; please attach Ken's email as support."}
   - {id: a3-discount, at: "D3 12:20", kind: reply, target: t3-darnell, to: [c_darnell], summary: "advised taking the Hoosier discount",
      body: "Yes: 2% of 38,400.00 is 768.00 for paying 20 days early, roughly a 37% annualized return, far above our revolver rate. The 10-day window ends 11/6, so Friday's run works if it goes out Friday; otherwise pull it into Thursday's. Pay to the bank on file, of course."}
@@ -186,7 +186,7 @@ needs:
     task: 21516
     from: "D3 11:00"
     due: "D3 17:00"
-    evidence: [t3-monique, doc-bank-rec-draft, doc-gl-1010]
+    evidence: [t2-monique, doc-bank-rec-draft, doc-gl-1010]
     ref: a3-rec-final
     check: {all: [{number_equals: {value: 18430}}, {mentions_any: [CR-55102]}, {number_equals: {value: 0}}]}
     must: ["All three items with their entries; difference 0.00; returned check noted"]
@@ -210,7 +210,7 @@ needs:
     task: 21529
     from: "D3 13:30"
     due: "D3 17:00"
-    evidence: [t3-marco-je, pol-je]
+    evidence: [t1-marco, pol-je]
     ref: a3-marco-je
     check: {all: [{any: [{to_includes: c_rachel}, {to_includes: c_marco}]}, {mentions_any: [JE-10316, "62,000"]}, {mentions_any: [Rachel]}]}
     must: ["Over the $50,000 limit; Tom is out, so Rachel; support attached"]
@@ -255,7 +255,7 @@ traps:
   - id: tr3-apply-credit
     title: Applying the duplicate credit to a November invoice
     kind: stale_info
-    evidence: [t3-monique, doc-ar-aging, doc-gl-1010]
+    evidence: [t2-monique, doc-ar-aging, doc-gl-1010]
     check: {all: [{to_includes: c_monique}, {mentions_any: ["apply it", "go ahead and apply", "apply the credit"]}, {not: {mentions_any: [duplicate, reverse, delete]}}]}
     correct: "It's a duplicate posting: reverse CR-55102."
     severity: medium

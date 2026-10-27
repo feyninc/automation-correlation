@@ -19,7 +19,7 @@ from pathlib import Path
 import yaml
 
 from . import checks
-from .apps import REGISTRY
+from .apps import REGISTRY, document_file, thread_file
 from .schema import (Contact, Document, Economics, Employer, Episode, Exchange, Meta, Minutes, MinutesModel, Need, StateChange,
                      Reference, Rubric, Sourced, Thread, Trap, Version, Worker, WorkerAction, fmt, seconds)
 
@@ -262,6 +262,12 @@ def audit(ep: Episode) -> tuple[list[str], list[str]]:
     for a in ep.apps:
         if a not in REGISTRY:
             errs.append(f"unknown app {a}")
+    seen: dict[str, str] = {}
+    for item in [*ep.threads, *ep.documents]:
+        f = thread_file(item) if isinstance(item, Thread) else document_file(item)
+        if f in seen:
+            errs.append(f"{item.id} and {seen[f]} both render to {f}")
+        seen.setdefault(f, item.id)
     produced = {a.produces: a for a in ep.worker_actions if a.produces}
     for n in ep.needs:
         if n.onet_task_id not in tasks:
