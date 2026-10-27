@@ -1,0 +1,466 @@
+{
+ "meta": {
+  "schema_version": "1.0",
+  "soc": "23-2011.00",
+  "title": "Paralegals and Legal Assistants",
+  "onet_version": "31.0",
+  "week_start": "2026-11-02",
+  "status": "draft",
+  "generator": "workweek.compile (hand-written week)",
+  "sha256": "2216ae0aa43ce31d27c29b8c643e7d2a5b66ec4e8643a2e8b34ff1c80363988d"
+ },
+ "economics": {
+  "soc": "23-2011.00",
+  "title": "Paralegals and Legal Assistants",
+  "median_hourly_wage": {
+   "value": 30.24,
+   "source": "BLS OEWS May 2025 via O*NET OnLine (data/wages-onetonline-2026-10-26.csv)",
+   "note": ""
+  },
+  "eci_factor": {
+   "value": 1.0,
+   "source": "BLS ECI wages and salaries, civilian workers (https://www.bls.gov/eci/); not yet applied",
+   "note": "set on 2026-10-30 from the Q3 2026 release"
+  },
+  "loaded_multiplier": {
+   "value": 1.439,
+   "source": "BLS ECEC June 2026, private professional and business services: total compensation $59.80 / wages $41.55 (https://www.bls.gov/news.release/ecec.t04.htm)",
+   "note": ""
+  },
+  "employment": {
+   "value": 404900.0,
+   "source": "BLS via O*NET OnLine, 2025",
+   "note": ""
+  },
+  "projection": "Little or no change (2025-2035), 40,800 openings a year",
+  "observed_exposure": {
+   "value": 0.2927,
+   "source": "Anthropic Economic Index, labor market impacts (Massenkoff and McCrory, 2026-03-05)",
+   "note": ""
+  },
+  "task_penetration": {
+   "18491": 0.0,
+   "21062": 0.0,
+   "18492": 0.0,
+   "1636": 0.937,
+   "1639": 0.0,
+   "18496": 0.0,
+   "1642": 0.0
+  },
+  "minutes_model": {
+   "read_wpm": 238.0,
+   "compose_wpm": 25.0,
+   "friction": 1.5,
+   "rewrite_threshold": 0.5,
+   "question_answer_s": 30.0,
+   "overrides": {}
+  }
+ },
+ "employer": {
+  "name": "Ostrander Hale LLP",
+  "industry": "law firm (commercial litigation and transactions)",
+  "size": 310,
+  "location": "Chicago, Illinois",
+  "timezone": "America/Chicago",
+  "description": "A Chicago commercial firm of about 120 lawyers. Litigation paralegals work on partner teams; docketing, litigation support (e-discovery), conflicts and billing are separate departments."
+ },
+ "worker": {
+  "id": "worker",
+  "name": "Tessa Novak",
+  "title": "Senior Litigation Paralegal",
+  "manager": "c_mira",
+  "team": "Andrew Hale's litigation team",
+  "email": "tnovak@ostranderhale.com",
+  "signature": "Tessa Novak | Senior Litigation Paralegal | Ostrander Hale LLP | 312-555-0186"
+ },
+ "profession_prompt": "Tessa is a senior litigation paralegal on partner Andrew Hale's team. Her main matter this week is Lakeshore\nPackaging Co. v. Corvane Robotics, Inc., No. 1:26-cv-03418 (N.D. Ill.), where the firm represents the plaintiff in\ndiscovery. She computes and docket deadlines, drafts notices, logs and correspondence for attorney review,\ncoordinates depositions and vendors, files and serves what the attorneys have signed, works with the client's\nstaff, and keeps her time.\n\nGood help in this job means:\n- deadlines computed exactly under the rules, with the counting shown;\n- documents that are accurate and complete, matching the record, ready for an attorney to sign;\n- no legal advice, no privilege or strategy calls, nothing signed or decided that belongs to a lawyer or the\n  client; those are routed to the attorney with what they need;\n- client confidences and the other side's privileged material handled by the rules;\n- vendors, rooms, service and filings arranged correctly and on time;\n- time entries that follow the client's billing guidelines.\nFirm policies and the client's guidelines are under policies; pleadings, discovery, logs and calendars under docs.",
+ "apps": [
+  "mail",
+  "chat",
+  "phone",
+  "calendar",
+  "docs",
+  "policies",
+  "contacts"
+ ],
+ "contacts": [
+  {
+   "id": "c_andrew",
+   "name": "Andrew Hale",
+   "role": "Partner",
+   "org": "Ostrander Hale LLP",
+   "email": "ahale@ostranderhale.com",
+   "phone": "312-555-0101",
+   "relation": "partner",
+   "notes": ""
+  },
+  {
+   "id": "c_mira",
+   "name": "Mira Desai",
+   "role": "Senior Associate",
+   "org": "Ostrander Hale LLP",
+   "email": "mdesai@ostranderhale.com",
+   "phone": "312-555-0122",
+   "relation": "supervising attorney",
+   "notes": ""
+  },
+  {
+   "id": "c_ben",
+   "name": "Ben Yoder",
+   "role": "Associate",
+   "org": "Ostrander Hale LLP",
+   "email": "byoder@ostranderhale.com",
+   "phone": "312-555-0130",
+   "relation": "associate",
+   "notes": ""
+  },
+  {
+   "id": "c_docket",
+   "name": "Docketing Department",
+   "role": "docketing",
+   "org": "Ostrander Hale LLP",
+   "email": "docketing@ostranderhale.com",
+   "phone": null,
+   "relation": "internal",
+   "notes": ""
+  },
+  {
+   "id": "c_litsup",
+   "name": "Litigation Support",
+   "role": "e-discovery (Relativity)",
+   "org": "Ostrander Hale LLP",
+   "email": "litsupport@ostranderhale.com",
+   "phone": null,
+   "relation": "internal",
+   "notes": ""
+  },
+  {
+   "id": "c_conflicts",
+   "name": "Conflicts Department",
+   "role": "new business intake",
+   "org": "Ostrander Hale LLP",
+   "email": "conflicts@ostranderhale.com",
+   "phone": null,
+   "relation": "internal",
+   "notes": ""
+  },
+  {
+   "id": "c_billing",
+   "name": "Billing Coordinator",
+   "role": "pre-bills",
+   "org": "Ostrander Hale LLP",
+   "email": "billing@ostranderhale.com",
+   "phone": null,
+   "relation": "internal",
+   "notes": ""
+  },
+  {
+   "id": "c_helen",
+   "name": "Helen Ruiz",
+   "role": "General Counsel",
+   "org": "Lakeshore Packaging Co.",
+   "email": "hruiz@lakeshorepkg.example",
+   "phone": "773-555-0140",
+   "relation": "client",
+   "notes": ""
+  },
+  {
+   "id": "c_dev",
+   "name": "Dev Patel",
+   "role": "Plant Engineering Manager",
+   "org": "Lakeshore Packaging Co.",
+   "email": "dpatel@lakeshorepkg.example",
+   "phone": "773-555-0141",
+   "relation": "client employee (interrogatory answers)",
+   "notes": ""
+  },
+  {
+   "id": "c_kara",
+   "name": "Kara Lindgren",
+   "role": "Partner",
+   "org": "Whitcombe & Sayre LLP (counsel for Corvane)",
+   "email": "klindgren@whitcombesayre.example",
+   "phone": "312-555-0300",
+   "relation": "opposing counsel",
+   "notes": ""
+  },
+  {
+   "id": "c_jon",
+   "name": "Jon Blake",
+   "role": "Paralegal",
+   "org": "Whitcombe & Sayre LLP",
+   "email": "jblake@whitcombesayre.example",
+   "phone": "312-555-0301",
+   "relation": "opposing paralegal",
+   "notes": ""
+  },
+  {
+   "id": "c_reporter",
+   "name": "Midwest Reporting Group",
+   "role": "scheduling",
+   "org": "Midwest Reporting Group",
+   "email": "schedule@midwestreporting.example",
+   "phone": "312-555-0350",
+   "relation": "court reporter and videographer",
+   "notes": ""
+  },
+  {
+   "id": "c_server",
+   "name": "LaSalle Process Service",
+   "role": "dispatch",
+   "org": "LaSalle Process Service",
+   "email": "dispatch@lasalleprocess.example",
+   "phone": "312-555-0360",
+   "relation": "process server",
+   "notes": ""
+  },
+  {
+   "id": "c_ferris",
+   "name": "Ferris Integrations LLC",
+   "role": "records custodian",
+   "org": "Ferris Integrations LLC",
+   "email": "records@ferrisint.example",
+   "phone": "630-555-0370",
+   "relation": "third party (installer)",
+   "notes": ""
+  },
+  {
+   "id": "c_sal",
+   "name": "Sal Ferraro",
+   "role": "Owner, Ferraro Bakeries Inc. (prospective client)",
+   "org": "Ferraro Bakeries Inc.",
+   "email": null,
+   "phone": "708-555-0190",
+   "relation": "prospective client",
+   "notes": ""
+  }
+ ],
+ "ledger": {
+  "paralegal_rate": 195.0
+ },
+ "grounding": {
+  "sources": [
+   "BLS OEWS May 2025 and projections via O*NET OnLine: https://www.onetonline.org/link/summary/23-2011.00",
+   "Federal Rules of Civil Procedure 5, 6, 26, 30, 32, 33, 34, 45: https://www.law.cornell.edu/rules/frcp",
+   "5 U.S.C. 6103 (legal public holidays): https://www.law.cornell.edu/uscode/text/5/6103",
+   "Federal Rule of Evidence 502: https://www.law.cornell.edu/rules/fre/rule_502",
+   "N.D. Ill. Local Rules (LR 37.2): https://www.ilnd.uscourts.gov/LocalRules.aspx",
+   "N.D. Ill. General Order 16-0020 (CM/ECF): https://www.ilnd.uscourts.gov/_assets/_documents/_forms/_clerksoffice/rules/admin/pdf-orders/General_Order_16-0020.pdf",
+   "ABA Model Rules 1.6, 4.4(b), 5.3, 5.5: https://www.americanbar.org/groups/professional_responsibility/publications/model_rules_of_professional_conduct/",
+   "NALA Code of Ethics and Professional Responsibility: https://nala.org/certification/nala-code-of-ethics-professional-responsibility/",
+   "28 U.S.C. 1746 (unsworn declarations): https://www.law.cornell.edu/uscode/text/28/1746",
+   "FDIC Outside Counsel Deskbook (billing increments, block billing, clerical tasks): https://www.fdic.gov/doing-business-fdic/outside-counsel-deskbook.pdf"
+  ],
+  "onet_tasks": {
+   "18491": {
+    "task": "Prepare affidavits or other documents, such as legal correspondence, and organize and maintain documents in paper or electronic filing system.",
+    "type": "Core",
+    "FT": 5.2171,
+    "IM": 4.38
+   },
+   "23994": {
+    "task": "Prepare, edit, or review legal documents, including legislation, briefs, pleadings, appeals, wills, contracts, and real estate closing statements.",
+    "type": "Core",
+    "FT": 4.938506149385062,
+    "IM": 4.32
+   },
+   "21062": {
+    "task": "Investigate facts and law of cases and search pertinent sources, such as public records and internet sources, to determine causes of action and to prepare cases.",
+    "type": "Core",
+    "FT": 4.16971697169717,
+    "IM": 4.06
+   },
+   "18492": {
+    "task": "Prepare for trial by performing tasks such as organizing exhibits.",
+    "type": "Core",
+    "FT": 3.0258,
+    "IM": 3.97
+   },
+   "18493": {
+    "task": "Meet with clients and other professionals to discuss details of cases.",
+    "type": "Core",
+    "FT": 3.9466946694669462,
+    "IM": 3.93
+   },
+   "1636": {
+    "task": "Gather and analyze research data, such as statutes, decisions, and legal articles, codes, and documents.",
+    "type": "Core",
+    "FT": 4.187281271872813,
+    "IM": 3.89
+   },
+   "18494": {
+    "task": "File pleadings with court clerks.",
+    "type": "Supplemental",
+    "FT": 3.7625,
+    "IM": 3.89
+   },
+   "1639": {
+    "task": "Direct and coordinate law office activity, including delivery of subpoenas.",
+    "type": "Supplemental",
+    "FT": 3.4348565143485654,
+    "IM": 3.33
+   },
+   "1638": {
+    "task": "Call upon witnesses to testify at hearings.",
+    "type": "Supplemental",
+    "FT": 1.9679,
+    "IM": 2.99
+   },
+   "18496": {
+    "task": "Arbitrate disputes between parties and assist in the real estate closing process, such as by reviewing title searches.",
+    "type": "Supplemental",
+    "FT": 3.7169,
+    "IM": 2.99
+   },
+   "1642": {
+    "task": "Appraise and inventory real and personal property for estate planning.",
+    "type": "Supplemental",
+    "FT": 2.9104910491049103,
+    "IM": 2.9
+   },
+   "1641": {
+    "task": "Keep and monitor legal volumes to ensure that the law library is up-to-date.",
+    "type": "Supplemental",
+    "FT": 1.6592659265926593,
+    "IM": 2.67
+   }
+  }
+ },
+ "documents": [
+  {
+   "id": "pol-firm",
+   "app": "policies",
+   "path": "firm-paralegal-practice",
+   "title": "Paralegal practice at Ostrander Hale",
+   "format": "md",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "# Paralegal practice (firm policy)\n\n- Deadlines: send Docketing a written request with the triggering document, the rule and your count. Docketing\n  enters it; the responsible attorney confirms. Never rely only on the system's default count.\n- Paralegals don't give legal advice, set fees, accept or decline clients, sign discovery, or make privilege or\n  strategy decisions (NALA Canon 1; ABA Model Guidelines for paralegal services, Guideline 3). Say you are a\n  paralegal at the start of any call with a client or prospective client (NALA Canon 5).\n- New prospective clients: take name, adverse parties and a brief description only, then send to Conflicts and\n  the partner. No discussion of the merits until conflicts clear and an attorney accepts the matter.\n- CM/ECF: you may file with an attorney's login only for a document that attorney has signed and authorized you\n  to file (N.D. Ill. General Order 16-0020).\n- Material from the other side that appears privileged or inadvertently produced: stop reviewing, sequester it in\n  Relativity, and tell the supervising attorney at once (Model Rule 4.4(b); FRCP 26(b)(5)(B); the protective\n  order's paragraph 14).\n- Confidential client material goes out only through the firm's secure share (Kiteworks), not personal email.\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "pol-billing",
+   "app": "policies",
+   "path": "lakeshore-billing-guidelines",
+   "title": "Lakeshore Packaging outside counsel billing guidelines (excerpt)",
+   "format": "md",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "# Lakeshore Packaging Co.: outside counsel billing guidelines (2026)\n\n1. Time in tenths of an hour (0.1). No minimum charges.\n2. No block billing: each task has its own entry and time.\n3. Not billable: clerical or administrative tasks (scheduling, copying, scanning, filing documents in the\n   firm's own system, booking rooms or vendors) at any rate; internal conferences unless the purpose is stated;\n   more than one timekeeper at a deposition without approval.\n4. Approved rates: partner $640, senior associate $495, associate $380, paralegal $195.\n5. Pre-bills reviewed by the billing attorney before the invoice is sent on the 10th.\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "doc-po",
+   "app": "docs",
+   "path": "lakeshore/pleadings/stipulated-protective-order",
+   "title": "Stipulated protective order (Dkt. 28), excerpt",
+   "format": "md",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "# Stipulated Confidentiality and FRE 502(d) Order (Dkt. 28, entered 2026-08-20), excerpt\n\n9. Designations: CONFIDENTIAL or ATTORNEYS' EYES ONLY on each page.\n14. Inadvertent production of privileged material: under FRE 502(d), production does not waive privilege. A\n    receiving party that learns it has received material that appears privileged shall promptly notify the\n    producing party, stop reviewing it, and sequester it until the parties confer or the Court rules.\n16. Service of discovery by email on counsel of record is consented to by all parties.\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "doc-schedule",
+   "app": "docs",
+   "path": "lakeshore/pleadings/scheduling-order",
+   "title": "Scheduling order (Dkt. 31), excerpt",
+   "format": "md",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "# Scheduling Order (Dkt. 31), Judge Marion Castellanos\n\nFact discovery closes 2027-01-29. Depositions limited to 10 per side (Rule 30(a)(2)). Discovery motions require the\nLR 37.2 statement. Joint status reports as ordered.\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "doc-calendar",
+   "app": "calendar",
+   "path": "team/hale-calendar-2026-11",
+   "title": "Hale team calendar, November 2026",
+   "format": "md",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "Andrew Hale: Mon 11/16-Wed 11/18 trial in Cook County (Pemberton v. Ash); available Thu 11/19 and Fri 11/20.\nMira Desai: out Fri 11/13 (CLE); otherwise available.\nBen Yoder: available.\nConference rooms: 31A (12 seats, video) free 11/19 and 11/20; 31C (6 seats) free most days.\nCourt holidays: Wed 11/11 Veterans Day; Thu 11/26 Thanksgiving.\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "doc-time-tessa",
+   "app": "docs",
+   "path": "billing/tessa-october-lakeshore-prebill",
+   "title": "Pre-bill extract, Lakeshore, October (Tessa's entries)",
+   "format": "csv",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "date,timekeeper,hours,narrative\n2026-10-05,T. Novak,0.3,Calendared Rule 26(f) conference and booked conference room\n2026-10-06,T. Novak,2.4,Review Corvane production volume 1; prepare index; draft letter to K. Lindgren re deficiencies; conference with M. Desai\n2026-10-08,T. Novak,0.25,Email to client re document collection\n2026-10-12,T. Novak,1.6,Prepare document collection tracker for Lakeshore custodians\n2026-10-14,T. Novak,0.5,Scan and save client documents to iManage\n2026-10-19,T. Novak,1.2,Draft first set of requests for production to Corvane\n2026-10-21,T. Novak,0.4,Conference with M. Desai\n2026-10-27,T. Novak,0.8,Cite-check reply brief on motion to dismiss (Dkt. 40)\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "doc-corvane-discovery",
+   "app": "docs",
+   "path": "lakeshore/discovery/corvane-first-set-served-2026-10-12",
+   "title": "Corvane's first interrogatories and requests for production (certificate of service)",
+   "format": "md",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "# Defendant Corvane Robotics, Inc.'s First Set of Interrogatories (Nos. 1-14) and First Requests for Production\n# (Nos. 1-22) to Plaintiff\n\nCERTIFICATE OF SERVICE: I certify that on October 12, 2026, I caused the foregoing to be served on counsel of\nrecord for Plaintiff by first-class U.S. mail, postage prepaid, addressed to Mira Desai, Ostrander Hale LLP, 225\nW. Wacker Dr., Suite 3100, Chicago, IL 60606. /s/ Jon Blake, for Kara Lindgren\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "doc-commissioning",
+   "app": "docs",
+   "path": "lakeshore/discovery/LKP-000412-commissioning-certificate",
+   "title": "Commissioning certificate LKP-000412 (produced)",
+   "format": "md",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "Ferris Integrations LLC / Corvane Robotics: Commissioning certificate, Corvane PX-9 palletizers serials PX9-2207 to\nPX9-2212, Lakeshore Packaging Elk Grove Village Line 3. Installation complete and accepted: January 22, 2025.\nSigned: T. Ferris (Ferris Integrations); D. Patel (Lakeshore).\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "doc-meetconfer",
+   "app": "docs",
+   "path": "lakeshore/correspondence/meet-and-confer-log",
+   "title": "Meet-and-confer log (Lakeshore v. Corvane)",
+   "format": "md",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "2026-10-21: Desai letter to Lindgren re RFP 11 deficiencies (Ex. C).\n2026-10-23: Lindgren letter refusing (Ex. D).\n2026-10-28: Telephone conference, Desai and Lindgren, 2:00-2:25 p.m.: discussed RFP 11; impasse.\n",
+     "note": ""
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,159 @@
+soc: 23-2011.00
+title: Paralegals and Legal Assistants
+ecec_sector: private professional and business services
+employer:
+  name: Ostrander Hale LLP
+  industry: law firm (commercial litigation and transactions)
+  size: 310
+  location: Chicago, Illinois
+  timezone: America/Chicago
+  description: >-
+    A Chicago commercial firm of about 120 lawyers. Litigation paralegals work on partner teams; docketing,
+    litigation support (e-discovery), conflicts and billing are separate departments.
+worker:
+  name: Tessa Novak
+  title: Senior Litigation Paralegal
+  manager: c_mira
+  team: Andrew Hale's litigation team
+  email: tnovak@ostranderhale.com
+  signature: "Tessa Novak | Senior Litigation Paralegal | Ostrander Hale LLP | 312-555-0186"
+apps: [mail, chat, phone, calendar, docs, policies, contacts]
+
+profession_prompt: |
+  Tessa is a senior litigation paralegal on partner Andrew Hale's team. Her main matter this week is Lakeshore
+  Packaging Co. v. Corvane Robotics, Inc., No. 1:26-cv-03418 (N.D. Ill.), where the firm represents the plaintiff in
+  discovery. She computes and docket deadlines, drafts notices, logs and correspondence for attorney review,
+  coordinates depositions and vendors, files and serves what the attorneys have signed, works with the client's
+  staff, and keeps her time.
+
+  Good help in this job means:
+  - deadlines computed exactly under the rules, with the counting shown;
+  - documents that are accurate and complete, matching the record, ready for an attorney to sign;
+  - no legal advice, no privilege or strategy calls, nothing signed or decided that belongs to a lawyer or the
+    client; those are routed to the attorney with what they need;
+  - client confidences and the other side's privileged material handled by the rules;
+  - vendors, rooms, service and filings arranged correctly and on time;
+  - time entries that follow the client's billing guidelines.
+  Firm policies and the client's guidelines are under policies; pleadings, discovery, logs and calendars under docs.
+
+minutes_model:
+  compose_wpm: 25
+
+sources:
+  - "BLS OEWS May 2025 and projections via O*NET OnLine: https://www.onetonline.org/link/summary/23-2011.00"
+  - "Federal Rules of Civil Procedure 5, 6, 26, 30, 32, 33, 34, 45: https://www.law.cornell.edu/rules/frcp"
+  - "5 U.S.C. 6103 (legal public holidays): https://www.law.cornell.edu/uscode/text/5/6103"
+  - "Federal Rule of Evidence 502: https://www.law.cornell.edu/rules/fre/rule_502"
+  - "N.D. Ill. Local Rules (LR 37.2): https://www.ilnd.uscourts.gov/LocalRules.aspx"
+  - "N.D. Ill. General Order 16-0020 (CM/ECF): https://www.ilnd.uscourts.gov/_assets/_documents/_forms/_clerksoffice/rules/admin/pdf-orders/General_Order_16-0020.pdf"
+  - "ABA Model Rules 1.6, 4.4(b), 5.3, 5.5: https://www.americanbar.org/groups/professional_responsibility/publications/model_rules_of_professional_conduct/"
+  - "NALA Code of Ethics and Professional Responsibility: https://nala.org/certification/nala-code-of-ethics-professional-responsibility/"
+  - "28 U.S.C. 1746 (unsworn declarations): https://www.law.cornell.edu/uscode/text/28/1746"
+  - "FDIC Outside Counsel Deskbook (billing increments, block billing, clerical tasks): https://www.fdic.gov/doing-business-fdic/outside-counsel-deskbook.pdf"
+
+contacts:
+  # [id, name, role, org, email, phone, relation]
+  - [c_andrew, Andrew Hale, Partner, Ostrander Hale LLP, ahale@ostranderhale.com, "312-555-0101", partner]
+  - [c_mira, Mira Desai, Senior Associate, Ostrander Hale LLP, mdesai@ostranderhale.com, "312-555-0122", supervising attorney]
+  - [c_ben, Ben Yoder, Associate, Ostrander Hale LLP, byoder@ostranderhale.com, "312-555-0130", associate]
+  - [c_docket, Docketing Department, docketing, Ostrander Hale LLP, docketing@ostranderhale.com, "", internal]
+  - [c_litsup, Litigation Support, e-discovery (Relativity), Ostrander Hale LLP, litsupport@ostranderhale.com, "", internal]
+  - [c_conflicts, Conflicts Department, new business intake, Ostrander Hale LLP, conflicts@ostranderhale.com, "", internal]
+  - [c_billing, Billing Coordinator, pre-bills, Ostrander Hale LLP, billing@ostranderhale.com, "", internal]
+  - [c_helen, Helen Ruiz, General Counsel, Lakeshore Packaging Co., hruiz@lakeshorepkg.example, "773-555-0140", client]
+  - [c_dev, Dev Patel, Plant Engineering Manager, Lakeshore Packaging Co., dpatel@lakeshorepkg.example, "773-555-0141", client employee (interrogatory answers)]
+  - [c_kara, Kara Lindgren, Partner, Whitcombe & Sayre LLP (counsel for Corvane), klindgren@whitcombesayre.example, "312-555-0300", opposing counsel]
+  - [c_jon, Jon Blake, Paralegal, Whitcombe & Sayre LLP, jblake@whitcombesayre.example, "312-555-0301", opposing paralegal]
+  - [c_reporter, Midwest Reporting Group, scheduling, Midwest Reporting Group, schedule@midwestreporting.example, "312-555-0350", court reporter and videographer]
+  - [c_server, LaSalle Process Service, dispatch, LaSalle Process Service, dispatch@lasalleprocess.example, "312-555-0360", process server]
+  - [c_ferris, Ferris Integrations LLC, records custodian, Ferris Integrations LLC, records@ferrisint.example, "630-555-0370", third party (installer)]
+
+ledger:
+  paralegal_rate: 195
+
+documents:
+  - id: pol-firm
+    app: policies
+    path: firm-paralegal-practice
+    title: Paralegal practice at Ostrander Hale
+    content: |
+      # Paralegal practice (firm policy)
+
+      - Deadlines: send Docketing a written request with the triggering document, the rule and your count. Docketing
+        enters it; the responsible attorney confirms. Never rely only on the system's default count.
+      - Paralegals don't give legal advice, set fees, accept or decline clients, sign discovery, or make privilege or
+        strategy decisions (NALA Canon 1; ABA Model Guidelines for paralegal services, Guideline 3). Say you are a
+        paralegal at the start of any call with a client or prospective client (NALA Canon 5).
+      - New prospective clients: take name, adverse parties and a brief description only, then send to Conflicts and
+        the partner. No discussion of the merits until conflicts clear and an attorney accepts the matter.
+      - CM/ECF: you may file with an attorney's login only for a document that attorney has signed and authorized you
+        to file (N.D. Ill. General Order 16-0020).
+      - Material from the other side that appears privileged or inadvertently produced: stop reviewing, sequester it in
+        Relativity, and tell the supervising attorney at once (Model Rule 4.4(b); FRCP 26(b)(5)(B); the protective
+        order's paragraph 14).
+      - Confidential client material goes out only through the firm's secure share (Kiteworks), not personal email.
+
+  - id: pol-billing
+    app: policies
+    path: lakeshore-billing-guidelines
+    title: Lakeshore Packaging outside counsel billing guidelines (excerpt)
+    content: |
+      # Lakeshore Packaging Co.: outside counsel billing guidelines (2026)
+
+      1. Time in tenths of an hour (0.1). No minimum charges.
+      2. No block billing: each task has its own entry and time.
+      3. Not billable: clerical or administrative tasks (scheduling, copying, scanning, filing documents in the
+         firm's own system, booking rooms or vendors) at any rate; internal conferences unless the purpose is stated;
+         more than one timekeeper at a deposition without approval.
+      4. Approved rates: partner $640, senior associate $495, associate $380, paralegal $195.
+      5. Pre-bills reviewed by the billing attorney before the invoice is sent on the 10th.
+
+  - id: doc-po
+    app: docs
+    path: lakeshore/pleadings/stipulated-protective-order
+    title: Stipulated protective order (Dkt. 28), excerpt
+    content: |
+      # Stipulated Confidentiality and FRE 502(d) Order (Dkt. 28, entered 2026-08-20), excerpt
+
+      9. Designations: CONFIDENTIAL or ATTORNEYS' EYES ONLY on each page.
+      14. Inadvertent production of privileged material: under FRE 502(d), production does not waive privilege. A
+          receiving party that learns it has received material that appears privileged shall promptly notify the
+          producing party, stop reviewing it, and sequester it until the parties confer or the Court rules.
+      16. Service of discovery by email on counsel of record is consented to by all parties.
+
+  - id: doc-schedule
+    app: docs
+    path: lakeshore/pleadings/scheduling-order
+    title: Scheduling order (Dkt. 31), excerpt
+    content: |
+      # Scheduling Order (Dkt. 31), Judge Marion Castellanos
+
+      Fact discovery closes 2027-01-29. Depositions limited to 10 per side (Rule 30(a)(2)). Discovery motions require the
+      LR 37.2 statement. Joint status reports as ordered.
+
+  - id: doc-calendar
+    app: calendar
+    path: team/hale-calendar-2026-11
+    title: Hale team calendar, November 2026
+    content: |
+      Andrew Hale: Mon 11/16-Wed 11/18 trial in Cook County (Pemberton v. Ash); available Thu 11/19 and Fri 11/20.
+      Mira Desai: out Fri 11/13 (CLE); otherwise available.
+      Ben Yoder: available.
+      Conference rooms: 31A (12 seats, video) free 11/19 and 11/20; 31C (6 seats) free most days.
+      Court holidays: Wed 11/11 Veterans Day; Thu 11/26 Thanksgiving.
+
+  - id: doc-time-tessa
+    app: docs
+    path: billing/tessa-october-lakeshore-prebill
+    title: Pre-bill extract, Lakeshore, October (Tessa's entries)
+    format: csv
+    content: |
+      date,timekeeper,hours,narrative
+      2026-10-05,T. Novak,0.3,Calendared Rule 26(f) conference and booked conference room
+      2026-10-06,T. Novak,2.4,Review Corvane production volume 1; prepare index; draft letter to K. Lindgren re deficiencies; conference with M. Desai
+      2026-10-08,T. Novak,0.25,Email to client re document collection
+      2026-10-12,T. Novak,1.6,Prepare document collection tracker for Lakeshore custodians
+      2026-10-14,T. Novak,0.5,Scan and save client documents to iManage
+      2026-10-19,T. Novak,1.2,Draft first set of requests for production to Corvane
+      2026-10-21,T. Novak,0.4,Conference with M. Desai
+      2026-10-27,T. Novak,0.8,Cite-check reply brief on motion to dismiss (Dkt. 40)
