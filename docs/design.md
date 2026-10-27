@@ -177,7 +177,7 @@ version of each document; a call's turns, then the worker's case note), plus `/w
   question (did a call line arrive in time?) is answered offline in grading from the tokens it used.
 - **Agent:** one conversation per day; each tick is a multi-turn tool loop ending at `wait` or after
   `max_tool_calls_per_tick` (25). Nothing in the day's conversation is trimmed (owner, 10-27): each model runs at
-  the largest context window its route offers (`context_window` in `config/run.yaml`), and when the input reaches 80%
+  the largest context window its route offers (`context_window` in `config/run.yaml`), and when the input reaches `compact_at` (80%)
   of it, Inspect compacts the conversation, natively where the provider offers it (OpenAI's `responses.compact`,
   which keeps the user turns and replaces the rest with an encrypted item only OpenAI models can read) and otherwise
   by the model summarizing its own history. Compaction is the harness's: its tokens are recorded in the sample
@@ -341,11 +341,13 @@ Azure each answered a 398,000-token prompt); Kimi K2 Thinking, K2.5 and K2.6 262
 GLM-4.7, GLM-5 and GLM-5.1 202,752 (Bedrock refused 200,753 input tokens plus 2,000 output); DeepSeek V3.2 on Azure
 131,072 (it refused 156,721).
 
-Azure's default content filter (`Microsoft.DefaultV2`) blocks prompts it reads as jailbreaks, and blocked ordinary
-DeepSeek turns on the budget-analyst week (a tick at 08:30, then a compaction summary) because the weeks carry
-phishing and social-engineering messages by design. The six Azure deployments use `benchmark-annotate-jailbreak`
-(10-27): `DefaultV2`'s filters unchanged except the jailbreak check, which annotates instead of blocking, so Azure
-models see the same weeks as every other route. Every model runs at its lab's
+Content filters are off wherever we can turn them off (owner, 10-27). Azure's default (`Microsoft.DefaultV2`)
+blocked ordinary DeepSeek turns on the budget-analyst week as jailbreaks (a tick at 08:30, then a compaction
+summary), because the weeks carry phishing and social-engineering messages by design. The six Azure deployments use
+`benchmark-minimal-filters`: jailbreak, indirect-attack and protected-material checks off, and the four harm
+categories at their most permissive setting, blocking only high severity; turning those off needs Microsoft's
+approval for modified content filtering (aka.ms/oai/rai/exceptions), which Azure refused without. Bedrock applies no
+guardrail unless a request names one, and none does; OpenAI's API and OpenRouter have no filter to configure. Every model runs at its lab's
 medium reasoning setting, set on every call (owner, 10-26), except DeepSeek, which has no medium and runs at high
 (owner, 10-27):
 

@@ -64,7 +64,7 @@ class ModelSpec(BaseModel):
     generate: dict[str, Any] = {}       # Inspect GenerateConfig fields (reasoning_effort, ...)
     model_args: dict[str, Any] = {}     # provider routing etc.
     price: Price | None = None
-    context_window: int | None = None  # tokens, the largest variant on this route; compaction starts at COMPACT_AT of it
+    context_window: int | None = None  # tokens, the largest variant on this route; compaction starts at run.compact_at of it
 
 
 class JudgeSpec(ModelSpec):
@@ -78,6 +78,7 @@ class RunSettings(BaseModel):
     seeds: int = 3
     max_tool_calls_per_tick: int = 25
     max_output_tokens_per_call: int = 16000
+    compact_at: float = 0.8             # share of a model's context window at which its day is compacted
     send_arm: bool = False
     professions: list[str] | str = "all"
     eci_factor: dict[str, Any] = {"value": 1.0, "source": ""}
@@ -117,6 +118,8 @@ class RunConfig(BaseModel):
             left = sum(j.weight for j in self.judges if not (j.report_with_dropout and j.family == fam))
             if left <= 0:
                 errs.append(f"dropping family {fam} leaves no judge weight")
+        if not 0 < self.run.compact_at <= 1:
+            errs.append("compact_at must be a share of the context window, in (0, 1]")
         if self.run.cadence_minutes <= 0:
             errs.append("cadence_minutes must be positive")
         if errs:

@@ -5,7 +5,7 @@ model runs as a multi-turn tool-using agent until it calls wait. Live calls the 
 Nothing the model proposes reaches the world; proposals and questions are recorded in the sample's store.
 
 Each day starts a new conversation (notes in /home/assistant carry over). Nothing in it is trimmed: when the input
-reaches COMPACT_AT of the model's context window (config `context_window`, the largest variant on its route), Inspect
+reaches `compact_at` (config) of the model's context window (config `context_window`, the largest variant on its route), Inspect
 compacts it, natively where the provider offers it (OpenAI's responses.compact) and otherwise by the model summarizing
 its own history. Compaction's tokens are recorded apart and not charged to the model (owner, 10-27).
 """
@@ -33,7 +33,6 @@ from .world import DAYS, Event, events, feed_lines, ticks
 ROOT = Path(__file__).resolve().parents[1]
 SANDBOX = ("docker", str(ROOT / "workweek/sandbox/compose.yaml"))
 MAX_TOOL_OUTPUT = 12000
-COMPACT_AT = 0.8              # share of the context window at which the day's conversation is compacted
 FILTER_ATTEMPTS = 3           # tries of a call a content filter blocks before the turn is given up
 READ_KEPT = 12                 # most recent world files read, kept with each proposal for the judges
 
@@ -225,7 +224,7 @@ async def run_tool(sim: Sim, call, t: int) -> tuple[str, bool]:
 
 
 async def compacted(sim: Sim, messages: list) -> list:
-    """The input to send: the day's history, compacted once it passes COMPACT_AT; compaction's tokens kept apart."""
+    """The input to send: the day's history, compacted once it passes run.compact_at; compaction's tokens kept apart."""
     before = {k: u.model_dump() for k, u in sample_model_usage().items()}
     for attempt in range(FILTER_ATTEMPTS):      # a summary call can meet a content filter too
         try:
@@ -342,7 +341,7 @@ def workweek_agent(run_path: str = "config/run.yaml", start: str = "D1 00:00", e
                                   date=DAYS[day - 1], time=show(day_ticks[0]).split()[1], first_name=sim.first,
                                   arrive=f"{day_start // 3600:02d}:{day_start % 3600 // 60:02d}",
                                   leave=f"{day_end // 3600:02d}:{day_end % 3600 // 60:02d}"))]
-            sim.compact = compaction(CompactionAuto(threshold=COMPACT_AT, memory=False), prefix=list(messages),
+            sim.compact = compaction(CompactionAuto(threshold=run.run.compact_at, memory=False), prefix=list(messages),
                                      tools=TOOLS, model=model)
             resume = -1
             for t in day_ticks:
