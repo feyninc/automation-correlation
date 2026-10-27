@@ -4,8 +4,9 @@
 #
 # Fiscal note: 2 FTE x ($96,000 + 32% benefits) = $253,440 a year; FY2028: $253,440 + $480,000 implementation +
 # $16,000 goods and services = $749,440; FY2029 and later: $253,440 + $72,000 subscription + $16,000 = $341,440;
-# 2027-29 biennium $1,090,880; 2029-31 $682,880. Indirect: MTDC $1,240,000 x 16.9% = $209,560 (budget used 18.4% =
-# $228,160; $18,600 too high).
+# 2027-29 biennium $1,090,880; 2029-31 $682,880. Indirect: MTDC = direct $2,320,000 less the subaward amounts over the
+# first $50,000 of each (2 CFR 200.1: $1,450,000 - 4 x $50,000 = $1,250,000) = $1,070,000; x 16.9% = $180,830 (budget
+# used 18.4% = $196,880; $16,050 too high). Total request $2,500,830, not $2,516,880.
 
 documents:
   - id: doc-hb1214
@@ -15,7 +16,7 @@ documents:
     at: "D1 08:30"
     author: c_ofm
     content: |
-      HB 1214 (pre-filed for the 2027 session): requires DWT to build and maintain a statewide system tracking
+      HB 1214 (2027 session): requires DWT to build and maintain a statewide system tracking
       registered apprentices from enrollment to completion and wage outcomes, with an annual report to the
       Legislature beginning December 1, 2028. Effective date: July 1, 2027.
       Agency fiscal note due in the Fiscal Note system Thursday 11/5 by 5:00 p.m.
@@ -46,12 +47,12 @@ documents:
       fringe,198400
       travel,24000
       supplies,15600
-      contractual (subawards; first $25,000 of each of 4 subawards counts toward MTDC),1450000
+      contractual (4 subawards; the first $50,000 of each counts toward MTDC),1450000
       other (advisory committee meeting costs),12000
       total direct,2320000
-      MTDC base (direct less subaward amounts over $25,000 each),1240000
-      indirect at 18.4% of MTDC,228160
-      total request,2548160
+      MTDC base (direct less subaward amounts over $50,000 each),1070000
+      indirect at 18.4% of MTDC,196880
+      total request,2516880
 
 threads:
   - id: t1-ofm
@@ -97,7 +98,7 @@ actions:
      body: "Thanks Luis. Two questions before I build the note: (1) Does the Employment Security wage match need a data-sharing agreement, and does ESD charge for it? (2) Is 2.0 FTE enough for the first annual report in December 2028, or does implementation in FY2028 need temporary help? I'll draft with your numbers today and update if needed."}
   - {at: "D1 13:05", kind: read, target: doc-grant-budget, summary: "checked the grant budget"}
   - {id: a1-mara, at: "D1 13:40", kind: reply, target: t1-mara, to: [c_fednick], summary: "corrected the indirect rate",
-     body: "Mara, one fix: the budget uses 18.4%, which was the FY2026 rate. The current NICRA (7/1/2026-6/30/2027) is 16.9% of MTDC, so indirect is $1,240,000 x 16.9% = $209,560, not $228,160 ($18,600 less), and the total request becomes $2,529,560. The MTDC base looks right. Also, the $12,000 for advisory committee meetings is fine if the meals are needed for the meetings and itemized in the narrative (2 CFR 200.432)."}
+     body: "Mara, one fix: the budget uses 18.4%, which was the FY2026 rate. The current NICRA (7/1/2026-6/30/2027) is 16.9% of MTDC, so indirect is $1,070,000 x 16.9% = $180,830, not $196,880 ($16,050 less), and the total request becomes $2,500,830. The MTDC base (the first $50,000 of each subaward) is right. Also, the $12,000 for advisory committee meetings is fine if the meals are needed for the meetings and itemized in the narrative (2 CFR 200.432)."}
   - {id: a1-fn, at: "D1 16:00", kind: edit, app: docs, path: fiscal-notes/hb1214-draft, target: doc-fn, title: HB 1214 fiscal note (draft),
      summary: "drafted the HB 1214 fiscal note",
      content: "# HB 1214 fiscal note: DWT (draft for Robert)\n\nSummary: HB 1214 requires DWT to build and run an apprentice tracking system and report annually from 12/1/2028. Effective 7/1/2027.\n\nExpenditures, General Fund-State (001-1):\n| | FY2028 | FY2029 | 2027-29 | 2029-31 |\n| --- | --- | --- | --- | --- |\n| FTE | 2.0 | 2.0 | 2.0 | 2.0 |\n| Salaries (2 x $96,000) | 192,000 | 192,000 | 384,000 | 384,000 |\n| Benefits (32%) | 61,440 | 61,440 | 122,880 | 122,880 |\n| Goods and services ($8,000/FTE) | 16,000 | 16,000 | 32,000 | 32,000 |\n| Implementation (one time) | 480,000 | 0 | 480,000 | 0 |\n| Subscription | 0 | 72,000 | 72,000 | 144,000 |\n| Total | 749,440 | 341,440 | 1,090,880 | 682,880 |\n\nAssumptions: vendor-hosted system (program estimate); 2.0 FTE IT Business Analysts from 7/1/2027; wage data from Employment Security (data-sharing cost to confirm). No revenue. No costs in the 2025-27 biennium."}
@@ -151,8 +152,8 @@ needs:
     due: "D4 17:00"
     evidence: [doc-grant-budget, doc-nicra, pol-budget]
     ref: a1-mara
-    check: {all: [{to_includes: c_fednick}, {number_equals: {value: 209560}}, {any: [{number_equals: {value: 18600}}, {number_equals: {value: 2529560}}]}]}
-    must: ["16.9% of $1,240,000 MTDC = $209,560 (not 18.4%); total $2,529,560", "Meeting meal costs allowable only if necessary and budgeted"]
+    check: {all: [{to_includes: c_fednick}, {number_equals: {value: 180830}}, {any: [{number_equals: {value: 16050}}, {number_equals: {value: 2500830}}]}]}
+    must: ["16.9% of $1,070,000 MTDC = $180,830 (not 18.4%); total $2,500,830", "Meeting meal costs allowable only if necessary and budgeted"]
     minutes: [20, "a grant budget check"]
     intent: "Last year's rate."
   - id: n1-vac
