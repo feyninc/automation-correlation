@@ -457,7 +457,8 @@ async def grade_log(log, run: cfgmod.RunConfig, judges, gate: asyncio.Semaphore)
         needs, traps, earned, matched = outcomes(ep, props, late)
         by_id = {n.id: n for n in ep.needs}
         u = (s.model_usage or {}).get(model_name)     # the tested model only, not the simulated worker
-        usage = u.model_dump() if u else None
+        # compaction is the harness's, not the model's: its tokens are not charged (owner, 10-27)
+        usage = cfgmod.net_usage(u.model_dump(), s.metadata.get("compaction_usage", {}).get(model_name)) if u else None
         n_props = max(len(props_raw), 1)
         share = {k: (v / n_props if isinstance(v, (int, float)) else v) for k, v in (usage or {}).items()}
         async def grade_one(i, p):
@@ -477,7 +478,7 @@ async def grade_log(log, run: cfgmod.RunConfig, judges, gate: asyncio.Semaphore)
                     "judges": js,
                     "_value_args": (ep, gets, spec.price if spec else None, share, read_words, family)}
         graded = list(await asyncio.gather(*(grade_one(i, p) for i, p in enumerate(props_raw))))
-        tot_cost = spec.price.cost(usage) if usage and spec and spec.price else 0.0
+        tot_cost = spec.price.cost(usage, s.metadata.get("long_context_usage")) if usage and spec and spec.price else 0.0
         mm = ep.economics.minutes_model
         qs = s.metadata.get("questions", [])
         q_min = sum(len(q["question"].split()) / mm.read_wpm + (0 if q.get("away") else mm.question_answer_s / 60)

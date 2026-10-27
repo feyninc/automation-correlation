@@ -45,13 +45,15 @@ def main():
         for s in log.samples or []:
             md = s.metadata
             usage = {k: u.model_dump() for k, u in (s.model_usage or {}).items()}
-            cost = spec.price.cost(usage[spec.model]) if spec.model in usage else 0.0
+            compacting = md.get("compaction_usage", {}).get(spec.model)       # the harness's, not charged
+            cost = (spec.price.cost(config.net_usage(usage[spec.model], compacting), md.get("long_context_usage"))
+                    if spec.model in usage else 0.0)
             sim = sum(cfg.user_model.price.cost(u) for k, u in usage.items() if k == cfg.user_model.model)
             total, worker = total + cost, worker + sim
             spent[config.billing(spec.model)] += cost
             spent[config.billing(cfg.user_model.model)] += sim
             print(f"  {s.id}: ticks {md.get('ticks')}, proposals {len(md.get('proposals', []))}, "
-                  f"questions {len(md.get('questions', []))}, ${cost:.2f}"
+                  f"questions {len(md.get('questions', []))}, compactions {md.get('compactions', 0)}, ${cost:.2f}"
                   + (f", error {s.error.message[:120]}" if s.error else ""))
     print(f"cost: tested models ${total:.2f}, simulated worker ${worker:.2f} (judging is priced by workweek.grade)")
     print("  by billing: " + ", ".join(f"{b} ${v:.2f}" for b, v in spent.items()))

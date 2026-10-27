@@ -176,7 +176,15 @@ version of each document; a call's turns, then the worker's case note), plus `/w
   writes the world as of that moment. Nothing waits on a model: the clock stops while it works, and every timing
   question (did a call line arrive in time?) is answered offline in grading from the tokens it used.
 - **Agent:** one conversation per day; each tick is a multi-turn tool loop ending at `wait` or after
-  `max_tool_calls_per_tick` (25). Tool output older than 6 ticks is elided. Tools: `bash` (Docker, no network,
+  `max_tool_calls_per_tick` (25). Nothing in the day's conversation is trimmed (owner, 10-27): each model runs at
+  the largest context window its route offers (`context_window` in `config/run.yaml`), and when the input reaches 80%
+  of it, Inspect compacts the conversation, natively where the provider offers it (OpenAI's `responses.compact`,
+  which keeps the user turns and replaces the rest with an encrypted item only OpenAI models can read) and otherwise
+  by the model summarizing its own history. Compaction is the harness's: its tokens are recorded in the sample
+  (`compaction_usage`) and not charged to the model. Earlier runs shortened every tool output older than six ticks,
+  which broke the prompt cache on every call: in the volume pilot, cache writes were $58 of Opus 4.8's $94.50 for
+  two days. A call a provider's content filter blocks is tried three times, then recorded (`filtered_calls`) and
+  the turn ends; the sample goes on. Tools: `bash` (Docker, no network,
   non-root), `propose(target, action, drafts[1-3], note)` with actions reply, new, forward, edit, schedule, update,
   say and flag (a new or forwarded message must name its recipients); `ask_worker(question)`; `join_call(path)` /
   `leave_call()` (a turn after every caller line while joined; a model that joins before the worker answers the
@@ -323,7 +331,21 @@ Kimi K2 Thinking, K3 and GLM-5.3 but not K3.1 Pro, GLM-5.1, 5.2 or DeepSeek V4.1
 OpenRouter: on Bedrock, every answer after a tool result (8 of 8 tries) came back with its reasoning as text, usually
 an unclosed `<think>`, which cannot be separated from the answer. GLM-5.3 on Bedrock has a 0 quota and is refused
 ("not available for this account"). Kimi K3 moved to Bedrock after a tool-call test, the same prompt caching as
-Moonshot's API (18,081 of 18,117 input tokens read from cache) and the reasoning setting passed through. Every model runs at its lab's
+Moonshot's API (18,081 of 18,117 input tokens read from cache) and the reasoning setting passed through.
+
+Context windows are the largest each route serves, checked on 10-27 with long prompts where no catalog gives the
+route's own limit: Opus 4.6 to 5.5 1M on Bedrock with no beta setting (Opus 4.6 answered a 505,023-token prompt),
+Opus 4.5 200k; GPT-5.4 and later 1.05M, GPT-5.2 400k (OpenAI prices prompts over 272k at twice the input rate);
+Kimi K3 and K3.1 Pro, DeepSeek V4 and V4.1, GLM-5.2 and 5.3 about 1M (K3 on Bedrock and DeepSeek V4 and V4.1 on
+Azure each answered a 398,000-token prompt); Kimi K2 Thinking, K2.5 and K2.6 262,144 (K2.5 on Azure took 251,722);
+GLM-4.7, GLM-5 and GLM-5.1 202,752 (Bedrock refused 200,753 input tokens plus 2,000 output); DeepSeek V3.2 on Azure
+131,072 (it refused 156,721).
+
+Azure's default content filter (`Microsoft.DefaultV2`) blocks prompts it reads as jailbreaks, and blocked ordinary
+DeepSeek turns on the budget-analyst week (a tick at 08:30, then a compaction summary) because the weeks carry
+phishing and social-engineering messages by design. The six Azure deployments use `benchmark-annotate-jailbreak`
+(10-27): `DefaultV2`'s filters unchanged except the jailbreak check, which annotates instead of blocking, so Azure
+models see the same weeks as every other route. Every model runs at its lab's
 medium reasoning setting, set on every call (owner, 10-26), except DeepSeek, which has no medium and runs at high
 (owner, 10-27):
 
@@ -409,6 +431,10 @@ most of these tasks.
 
 Spent on 2026-10-27: about $17 on tested models for the three samples, under $0.05 on the simulated worker, and about
 $7 to $11 per full grading of the claims sample (several gradings while fixing the grader); about $60 in all.
+
+The pilot below ran with the old trimming, which rewrote the prompt cache on every call; with no trimming and
+compaction at 80% the cost has to be measured again, and these figures are an upper bound for cache writes and a
+lower bound for context length.
 
 The full run is sized from the volume pilot (`logs/pilot-volume-d1`, 10-27): Claude Opus 4.8, GPT-6.1 Sol and
 DeepSeek V4.1 Flash on the expanded budget-analyst and operations-manager weeks, Monday 00:00-23:55, the 24-hour clock.

@@ -24,6 +24,11 @@ BILLING = {                        # model-string prefix -> who pays; OpenRouter
 BILLED = ("Bedrock credits", "Azure credits", "OpenAI credits", "OpenRouter")
 
 
+def net_usage(usage: dict, less: dict | None) -> dict:
+    """An Inspect ModelUsage dump minus another (compaction's tokens are the harness's, not the model's)."""
+    return {k: v - (less or {}).get(k, 0) if isinstance(v, (int, float)) else v for k, v in usage.items()}
+
+
 def billing(model: str) -> str:
     return next((b for p, b in BILLING.items() if model.startswith(p + "/")), "OpenRouter")
 
@@ -33,11 +38,20 @@ class Price(BaseModel):
     output: float
     cache_read: float = 0.0
     cache_write: float | None = None
+    long_above: int | None = None      # a call whose prompt exceeds this many tokens is priced at the multipliers below
+    long_input_x: float = 1.0          # on input, cache reads and cache writes
+    long_output_x: float = 1.0
 
-    def cost(self, usage: dict) -> float:
-        """USD for an Inspect ModelUsage dump; its input_tokens already exclude cache reads and writes."""
+    def cost(self, usage: dict, long: dict | None = None) -> float:
+        """USD for an Inspect ModelUsage dump; its input_tokens already exclude cache reads and writes. `long` is the
+        part of `usage` from calls over `long_above`, which pays the long-context surcharge on top."""
+        extra = 0.0
+        if long:
+            base = self.cost(long)
+            out = long.get("output_tokens", 0) * self.output / 1e6
+            extra = (base - out) * (self.long_input_x - 1) + out * (self.long_output_x - 1)
         write = self.input if self.cache_write is None else self.cache_write
-        return (usage.get("input_tokens", 0) * self.input + usage.get("output_tokens", 0) * self.output
+        return extra + (usage.get("input_tokens", 0) * self.input + usage.get("output_tokens", 0) * self.output
                 + (usage.get("input_tokens_cache_read") or 0) * self.cache_read
                 + (usage.get("input_tokens_cache_write") or 0) * write) / 1e6
 
@@ -50,6 +64,7 @@ class ModelSpec(BaseModel):
     generate: dict[str, Any] = {}       # Inspect GenerateConfig fields (reasoning_effort, ...)
     model_args: dict[str, Any] = {}     # provider routing etc.
     price: Price | None = None
+    context_window: int | None = None  # tokens, the largest variant on this route; compaction starts at COMPACT_AT of it
 
 
 class JudgeSpec(ModelSpec):
@@ -89,6 +104,8 @@ class RunConfig(BaseModel):
         for m in self.models:
             if m.price is None:
                 errs.append(f"{m.name}: price missing")
+            if not m.context_window:
+                errs.append(f"{m.name}: context_window missing")
         total = sum(j.weight for j in self.judges)
         if abs(total - 1) > 1e-4:
             errs.append(f"judge weights sum to {total:.6f}, not 1")
@@ -105,6 +122,9 @@ class RunConfig(BaseModel):
         if errs:
             raise ValueError("config errors:\n  " + "\n  ".join(errs))
         return self
+
+    def spec(self, model: str) -> ModelSpec:
+        return next(m for m in self.models if m.model == model)
 
     def generate_for(self, m: ModelSpec) -> dict[str, Any]:
         return {**self.defaults.get("generate", {}), **m.generate,

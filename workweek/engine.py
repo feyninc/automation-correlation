@@ -3,6 +3,11 @@
 The clock is simulated. At every tick (config cadence) the world up to that moment is written into the sandbox and the
 model runs as a multi-turn tool-using agent until it calls wait. Live calls the model joins are followed turn by turn.
 Nothing the model proposes reaches the world; proposals and questions are recorded in the sample's store.
+
+Each day starts a new conversation (notes in /home/assistant carry over). Nothing in it is trimmed: when the input
+reaches COMPACT_AT of the model's context window (config `context_window`, the largest variant on its route), Inspect
+compacts it, natively where the provider offers it (OpenAI's responses.compact) and otherwise by the model summarizing
+its own history. Compaction's tokens are recorded apart and not charged to the model (owner, 10-27).
 """
 from __future__ import annotations
 
@@ -12,8 +17,9 @@ from pathlib import Path
 
 from inspect_ai import Task, task
 from inspect_ai.dataset import Sample
-from inspect_ai.model import (ChatMessageSystem, ChatMessageTool, ChatMessageUser, GenerateConfig, Model,
-                              get_model)
+from inspect_ai.model import (ChatMessageSystem, ChatMessageTool, ChatMessageUser, CompactionAuto, GenerateConfig, Model,
+                              ModelInfo, compaction, get_model, set_model_info)
+from inspect_ai.model._model import sample_model_usage
 from inspect_ai.solver import Generate, TaskState, solver
 from inspect_ai.tool import ToolInfo, ToolParam, ToolParams
 from inspect_ai.util import sandbox, store
@@ -27,7 +33,8 @@ from .world import DAYS, Event, events, feed_lines, ticks
 ROOT = Path(__file__).resolve().parents[1]
 SANDBOX = ("docker", str(ROOT / "workweek/sandbox/compose.yaml"))
 MAX_TOOL_OUTPUT = 12000
-KEEP_TOOL_OUTPUT_TICKS = 6
+COMPACT_AT = 0.8              # share of the context window at which the day's conversation is compacted
+FILTER_ATTEMPTS = 3           # tries of a call a content filter blocks before the turn is given up
 READ_KEPT = 12                 # most recent world files read, kept with each proposal for the judges
 
 TOOLS = [
@@ -82,6 +89,12 @@ class Sim:
         self.call_done: set[str] = set()
         self.ticks_run = 0
         self.recovered = 0          # tool calls recovered from GLM-syntax text
+        self.compact = None         # the day's Inspect compaction handler
+        self.compactions = 0
+        self.compaction_usage: dict[str, dict] = {}   # per model string: tokens spent compacting (not charged)
+        self.filtered: list[dict] = []    # calls a provider's content filter blocked, after retries
+        self.price = None                 # the tested model's Price
+        self.long_usage: dict = {}        # usage of calls over price.long_above (priced at the long-context rate)
         self.tick_index = 0
         self.first = ep.worker.name.split()[0]
         self.user_model: Model = get_model(run.user_model.model, config=GenerateConfig(**run.generate_for(run.user_model)),
@@ -211,17 +224,50 @@ async def run_tool(sim: Sim, call, t: int) -> tuple[str, bool]:
     return f"Unknown tool {name}.", False
 
 
-def elide(messages: list, keep_from: int) -> None:
-    """Shorten tool outputs older than the last few ticks to bound context; the model can rerun commands."""
-    for m in messages[:keep_from]:
-        if isinstance(m, ChatMessageTool) and isinstance(m.content, str) and len(m.content) > 400 \
-                and not m.content.startswith("[elided"):
-            m.content = "[elided: older output; rerun the command if you need it]\n" + m.content[:200]
+async def compacted(sim: Sim, messages: list) -> list:
+    """The input to send: the day's history, compacted once it passes COMPACT_AT; compaction's tokens kept apart."""
+    before = {k: u.model_dump() for k, u in sample_model_usage().items()}
+    for attempt in range(FILTER_ATTEMPTS):      # a summary call can meet a content filter too
+        try:
+            inp, summary = await sim.compact.compact_input(messages)
+            break
+        except Exception as e:
+            if not providers.content_filtered(e) or attempt == FILTER_ATTEMPTS - 1:
+                raise
+    if summary is not None:
+        messages.append(summary)
+    spent = {k: cfgmod.net_usage(u.model_dump(), before.get(k)) for k, u in sample_model_usage().items()}
+    spent = {k: u for k, u in spent.items() if any(isinstance(v, (int, float)) and v for v in u.values())}
+    for k, u in spent.items():
+        tally = sim.compaction_usage.setdefault(k, {})
+        for f, v in u.items():
+            if isinstance(v, (int, float)):
+                tally[f] = tally.get(f, 0) + v
+    sim.compactions += bool(spent or summary is not None)
+    return inp
 
 
 async def agent_turn(sim: Sim, model: Model, messages: list, t: int, budget: int) -> None:
     for _ in range(budget):
-        out = await model.generate(messages, tools=TOOLS)
+        inp = await compacted(sim, messages)
+        out = None
+        for attempt in range(FILTER_ATTEMPTS):
+            try:
+                out = await model.generate(inp, tools=TOOLS)
+                break
+            except Exception as e:     # a content-filter block ends this turn, not the sample
+                if not providers.content_filtered(e):
+                    raise
+                if attempt == FILTER_ATTEMPTS - 1:
+                    sim.filtered.append({"at": fmt(t), "error": str(e)[-300:]})
+                    return
+        await sim.compact.record_output(inp, out)
+        u = out.usage
+        if u and sim.price and sim.price.long_above and \
+                u.input_tokens + (u.input_tokens_cache_read or 0) + (u.input_tokens_cache_write or 0) > sim.price.long_above:
+            for f, v in u.model_dump().items():
+                if isinstance(v, (int, float)):
+                    sim.long_usage[f] = sim.long_usage.get(f, 0) + v
         sim.work["output_tokens"].append(out.usage.output_tokens if out.usage else 0)
         calls = out.message.tool_calls or []
         if not calls:
@@ -279,6 +325,8 @@ def workweek_agent(run_path: str = "config/run.yaml", start: str = "D1 00:00", e
         s0, s1 = seconds(start), seconds(end)
         sim = Sim(ep, run, s0, s1)
         model = get_model()
+        set_model_info(str(model), ModelInfo(context_length=run.spec(str(model)).context_window))
+        sim.price = run.spec(str(model)).price
         cadence = int(run.run.cadence_minutes * 60)
         budget = run.run.max_tool_calls_per_tick
         system = prompts.HARNESS.format(worker_name=ep.worker.name, worker_title=ep.worker.title,
@@ -294,7 +342,8 @@ def workweek_agent(run_path: str = "config/run.yaml", start: str = "D1 00:00", e
                                   date=DAYS[day - 1], time=show(day_ticks[0]).split()[1], first_name=sim.first,
                                   arrive=f"{day_start // 3600:02d}:{day_start % 3600 // 60:02d}",
                                   leave=f"{day_end // 3600:02d}:{day_end % 3600 // 60:02d}"))]
-            tick_starts: list[int] = []
+            sim.compact = compaction(CompactionAuto(threshold=COMPACT_AT, memory=False), prefix=list(messages),
+                                     tools=TOOLS, model=model)
             resume = -1
             for t in day_ticks:
                 if t < resume:
@@ -310,9 +359,6 @@ def workweek_agent(run_path: str = "config/run.yaml", start: str = "D1 00:00", e
                 text = (prompts.END_OF_DAY.format(when=show(t), first_name=sim.first, n_new=len(new)) if end_of_day else
                         prompts.TICK.format(when=show(t), n_new=len(new), call_note=call_note,
                                             presence=sim.presence(t)))
-                tick_starts.append(len(messages))
-                if len(tick_starts) > KEEP_TOOL_OUTPUT_TICKS:
-                    elide(messages, tick_starts[-KEEP_TOOL_OUTPUT_TICKS - 1])
                 messages.append(ChatMessageUser(content=text))
                 sim.ticks_run += 1
                 sim.work = {"output_tokens": [], "tool_s": 0.0}
@@ -326,6 +372,10 @@ def workweek_agent(run_path: str = "config/run.yaml", start: str = "D1 00:00", e
         state.metadata["questions"] = sim.questions
         state.metadata["ticks"] = sim.ticks_run
         state.metadata["recovered_tool_calls"] = sim.recovered
+        state.metadata["compactions"] = sim.compactions
+        state.metadata["filtered_calls"] = sim.filtered
+        state.metadata["long_context_usage"] = sim.long_usage
+        state.metadata["compaction_usage"] = sim.compaction_usage
         state.completed = True
         return state
 

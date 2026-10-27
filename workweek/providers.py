@@ -8,6 +8,10 @@ Moonshot's own API), so it is passed for `moonshotai.` ids too, keeping the sett
 GLM tool calls in text: GLM-4.7 and GLM-5 on Bedrock sometimes writes a tool call in its native syntax
 (`<tool_call>name<arg_key>k</arg_key><arg_value>v</arg_value></tool_call>`) as text instead of a structured call.
 `recover_tool_calls` turns that text into tool calls; the engine counts each recovery.
+
+Content filters: Azure's filter sometimes blocks an ordinary turn (DeepSeek V4.1 Flash, 10-27: "Response content
+blocked by label 'Jailbreak'" on a budget analyst's 08:30 tick). `content_filtered` recognizes such a refusal so the
+engine can retry the call, and record it, instead of losing the sample.
 """
 import json
 import re
@@ -47,3 +51,11 @@ def recover_tool_calls(text: str, known: set[str]) -> list[ToolCall]:
                 args[k.strip()] = v
         out.append(ToolCall(id=f"recovered-{uuid.uuid4().hex[:12]}", function=name, arguments=args))
     return out
+
+
+_FILTERED = ("blocked by label", "content_filter", "ResponsibleAIPolicyViolation", "content management policy")
+
+
+def content_filtered(error: BaseException) -> bool:
+    """A provider's content filter refused the request or its response."""
+    return any(x in str(error) for x in _FILTERED)
