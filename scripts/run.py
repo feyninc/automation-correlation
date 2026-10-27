@@ -38,6 +38,7 @@ def main():
     logs = inspect_eval(workweek(professions=a.professions, start=a.start, end=a.end), model=models,
                         log_dir=a.log_dir, max_samples=a.max_samples, max_tasks=a.max_models, display="none",
                         fail_on_error=False, retry_on_error=2)
+    spent = dict.fromkeys(config.BILLED, 0.0)
     total = worker = 0.0
     for spec, log in zip(specs, logs):
         print(f"{spec.name}: {log.status}" + (f" ({log.error.message[:200]})" if log.error else ""))
@@ -47,10 +48,13 @@ def main():
             cost = spec.price.cost(usage[spec.model]) if spec.model in usage else 0.0
             sim = sum(cfg.user_model.price.cost(u) for k, u in usage.items() if k == cfg.user_model.model)
             total, worker = total + cost, worker + sim
+            spent[config.billing(spec.model)] += cost
+            spent[config.billing(cfg.user_model.model)] += sim
             print(f"  {s.id}: ticks {md.get('ticks')}, proposals {len(md.get('proposals', []))}, "
                   f"questions {len(md.get('questions', []))}, ${cost:.2f}"
                   + (f", error {s.error.message[:120]}" if s.error else ""))
     print(f"cost: tested models ${total:.2f}, simulated worker ${worker:.2f} (judging is priced by workweek.grade)")
+    print("  by billing: " + ", ".join(f"{b} ${v:.2f}" for b, v in spent.items()))
 
 
 if __name__ == "__main__":

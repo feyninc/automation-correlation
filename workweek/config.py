@@ -16,6 +16,15 @@ PROVIDER_CREDENTIALS = {          # model-string prefix -> environment variable 
     "openai-api/azure": "AZURE_API_KEY",
     "bedrock": "AWS_BEARER_TOKEN_BEDROCK",
 }
+BILLING = {                        # model-string prefix -> who pays; every other route is paid for
+    "bedrock": "Bedrock credits",
+    "openai-api/azure": "Azure credits",
+}
+BILLED = ("Bedrock credits", "Azure credits", "paid")
+
+
+def billing(model: str) -> str:
+    return next((b for p, b in BILLING.items() if model.startswith(p + "/")), "paid")
 
 
 class Price(BaseModel):

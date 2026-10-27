@@ -36,8 +36,8 @@ overtime to 17:00 on Friday. Each day she takes 30 to 40 calls the assistant fol
   callback list ([47 CFR 9.11](https://www.law.cornell.edu/cfr/text/47/9.11)).
 - **Cancellations.** Federal law requires a simple way to cancel
   ([ROSCA](https://www.law.cornell.edu/uscode/text/15/8403)); at Northbeam the customer can cancel in any channel and
-  gets at most one retention offer, and a no is final. California customers are told they may cancel at any
-  time before any offer is made ([Cal. Bus. & Prof. Code 17602](https://codes.findlaw.com/ca/business-and-professions-code/bpc-sect-17602/)).
+  gets at most one retention offer, and a no is final. On the phone, California customers are told they may
+  cancel at any time before any offer is made ([Cal. Bus. & Prof. Code 17602](https://codes.findlaw.com/ca/business-and-professions-code/bpc-sect-17602/)).
 - **Card data and marketing.** Card numbers are never taken by voice or repeated from a chat: the caller goes to the
   automated payment line, and pasted numbers are redacted
   ([PCI SSC](https://www.pcisecuritystandards.org/documents/Protecting_Telephone_Based_Payment_Card_Data_v3-0_nov_2018.pdf)).

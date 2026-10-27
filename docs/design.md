@@ -358,6 +358,15 @@ V4.1 Flash 1017 at high (OpenRouter, DeepInfra), Qwen3.8 Max Prime (OpenRouter, 
 Z.ai). The simulated worker is Gemini 4 Argon at medium. A smoke test on 10-27 (`data/smoke-models.csv`) had every
 tested model, judge and the simulated worker make its tool call on its route at these settings.
 
+Who pays follows from the route (`workweek.config.billing`), and `scripts/run.py` and `workweek.grade` print each
+run's cost split the same way:
+
+| Billing | Tested models | Judges and the simulated worker |
+| --- | --- | --- |
+| Bedrock credits | Claude Opus 4.5, 4.6, 4.7, 4.8, 5, 5.5; GLM-4.7, GLM-5 (8) | judge Claude Opus 5.5 |
+| Azure credits | Kimi K2.5, K2.6; DeepSeek V3.2, V4 Flash, V4 Flash 0731, V4.1 Flash (6) | none |
+| Paid (OpenAI API, OpenRouter) | GPT-5.2, 5.4, 5.5, 5.6 Sol, 6 Sol, 6.1 Sol; Kimi K2 Thinking, K3, K3.1 Pro; DeepSeek V4.1 Flash 1017; GLM-5.1, 5.2, 5.3 (13) | judges GPT-6 Astra, Gemini 4 Argon, Kimi K3.1 Pro, DeepSeek V4.1 Flash 1017, Qwen3.8 Max Prime, GLM-5.3; the simulated worker (Gemini 4 Argon) |
+
 `workweek.config.load()` refuses duplicate names, unknown families, a model string without a provider prefix, a
 missing price, judge weights that do not sum to 1, two judges from one family, a dropout that leaves no weight, and a
 non-positive cadence; `missing_credentials()` lists routes without keys.
@@ -410,6 +419,10 @@ GPT-6.1 Sol, DeepSeek V4.1 Flash; claims and customer service, D1 08:00-17:00; `
   OpenRouter judges cannot.
 - Per seed in all, at today's volume: $5,800-12,200 (mid about $8,900); three seeds $17,000-37,000. About $2,300 a
   seed runs through OpenRouter (8 tested models, 4 judges, the simulated worker); its credit tops up automatically.
+- By billing, per seed at today's volume: Bedrock credits $2,800-5,900, Azure credits $350-650, paid $2,600-5,700.
+  The shares come from the three samples (tested models: Bedrock 57%, paid 32%, Azure 11% of $16.73, every model
+  on the same windows) and the claims grading (judges: Opus 5.5 on Bedrock about 40%, the six paid judges about 60%,
+  with GPT-6 Astra at its batch price). Opus is the costliest family on both sides, so Bedrock carries the most.
 - Wall clock: a day took 11-14 minutes for GPT-6.1 Sol and Opus 4.8 (both professions in parallel) and 79 minutes for
   DeepSeek V4.1 Flash on Azure, which sets the pace of a full run.
 
