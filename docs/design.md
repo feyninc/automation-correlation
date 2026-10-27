@@ -121,8 +121,10 @@ version of each document; a call's turns, then the worker's case note), plus `/w
 
 ## 5. The engine (`workweek/engine.py`, an Inspect AI task)
 
-- **Clock:** simulated, 08:00 to 17:00 each day, a tick every `cadence_minutes` (default 5), the 17:00 tick an
-  end-of-day turn. Before each tick the engine writes the world as of that moment.
+- **Clock:** simulated, from the worker's arrival to departure each day (`worker.hours`, default 08:00 to 17:00), a
+  tick every `cadence_minutes` (default 5), the departure tick an end-of-day turn. Before each tick the engine writes
+  the world as of that moment. Nothing waits on a model: the clock stops while it works, and every timing question
+  (did a call line arrive in time?) is answered offline in grading from the tokens it used.
 - **Agent:** one conversation per day; each tick is a multi-turn tool loop ending at `wait` or after
   `max_tool_calls_per_tick` (25). Tool output older than 6 ticks is elided. Tools: `bash` (Docker, no network,
   non-root), `propose(target, action, drafts[1-3], note)` with actions reply, new, forward, edit, schedule, update,
@@ -163,12 +165,27 @@ version of each document; a call's turns, then the worker's case note), plus `/w
    draft and the minimal fix are the heaviest remaining judge's after dropout.
 5. **Value:** loaded wage x (minutes of the needs it earns x p - reading time - (1 - p) x fix time) minus the
    proposal's share of the tested model's token cost, with p = panel score / 100. Reading is every word of every
-   draft, or for a revision only the words that changed; unplanned and superseded proposals cost their reading; each
-   question costs its reading plus `question_answer_s` at the loaded wage. The simulated worker's tokens are recorded
-   separately and not charged to the model.
-6. **Latency (planned):** time to first token (p50) plus output tokens / throughput from OpenRouter's published stats,
-   entered by hand in the config, to decide whether a call line would have arrived in time. The speed fields are not
-   yet filled.
+   draft, or for a revision only the words that changed, plus an attention cost for every proposal shown (10 s for a
+   written proposal, 3 s for a call line; below); unplanned and superseded proposals cost their reading and attention;
+   each question costs its reading plus `question_answer_s` at the loaded wage. The simulated worker's tokens are
+   recorded separately and not charged to the model.
+6. **Call timing (offline):** a line proposed on a call counts only if it would have reached the worker in time. The
+   engine records, with each proposal, the output tokens of every model call since the caller's line and the time
+   its tools took; the grader converts tokens to seconds with the model's p50 time to first token and throughput on
+   its route (`scripts/speed.py`, OpenRouter's endpoint stats, `data/openrouter/speed-<date>.csv`), adds the worker
+   reading the line's first 10 words, and compares with the caller's patience (strict) or the caller's line plus
+   patience (streaming, as if the assistant heard the line as it was spoken: an upper bound). A late line earns no
+   need; traps still fire on it, since they measure what was proposed. Provider-neutral speeds rather than our own
+   wall clock keep queueing and retries on our routes (Bedrock's 503s, Azure's slow DeepSeek) out of the measure.
+7. **Attention:** every proposal shown costs time beyond reading it, whether accepted or not (agents ignored 62% of
+   AI suggestions in Brynjolfsson, Li and Raymond 2023). Written proposal: 10 s (4-60 s for sensitivity), from about
+   2 s to notice and switch to the mail client (Iqbal and Horvitz 2007: 2.35 s to Outlook after an alert), 2-6 s to
+   decide beyond reading (Mozannar et al., AI-assisted programming: 6.11 s from a suggestion to accepting or rejecting
+   it; 6.48 s median with later verification) and 2-4 s to resume the interrupted task (Altmann and Trafton 2004:
+   resumption lag 3.8 s against 1.9 s between actions). Call line: 3 s (1-8 s), no switch (the worker is watching the
+   panel) but a decision inside turn gaps of about 200 ms (Levinson and Torreira 2015). The popular "23 minutes to
+   refocus" is in neither of Mark's papers; Mark, Gonzalez and Harris 2005 measured 25 minutes until people returned to
+   an interrupted task, doing other work meanwhile.
 
 ### Making judging easy, and what it bought
 
@@ -309,39 +326,35 @@ Spent on 2026-10-27: about $17 on tested models for the three samples, under $0.
 $7 to $11 per full grading of the claims sample (several gradings while fixing the grader); about $60 in all.
 
 The full run is extrapolated from the claims sample (27 models, 10 minutes) and a one-day pilot (Claude Opus 4.8 and
-GPT-6.1 Sol, claims and customer service, D1 08:00-17:00; `logs/pilot-day1`):
+GPT-6.1 Sol, DeepSeek V4.1 Flash; claims and customer service, D1 08:00-17:00; `logs/pilot-day1`):
 
-- A full day costs 17-20 times a 10-minute window, not 54: after the first look a model makes about 1.5 calls a tick,
+- A full day costs 15-20 times a 10-minute window, not 54: after the first look a model makes about 1.5 calls a tick,
   and prompt caching covers most input (90-95% of input tokens read from cache on Bedrock and OpenAI). Input
   per call grows through the day (Opus 4.8: 9k tokens a call in the first quarter of the day, 27k in the last).
-- Cost rises with the day's inbound items, with an elasticity of 0.6 (Opus 4.8) to 1.0 (GPT-6.1 Sol) between
-  claims (6.6 items a day) and customer service (19.4).
-- Tested models, one seed (27 models x 11 professions x 5 days): $3,700-5,100 (mid $4,300). Routes without prompt
+- Cost rises with the day's inbound items, with an elasticity of 0.6 (Opus 4.8) to 1.2 (DeepSeek V4.1 Flash)
+  between claims (6.6 items a day) and customer service (19.4). Realistic volume (section 3) multiplies the inbound
+  items, so it multiplies cost by about that factor to the power 0.6-1.2.
+- Tested models, one seed (27 models x 11 professions x 5 days), at today's volume: $3,200-5,800 (mid $4,400). Routes without prompt
   caching (DeepSeek V3.2 on Azure, GLM-4.7 and GLM-5 on Bedrock) cost more than their prices suggest.
 - Judges: 11-27 proposals a profession-day (pilot), so 16,000-40,000 a seed; at $0.16 a proposal (seven judges, the
-  packet) $2,600-6,400 (mid $4,500). OpenAI's Batch API would halve GPT-6 Astra's share (about a third of the
-  judge cost).
-- Per seed in all: $6,300-11,500 (mid about $8,800); three seeds $19,000-35,000. About $2,300 a seed runs through
+  packet) $2,600-6,400 (mid $4,500). GPT-6 Astra now judges through OpenAI's Batch API at half price, about a sixth
+  off the judge cost; Inspect batches only OpenAI's, Anthropic's own and Google's own APIs, so the Bedrock, Azure and
+  OpenRouter judges cannot.
+- Per seed in all, at today's volume: $5,800-12,200 (mid about $8,900); three seeds $17,000-37,000. About $2,300 a seed runs through
   OpenRouter (8 tested models, 4 judges, the simulated worker), which had $13.50 of credit left on 2026-10-27.
-- Wall clock: a day took 11-14 minutes for GPT-6.1 Sol and Opus 4.8 (both professions in parallel); DeepSeek V4.1
-  Flash on Azure took over 35 minutes.
+- Wall clock: a day took 11-14 minutes for GPT-6.1 Sol and Opus 4.8 (both professions in parallel) and 79 minutes for
+  DeepSeek V4.1 Flash on Azure, which sets the pace of a full run.
 
 ## 10. Open
 
 - Need counts: 25 to 101 per week against the ~100 target; raising the analyst weeks to ~100 would mean either
   splitting big deliverables into many small needs (inflating counts without adding work) or writing more items. The
   owner should decide; minutes are reported either way.
-- Call latency: models took a median 7.4 s from a caller's line to a proposed reply (47 lines, claims sample) against
-  callers' patience of 5-6 s; 74% would have come too late, and a 60-word suggestion takes the worker 15 s to read.
-  The clock is frozen while a model works, so call help is overstated until latency counts (measured time per call
-  turn is in the logs; OpenRouter's TTFT and throughput as the provider-neutral alternative).
 - Volume: inbound items are 1/15 to 1/45 of a Microsoft 365 worker's mail and chat, which makes noticing easier and
   runs cheaper; a templated low-information noise arm (newsletters, notifications, cc's, calendar replies) would test
   how much recall depends on it.
 - Coverage: planned work is 0.8-3.2 hours of each day; value is per benchmark week and the press-enter rate is over
   planned work, not the whole job, unless scaled by task time shares.
-- Attention: every proposal is assumed read at once and in full; a per-proposal triage cost (interruption) is not
-  modelled and belongs in the sensitivity analysis.
 - ECI factor on 2026-10-30.
 - Hand grades (about 100 proposals) and judge agreement; the friction (1.5) and rewrite threshold (0.5) sensitivity.
 - Seeds (3 planned) and the pilot that sizes the full run.

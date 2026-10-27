@@ -237,7 +237,8 @@ class MinutesModel(_M):
     rewrite_threshold: float = 0.5   # edit rate above which the worker rewrites
     question_answer_s: float = 30.0  # the worker answering one simulated-worker question, beyond reading it
     triage_s: float = 10.0           # noticing, switching to and deciding on a written proposal, beyond reading it
-    call_glance_s: float = 2.0       # glancing at a suggested line during a call, beyond reading it
+                                     # (4-60 s for sensitivity; docs/design.md, section 6)
+    call_glance_s: float = 3.0       # deciding on a suggested line during a call, beyond reading it (1-8 s)
     call_read_words: int = 10        # words of a suggested line the worker reads before starting to speak
     overrides: dict[str, float] = {}
 
