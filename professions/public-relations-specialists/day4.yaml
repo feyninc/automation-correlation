@@ -116,7 +116,7 @@ actions:
   - {id: a4-wire, at: "D4 09:05", kind: new, app: mail, path: sent/prnewswire-replace-file, target: m4-wire, to: [c_prn], cc: [c_doug],
      subject: "PRN-883120: replace release file before 10:00 AM CT", summary: "replaced the wire file with the final release",
      body: "Hello, for order PRN-883120 please replace the release text with the attached final version (release-final: adds the Governor's approved quote). Release time unchanged: Nov 5, 10:00 AM CT. Please confirm the replacement and send a new proof. Erin Mathers, Prairie Bend Health", att: [doc-release]}
-  - {id: a4-event, at: "D4 10:00", kind: noop, target: doc-gift-plan, summary: "ran media at the announcement"}
+  - {id: a4-event, at: "D4 10:00", kind: noop, target: doc-gift-plan, minutes: 90, summary: "ran media at the announcement"}
   - {at: "D4 10:40", kind: read, target: t4-luis, summary: "read NC9's interview request"}
   - {id: a4-luis-celeste, at: "D4 10:50", kind: forward, target: t4-luis, to: [c_celeste], cc: [c_doug], summary: "sent NC9's request to Celeste",
      body: "Celeste, NC9 wants 10 minutes on camera with Dr. Ellison by 2 about the ER death and staffing. Your call. My suggestion: decline the sit-down (we can't discuss the patient, so it would be 10 minutes of 'privacy law doesn't allow'), and offer Dr. Whitley for a general piece on ED volumes and staffing next week. I'll hold NC9 until I hear from you."}
