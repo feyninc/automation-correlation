@@ -65,7 +65,7 @@ actions:
   - {at: "D3 12:15", kind: read, target: t3-paul, summary: "read the final pickup"}
   - {id: a3-pickup, at: "D3 12:30", kind: new, app: chat, path: "@roberta/dm", target: t1-roberta, to: [c_roberta], summary: "updated Roberta on attrition",
      body: "Final pickup 171 room-nights; floor 176, so 5 short: at most $945 (5 x $189), less anything the Henley resells from the released rooms. Down from $4,536 on Monday."}
-  - {at: "D3 13:00", kind: noop, target: cal-harper, summary: "load-in, room check and registration set-up"}
+  - {at: "D3 13:00", kind: noop, target: cal-harper, minutes: 180, summary: "load-in, room check and registration set-up"}
   - {at: "D3 14:25", kind: read, target: t3-keynote, summary: "read the keynote's delay"}
   - {id: a3-keynote, at: "D3 14:45", kind: reply, target: t3-keynote, to: [c_keynote], cc: [c_roberta], summary: "set a keynote fallback",
      body: "Thanks for the heads-up, Alicia, and safe travels. A car will meet you at DTW whatever time you land (I'll text you the driver's number), and the Henley has a late check-in for you. Please send your slides tonight so AV can load them. If anything slips further, our plan B is to swap: the closing panel moves to 08:30 and your keynote to 16:00, so text me by 06:30 if you won't make 8:00."}

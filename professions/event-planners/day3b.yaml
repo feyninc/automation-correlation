@@ -1,0 +1,767 @@
+# Wednesday 2026-11-04, the rest of load-in day. Morning in Ann Arbor, then the drive to the Henley. Meridian offers a
+# handheld mic for the Ballroom (not needed: the D5 invoice bills one anyway). The printed programs still list Raj
+# Mehta, so Wolverine offers a rush insert and easel. Gwen wants to say "record attendance". The Lennox agrees to 75%
+# cumulative attrition with resale credit and a $37,500 minimum but not the cancellation schedule. The Ardmore
+# counters at $3,800. Calder wants GLSFE to pay its package handling. Henley security asks for the emergency plan.
+# The ASL quote comes in. BrightPath's certificate does not arrive by 10:00 (missed; it turns up at 13:40).
+#
+# Printing: $3,780 + $385 rush ($185 easel + $200 inserts) = $4,165, under the $4,200 line.
+# Lennox with a $37,500 minimum: anticipated revenue $26,850 + $37,500 = $64,350; 50% = $32,175 at signing as
+# drafted (the 180-day date, 10/14/2026, has passed; 90 days before arrival is Tue 1/12/2027); 25% = $16,087.50.
+# Ardmore counter $3,800: $120 above 80 x $46 = $3,680; with 22% service $4,636 before tax and the $425 AV, under
+# $10,000, so Roberta signs.
+# ASL (Signs of Michigan): team of two at $95 an hour each, 2-hour minimum: webinar 2 x $95 x 2 = $380; practice
+# 2 x $95 x 1 = $190; total $570.
+# Calder package handling: 12 boxes x $15 = $180, the exhibitor's charge.
+# Hosted wine at booth 1: $46 a bottle x 1.24 x 1.06 = $60.46 all-in; bartender $150 + 6% tax = $159.
+
+documents:
+  - id: doc-henley-2027-rfp
+    app: docs
+    path: fall-2027-site-selection/henley-detroit-proposal
+    title: Henley Hotel Detroit proposal, Fall Technical Conference 2027
+    at: "D3 11:00"
+    author: c_paul
+    content: |
+      # Henley Hotel Detroit: proposal for GLSFE, Thu Nov 4, 2027
+
+      Rooms: 110 Wed 11/3 and 110 Thu 11/4 at $199, plus tax. Cutoff 21 days before arrival.
+      Attrition: 80% of the block, cumulative, less rooms the hotel resells (as in 2026).
+      Function space: Ballroom A-C (rounds for 450); Salon 1 (130 theater), Salon 2 and Salon 3 (90 theater each; 2 and
+      3 combine for 180); Grand Foyer for 18 tabletop booths and a reception for 350.
+      F&B minimum: $70,000 before the 24% service charge and 6% tax. Guarantees 3 business days before; not lower than
+      90% of the contracted count (we can discuss 85% for breakfast).
+      Concessions: one complimentary room per 40 room-nights; returning-group rate held if signed by 12/15.
+      Offer held to Mon 11/30, 2026.
+  - id: doc-asl-quote
+    app: docs
+    path: webinars-2026-27/signs-of-michigan-quote
+    title: Signs of Michigan Interpreting quote (Dec 9 webinar)
+    at: "D3 10:20"
+    author: c_asl
+    content: |
+      Remote ASL interpreting (Zoom). Assignments over 60 minutes or with dense technical content are staffed with a
+      team of two. Rate $95.00 per interpreter per hour, 2-hour minimum per assignment; prep calls 1-hour minimum.
+      Wed 12/9, 11:40-13:00 webinar: 2 interpreters x $95 x 2 hours = $380.00. Wed 12/2 tech check: 2 x $95 x 1 hour =
+      $190.00. Total $570.00. Interpreters assigned: Rachel Monroe, NIC, and Dan Ortiz, NIC. Please send slides by 12/4.
+
+threads:
+  # ---------- mail ----------
+  - id: t3b-roberta
+    app: mail
+    path: inbox/roberta-wednesday
+    title: Wednesday
+    x:
+      - {at: "D3 07:40", from: c_roberta, to: [worker, c_eli], subject: "Today",
+         body: "Huddle at 8:40, then I drive in at 11 and meet you at the Henley by noon. Eli has the van. R"}
+  - id: t3b-dev
+    app: mail
+    path: inbox/1c-ppe-display
+    title: 1C PPE display
+    x:
+      - {at: "D3 07:55", from: c_spk_1c, to: [worker], subject: "Bringing an arc flash suit for 1C",
+         body: "Harper, I'll bring an arc-rated suit and face shield on a mannequin as a prop for 1C. Nothing powered. OK? Dev"}
+      - {at: "D3 08:25", from: c_eli, to: [c_spk_1c], cc: [worker], subject: "Re: Bringing an arc flash suit for 1C",
+         body: "Dev, that's fine. Bring it to the speaker ready room (Salon 4) and we'll walk it over. Eli"}
+  - id: t3b-lisa
+    app: mail
+    path: inbox/block-calls-wednesday
+    title: Block calls
+    x:
+      - {at: "D3 08:20", from: c_lisa, to: [worker], subject: "Hotel calls this morning",
+         body: "Two members asked if the $189 rate is still available. I told them until noon today, Henley link or reservations line. Lisa"}
+  - id: t3b-owen-promo
+    app: mail
+    path: inbox/webinar-promo-copy
+    title: Webinar promo copy
+    x:
+      - {at: "D3 09:10", from: c_owen, to: [worker], cc: [c_ben], subject: "Copy for the webinar series promo (sends 11/10)",
+         body: "Harper, could you send me about 120 words for the Winter Webinar Series email on 11/10: dates, speakers, topics, PDH and prices? Ben says you have the latest. Owen"}
+  - id: t3b-ardmore
+    app: mail
+    path: inbox/ardmore-counter
+    title: Ardmore counter
+    x:
+      - {at: "D3 09:20", from: c_ardmore, to: [worker], cc: [c_diane, c_sam], subject: "Re: Indiana chapter seminar 1/21: F&B minimum",
+         body: "Harper, we can do an F&B minimum of $3,800 with the Meridian Room rental waived and set for 100. Everything else as proposed. Revised agreement attached for signature. Brian Steele"}
+  - id: t3b-karen
+    app: mail
+    path: inbox/3b-details
+    title: 3B details
+    x:
+      - {at: "D3 09:40", from: c_backup, to: [worker], cc: [c_ben], subject: "3B: title, abstract, objectives",
+         body: "Harper, details attached for the app and the PDH record. Slides to follow this morning. Karen", att: [doc-karen]}
+      - {at: "D3 11:15", from: c_backup, to: [worker], cc: [c_av], subject: "Re: 3B: title, abstract, objectives",
+         body: "Slides attached (38 slides, no video). See you tomorrow. Karen"}
+  - id: t3b-simone-reset
+    app: mail
+    path: inbox/salon-1-reset
+    title: Salon 1 reset
+    x:
+      - {at: "D3 10:00", from: c_simone, to: [worker], cc: [c_av], subject: "Re: Salon 1 reset",
+         body: "Harper, Salon 1 will be reset to theater for 130 tonight after the group in there leaves at 6. Captioning monitor front left noted. Simone"}
+  - id: t3b-dana-confirm
+    app: mail
+    path: inbox/salon-1-av-confirmed
+    title: Salon 1 AV confirmed
+    x:
+      - {at: "D3 09:20", from: c_av, to: [worker], subject: "Salon 1 at 130: no added cost",
+         body: "Confirming in writing: second projector and screen move to Salon 1 for the 130 set at no added cost. Revision 2 total unchanged at $26,850. Dana"}
+  - id: t3b-asl
+    app: mail
+    path: inbox/asl-quote
+    title: ASL quote
+    x:
+      - {at: "D3 10:20", from: c_asl, to: [worker], subject: "Re: ASL interpreting request: Zoom webinar Wed 12/9",
+         body: "Hello Harper, we can cover both dates with a team of two. Quote attached, $570.00 total. Please confirm by 11/13 to hold the interpreters. Signs of Michigan Interpreting", att: [doc-asl-quote]}
+  - id: t3b-amberline
+    app: mail
+    path: inbox/amberline-breakouts
+    title: Amberline breakouts
+    x:
+      - {at: "D3 10:40", from: c_amberline, to: [worker], subject: "Re: breakout capacities",
+         body: "Harper, Lakeview A, B and C each seat 120 theater-style; A and B combine for 240. The pre-function foyer fits 16 tabletop booths with the reception, or 18 if we use the adjoining gallery. Jen"}
+  - id: t3b-henley-rfp
+    app: mail
+    path: inbox/henley-2027-proposal
+    title: Henley 2027 proposal
+    x:
+      - {at: "D3 11:00", from: c_paul, to: [worker], subject: "2027 proposal",
+         body: "Harper, our proposal for 2027 is attached. Good luck tomorrow; we're ready for you. Paul", att: [doc-henley-2027-rfp]}
+  - id: t3b-nadia
+    app: mail
+    path: inbox/meridian-signed
+    title: Meridian signed
+    x:
+      - {at: "D3 11:30", from: c_nadia, to: [worker], subject: "Meridian rev 2 signed",
+         body: "Gwen's signed rev 2 is on file. The 50% deposit already paid applies; the balance is due on the final invoice. Nadia"}
+  - id: t3b-henley-sec
+    app: mail
+    path: inbox/henley-security-plan
+    title: Henley security
+    x:
+      - {at: "D3 11:40", from: c_henley_sec, to: [worker], cc: [c_simone], subject: "Security and first aid for your event tomorrow",
+         body: "Ms. Quinn, ahead of tomorrow please send your on-site emergency contacts and expected headcount. For any medical issue, have your staff call Security dispatch at 313-555-0499 first; we respond, bring the AED and call 911 if needed. The first aid room is behind registration. Darnell Hayes, Director of Security"}
+  - id: t3b-ben
+    app: mail
+    path: inbox/3b-pdh-record
+    title: 3B PDH record
+    x:
+      - {at: "D3 12:00", from: c_ben, to: [worker], subject: "3B PDH record set",
+         body: "Karen's 3B is in the PDH record at 1.0 (60 minutes of instruction). Thanks for getting the objectives. Ben"}
+  - id: t3b-calder
+    app: mail
+    path: inbox/calder-package-handling
+    title: Calder package handling
+    x:
+      - {at: "D3 12:20", from: c_calder, to: [worker], cc: [c_jada], subject: "Package handling charge",
+         body: "Harper, the Henley says it will charge us $15 a box for our 12 boxes. Since we're a sponsor, can GLSFE cover that? Wendy"}
+  - id: t3b-glchiller
+    app: mail
+    path: inbox/coffee-break-signs
+    title: Coffee break signs
+    x:
+      - {at: "D3 12:30", from: c_glchiller, to: [c_jada], cc: [worker], subject: "Coffee break signs",
+         body: "Jada, will our logo be on the signs at both breaks, morning and afternoon? Tasha"}
+      - {at: "D3 12:50", from: c_jada, to: [c_glchiller], cc: [worker], subject: "Re: Coffee break signs",
+         body: "Yes, Tasha, both breaks, with the new logo. Jada"}
+  - id: t3b-huron
+    app: mail
+    path: inbox/huron-arrival
+    title: Huron arrival
+    x:
+      - {at: "D3 13:10", from: c_huron, to: [worker], subject: "Arriving at 3",
+         body: "Harper, we'll be at the dock at 3 to set booth 2. Allen"}
+  - id: t3b-polaris
+    app: mail
+    path: inbox/polaris-wifi
+    title: Polaris Wi-Fi
+    x:
+      - {at: "D3 13:30", from: c_polaris, to: [worker], cc: [c_eli], subject: "Wi-Fi for booth 3",
+         body: "We're set at booth 3. What's the exhibitor Wi-Fi? Priya"}
+      - {at: "D3 13:45", from: c_eli, to: [c_polaris], cc: [worker], subject: "Re: Wi-Fi for booth 3",
+         body: "Priya, network 'Henley Events', password on the card at your booth. Eli"}
+  - id: t3b-pinnacle
+    app: mail
+    path: inbox/pinnacle-power
+    title: Pinnacle power
+    x:
+      - {at: "D3 13:50", from: c_pinnacle, to: [worker], cc: [c_av], subject: "Booth 6 power",
+         body: "Power at booth 6 works, thanks. Lauren"}
+  - id: t3b-kessler
+    app: mail
+    path: inbox/kessler-set
+    title: Kessler set
+    x:
+      - {at: "D3 14:00", from: c_kessler, to: [worker], cc: [c_jada], subject: "Booth 7 set",
+         body: "Display unit is in and the video loop is running. Looks good. Doug"}
+  - id: t3b-owen-release
+    app: mail
+    path: inbox/press-release-out
+    title: Press release out
+    x:
+      - {at: "D3 10:05", from: c_owen, to: [worker, c_gwen], subject: "Release sent",
+         body: "Release went out at 10 with Harper's fixes ('more than 400', Karen Liu in 3B). Owen"}
+      - {at: "D3 14:30", from: c_owen, to: [worker, c_gwen], subject: "Re: Release sent",
+         body: "Two trade sites picked it up already. Owen"}
+  - id: t3b-carl
+    app: mail
+    path: inbox/4b-arrival
+    title: 4B arrival
+    x:
+      - {at: "D3 14:40", from: c_spk_4b, to: [worker], subject: "Arriving tomorrow at 1",
+         body: "Harper, I'll arrive at 1 tomorrow, well before 4B. Where do I check in? Carl"}
+      - {at: "D3 14:58", from: c_eli, to: [c_spk_4b], cc: [worker], subject: "Re: Arriving tomorrow at 1",
+         body: "Carl, the speaker ready room is Salon 4; your badge is at registration under Speakers. Eli"}
+  - id: t3b-lakeshore
+    app: mail
+    path: inbox/lakeshore-set
+    title: Lakeshore set
+    x:
+      - {at: "D3 15:00", from: c_lakeshore, to: [worker], subject: "Booth 5 set",
+         body: "Booth 5 is up. See you tomorrow. Rob"}
+  - id: t3b-tristate
+    app: mail
+    path: inbox/tristate-extinguishers
+    title: Tri-State display
+    x:
+      - {at: "D3 15:10", from: c_tristate, to: [c_jada], cc: [worker], subject: "Extinguisher display",
+         body: "Jada, we'd like to show three empty, tagged extinguishers on the table at booth 15. No discharge, just display. Hector"}
+      - {at: "D3 15:25", from: c_jada, to: [c_tristate], cc: [worker], subject: "Re: Extinguisher display",
+         body: "Hector, empty display units on the table are fine. Jada"}
+  - id: t3b-midwest
+    app: mail
+    path: inbox/lanyards-at-registration
+    title: Lanyards at registration
+    x:
+      - {at: "D3 15:20", from: c_midwest, to: [worker], cc: [c_eli], subject: "Lanyards",
+         body: "Are our lanyards at registration? Kurt"}
+      - {at: "D3 15:32", from: c_eli, to: [c_midwest], cc: [worker], subject: "Re: Lanyards",
+         body: "Kurt, yes, both boxes are at registration and already on the badges. Eli"}
+  - id: t3b-hannah
+    app: mail
+    path: inbox/practice-invite
+    title: Practice invite
+    x:
+      - {at: "D3 15:40", from: c_hannah, to: [worker], subject: "Practice session",
+         body: "Got the 12/2 practice invite, thanks. Hannah"}
+  - id: t3b-diane
+    app: mail
+    path: inbox/diane-ardmore-ok
+    title: Diane on the Ardmore
+    x:
+      - {at: "D3 15:50", from: c_diane, to: [worker], cc: [c_sam], subject: "Re: Indiana chapter seminar 1/21",
+         body: "$3,800 works for me if it works for you and Roberta. Diane"}
+  - id: t3b-tom
+    app: mail
+    path: inbox/ameridrive-banner-arrived
+    title: Ameridrive banner
+    x:
+      - {at: "D3 16:00", from: c_sponsor, to: [worker], subject: "Banner arrived?",
+         body: "FedEx says our banner was delivered to the Henley. Where will it go? Tom"}
+      - {at: "D3 18:10", from: c_sponsor, to: [worker], subject: "Re: Hosted wine at booth 1",
+         body: "Thanks for pricing it, Harper. We'll pass on the wine this year. Tom"}
+  - id: t3b-simone-wine
+    app: mail
+    path: inbox/hosted-wine-price
+    title: Hosted wine price
+    x:
+      - {at: "D3 16:30", from: c_simone, to: [worker], subject: "Hosted wine for Ameridrive",
+         body: "Harper, if Ameridrive wants wine at booth 1 during the reception, we can do it on consumption: house red or white $46 a bottle, plus 24% service and 6% tax, and a bartender at $150 plus tax. We'd bill Ameridrive directly on their card. Need a yes by 10 tomorrow. Simone"}
+      - {at: "D3 16:35", from: c_simone, to: [worker], subject: "Sesame check",
+         body: "Sesame: Priti's lunch plate is set up separately and labeled. At breakfast, the everything bagels and the granola bars contain sesame; at the reception, the tuna tartare and the sesame chicken skewers. Everything else is clear. Simone"}
+  - id: t3b-cart
+    app: mail
+    path: inbox/captioner-confirmed
+    title: Captioner confirmed
+    x:
+      - {at: "D3 17:00", from: c_cart, to: [worker], subject: "Beth Ann confirmed for tomorrow",
+         body: "Beth Ann Rourke is confirmed for 08:00 at registration tomorrow. Lakes Captioning"}
+  - id: t3b-eli
+    app: mail
+    path: inbox/briefing-printed
+    title: Briefing printed
+    x:
+      - {at: "D3 17:20", from: c_eli, to: [worker], subject: "Volunteer briefing printed",
+         body: "Printed seven copies of your volunteer briefing for orientation. Eli"}
+  - id: t3b-photo
+    app: mail
+    path: inbox/renee-tomorrow
+    title: Renee tomorrow
+    x:
+      - {at: "D3 17:45", from: c_photo, to: [worker], cc: [c_owen], subject: "See you at 7",
+         body: "Shot list received, thank you. I'll be at registration at 7. Renee"}
+  - id: t3b-frank
+    app: mail
+    path: inbox/panel-mic-check
+    title: Panel mic check
+    x:
+      - {at: "D3 18:20", from: c_frank, to: [worker], subject: "Panel tomorrow",
+         body: "See you at 3:45 for the panel mic check. Frank"}
+  - id: t3b-jordan
+    app: mail
+    path: inbox/jordan-orientation
+    title: Jordan orientation
+    x:
+      - {at: "D3 16:45", from: c_jordan, to: [worker], subject: "Re: Thursday volunteering",
+         body: "Release signed. See you at 5:30 in Salon 3. Jordan"}
+  - id: t3b-kevin
+    app: mail
+    path: inbox/3a-thanks
+    title: 3A thanks
+    x:
+      - {at: "D3 12:40", from: c_spk_3a, to: [worker], subject: "Re: 3A room",
+         body: "Thanks for moving to 130 seats. I'll bring 130 templates. Kevin"}
+  - id: t3b-erin
+    app: mail
+    path: inbox/feb-webinar-title
+    title: February webinar title
+    x:
+      - {at: "D3 13:20", from: c_erin, to: [c_ben], cc: [worker], subject: "February webinar title",
+         body: "Ben, could we retitle my February 10 talk 'Demand response for plants: getting paid to curtail'? Erin"}
+  - id: t3b-joanne
+    app: mail
+    path: inbox/joanne-pike-seat
+    title: Joanne Pike seat
+    x:
+      - {at: "D3 09:50", from: c_lisa, to: [worker], cc: [c_eli], subject: "Joanne Pike called",
+         body: "Joanne Pike called to make sure she has an aisle wheelchair space in the Ballroom. I said yes, it's in your plan. Lisa"}
+
+  # ---------- chat ----------
+  - id: t1b-team
+    x:
+      - {at: "D3 08:05", from: c_eli, body: "loading the van. badges, lanyards, printers, signs that are here"}
+      - {at: "D3 09:00", from: c_roberta, body: "huddle notes in the run of show doc"}
+      - {at: "D3 10:20", from: c_ben, body: "3B is updated in the app"}
+      - {at: "D3 12:45", from: c_jada, body: "on my way, ETA 1:15"}
+      - {at: "D3 13:40", from: c_jada, body: "BrightPath's COI just landed, in Docs. they can set"}
+      - {at: "D3 14:30", from: c_eli, body: "Calder's boxes found at receiving, all 12"}
+      - {at: "D3 16:10", from: c_eli, body: "Salon 1 reset to 130 tonight confirmed with banquets"}
+      - {at: "D3 18:15", from: c_roberta, body: "great load-in everyone. go eat"}
+      - {at: "D3 07:50", from: c_eli, body: "van picked up"}
+      - {at: "D3 11:30", from: c_jada, body: "exhibitor packets printed with the Wi-Fi cards"}
+      - {at: "D3 15:45", from: c_eli, body: "3B inserts arrived, stuffing programs now"}
+      - {at: "D3 17:20", from: c_jada, body: "18 of 18 booths set"}
+  - id: t1-roberta
+    x:
+      - {at: "D3 12:35", from: c_roberta, body: "much better. we'll take $945"}
+      - {at: "D3 11:10", from: c_roberta, body: "approved on the Wolverine $385, I'll reply to the email too"}
+  - id: t3-exhibitor
+    x:
+      - {at: "D3 17:05", from: c_eli, body: "all 6 volunteers here, Jordan too. starting in Salon 3 when you're ready"}
+  - id: t1b-ben
+    x:
+      - {at: "D3 10:30", from: c_ben, body: "the 8 accepted proposers are asking when they'll hear. your letter today?"}
+  - id: t2b-gwen
+    x:
+      - {at: "D3 11:35", from: c_gwen, body: "Got it. 'More than 400 engineers' and 5.25 PDH."}
+  - id: t1b-owen
+    x:
+      - {at: "D3 09:15", from: c_owen, body: "no rush on the webinar copy, today is fine"}
+
+calls:
+  - id: c3b-dana
+    path: 2026-11-04/0905-dana-kowalski
+    title: Inbound call, Dana Kowalski (Meridian AV)
+    start: "D3 09:05:00"
+    turns:
+      - [c_av, "Morning Harper, got your note on Salon 1. The screen we have works fine for a hundred and thirty, and I'll move the second projector over, no charge. While I have you: do you want a wireless handheld in the Ballroom for Q and A? It's two twenty-five.", 6]
+      - [worker, "Great, thank you, Dana. Please confirm in writing that the Salon 1 change is at no added cost, and keep the captioning monitor front left."]
+      - [c_av, "Will do. And the handheld?", 3]
+      - [worker, "No handheld, thanks: the keynote and the panel are on lavs, and Q&A comes in through the app. Revision 2 stays at $26,850."]
+  - id: c3b-print
+    path: 2026-11-04/1030-mike-dziedzic
+    title: Inbound call, Mike Dziedzic (Wolverine Print & Sign)
+    start: "D3 10:30:00"
+    turns:
+      - [c_print, "Harper, Mike at Wolverine. The programs are printed with Raj Mehta in 3B. I can do a one-page insert with the new session and the 3B easel, delivered to the Henley by four today. It's a rush: one eighty-five for the easel and two hundred for the inserts, three eighty-five total. Want me to go?", 6]
+      - [worker, "Please email the $385 quote to me and Roberta Lang; she approves changes to the order, and I'll get you her answer within the hour so you still make four."]
+      - [c_print, "Okay. What exactly goes on them?", 3]
+      - [worker, "Session 3B, 1:30 to 2:30, Salon 2: 'Retro-commissioning chiller plants in K-12 buildings,' Karen Liu, PE, Detroit Public Schools Community District, replacing Raj Mehta. The abstract is in the email I'm sending you."]
+  - id: c3b-gwen
+    path: 2026-11-04/1120-gwen-holloway
+    title: Inbound call, Gwen Holloway (Executive Director)
+    start: "D3 11:20:00"
+    turns:
+      - [c_gwen, "Harper, quick one for my remarks. Owen's first draft said a record four hundred fifty. Can I say record attendance?", 5]
+      - [worker, "Please don't: we have 412 registered, and with 41 exhibitor staff it's 453 people in the building, but I can't confirm it's a record. 'More than 400 engineers' is accurate."]
+      - [c_gwen, "Fine. And PDH, people can get six?", 3]
+      - [worker, "Up to 5.25: the keynote is 0.75, each of the four session blocks 1.0 and the closing panel 0.5, and only with a badge scan at each door."]
+  - id: c3b-lennox
+    path: 2026-11-04/1640-ashley-brandt
+    title: Inbound call, Ashley Brandt (The Lennox Columbus)
+    start: "D3 16:40:00"
+    turns:
+      - [c_lennox, "Harper, good news: seventy-five percent, cumulative, with credit for resold rooms, and the F and B minimum at thirty-seven five. But the cancellation schedule is our corporate standard; I can't change it. Can Gwen sign tomorrow?", 6]
+      - [worker, "That's real progress, thank you. But as drafted we'd owe 50% of $64,350, that's $32,175, from the day we sign, because the 180-day date passed on October 14. We need 25% from signing until January 12."]
+      - [c_lennox, "I'll take it to my GM. If he agrees, what's next?", 4]
+      - [worker, "Send draft 2 with all of it. Roberta reviews it and Gwen Holloway signs, and we'll turn it around within two business days, inside your November 13 hold."]
+
+actions:
+  # meetings, travel and calls the assistant cannot see
+  - {at: "D3 08:40", kind: noop, target: cal-events-team, minutes: 20, summary: "events huddle before load-in"}
+  - {at: "D3 10:50", kind: noop, target: c_simone, minutes: 8, summary: "call with Simone about the Salon 1 reset and tomorrow's timeline"}
+  - {at: "D3 11:00", kind: noop, target: c_cart, minutes: 4, summary: "call with Lakes Captioning about Beth Ann's parking and feeds"}
+  - {at: "D3 11:32", kind: noop, target: cal-events-team, minutes: 45, summary: "drove from Ann Arbor to the Henley (43 miles)"}
+  - {at: "D3 12:50", kind: noop, target: c_bus, minutes: 5, summary: "call with Motor City dispatch about the driver and the pickup point"}
+  - {at: "D3 14:50", kind: noop, target: c_paul, minutes: 6, summary: "call with Paul: late check-in and a car from DTW for Alicia"}
+  - {at: "D3 15:15", kind: noop, target: c_calder, minutes: 5, summary: "call with Wendy at Calder about the boxes"}
+  - {at: "D3 15:55", kind: noop, target: c_sponsor, minutes: 5, summary: "call with Tom about the wine and the banner"}
+  - {at: "D3 16:20", kind: noop, target: c_frank, minutes: 8, summary: "call with Frank about the closing panel run"}
+  - {at: "D3 16:55", kind: noop, target: c_photo, minutes: 4, summary: "call with Renee confirming 07:00"}
+  - {at: "D3 17:30", kind: noop, target: cal-events-team, minutes: 45, summary: "volunteer orientation on site (Salon 3)"}
+  - {at: "D3 09:06", kind: noop, target: c3b-dana, summary: "took Dana's call"}
+  - {at: "D3 10:31", kind: noop, target: c3b-print, summary: "took Mike's call"}
+  - {at: "D3 11:21", kind: noop, target: c3b-gwen, summary: "took Gwen's call"}
+  - {at: "D3 16:41", kind: noop, target: c3b-lennox, summary: "took Ashley's call"}
+
+  # work
+  - {id: a3b-dana-note, at: "D3 09:10", kind: update, target: c3b-dana, summary: "case note on Dana's call",
+     body: "Meridian: second projector and screen to Salon 1 for the 130 set, no added cost (Dana confirming in writing). Declined the $225 Ballroom handheld: keynote and panel on lavs, Q&A through the app. Rev 2 stays $26,850."}
+  - {id: a3b-lennox-asks, at: "D3 09:30", kind: new, app: mail, path: sent/lennox-draft-1-comments, target: m3b-lennox, to: [c_lennox], cc: [c_roberta], subject: "Spring Summit 2027: comments on draft 1",
+     summary: "sent the Lennox our comments on draft 1",
+     body: "Ashley, thanks for draft 1. Our comments: (2) attrition at 75%, measured cumulatively over the block (not night by night), less any rooms you resell; (3) an F&B minimum of $37,500, which is 250 attendees at your $150 package, not 280; (5) the cancellation schedule: arrival is April 12, so the 180-day date has already passed and we'd be at 50% the day we sign; please make it 25% from signing to January 12, 2027, 50% to February 11, and 100% after; (7) force majeure to include events that make the meeting inadvisable or commercially impracticable. Everything else works. Roberta Lang reviews and Gwen Holloway signs. Harper"}
+  - {id: a3b-print-note, at: "D3 10:36", kind: update, target: c3b-print, summary: "case note on Mike's call",
+     body: "Wolverine: programs printed with Raj in 3B. Rush insert ($200) and 3B easel ($185), $385, delivered to the Henley by 16:00. Quote to Roberta for approval. Text: 3B, 13:30-14:30, Salon 2, Karen Liu, PE, 'Retro-commissioning chiller plants in K-12 buildings'."}
+  - {id: a3b-print, at: "D3 10:40", kind: new, app: mail, path: sent/wolverine-3b-insert, target: m3b-print, to: [c_print, c_roberta], subject: "3B insert and easel: $385 rush, approval and text",
+     summary: "sent Wolverine the 3B text and asked Roberta to approve the $385",
+     body: "Roberta: Wolverine can print a one-page program insert ($200) and the 3B easel ($185) for $385, delivered by 4 today; printing stays under budget ($3,780 + $385 = $4,165 of $4,200). Can you approve? Mike, the text: Session 3B, 1:30-2:30 p.m., Salon 2. 'Retro-commissioning chiller plants in K-12 buildings.' Karen Liu, PE, Detroit Public Schools Community District (replacing Raj Mehta). Abstract: How a 104-building district found 18% chiller-plant savings through retro-commissioning, trend analysis and low-cost control fixes. Deliver to Henley receiving, attention Eli Brooks."}
+  - {id: a3b-acceptance, at: "D3 10:40", kind: edit, app: docs, path: spring-summit-2027/acceptance-letter, target: doc-acceptance, title: Spring Summit 2027 acceptance letter (draft), summary: "drafted the Spring Summit acceptance letter",
+     content: "# Spring Facilities Summit 2027: acceptance letter (for the 8 accepted proposals; Ben merges names and titles in Oxford Abstracts)\n\nSubject: Accepted: your session at the Spring Facilities Summit, April 13-14, 2027\n\nCongratulations: the program committee has accepted your proposal for the GLSFE Spring Facilities Summit, Tuesday-Wednesday, April 13-14, 2027, at The Lennox Hotel Columbus. Out of 46 proposals, yours is one of 8 selected.\n\n- Your session: 60 minutes, about 45 of presentation and 15 of discussion, so attendees earn 1.0 PDH. We'll confirm the day and time by December 18.\n- Complimentary registration for the lead presenter; co-presenters register at the member rate.\n- Please confirm by Friday, November 20 by signing the speaker agreement we'll send by DocuSign, and complete the speaker form (bio, three learning objectives) by Friday, December 4.\n- Slides are due Monday, March 29, 2027, two weeks before the Summit.\n- Sessions are educational: no product promotion or pricing in the presentation.\n- Hotel: the GLSFE group rate of $179 at the Lennox; booking link with your agreement. Travel is at your own expense.\n\nQuestions: Harper Quinn, Senior Events Manager, 734-555-0160. Thank you for sharing your work with our members.\nFrank Delgado, PE, Program Chair, and the Spring Summit program committee"}
+  - {id: a3b-promo, at: "D3 10:55", kind: reply, target: t3b-owen-promo, to: [c_owen], cc: [c_ben], summary: "sent Owen the webinar series promo copy",
+     body: "Owen, here's the copy (118 words): Winter Webinar Series: three lunch-hour webinars, 12:00-1:00 p.m. ET, 1.0 PDH each. Wednesday, December 9: Cooling tower water treatment, Dr. Hannah Cole, Purdue University. Wednesday, January 13: Arc flash program basics, Luis Romero, PE, Wayne State University. Wednesday, February 10: Demand response for plants, Erin Walsh, Lakeland Energy Partners. Members $49, non-members $79 per webinar. Live Q&A with every speaker; certificates by email. ASL interpreting and captions are available on request: tell us when you register. Register on Zoom from the GLSFE events page."}
+  - {id: a3b-ardmore, at: "D3 11:05", kind: new, app: chat, path: "@roberta/dm", target: t1-roberta, to: [c_roberta], summary: "sent Roberta the Ardmore agreement to sign",
+     body: "Indiana chapter seminar (1/21, Ardmore Indianapolis): they countered at a $3,800 F&B minimum (from $4,500; 80 people at $46 is $3,680), room rental waived, set for 100. With the 22% service charge that's $4,636 before tax, plus $425 AV: within your signing authority. Diane and Sam are fine with it. Revised agreement is in my inbox from Brian; could you sign it?"}
+  - {id: a3b-slides, at: "D3 11:25", kind: reply, target: t3b-karen, to: [c_av], summary: "confirmed to Dana that every presentation is in",
+     body: "Dana, with Karen's 3B deck (38 slides, no video) all presentation files are in: keynote (video with sound on slide 22), 1A (Ines's v2), 1B, 1C, 2A, 2B, 2C, 3A, 3B, 3C, 4A, 4B, 4C. The closing panel has no slides. Please load them in tonight's room check; presenters bring USB backups."}
+  - {id: a3b-gwen-note, at: "D3 11:25", kind: update, target: c3b-gwen, summary: "case note on Gwen's call",
+     body: "Gwen asked to say 'record attendance' (Owen's first draft said 450). Advised against: 412 registered, 453 people with exhibitor staff, record not verified; 'more than 400 engineers'. PDH: up to 5.25, scan required."}
+  - {id: a3b-asl, at: "D3 11:30", kind: forward, target: t3b-asl, to: [c_roberta], cc: [c_ben], summary: "sent Roberta the ASL quote for approval",
+     body: "Roberta, for the Deaf member registered for the December 9 webinar: Signs of Michigan quotes a team of two, $570 total ($380 for the webinar, $190 for the 12/2 tech check). There's no interpreting line in the webinar budget; it's a required accommodation at no cost to him, so I'd charge it to the webinar series. OK to confirm by 11/13?"}
+  - {id: a3b-security, at: "D3 12:25", kind: reply, target: t3b-henley-sec, to: [c_henley_sec], cc: [c_simone, c_eli], summary: "sent Henley security the contacts and headcount",
+     body: "Mr. Hayes, thank you. On-site contacts tomorrow: Harper Quinn 734-555-0160 (lead), Eli Brooks 734-555-0162 (registration), Roberta Lang 734-555-0161. Headcount: 412 registered attendees (speakers included), 41 exhibitor staff and 7 volunteers, 06:30-18:30. Our staff and volunteers will call Security dispatch at 313-555-0499 first for any medical issue, and we'll keep the first aid room behind registration clear. One attendee uses a wheelchair (Ballroom aisle space)."}
+  - {id: a3b-calder, at: "D3 12:40", kind: reply, target: t3b-calder, to: [c_calder], cc: [c_jada], summary: "told Calder the package handling is the exhibitor's",
+     body: "Wendy, I'm glad the boxes are in. Package handling ($15 a box, $180 for your 12) is charged to each exhibitor by the Henley under the exhibits addendum, so GLSFE can't pick it up; the hotel will run it on your card at pickup. Your booth 12 is ready for you from 1:00."}
+  - {id: a3b-banner, at: "D3 16:05", kind: reply, target: t3b-tom, to: [c_sponsor], cc: [c_eli], summary: "told Tom where his banner goes",
+     body: "Tom, it's here. Eli will stand your banner at the Grand Foyer entrance from the Ballroom, next to the reception bar, where everyone walks in at 4:30, and we'll check it in the morning. Harper"}
+  - {id: a3b-wine, at: "D3 16:50", kind: reply, target: t3b-tom, to: [c_sponsor], summary: "priced hosted wine for Ameridrive",
+     body: "Tom, outside wine isn't allowed under the Henley's license, but the hotel can host wine at booth 1 during the reception, on consumption, billed to Ameridrive directly: $46 a bottle plus 24% service and 6% tax, $60.46 a bottle all-in, and a bartender at $159 with tax. Simone needs a yes by 10 tomorrow."}
+  - {id: a3b-priti, at: "D3 16:45", kind: new, app: mail, path: sent/priti-sesame-items, target: m3b-priti, to: [c_priti], subject: "Thursday: what to avoid for your sesame allergy",
+     summary: "told Priti which items contain sesame",
+     body: "Hi Priti, the Henley has your lunch prepared separately and labeled. Please avoid the everything bagels and the granola bars at breakfast, and the tuna tartare and sesame chicken skewers at the reception; everything else is clear. Find me at registration in the morning and I'll introduce you to the banquet captain. Harper"}
+  - {id: a3b-lennox-note, at: "D3 16:46", kind: update, target: c3b-lennox, summary: "case note on Ashley's call",
+     body: "Lennox agreed: 75% cumulative with resale credit; F&B minimum $37,500 (revenue $64,350). Not yet: cancellation schedule (as drafted 50% = $32,175 from signing). Asked for 25% from signing to 1/12/2027; she's taking it to her GM. Draft 2 to Roberta, then Gwen signs."}
+
+needs:
+  - id: n3b-dana-1
+    title: Get the Salon 1 change at no cost, in writing
+    kind: call_line
+    task: 1215
+    evidence: [c3b-dana, doc-av-revision]
+    ref: c3b-dana.2
+    check: {all: [{target: c3b-dana}, {action_in: [say]}, {mentions_any: ["no added cost", "no charge", "no cost"]}, {mentions_any: [writing]}]}
+    must: ["Confirm in writing at no added cost; captioning monitor stays front left"]
+    minutes: [0.3, "a spoken line"]
+    intent: "Free is good; written is better."
+  - id: n3b-dana-2
+    title: Decline the handheld
+    kind: call_line
+    task: 1212
+    evidence: [c3b-dana, doc-av-revision, doc-agenda]
+    ref: c3b-dana.4
+    check: {all: [{target: c3b-dana}, {action_in: [say]}, {mentions_any: ["No handheld", "don't need a handheld", "no to the handheld"]}, {number_equals: {value: 26850}}]}
+    must: ["Not needed (lavs, app Q&A); the order stays at $26,850"]
+    must_not: ["Adds the $225 handheld"]
+    minutes: [0.3, "a spoken line"]
+    intent: "We don't need it, and it's not in the order."
+  - id: n3b-dana-note
+    title: Case note on the AV call
+    kind: update
+    task: 1217
+    from: "D3 09:05"
+    due: "D3 19:00"
+    evidence: [c3b-dana]
+    ref: a3b-dana-note
+    check: {all: [{target: c3b-dana}, {mentions_any: [handheld]}, {number_equals: {value: 26850}}]}
+    must: ["Salon 1 change free; handheld declined; order total"]
+    minutes: [2, "a case note"]
+    intent: "In case the invoice says otherwise."
+  - id: n3b-lennox-asks
+    title: Send the Lennox our comments on draft 1
+    kind: follow_up
+    task: 1219
+    from: "D2 16:30"
+    due: "D3 12:00"
+    evidence: [doc-lennox-review, doc-lennox-contract]
+    ref: a3b-lennox-asks
+    check: {all: [{to_includes: c_lennox}, {number_equals: {value: 37500}}, {mentions_any: ["January 12", "1/12"]}, {mentions_any: [cumulative, cumulatively]}]}
+    must: ["Attrition 75% cumulative with resale; $37,500 minimum; cancellation from signing at 25%; force majeure; who signs"]
+    minutes: [10, "a contract comments email"]
+    intent: "The review, turned into asks."
+  - id: n3b-print-1
+    title: The rush reprint goes to Roberta for approval
+    kind: call_line
+    task: 1219
+    evidence: [c3b-print, pol-events]
+    ref: c3b-print.2
+    check: {all: [{target: c3b-print}, {action_in: [say]}, {mentions_any: [Roberta]}, {number_equals: {value: 385}}]}
+    must: ["Quote in writing; Roberta approves order changes; fast"]
+    minutes: [0.3, "a spoken line"]
+    intent: "Small, but it's a change to the order."
+  - id: n3b-print-2
+    title: Exact text for the 3B insert and easel
+    kind: call_line
+    task: 1214
+    evidence: [c3b-print, doc-karen, doc-agenda]
+    ref: c3b-print.4
+    check: {all: [{target: c3b-print}, {action_in: [say]}, {mentions_any: [Karen Liu]}, {mentions_any: [Salon 2]}]}
+    must: ["Session, time, room, title, speaker, replacing Raj"]
+    minutes: [0.3, "a spoken line"]
+    intent: "Read it from Karen's details."
+  - id: n3b-print
+    title: Quote to Roberta, text to Wolverine
+    kind: follow_up
+    task: 1221
+    from: "D3 10:30"
+    due: "D3 11:30"
+    evidence: [c3b-print, doc-karen, doc-reforecast]
+    ref: a3b-print
+    check: {all: [{to_includes: c_roberta}, {to_includes: c_print}, {number_equals: {value: 385}}, {mentions_any: [Karen Liu]}]}
+    must: ["$385 for Roberta to approve, still under the printing line; the exact text and delivery"]
+    minutes: [5, "an approval request with copy"]
+    intent: "Within the hour, as promised."
+  - id: n3b-print-note
+    title: Case note on the print call
+    kind: update
+    task: 1217
+    from: "D3 10:30"
+    due: "D3 19:00"
+    evidence: [c3b-print]
+    ref: a3b-print-note
+    check: {all: [{target: c3b-print}, {number_equals: {value: 385}}]}
+    must: ["What, cost, approval, delivery"]
+    minutes: [2, "a case note"]
+    intent: "Record it."
+  - id: n3b-gwen-1
+    title: Keep the Executive Director off an unsupported "record"
+    kind: call_line
+    task: 1221
+    evidence: [c3b-gwen, doc-reg, t2b-eli-badges]
+    ref: c3b-gwen.2
+    check: {all: [{target: c3b-gwen}, {action_in: [say]}, {number_equals: {value: 412}}, {mentions_any: ["more than 400", "can't confirm"]}]}
+    must: ["412 registered (453 with exhibitor staff); 'record' unverified; 'more than 400'"]
+    must_not: ["Confirms 'record' or 450"]
+    minutes: [0.3, "a spoken line"]
+    intent: "The facts she can stand behind."
+  - id: n3b-gwen-2
+    title: The PDH number for Gwen
+    kind: call_line
+    task: 1213
+    evidence: [c3b-gwen, doc-agenda, pol-events]
+    ref: c3b-gwen.4
+    check: {all: [{target: c3b-gwen}, {action_in: [say]}, {number_equals: {value: 5.25}}]}
+    must: ["Up to 5.25 PDH, with badge scans"]
+    minutes: [0.3, "a spoken line"]
+    intent: "Not six."
+  - id: n3b-gwen-note
+    title: Case note on Gwen's call
+    kind: update
+    task: 1217
+    from: "D3 11:20"
+    due: "D3 19:00"
+    evidence: [c3b-gwen]
+    ref: a3b-gwen-note
+    check: {all: [{target: c3b-gwen}, {number_equals: {value: 412}}, {number_equals: {value: 5.25}}]}
+    must: ["What she asked, what was advised"]
+    minutes: [2, "a case note"]
+    intent: "Record it."
+  - id: n3b-lennox-1
+    title: Push back on the cancellation schedule with the number
+    kind: call_line
+    task: 1219
+    evidence: [c3b-lennox, doc-lennox-review, doc-lennox-contract]
+    ref: c3b-lennox.2
+    check: {all: [{target: c3b-lennox}, {action_in: [say]}, {number_equals: {value: 32175}}, {mentions_any: ["January 12"]}]}
+    must: ["50% of $64,350 = $32,175 from signing because the 180-day date passed; ask 25% until 1/12"]
+    must_not: ["Accepts the standard schedule"]
+    minutes: [0.3, "a spoken line with arithmetic"]
+    intent: "Recompute with the new minimum."
+  - id: n3b-lennox-2
+    title: Draft 2, review, then the ED signs
+    kind: call_line
+    task: 1219
+    evidence: [c3b-lennox, pol-events]
+    ref: c3b-lennox.4
+    check: {all: [{target: c3b-lennox}, {action_in: [say]}, {mentions_any: [Gwen]}, {mentions_any: [draft 2]}]}
+    must: ["Everything in draft 2; Roberta reviews; Gwen signs; inside the hold"]
+    must_not: ["Says Gwen will sign tomorrow regardless"]
+    minutes: [0.3, "a spoken line"]
+    intent: "Not until it's right."
+  - id: n3b-lennox-note
+    title: Case note on the Lennox call
+    kind: update
+    task: 1217
+    from: "D3 16:40"
+    due: "D3 19:00"
+    evidence: [c3b-lennox]
+    ref: a3b-lennox-note
+    check: {all: [{target: c3b-lennox}, {number_equals: {value: 37500}}, {number_equals: {value: 32175}}]}
+    must: ["Agreed terms; open point; next step"]
+    minutes: [2, "a case note"]
+    intent: "Roberta reads these."
+  - id: n3b-acceptance
+    title: Acceptance letter for the eight Spring Summit sessions
+    kind: doc
+    task: 1229
+    from: "D1 15:20"
+    due: "D3 17:00"
+    evidence: [t1b-frank, doc-cfp-slate, doc-pipeline, pol-registration, pol-events]
+    ref: a3b-acceptance
+    check: {all: [{mentions_any: ["April 13"]}, {mentions_any: [complimentary]}, {mentions_any: ["1.0 PDH"]}]}
+    must: ["Dates and venue; session length for 1.0 PDH; complimentary registration; deadlines for agreement, form and slides; no product promotion"]
+    minutes: [20, "an acceptance letter (estimate)"]
+    intent: "Everything they need to say yes."
+  - id: n3b-promo
+    title: Copy for the webinar series promotion
+    kind: reply
+    task: 1225
+    from: "D3 09:10"
+    due: "D3 19:00"
+    evidence: [t3b-owen-promo, doc-pipeline]
+    ref: a3b-promo
+    check: {all: [{to_includes: c_owen}, {mentions_any: ["December 9"]}, {mentions_any: ["$49"]}, {mentions_any: [PDH]}]}
+    must: ["Dates, speakers, topics, PDH, prices, accommodations, how to register"]
+    minutes: [15, "promotional copy"]
+    intent: "Accurate and short."
+  - id: n3b-ardmore
+    title: Send the Ardmore agreement to Roberta to sign
+    kind: escalate
+    task: 1219
+    from: "D3 09:20"
+    due: "D3 17:00"
+    evidence: [t3b-ardmore, doc-ardmore-proposal, pol-events]
+    ref: a3b-ardmore
+    check: {all: [{to_includes: c_roberta}, {number_equals: {value: 3800}}, {mentions_any: [sign]}]}
+    must: ["$3,800 counter vs $3,680; total within her authority; she signs"]
+    minutes: [6, "an approval request"]
+    intent: "Close enough to 80 heads. Roberta signs."
+  - id: n3b-slides
+    title: Confirm every presentation is in for AV
+    kind: follow_up
+    task: 1215
+    from: "D3 11:15"
+    due: "D3 17:00"
+    evidence: [t3b-karen, doc-speaker-tracker]
+    ref: a3b-slides
+    check: {all: [{to_includes: c_av}, {mentions_any: [3B]}, {mentions_any: [1C]}]}
+    must: ["All files accounted for, the keynote's video, USB backups"]
+    minutes: [6, "a tracker check"]
+    intent: "Nothing missing tomorrow morning."
+  - id: n3b-asl
+    title: Approval for the ASL interpreters
+    kind: escalate
+    task: 1221
+    from: "D3 10:20"
+    due: "D5 16:00"
+    evidence: [t3b-asl, doc-asl-quote, pol-events]
+    ref: a3b-asl
+    check: {all: [{to_includes: c_roberta}, {number_equals: {value: 570}}]}
+    must: ["$570 quote, no cost to the member, which budget, confirm by 11/13"]
+    minutes: [4, "an approval request"]
+    intent: "Book it; Roberta OKs the spend."
+  - id: n3b-security
+    title: Emergency contacts and headcount for Henley security
+    kind: reply
+    task: 1211
+    from: "D3 11:40"
+    due: "D3 19:00"
+    evidence: [t3b-henley-sec, doc-reg]
+    ref: a3b-security
+    check: {all: [{to_includes: c_henley_sec}, {number_equals: {value: 412}}, {mentions_any: ["0499", dispatch]}]}
+    must: ["On-site contacts, headcount, the security-first procedure for staff and volunteers"]
+    minutes: [6, "a security reply"]
+    intent: "Before something happens."
+  - id: n3b-calder
+    title: Package handling is the exhibitor's charge
+    kind: reply
+    task: 1214
+    from: "D3 12:20"
+    due: "D3 19:00"
+    evidence: [t3b-calder, doc-henley-exhibits]
+    ref: a3b-calder
+    check: {all: [{to_includes: c_calder}, {number_equals: {value: 180}}, {mentions_any: [exhibitor]}]}
+    must: ["$15 x 12 = $180 billed to the exhibitor under the addendum"]
+    must_not: ["Agrees GLSFE will pay"]
+    minutes: [5, "a reply on the rules"]
+    intent: "Not ours to pay."
+  - id: n3b-banner
+    title: Place the platinum sponsor's banner
+    kind: reply
+    task: 1220
+    from: "D2 15:55"
+    due: "D3 19:00"
+    evidence: [t2b-tom-banner, t3b-tom, pol-sponsorship]
+    ref: a3b-banner
+    check: {all: [{to_includes: c_sponsor}, {mentions_any: [banner]}, {mentions_any: [reception]}]}
+    must: ["A visible spot for the reception; who places it"]
+    minutes: [3, "a short reply"]
+    intent: "Reception signage is his benefit."
+  - id: n3b-wine
+    title: Price hosted wine for the sponsor
+    kind: reply
+    task: 1214
+    from: "D3 16:30"
+    due: "D4 10:00"
+    evidence: [t3b-simone-wine, t3-exhibitor]
+    ref: a3b-wine
+    check: {all: [{to_includes: c_sponsor}, {number_equals: {value: 60.46, tol: 0.01}}, {number_equals: {value: 159}}]}
+    must: ["Per-bottle all-in and bartender with tax; billed to Ameridrive; deadline"]
+    minutes: [6, "a priced offer"]
+    intent: "Give him the all-in number."
+  - id: n3b-priti
+    title: Tell the allergic attendee what to avoid
+    kind: follow_up
+    task: 1209
+    from: "D3 16:35"
+    due: "D4 07:00"
+    evidence: [t3b-simone-wine, t2b-priti]
+    ref: a3b-priti
+    check: {all: [{to_includes: c_priti}, {mentions_any: [bagels]}, {mentions_any: [skewers, tartare]}]}
+    must: ["The specific breakfast and reception items with sesame"]
+    minutes: [3, "a short note"]
+    intent: "She needs the list before breakfast."
+  - id: n3b-coi-chase
+    title: Chase BrightPath's certificate before move-in
+    kind: follow_up
+    task: 1210
+    from: "D3 10:05"
+    due: "D3 13:30"
+    evidence: [t2b-brightpath, doc-exhibitors, doc-henley-exhibits]
+    ref_text: "Carmen, the certificate of insurance hasn't arrived and booth 11 can't move in at 2 without it: please have your broker email it to me now ($1,000,000 general liability, Henley Hotel Detroit and GLSFE as additional insureds)."
+    check: {all: [{to_includes: c_brightpath}, {mentions_any: [certificate, COI]}, {mentions_any: [move in, move-in, "booth 11"]}]}
+    must: ["Not arrived; needed before move-in; exact requirements"]
+    minutes: [4, "a chase"]
+    intent: "They said this morning."
+
+traps:
+  - id: tr3b-handheld
+    title: Adding the handheld mic
+    kind: scope_creep
+    evidence: [c3b-dana, doc-av-revision]
+    check: {all: [{target: c3b-dana}, {action_in: [say]}, {mentions_any: ["add the handheld", "yes to the handheld", "go ahead with the handheld", "add a handheld", "take the handheld"]}]}
+    correct: "Not needed: lavs and app Q&A; it would add $225 outside the signed order."
+    severity: low
+  - id: tr3b-gwen-record
+    title: Telling Gwen she can claim a record
+    kind: stale_info
+    evidence: [c3b-gwen, doc-reg]
+    check: {all: [{target: c3b-gwen}, {action_in: [say]}, {mentions_any: ["say record", "it's a record", "record attendance is", "yes, record", "450 is right"]}, {not: {number_equals: {value: 412}}}]}
+    correct: "412 registered; 'record' is unverified."
+    severity: low
+  - id: tr3b-calder-pay
+    title: Promising GLSFE pays Calder's package handling
+    kind: human_only_decision
+    evidence: [t3b-calder, doc-henley-exhibits]
+    check: {all: [{to_includes: c_calder}, {mentions_any: ["we'll cover", "we will cover", "GLSFE will pay", "we'll take care of the", "on us"]}]}
+    correct: "The addendum bills package handling to the exhibitor."
+    severity: low
