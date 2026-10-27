@@ -134,37 +134,95 @@ def _excerpt(text: str, keys: set[str]) -> str:
     return head + "\n[... lines matching the drafts' identifiers:]\n" + "\n".join(hits)[:FILE_CHARS - 1500]
 
 
-def _context(ep: Episode, p: dict, t: int, needs: list) -> str:
-    """What the assistant could see, as of the proposal: the target, the need's evidence, the files it read."""
-    files = render_world(ep, t)
-    keys = {k for d in p["drafts"] for k in re.findall(r"[\w@.#-]*\d[\w@.#-]*", " ".join(str(v) for v in d.values()))
-            if len(k) >= 3}
-    paths = [p["target"]]
-    for e in [e for n in needs for e in n.evidence]:
-        paths += [thread_file(th) for th in ep.threads if th.id == e or any(x.id == e for x in th.exchanges)]
-        paths += [document_file(d) for d in ep.documents if d.id == e]
-    paths += reversed(p.get("read", []))
-    parts, used, seen = [], 0, set()
+_ID = re.compile(r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+|\b\d{1,2}/\d{1,2}(?:/\d{2,4})?\b|\b\d{1,2}:\d{2}\b"
+                 r"|\b(?=[\w#-]*\d)(?=[\w#-]*[A-Za-z])[\w#-]{4,}\b")
+MAX_FACTS = 40
+HISTORY_ROWS = 8
+
+
+def draft_facts(p: dict) -> tuple[list[str], list[float]]:
+    """The checkable facts in a proposal's drafts: identifiers (ids, emails, dates, times) and amounts."""
+    ids, nums = [], []
+    for d in p["drafts"]:
+        text = " ".join(str(d.get(k, "") or "") for k in ("to", "cc", "subject", "text"))
+        found = [m.strip(".-") for m in _ID.findall(text)]
+        ids += found
+        rest = _ID.sub(" ", text)                       # numbers inside identifiers are not amounts
+        nums += [abs(n) for n in checks.numbers(rest) if not (n.is_integer() and 0 <= abs(n) <= 31)]  # list items, days
+    return list(dict.fromkeys(ids)), list(dict.fromkeys(nums))
+
+
+def _locate(files: dict, order: list[str], fact, is_num: bool) -> str | None:
+    paths = [x for x in order if x in files] + sorted(set(files) - set(order))
     for path in paths:
-        f = files.get(path)
-        if not f or path in seen or path.endswith(".xlsx"):
-            continue
-        seen.add(path)
-        block = f"### {path}\n" + _excerpt(f.data.decode(errors="replace"), keys)
-        if used + len(block) > CONTEXT_CHARS:
-            continue
-        parts.append(block)
-        used += len(block)
-    world = " ".join(f.data.decode(errors="replace") for f in files.values()) + " " + " ".join(
-        x.body for th in ep.threads for x in th.exchanges if seconds(x.at) <= t)
-    unseen = sorted(k for k in keys if k.strip(".-") and k.strip(".-") not in world)
-    note = ("\n\nIdentifiers and numbers in the drafts found nowhere in the world at this time (they may be computed, "
-            "or invented): " + ", ".join(unseen[:40])) if unseen else ""
-    return ("\n\n".join(parts) or "(no file context)") + note
+        for ln in files[path].data.decode(errors="replace").splitlines():
+            hit = (any(abs(abs(n) - fact) < 0.005 for n in checks.numbers(ln)) if is_num
+                   else re.search(r"(?<![\w/])" + re.escape(fact) + r"(?![\w/])", ln, re.I) is not None)
+            if hit:
+                return f"{path}: {ln.strip()[:160]}"
+    return None
 
 
-def judge_prompt(ep: Episode, p: dict, needs: list) -> str:
+def fact_table(ep: Episode, p: dict, t: int, needs: list, files: dict, order: list[str]) -> str:
+    """Each fact in the drafts, located in the world as of t, or found nowhere (computed or invented)."""
+    ids, nums = draft_facts(p)
+    key = " ".join(need.reference.text or next((x.body for th in ep.threads for x in th.exchanges
+                                                 if x.id == need.reference.exchange_id), "") for need in needs)
+    rows = []
+    for fact, is_num in [(i, False) for i in ids] + [(n, True) for n in nums]:
+        where = _locate(files, order, fact, is_num)
+        shown = (str(int(fact)) if is_num and fact.is_integer() and 1900 <= fact <= 2100
+                 else f"{fact:,.2f}".rstrip("0").rstrip(".") if is_num else fact)
+        if where:
+            rows.append(f"- {shown}: {where}")
+        elif (any(abs(abs(n) - fact) < 0.005 for n in checks.numbers(key)) if is_num else fact.lower() in key.lower()):
+            rows.append(f"- {shown}: not in the world, but in {ep.worker.name.split()[0]}'s own version (computed)")
+        else:
+            rows.append(f"- {shown}: FOUND NOWHERE in the world (computed from other figures, or invented)")
+    text = " ".join(str(d.get(k, "") or "") for d in p["drafts"] for k in ("to", "cc", "text"))
+    for c in ep.contacts:
+        first, last = c.name.split()[0], c.name.split()[-1]
+        if any(len(w) >= 3 and re.search(rf"\b{re.escape(w)}\b", text) for w in {c.name, first, last}):
+            rows.append(f"- {c.name}: {c.role}, {c.org}" + (f", {c.email}" if c.email else "") + " (contacts)")
+    return "\n".join(rows[:MAX_FACTS]) or "(no identifiers, amounts or people)"
+
+
+def open_work(ep: Episode, t: int, needs: list) -> str:
+    """The planned work open at t, and whether the worker had already done it."""
+    rows = []
+    for n in ep.needs:
+        if not seconds(n.discoverable_at) <= t <= seconds(n.deadline):
+            continue
+        done = next((seconds(x.at) for th in ep.threads for x in th.exchanges if x.id == n.reference.exchange_id), None)
+        status = f"done by {ep.worker.name.split()[0]} at {fmt(done)}" if done is not None and done <= t else "not done yet"
+        mark = " (this proposal does this work)" if n in needs else ""
+        rows.append(f"- {n.title} (due {n.deadline}; {status}){mark}")
+    return "\n".join(rows) or "(none)"
+
+
+def history(ep: Episode, p: dict, t: int, needs: list, earlier: list[dict]) -> str:
+    """What the worker and the assistant had already done on this matter by t."""
+    first = ep.worker.name.split()[0]
+    idx = path_index(ep)
+    ids = {idx[p["target"]][2]} if p["target"] in idx else set()
+    ids |= {e for n in needs for e in n.evidence}
+    rows = []
+    for a in ep.worker_actions:
+        if seconds(a.at) <= t and (a.target in ids or any(n.reference.exchange_id == a.produces for n in needs)):
+            body = next((x.body for th in ep.threads for x in th.exchanges if x.id == a.produces), "")
+            rows.append(f"- {a.at} {first} {a.summary}" + (f": \"{body[:400]}\"" if body else ""))
+    for q in earlier:
+        text = str(q["drafts"][0].get("text", "")) if q["drafts"] else ""
+        rows.append(f"- {q['t']} the assistant already proposed ({q['action']} on {q['target']}): \"{text[:300]}\"")
+    return "\n".join(rows[-HISTORY_ROWS:]) or "(nothing yet)"
+
+
+def judge_prompt(ep: Episode, p: dict, needs: list, earlier: list[dict] = ()) -> str:
     t = seconds(p["t"])
+    files = render_world(ep, t)
+    order = [p["target"]] + [thread_file(th) for n in needs for e in n.evidence for th in ep.threads if th.id == e] \
+        + [document_file(d) for n in needs for e in n.evidence for d in ep.documents if d.id == e] \
+        + list(reversed(p.get("read", [])))
     drafts = "\n".join(f"### Draft {i + 1}: {d.get('label', '')}\nTo: {d.get('to', '')}  Cc: {d.get('cc', '')}  "
                        f"Subject: {d.get('subject', '')}\n{d.get('text', '')}" for i, d in enumerate(p["drafts"]))
     blocks = []
@@ -179,8 +237,31 @@ def judge_prompt(ep: Episode, p: dict, needs: list) -> str:
                                             must_not="; ".join(need.rubric.must_not) or "(none)", reference=ref))
     return prompts.JUDGE.format(worker_name=ep.worker.name, worker_title=ep.worker.title, employer=ep.employer.name,
                                 first_name=ep.worker.name.split()[0], when=fmt(t),
-                                profession_prompt=ep.profession_prompt, rubric_block="\n".join(blocks),
-                                context=_context(ep, p, t, needs), target=p["target"], action=p["action"], drafts=drafts)
+                                profession_prompt=ep.profession_prompt,
+                                rubric_block="\n".join(blocks) or prompts.NO_RUBRIC,
+                                open_work=open_work(ep, t, needs), history=history(ep, p, t, needs, list(earlier)),
+                                facts=fact_table(ep, p, t, needs, files, order),
+                                context=_context(ep, p, t, needs, files, order), target=p["target"],
+                                action=p["action"], drafts=drafts)
+
+
+def _context(ep: Episode, p: dict, t: int, needs: list, files: dict, order: list[str]) -> str:
+    """The files themselves, as of the proposal: the target, the need's evidence, the files the assistant opened."""
+    ids, _ = draft_facts(p)
+    keys = set(ids) | {k for d in p["drafts"] for k in re.findall(r"[\w@.#-]*\d[\w@.#-]*", str(d.get("text", "")))
+                       if len(k) >= 3}
+    parts, used, seen = [], 0, set()
+    for path in order:
+        f = files.get(path)
+        if not f or path in seen or path.endswith(".xlsx"):
+            continue
+        seen.add(path)
+        block = f"### {path}\n" + _excerpt(f.data.decode(errors="replace"), keys)
+        if used + len(block) > CONTEXT_CHARS:
+            continue
+        parts.append(block)
+        used += len(block)
+    return "\n\n".join(parts) or "(no file context)"
 
 
 def parse_judgement(text: str) -> dict | None:
@@ -197,6 +278,7 @@ def parse_judgement(text: str) -> dict | None:
     except (TypeError, ValueError):
         return None
     j["harm"] = bool(j.get("harm", False))
+    j["checklist"] = {k: j.get(k) for k in ("needed", "right_place", "facts_correct", "within_authority", "complete")}
     j["minimal_fix"] = str(j.get("minimal_fix", "") or "")
     j["reasons"] = [str(r)[:220] for r in (j.get("reasons") or [])][:2]
     return j
@@ -226,19 +308,40 @@ async def judge_all(run: cfgmod.RunConfig, judges, prompt: str) -> dict[str, dic
     return dict(await asyncio.gather(*(one(j) for j in judges)))
 
 
-def panel(run: cfgmod.RunConfig, judgements: dict[str, dict], tested_family: str) -> dict:
+def panel(run: cfgmod.RunConfig, judgements: dict[str, dict], tested_family: str,
+          offsets: dict[str, float] | None = None) -> dict:
+    """The panel score: each judge's score less its offset (its average lean over the whole run), weighted, with the
+    tested model's own family left out. The uncalibrated means are kept beside it."""
+    offsets = offsets or {}
     ok = {j.name: (j, judgements[j.name]) for j in run.judges if j.name in judgements and "score" in judgements[j.name]}
 
-    def mean(items):
+    def mean(items, calibrated=True):
         w = sum(j.weight for j, _ in items)
-        return sum(j.weight * r["score"] for j, r in items) / w if w else None
+        if not w:
+            return None
+        return sum(j.weight * (min(100.0, max(0.0, r["score"] - offsets.get(j.name, 0.0))) if calibrated else r["score"])
+                   for j, r in items) / w
 
     full = list(ok.values())
     drop = [(j, r) for j, r in full if not (j.report_with_dropout and j.family == tested_family)]
     scores = sorted(r["score"] for _, r in full)
     median = scores[len(scores) // 2] if scores else None
-    return {"score": mean(drop), "score_all": mean(full), "median_all": median,
+    return {"score": mean(drop), "score_all": mean(full), "score_raw": mean(drop, False),
+            "score_all_raw": mean(full, False), "median_all_raw": median,
             "harm": sum(j.weight for j, r in drop if r["harm"]) / max(sum(j.weight for j, _ in drop), 1e-9) >= 0.5}
+
+
+def judge_offsets(graded: list[dict]) -> dict[str, float]:
+    """Each judge's average lean: its score minus the mean of all judges on the same proposal, over the run."""
+    devs: dict[str, list[float]] = {}
+    for g in graded:
+        sc = {k: v["score"] for k, v in g["judges"].items() if "score" in v}
+        if len(sc) < 2:
+            continue
+        m = sum(sc.values()) / len(sc)
+        for k, v in sc.items():
+            devs.setdefault(k, []).append(v - m)
+    return {k: sum(v) / len(v) for k, v in devs.items()}
 
 
 def fix_judge(run: cfgmod.RunConfig, judgements: dict[str, dict], tested_family: str) -> dict:
@@ -293,7 +396,7 @@ def value(ep: Episode, p: dict, j: dict | None, earned: list, price, usage: dict
 # ---------- driver ----------
 
 
-async def grade_log(log, run: cfgmod.RunConfig, judges, out_dir: Path, gate: asyncio.Semaphore) -> list[dict]:
+async def grade_log(log, run: cfgmod.RunConfig, judges, gate: asyncio.Semaphore) -> list[dict]:
     model_name = log.eval.model
     spec = next((m for m in run.models if m.model == model_name or model_name.endswith(m.model.split("/", 1)[-1])), None)
     family = spec.family if spec else ""
@@ -316,17 +419,14 @@ async def grade_log(log, run: cfgmod.RunConfig, judges, out_dir: Path, gate: asy
             read_words = None if prev is None else sum(
                 changed_words([str(d.get("text", "")) for d in props_raw[prev]["drafts"]], str(d.get("text", "")))
                 for d in p["drafts"])
+            earlier = [props_raw[k] for k in range(i) if props_raw[k]["target"] == p["target"] and p["target"] != "new"
+                       or set(matched.get(k, [])) & set(matched.get(i, []))]
             async with gate:
-                js = await judge_all(run, judges, judge_prompt(ep, p, relevant)) if judges else {}
-            pn = panel(run, js, family) if js else {"score": None}
-            lead = fix_judge(run, js, family)
-            j_for_value = {"score": pn["score"], "best_draft": lead.get("best_draft", 1),
-                           "minimal_fix": lead.get("minimal_fix", "")} if js else None
-            v = value(ep, p, j_for_value, gets, spec.price if spec else None, share, read_words)
+                js = await judge_all(run, judges, judge_prompt(ep, p, relevant, earlier)) if judges else {}
             return {"model": spec.name if spec else model_name, "profession": s.id, "epoch": s.epoch,
                     "proposal": p, "needs": [n.id for n in gets], "matches": [n.id for n in relevant],
-                    "revises": props_raw[prev]["id"] if prev is not None else None,
-                    "panel": pn, "judges": js, "value": v}
+                    "revises": props_raw[prev]["id"] if prev is not None else None, "judges": js,
+                    "_value_args": (ep, gets, spec.price if spec else None, share, read_words, family)}
         graded = list(await asyncio.gather(*(grade_one(i, p) for i, p in enumerate(props_raw))))
         tot_cost = spec.price.cost(usage) if usage and spec and spec.price else 0.0
         mm = ep.economics.minutes_model
@@ -337,11 +437,20 @@ async def grade_log(log, run: cfgmod.RunConfig, judges, out_dir: Path, gate: asy
                      "questions": len(qs), "questions_cost_usd": round(q_min * ep.economics.loaded_hourly / 60, 4),
                      "recovered_tool_calls": s.metadata.get("recovered_tool_calls", 0), "needs": needs, "traps": traps,
                      "graded": graded, "usage": usage, "token_cost_usd": round(tot_cost, 4)})
-    out_dir.mkdir(parents=True, exist_ok=True)
-    with open(out_dir / "graded.jsonl", "a") as f:
-        for r in rows:
-            f.write(json.dumps(r, default=str) + "\n")
     return rows
+
+
+def finish(run: cfgmod.RunConfig, rows: list[dict], offsets: dict[str, float]) -> None:
+    """Panel scores and value for every graded proposal, once the judges' offsets over the run are known."""
+    for r in rows:
+        for g in r["graded"]:
+            ep, gets, price, share, read_words, family = g.pop("_value_args")
+            js = g["judges"]
+            g["panel"] = panel(run, js, family, offsets) if js else {"score": None}
+            lead = fix_judge(run, js, family)
+            j_for_value = {"score": g["panel"]["score"], "best_draft": lead.get("best_draft", 1),
+                           "minimal_fix": lead.get("minimal_fix", "")} if js else None
+            g["value"] = value(ep, g["proposal"], j_for_value, gets, price, share, read_words)
 
 
 def main():
@@ -354,16 +463,22 @@ def main():
     run = cfgmod.load(ROOT / "config/run.yaml")
     judges = [] if a.judges == "none" else [j for j in run.judges if a.judges == "all" or j.name in a.judges.split(",")]
     out = Path(a.out or ROOT / "results" / Path(a.logs).name)
-    if (out / "graded.jsonl").exists():
-        (out / "graded.jsonl").unlink()
     logs = [read_eval_log(l.name) for l in list_eval_logs(a.logs)]   # read before the event loop starts
 
     async def grade_all():
         gate = asyncio.Semaphore(PROPOSALS_IN_FLIGHT)
-        return [r for rows in await asyncio.gather(*(grade_log(lg, run, judges, out, gate) for lg in logs)) for r in rows]
+        return [r for rows in await asyncio.gather(*(grade_log(lg, run, judges, gate) for lg in logs)) for r in rows]
 
+    rows = sorted(asyncio.run(grade_all()), key=lambda r: (r["model"], r["profession"], r["epoch"]))
+    offsets = judge_offsets([g for r in rows for g in r["graded"]])
+    finish(run, rows, offsets)
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "judge_offsets.json").write_text(json.dumps(offsets, indent=1) + "\n")
+    with open(out / "graded.jsonl", "w") as f:
+        for r in rows:
+            f.write(json.dumps(r, default=str) + "\n")
     summary = []
-    for r in sorted(asyncio.run(grade_all()), key=lambda r: (r["model"], r["profession"], r["epoch"])):
+    for r in rows:
             sc = [g["panel"]["score"] for g in r["graded"] if g["panel"].get("score") is not None]
             summary.append({"model": r["model"], "profession": r["profession"], "epoch": r["epoch"], "ticks": r["ticks"],
                             "proposals": r["proposals"], "questions": r["questions"],

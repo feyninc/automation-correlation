@@ -14,6 +14,7 @@ user_model:
   name: Gemini 4 Argon (simulated worker)
   model: openrouter/google/gemini-4-argon
   family: google
+  price: {input: 2, output: 10, cache_read: 0.1}
   generate: {reasoning_effort: medium}
   model_args: {provider: {order: [google-vertex/global], allow_fallbacks: false}}
 
@@ -55,10 +56,10 @@ models:
   - {name: GLM-5.3, model: openrouter/z-ai/glm-5.3, family: zai, released: 2026-08-18, price: {input: 1.4, output: 4.4, cache_read: 0.26}, model_args: {provider: {order: [z-ai/fp8], allow_fallbacks: false}}}
 
 judges:
-  - {name: Claude Opus 5.5, model: bedrock/global.anthropic.claude-opus-5-5, family: anthropic, weight: 0.142858, report_with_dropout: true}
-  - {name: GPT-6 Astra, model: openai/gpt-6-astra, family: openai, weight: 0.142857, report_with_dropout: true}
-  - {name: Gemini 4 Argon, model: openrouter/google/gemini-4-argon, family: google, weight: 0.142857, report_with_dropout: true, model_args: {provider: {order: [google-vertex/global], allow_fallbacks: false}}}
-  - {name: Kimi K3, model: openrouter/moonshotai/kimi-k3, family: moonshot, weight: 0.142857, report_with_dropout: true, model_args: {provider: {order: [moonshotai], allow_fallbacks: false}}}
-  - {name: DeepSeek V4.1 Flash, model: openai-api/azure/deepseek-v4.1-flash, family: deepseek, weight: 0.142857, report_with_dropout: true}
-  - {name: Qwen3.8 Max Prime, model: openrouter/qwen/qwen3.8-max-prime, family: alibaba, weight: 0.142857, report_with_dropout: true, model_args: {provider: {order: [alibaba], allow_fallbacks: false}}}
-  - {name: GLM-5.3, model: openrouter/z-ai/glm-5.3, family: zai, weight: 0.142857, report_with_dropout: true, model_args: {provider: {order: [z-ai/fp8], allow_fallbacks: false}}}
+  - {name: Claude Opus 5.5, model: bedrock/global.anthropic.claude-opus-5-5, family: anthropic, price: {input: 4, output: 20, cache_read: 0.2, cache_write: 5}, weight: 0.142858, report_with_dropout: true}
+  - {name: GPT-6 Astra, model: openai/gpt-6-astra, family: openai, price: {input: 10, output: 50, cache_read: 1.0}, weight: 0.142857, report_with_dropout: true}
+  - {name: Gemini 4 Argon, model: openrouter/google/gemini-4-argon, family: google, price: {input: 2, output: 10, cache_read: 0.1}, weight: 0.142857, report_with_dropout: true, model_args: {provider: {order: [google-vertex/global], allow_fallbacks: false}}}
+  - {name: Kimi K3, model: openrouter/moonshotai/kimi-k3, family: moonshot, price: {input: 3, output: 15, cache_read: 0.3}, weight: 0.142857, report_with_dropout: true, model_args: {provider: {order: [moonshotai], allow_fallbacks: false}}}
+  - {name: DeepSeek V4.1 Flash, model: openai-api/azure/deepseek-v4.1-flash, family: deepseek, price: {input: 0.3, output: 1.2, cache_read: 0.03}, weight: 0.142857, report_with_dropout: true}
+  - {name: Qwen3.8 Max Prime, model: openrouter/qwen/qwen3.8-max-prime, family: alibaba, price: {input: 4, output: 12, cache_read: 0.5}, weight: 0.142857, report_with_dropout: true, model_args: {provider: {order: [alibaba], allow_fallbacks: false}}}
+  - {name: GLM-5.3, model: openrouter/z-ai/glm-5.3, family: zai, price: {input: 1.4, output: 4.4, cache_read: 0.26}, weight: 0.142857, report_with_dropout: true, model_args: {provider: {order: [z-ai/fp8], allow_fallbacks: false}}}

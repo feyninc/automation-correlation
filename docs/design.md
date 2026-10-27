@@ -102,10 +102,12 @@ prorations, deadlines) were computed by script and are shown in each day file's 
 
 ### Realism and scale
 
-A real worker sees about 117 emails and 153 chat messages a day (Microsoft Work Trend Index 2025); the weeks carry
-roughly one-eighth to one-twelfth of that, keeping every item that carries work or risk plus some noise. Worker actions
-are the visible outputs (25 to 115 a week), not every keystroke; calls and meetings the model cannot see appear as
-`noop` actions in the feed.
+A worker in Microsoft 365 receives about 117 emails and 153 chat messages a day (Microsoft Work Trend Index 2025).
+The weeks carry 6 to 19 inbound items a day (mail, chat, tickets, calls and new or updated documents; claims adjusters
+6.6, customer service 19.4, mean 11.4), about one-fifteenth to one-forty-fifth of that, keeping every item that
+carries work or risk plus some noise. Worker actions are the visible outputs (8 to 23 a day, against the ~30 planned),
+not every keystroke; calls and meetings the model cannot see appear as `noop` actions in the feed. The planned work is
+0.8 to 3.2 hours of each 8-hour day, so value is per benchmark week, not per worker-week (section 10).
 
 ## 4. The world (`workweek/apps.py`)
 
@@ -143,15 +145,18 @@ version of each document; a call's turns, then the worker's case note), plus `/w
    call is say, anything changing a document is an edit; flag, new, forward and schedule keep their names). A need is
    earned by the last matching proposal inside its window, and one proposal can earn several needs (see "Crediting
    work" below); a trap fires on any matching proposal.
-2. **Judges:** a panel of seven from seven families (weights in the config, summing to 1). The prompt carries the same
-   profession prompt; as of the proposal's time, the target, the need's evidence and the last 12 files the model
-   opened (long files keep their head and the lines sharing an identifier with the drafts; 30,000 characters in all);
-   the identifiers and numbers in the drafts found nowhere in the world (computed or invented); every draft; and the
-   rubric and the worker's own version for every need the proposal matches, superseded versions included. Output:
-   score 0-100 (the probability the worker sends the best draft unchanged), best draft, harm, rubric hits and misses,
-   two short reasons, and the minimal fix.
-3. **Panel score:** weighted mean with the tested model's own family dropped (`report_with_dropout`); the full-panel
-   mean and median are kept beside it.
+2. **Judges:** a panel of seven from seven families (weights in the config, summing to 1). Each gets a packet built so
+   that judging is reading, not searching (see "Making judging easy" below): the profession prompt; the rubric and the
+   worker's own version for every need the proposal matches; the planned work open at that moment and whether the
+   worker had done it; what the worker and the assistant had already done on the matter; a fact table; the files
+   (target, evidence and the last 12 files the model opened; long files keep their head and the lines sharing an
+   identifier with the drafts; 30,000 characters); and every draft. Output: a checklist (needed, right place, facts
+   correct, within authority, complete), then score 0-100 (the probability the worker sends the best draft
+   unchanged) bounded by the checklist, best draft, harm, rubric hits and misses, two short reasons, the minimal fix.
+3. **Panel score:** each judge's score less its offset (its mean deviation from the other judges on the same
+   proposals, over the whole run), then the weighted mean with the tested model's own family left out
+   (`report_with_dropout`). The uncalibrated and full-panel means and the median are kept beside it; offsets are
+   written to `results/<run>/judge_offsets.json`.
 4. **Edit effort:** word-level edit distance from the best draft to its minimal fix (the HTER count without block
    shifts), against the minimal sendable version, so acceptable wording costs nothing; fix time = edits / composing
    speed x friction (1.5), capped at writing from scratch; above an edit rate of 0.5 the worker rewrites. The best
@@ -164,6 +169,33 @@ version of each document; a call's turns, then the worker's case note), plus `/w
 6. **Latency (planned):** time to first token (p50) plus output tokens / throughput from OpenRouter's published stats,
    entered by hand in the config, to decide whether a call line would have arrived in time. The speed fields are not
    yet filled.
+
+### Making judging easy, and what it bought
+
+Judges do not see the episode's history or the model's notes, and should not have to: a draft is right or wrong
+against the world, whatever the model's process. So the packet hands them what checking needs.
+
+- **Fact table:** every identifier (claim and account numbers, emails, dates, times), amount and person in the drafts,
+  located deterministically in the world as of the proposal (file and line), or marked as in the worker's own version
+  (computed), or as found nowhere (computed from other figures, or invented). Where a fact came from (a file read days
+  earlier, the model's notes) no longer matters.
+- **Open work and history:** the planned work open at that moment with whether the worker had done it, and what the
+  worker and the assistant had already done on the matter, so "already done" and "duplicate" can be judged at all.
+- **Checklist before the score**, with the score bounded by it (not needed: 0-9; wrong place, facts or authority: at
+  most 49 unless the fix is a few words).
+
+Measured on the same proposals graded with the old and the new prompt (63 from the claims sample, 40 from six models
+in the customer-service sample): agreement on accept (score at least 50) stayed at Fleiss kappa 0.34-0.44 and the
+typical spread across judges barely moved, while judges became 4-8 points stricter. Where old and new grades differed
+most, the new ones were right: a draft naming a caller with an email the fact table located on another customer's
+account fell from 60 to 2; a QA dispute that was Marisol's planned work rose from 27 to 69. So the packet buys
+validity, not agreement, at about 60% more judge cost ($0.16 a proposal against $0.10).
+
+The disagreement that remains is mostly in level, not ranking: each judge correlates 0.72-0.94 with the mean of the
+other six, and with judges' offsets removed the seven-judge panel's reliability is ICC(3,k) 0.90-0.94. The offsets
+are large (Claude Opus 5.5 about -12 points, Kimi K3 +8, GLM-5.3 +6), which made leaving out the tested family shift
+scores by family: Claude models +1.8 points, Kimi -1.4, GLM -1.0. Calibrating offsets over the run removes it
+(-0.2, -0.1, 0.0). Remaining checks: hand grades for accuracy, and agreement on the full run.
 
 ### Crediting work, and why
 
@@ -271,12 +303,45 @@ most of these tasks.
   to 29 with the files the model opened); token cost charging the simulated worker and double-counting cache reads;
   phishing traps firing on correct reports; new messages without recipients (now refused).
 
+### Cost
+
+Spent on 2026-10-27: about $17 on tested models for the three samples, under $0.05 on the simulated worker, and about
+$7 to $11 per full grading of the claims sample (several gradings while fixing the grader); about $60 in all.
+
+The full run is extrapolated from the claims sample (27 models, 10 minutes) and a one-day pilot (Claude Opus 4.8 and
+GPT-6.1 Sol, claims and customer service, D1 08:00-17:00; `logs/pilot-day1`):
+
+- A full day costs 17-20 times a 10-minute window, not 54: after the first look a model makes about 1.5 calls a tick,
+  and prompt caching covers most input (90-95% of input tokens read from cache on Bedrock and OpenAI). Input
+  per call grows through the day (Opus 4.8: 9k tokens a call in the first quarter of the day, 27k in the last).
+- Cost rises with the day's inbound items, with an elasticity of 0.6 (Opus 4.8) to 1.0 (GPT-6.1 Sol) between
+  claims (6.6 items a day) and customer service (19.4).
+- Tested models, one seed (27 models x 11 professions x 5 days): $3,700-5,100 (mid $4,300). Routes without prompt
+  caching (DeepSeek V3.2 on Azure, GLM-4.7 and GLM-5 on Bedrock) cost more than their prices suggest.
+- Judges: 11-27 proposals a profession-day (pilot), so 16,000-40,000 a seed; at $0.16 a proposal (seven judges, the
+  packet) $2,600-6,400 (mid $4,500). OpenAI's Batch API would halve GPT-6 Astra's share (about a third of the
+  judge cost).
+- Per seed in all: $6,300-11,500 (mid about $8,800); three seeds $19,000-35,000. About $2,300 a seed runs through
+  OpenRouter (8 tested models, 4 judges, the simulated worker), which had $13.50 of credit left on 2026-10-27.
+- Wall clock: a day took 11-14 minutes for GPT-6.1 Sol and Opus 4.8 (both professions in parallel); DeepSeek V4.1
+  Flash on Azure took over 35 minutes.
+
 ## 10. Open
 
 - Need counts: 25 to 101 per week against the ~100 target; raising the analyst weeks to ~100 would mean either
   splitting big deliverables into many small needs (inflating counts without adding work) or writing more items. The
   owner should decide; minutes are reported either way.
-- Speed fields (TTFT, throughput) for the latency analysis: owner to enter from OpenRouter.
+- Call latency: models took a median 7.4 s from a caller's line to a proposed reply (47 lines, claims sample) against
+  callers' patience of 5-6 s; 74% would have come too late, and a 60-word suggestion takes the worker 15 s to read.
+  The clock is frozen while a model works, so call help is overstated until latency counts (measured time per call
+  turn is in the logs; OpenRouter's TTFT and throughput as the provider-neutral alternative).
+- Volume: inbound items are 1/15 to 1/45 of a Microsoft 365 worker's mail and chat, which makes noticing easier and
+  runs cheaper; a templated low-information noise arm (newsletters, notifications, cc's, calendar replies) would test
+  how much recall depends on it.
+- Coverage: planned work is 0.8-3.2 hours of each day; value is per benchmark week and the press-enter rate is over
+  planned work, not the whole job, unless scaled by task time shares.
+- Attention: every proposal is assumed read at once and in full; a per-proposal triage cost (interruption) is not
+  modelled and belongs in the sensitivity analysis.
 - ECI factor on 2026-10-30.
 - Hand grades (about 100 proposals) and judge agreement; the friction (1.5) and rewrite threshold (0.5) sensitivity.
 - Seeds (3 planned) and the pilot that sizes the full run.
