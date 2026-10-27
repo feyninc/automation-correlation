@@ -135,7 +135,7 @@ needs:
     task: 21423
     from: "D1 11:00:10"
     due: "D1 11:00:50"
-    evidence: [c1-carla, doc-ccc, pol-form]
+    evidence: [c1-carla, doc-ccc, pol-form, doc-declarations]
     ref: c1-carla.2
     check: {all: [{target: c1-carla}, {action_in: [say]}, {any: [{number_equals: {value: 7260}}, {mentions_any: ["seven thousand two hundred sixty"]}]}, {mentions_any: [credit union, lienholder, payoff]}]}
     must: ["ACV $8,260 less $1,000 = $7,260; $5,140 to the credit union, $2,120 to her"]
@@ -159,7 +159,7 @@ needs:
     task: 21423
     from: "D1 11:00"
     due: "D1 17:00"
-    evidence: [doc-ccc, pol-form, pol-guidelines]
+    evidence: [doc-ccc, pol-form, pol-guidelines, doc-declarations]
     ref: a1-carla
     check: {all: [{to_includes: c_insured2}, {number_equals: {value: 8260}}, {number_equals: {value: 2120}}]}
     must: ["Figures, valuation attached, lien split, how to accept, payment timing, dispute and appraisal options, rental limit"]

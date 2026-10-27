@@ -1,14 +1,14 @@
 # Accountants and Auditors (13-2011.00): build report
 
-47 needs, 17 traps, 77 worker actions, 39 threads, 30 documents, 5,343 words.
+47 needs, 17 traps, 77 worker actions, 39 threads, 30 documents, 5,347 words.
 
-| day | chat exchanges | chat threads | docs exchanges | docs threads | mail exchanges | mail threads | needs | phone exchanges | phone threads | worker actions |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| D1 | 8 | 3 | 0 | 0 | 7 | 4 | 10 | 4 | 1 | 16 |
-| D2 | 8 | 2 | 0 | 0 | 6 | 4 | 11 | 0 | 0 | 16 |
-| D3 | 8 | 2 | 0 | 0 | 7 | 6 | 8 | 0 | 0 | 15 |
-| D4 | 4 | 1 | 1 | 1 | 7 | 5 | 7 | 0 | 0 | 14 |
-| D5 | 2 | 0 | 0 | 0 | 16 | 10 | 11 | 0 | 0 | 16 |
+| day | chat exchanges | chat threads | mail exchanges | mail threads | needs | phone exchanges | phone threads | worker actions |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| D1 | 8 | 3 | 7 | 4 | 10 | 4 | 1 | 16 |
+| D2 | 8 | 2 | 6 | 4 | 11 | 0 | 0 | 16 |
+| D3 | 8 | 2 | 7 | 6 | 8 | 0 | 0 | 15 |
+| D4 | 4 | 1 | 8 | 6 | 7 | 0 | 0 | 14 |
+| D5 | 2 | 0 | 16 | 10 | 11 | 0 | 0 | 16 |
 
 ## Task mix against O*NET
 

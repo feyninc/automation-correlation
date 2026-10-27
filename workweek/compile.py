@@ -262,6 +262,12 @@ def audit(ep: Episode) -> tuple[list[str], list[str]]:
     for a in ep.apps:
         if a not in REGISTRY:
             errs.append(f"unknown app {a}")
+    for t in ep.threads:
+        if REGISTRY.get(t.app) is None or REGISTRY[t.app].kind != "thread":
+            errs.append(f"thread {t.id} uses {t.app}, which is not a thread app")
+    for d in ep.documents:
+        if REGISTRY.get(d.app) is None or REGISTRY[d.app].kind != "document":
+            errs.append(f"document {d.id} uses {d.app}, which is not a document app")
     seen: dict[str, str] = {}
     for item in [*ep.threads, *ep.documents]:
         f = thread_file(item) if isinstance(item, Thread) else document_file(item)

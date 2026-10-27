@@ -118,7 +118,7 @@ needs:
     task: 21426
     from: "D2 09:00"
     due: "D2 17:00"
-    evidence: [doc-dunham, doc-hail-queue, pol-guidelines]
+    evidence: [doc-dunham, doc-hail-queue, pol-guidelines, doc-declarations]
     ref: a2-dunham-pay
     check: {all: [{to_includes: c_finance}, {number_equals: {value: 3880}}, {mentions_any: ["11/10", "5 business days"]}]}
     must: ["$4,380 - $500 = $3,880, joint payee, paid within 5 business days of acceptance"]
@@ -142,7 +142,7 @@ needs:
     task: 21420
     from: "D2 14:00"
     due: "D2 17:00"
-    evidence: [doc-supplement, pol-guidelines]
+    evidence: [doc-supplement, pol-guidelines, doc-declarations]
     ref: a2-supplement
     check: {all: [{to_includes: c_shop}, {number_equals: {value: 5980}}, {number_equals: {value: 5480}}]}
     must: ["Hail-related per photos; new total $5,980, payment $5,480"]

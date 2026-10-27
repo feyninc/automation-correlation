@@ -98,11 +98,11 @@ threads:
     x:
       - {at: "D4 16:00", from: c_ken, body: "For the Q4 reforecast tonight, can I use 19.41M for October revenue? That's what the flash showed Monday."}
   - id: t4-jelist
-    app: docs
-    path: audit/2026/je-listing-jan-oct
-    title: JE listing Jan-Oct, preparer and approver (NetSuite saved search)
+    app: mail
+    path: inbox/netsuite-je-listing
+    title: "NetSuite: JE listing with approvals (saved search)"
     x:
-      - {at: "D4 11:00", from: c_system, body: "Saved search 'JE listing with approvals' (1,284 entries). Entries where preparer = approver: JE-09812 (2026-09-30, 74,120.00, prepared and approved T. Haldane, 'Q3 warranty reserve'); JE-09640 (2026-08-31, 12,300.00, T. Haldane); JE-09301 (2026-07-31, 8,450.00, R. Okafor). All three during delegate periods."}
+      - {at: "D4 11:00", from: c_system, to: [worker], subject: "Saved search results: JE listing with approvals (Jan-Oct)", body: "Saved search 'JE listing with approvals' (1,284 entries), run for PBC 7. Entries where preparer = approver: JE-09812 (2026-09-30, 74,120.00, prepared and approved T. Haldane, 'Q3 warranty reserve'); JE-09640 (2026-08-31, 12,300.00, T. Haldane); JE-09301 (2026-07-31, 8,450.00, R. Okafor). All three during delegate periods."}
 
 actions:
   - {at: "D4 07:10", kind: read, target: doc-pl, summary: "pulled the October P&L"}
