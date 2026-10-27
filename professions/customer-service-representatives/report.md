@@ -10,6 +10,16 @@
 | D4 | 4 | 1 | 8 | 6 | 21 | 42 | 6 | 6 | 2 | 27 |
 | D5 | 4 | 1 | 8 | 6 | 19 | 22 | 4 | 10 | 3 | 25 |
 
+## Time budget (minutes)
+
+| day | present | needs done | other timed work | lunch | skimming inbound | inbound items | accounted |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| D1 | 510 | 30 | 0 | 30 | 6 | 17 | 65 (13%) |
+| D2 | 585 | 18 | 0 | 30 | 6 | 19 | 54 (9%) |
+| D3 | 540 | 25 | 0 | 30 | 4 | 12 | 59 (11%) |
+| D4 | 510 | 38 | 0 | 30 | 5 | 14 | 73 (14%) |
+| D5 | 600 | 48 | 0 | 30 | 5 | 15 | 83 (14%) |
+
 ## Task mix against O*NET
 
 | task | importance | frequency (1-7) | needs | penetration |
@@ -30,7 +40,12 @@
 
 ## Errors (0)
 
-## Warnings (3)
+## Warnings (8)
+- D1: the day's work accounts for 13% of the 510 minutes present (aim for 80-110%)
+- D2: the day's work accounts for 9% of the 585 minutes present (aim for 80-110%)
+- D3: the day's work accounts for 11% of the 540 minutes present (aim for 80-110%)
+- D4: the day's work accounts for 14% of the 510 minutes present (aim for 80-110%)
+- D5: the day's work accounts for 14% of the 600 minutes present (aim for 80-110%)
 - n2-raj-rate: very short mention '$5'
 - n2-v7-read: very short mention 'v7'
 - n4-walter-note: very short mention 'v7'

@@ -10,6 +10,16 @@
 | D4 | 8 | 1 | 12 | 7 | 13 | 3 | 1 | 16 |
 | D5 | 8 | 1 | 6 | 6 | 11 | 3 | 1 | 18 |
 
+## Time budget (minutes)
+
+| day | present | needs done | other timed work | lunch | skimming inbound | inbound items | accounted |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| D1 | 525 | 71 | 0 | 30 | 4 | 11 | 104 (20%) |
+| D2 | 510 | 57 | 0 | 30 | 4 | 12 | 91 (18%) |
+| D3 | 510 | 45 | 0 | 30 | 3 | 8 | 78 (15%) |
+| D4 | 615 | 47 | 0 | 30 | 3 | 10 | 81 (13%) |
+| D5 | 390 | 86 | 0 | 30 | 2 | 6 | 118 (30%) |
+
 ## Task mix against O*NET
 
 | task | importance | frequency (1-7) | needs | penetration |
@@ -48,6 +58,11 @@
 
 ## Errors (0)
 
-## Warnings (2)
+## Warnings (7)
+- D1: the day's work accounts for 20% of the 525 minutes present (aim for 80-110%)
+- D2: the day's work accounts for 18% of the 510 minutes present (aim for 80-110%)
+- D3: the day's work accounts for 15% of the 510 minutes present (aim for 80-110%)
+- D4: the day's work accounts for 13% of the 615 minutes present (aim for 80-110%)
+- D5: the day's work accounts for 30% of the 390 minutes present (aim for 80-110%)
 - n1-carla: very short mention 'HR'
 - n1-actions: very short mention 'QC'

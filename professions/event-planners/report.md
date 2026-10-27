@@ -10,6 +10,16 @@
 | D4 | 5 | 1 | 0 | 0 | 5 | 8 | 4 | 7 |
 | D5 | 1 | 0 | 5 | 2 | 6 | 0 | 0 | 9 |
 
+## Time budget (minutes)
+
+| day | present | needs done | other timed work | lunch | skimming inbound | inbound items | accounted |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| D1 | 540 | 79 | 0 | 30 | 2 | 5 | 110 (20%) |
+| D2 | 570 | 35 | 0 | 30 | 2 | 6 | 67 (12%) |
+| D3 | 660 | 57 | 0 | 30 | 1 | 3 | 88 (13%) |
+| D4 | 750 | 9 | 0 | 30 | 2 | 5 | 40 (5%) |
+| D5 | 450 | 86 | 0 | 30 | 1 | 2 | 117 (26%) |
+
 ## Task mix against O*NET
 
 | task | importance | frequency (1-7) | needs | penetration |
@@ -38,7 +48,12 @@
 
 ## Errors (0)
 
-## Warnings (4)
+## Warnings (9)
+- D1: the day's work accounts for 20% of the 540 minutes present (aim for 80-110%)
+- D2: the day's work accounts for 12% of the 570 minutes present (aim for 80-110%)
+- D3: the day's work accounts for 13% of the 660 minutes present (aim for 80-110%)
+- D4: the day's work accounts for 5% of the 750 minutes present (aim for 80-110%)
+- D5: the day's work accounts for 26% of the 450 minutes present (aim for 80-110%)
 - n1-cart: very short mention '1A'
 - n2-karen: very short mention '3B'
 - n3-agenda: very short mention '3B'

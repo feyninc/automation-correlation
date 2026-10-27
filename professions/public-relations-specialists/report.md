@@ -10,6 +10,16 @@
 | D4 | 2 | 0 | 18 | 10 | 11 | 1 | 1 | 0 | 0 | 18 |
 | D5 | 1 | 0 | 14 | 9 | 11 | 0 | 0 | 0 | 0 | 14 |
 
+## Time budget (minutes)
+
+| day | present | needs done | other timed work | lunch | skimming inbound | inbound items | accounted |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| D1 | 600 | 118 | 0 | 30 | 3 | 9 | 152 (25%) |
+| D2 | 540 | 103 | 0 | 30 | 3 | 10 | 137 (25%) |
+| D3 | 555 | 180 | 0 | 30 | 5 | 14 | 214 (39%) |
+| D4 | 660 | 40 | 0 | 30 | 3 | 10 | 73 (11%) |
+| D5 | 450 | 132 | 0 | 30 | 2 | 6 | 164 (36%) |
+
 ## Task mix against O*NET
 
 | task | importance | frequency (1-7) | needs | penetration |
@@ -35,7 +45,12 @@
 
 ## Errors (0)
 
-## Warnings (6)
+## Warnings (11)
+- D1: the day's work accounts for 25% of the 600 minutes present (aim for 80-110%)
+- D2: the day's work accounts for 25% of the 540 minutes present (aim for 80-110%)
+- D3: the day's work accounts for 39% of the 555 minutes present (aim for 80-110%)
+- D4: the day's work accounts for 11% of the 660 minutes present (aim for 80-110%)
+- D5: the day's work accounts for 36% of the 450 minutes present (aim for 80-110%)
 - n1-qa: very short mention 'Q:'
 - n2-okeke-brief: very short mention 'ER'
 - n2-advisory: very short mention 'CT'

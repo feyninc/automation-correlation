@@ -11,6 +11,7 @@ from __future__ import annotations
 import csv
 import hashlib
 import json
+import random
 import re
 import sys
 from collections import Counter, defaultdict
@@ -110,6 +111,36 @@ def _call(raw: dict) -> Thread:
                   state=raw.get("state", {}), exchanges=xs)
 
 
+def _traffic(tf: dict, worker: dict) -> list[Thread]:
+    """Recurring low-information items (system notifications, digests, channel chatter), expanded deterministically:
+    `per_day` items on each of `days`, spread over the worker's hours with a jitter seeded by the id, cycling through
+    `items` ({n} is the item's running number). With `group: true` they are exchanges in one thread (a chat channel),
+    otherwise each is a thread of its own under `path`."""
+    rng = random.Random(tf["id"])
+    hours = worker.get("hours", {})
+    threads: dict[str, Thread] = {}
+    n = 0
+    for day in tf.get("days", [1, 2, 3, 4, 5]):
+        a, b = hours.get(f"D{day}", ["08:00", "17:00"])
+        a, b = tf.get("hours", [a, b])
+        lo = int(a[:2]) * 60 + int(a[3:]) + 5
+        hi = int(b[:2]) * 60 + int(b[3:]) - 5
+        k = int(tf["per_day"])
+        slots = sorted(lo + (hi - lo) * (i + rng.random()) / k for i in range(k))
+        for minute in slots:
+            n += 1
+            item = tf["items"][(n - 1) % len(tf["items"])]
+            at = f"D{day} {int(minute) // 60:02d}:{int(minute) % 60:02d}"
+            fill = lambda x: str(x).replace("{n}", str(n))
+            tid = tf["id"] if tf.get("group") else f"{tf['id']}-{n}"
+            th = threads.setdefault(tid, Thread(id=tid, app=tf["app"], title=fill(tf.get("title", item.get("subject", tf["id"]))),
+                                                path=tf["path"] if tf.get("group") else f"{tf['path']}-{n}", exchanges=[]))
+            th.exchanges.append(Exchange(id=f"{tid}.{len(th.exchanges) + 1}", at=at, author=item.get("from", tf["from"]),
+                                         to=["worker"] if tf["app"] == "mail" else [], subject=fill(item["subject"]) if item.get("subject") else None,
+                                         body=fill(item["body"]).strip(), meta={"traffic": True}))
+    return list(threads.values())
+
+
 def call_line_window(th: Thread, xid: str) -> tuple[str, str]:
     """A worker's call line is needed from the caller turn it answers until just before the caller speaks again."""
     xs = [x for x in th.exchanges if not x.meta.get("case_note")]
@@ -149,6 +180,12 @@ def expand(form: dict) -> Episode:
         th.exchanges += [_exchange(x, t["id"], n0 + i) for i, x in enumerate(t["x"], 1)]
     for c in form.get("calls", []):
         threads[c["id"]] = _call(c)
+    for tf in form.get("traffic", []):
+        for th in _traffic(tf, form["worker"]):
+            if th.id in threads:
+                threads[th.id].exchanges += th.exchanges
+            else:
+                threads[th.id] = th
 
     actions, produced = [], {}
     for i, a in enumerate(form.get("actions", []), 1):
@@ -179,7 +216,7 @@ def expand(form: dict) -> Episode:
             threads[tgt].state_changes.append(StateChange(at=a["at"], set=a["update_state"]))
         produced[aid] = prod
         actions.append(WorkerAction(id=aid, at=a["at"], kind=kind, target=tgt, produces=None if isinstance(prod, tuple) else prod,
-                                    summary=a["summary"], note=a.get("note", "")))
+                                    summary=a["summary"], note=a.get("note", ""), minutes=float(a.get("minutes", 0))))
 
     for aid, prod in list(produced.items()):
         if isinstance(prod, tuple):
@@ -274,6 +311,10 @@ def audit(ep: Episode) -> tuple[list[str], list[str]]:
     for a in ep.apps:
         if a not in REGISTRY:
             errs.append(f"unknown app {a}")
+    for d, b in time_budget(ep).items():
+        if not 0.8 <= b["share"] <= 1.1:
+            warns.append(f"D{d}: the day's work accounts for {b['share']:.0%} of the {b['present']:.0f} minutes present "
+                         "(aim for 80-110%)")
     for a in ep.worker_actions:
         day = seconds(a.at) // 86400 + 1
         start, end = ep.worker.day_hours(day)
@@ -329,6 +370,30 @@ def audit(ep: Episode) -> tuple[list[str], list[str]]:
     return errs, warns
 
 
+TRIAGE_S = 20        # skimming one inbound item (Microsoft WTI 2025: most email skimmed in under a minute)
+
+
+def time_budget(ep: Episode) -> dict[int, dict]:
+    """Per day: minutes present, and minutes accounted for by the needs the worker does that day, other timed
+    actions (meetings, in-person work), lunch, and skimming the inbound items."""
+    out = {}
+    for d in range(1, 6):
+        a, b = ep.worker.day_hours(d)
+        on_day = lambda t: seconds(t) // 86400 + 1 == d
+        done = {x.id: x.at for th in ep.threads for x in th.exchanges if x.author == "worker"}
+        done |= {f"{doc.id}@{i}": v.at for doc in ep.documents for i, v in enumerate(doc.versions) if v.author == "worker"}
+        ref = lambda n: done.get(n.reference.exchange_id or n.reference.document_version or "")
+        needs = sum(n.minutes.do for n in ep.needs if ref(n) and on_day(ref(n)))
+        busy = sum(x.minutes for x in ep.worker_actions if on_day(x.at))
+        inbound = sum(1 for th in ep.threads for x in th.exchanges if x.author != "worker" and on_day(x.at)
+                      and not (th.live and not x.id.endswith(".1")))
+        present = (b - a) / 60
+        acc = needs + busy + ep.worker.lunch_minutes + inbound * TRIAGE_S / 60
+        out[d] = {"present": present, "needs": needs, "other": busy, "lunch": ep.worker.lunch_minutes,
+                  "skim": inbound * TRIAGE_S / 60, "inbound": inbound, "accounted": acc, "share": acc / present}
+    return out
+
+
 def report(ep: Episode, errs: list[str], warns: list[str]) -> str:
     days = defaultdict(Counter)
     for t in ep.threads:
@@ -349,6 +414,12 @@ def report(ep: Episode, errs: list[str], warns: list[str]) -> str:
              "", "| day | " + " | ".join(cols) + " |", "| --- |" + " --- |" * len(cols)]
     for d in sorted(days):
         lines.append(f"| {'D0' if d == 0 else 'D' + str(d)} | " + " | ".join(str(days[d].get(c, 0)) for c in cols) + " |")
+    lines += ["", "## Time budget (minutes)", "",
+              "| day | present | needs done | other timed work | lunch | skimming inbound | inbound items | accounted |",
+              "| --- | --- | --- | --- | --- | --- | --- | --- |"]
+    for d, b in time_budget(ep).items():
+        lines.append(f"| D{d} | {b['present']:.0f} | {b['needs']:.0f} | {b['other']:.0f} | {b['lunch']} | {b['skim']:.0f} | "
+                     f"{b['inbound']} | {b['accounted']:.0f} ({b['share']:.0%}) |")
     tasks = ep.grounding["onet_tasks"]
     use = Counter(n.onet_task_id for n in ep.needs)
     lines += ["", "## Task mix against O*NET", "",
@@ -360,7 +431,7 @@ def report(ep: Episode, errs: list[str], warns: list[str]) -> str:
     return "\n".join(lines) + "\n"
 
 
-LIST_KEYS = ("contacts", "documents", "threads", "calls", "actions", "needs", "traps", "sources")
+LIST_KEYS = ("contacts", "documents", "threads", "calls", "actions", "needs", "traps", "sources", "traffic")
 
 
 def load_form(path: str | Path) -> dict:

@@ -49,6 +49,7 @@ class JudgeSpec(ModelSpec):
 
 class RunSettings(BaseModel):
     cadence_minutes: float = 5
+    speed_file: str = ""                # p50 time to first token and throughput per model (offline timing)
     seeds: int = 3
     max_tool_calls_per_tick: int = 25
     max_output_tokens_per_call: int = 16000

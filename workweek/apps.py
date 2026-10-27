@@ -9,7 +9,7 @@ import csv
 import io
 from dataclasses import dataclass
 
-from .schema import Document, Episode, Exchange, Thread, fmt, seconds
+from .schema import Document, Episode, Exchange, Thread, seconds, show
 
 REGISTRY: dict[str, "App"] = {}
 
@@ -61,7 +61,7 @@ class ThreadApp(App):
         return head + "\n".join(self.exchange(ep, x) for x in xs) + "\n"
 
     def exchange(self, ep: Episode, x: Exchange) -> str:
-        return f"\n## {fmt(seconds(x.at))} {_who(ep, x.author)}\n{x.body}{_attach(ep, x)}\n"
+        return f"\n## {show(x.at)} {_who(ep, x.author)}\n{x.body}{_attach(ep, x)}\n"
 
 
 @register
@@ -74,7 +74,7 @@ class Mail(ThreadApp):
             lines.append("To: " + ", ".join(_who(ep, p) for p in x.to))
         if x.cc:
             lines.append("Cc: " + ", ".join(_who(ep, p) for p in x.cc))
-        lines.append(f"Date: {fmt(seconds(x.at))}")
+        lines.append(f"Date: {show(x.at)}")
         if x.subject:
             lines.append(f"Subject: {x.subject}")
         return "\n".join(lines) + f"\n\n{x.body}{_attach(ep, x)}\n"
@@ -96,7 +96,7 @@ class Phone(ThreadApp):
 
     def exchange(self, ep, x):
         if x.meta.get("case_note"):
-            return f"\n## {fmt(seconds(x.at))} Case note ({_who(ep, x.author)})\n{x.body}\n"
+            return f"\n## {show(x.at)} Case note ({_who(ep, x.author)})\n{x.body}\n"
         return super().exchange(ep, x)
 
 

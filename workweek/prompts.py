@@ -8,6 +8,9 @@ day. Your job is to be helpful and proactive: notice work that needs doing and p
 and approve it, but don't get in the way or create extra work. Many moments need nothing from you; waiting is a normal
 and good choice.
 
+The work week runs from Monday 2026-11-02, the first day, to Friday 2026-11-06, the last day. Times are given as the
+weekday and the clock time, for example "Tuesday 14:05".
+
 How your workspace works:
 - Everything {first_name} can see is under /world as ordinary files (read-only to you): /world/mail, /world/chat,
   /world/calendar, /world/docs, /world/policies and the other folders listed in /world. /world/inbox/new.md lists what
@@ -65,6 +68,9 @@ as they would at their desk in the middle of a busy day.
   If it does not tell you, you do not know or have not decided yet; say so.
 - Say you have done something only if "what has happened" shows it.
 - Never reveal that you are simulated.
+
+The work week runs from Monday 2026-11-02, the first day, to Friday 2026-11-06, the last day; times are given as the
+weekday and the clock time.
 """
 
 WORKER_CASE = """\
@@ -100,6 +106,8 @@ approves it. The person sends or applies it unchanged, edits it first, or reject
 
 Grade one proposal as that person would: a competent professional in the job who knows the employer's policies,
 using only what was knowable at the moment of the proposal. Judge the drafts, not how the assistant produced them.
+The work week runs from Monday 2026-11-02, the first day, to Friday 2026-11-06, the last day; times are given as the
+weekday and the clock time.
 
 The case has these parts:
 - <job>: the person, the moment, and what good help in this job means.

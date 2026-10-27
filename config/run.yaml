@@ -4,6 +4,7 @@
 # through its provider's batch API (OpenAI's, at half price); grade with --no-batch for quick checks.
 run:
   cadence_minutes: 5
+  speed_file: data/openrouter/speed-week-2026-10-20.csv   # p50 TTFT and throughput, offline call timing
   seeds: 3
   max_tool_calls_per_tick: 25
   max_output_tokens_per_call: 16000
@@ -43,12 +44,12 @@ models:
   - {name: Kimi K2.6, model: openai-api/azure/kimi-k2.6, family: moonshot, released: 2026-04-20, price: {input: 0.95, output: 4, cache_read: 0.16}}
   - {name: Kimi K3, model: openrouter/moonshotai/kimi-k3, family: moonshot, released: 2026-07-16, price: {input: 3, output: 15, cache_read: 0.3}, model_args: {provider: {order: [moonshotai], allow_fallbacks: false}}}
   - {name: Kimi K3.1 Pro, model: openrouter/moonshotai/kimi-k3.1-pro, family: moonshot, released: 2026-10-23, price: {input: 2, output: 10, cache_read: 0.2}, model_args: {provider: {order: [moonshotai], allow_fallbacks: false}}}
-  # DeepSeek: Azure Foundry where offered, else OpenRouter (DeepInfra fp8)
-  - {name: DeepSeek V3.2, model: openai-api/azure/deepseek-v3.2, family: deepseek, released: 2025-12-01, price: {input: 0.58, output: 1.68, cache_read: 0.058}}
-  - {name: DeepSeek V4 Flash, model: openai-api/azure/deepseek-v4-flash, family: deepseek, released: 2026-04-24, price: {input: 0.21, output: 0.56, cache_read: 0.031}}
-  - {name: DeepSeek V4 Flash 0731, model: openai-api/azure/deepseek-v4-flash-0731, family: deepseek, released: 2026-07-31, price: {input: 0.21, output: 0.56, cache_read: 0.031}}
-  - {name: DeepSeek V4.1 Flash, model: openai-api/azure/deepseek-v4.1-flash, family: deepseek, released: 2026-09-10, price: {input: 0.3, output: 1.2, cache_read: 0.03}}
-  - {name: DeepSeek V4.1 Flash 1017, model: openrouter/deepseek/deepseek-v4.1-flash-1017, family: deepseek, released: 2026-10-17, price: {input: 0.098, output: 0.294, cache_read: 0.00294}, model_args: {provider: {order: [deepinfra/fp8], allow_fallbacks: false}}}
+  # DeepSeek: Azure Foundry where offered, else OpenRouter (DeepInfra fp8). DeepSeek has no medium: high (owner, 10-27)
+  - {name: DeepSeek V3.2, model: openai-api/azure/deepseek-v3.2, family: deepseek, released: 2025-12-01, price: {input: 0.58, output: 1.68, cache_read: 0.058}, generate: {reasoning_effort: high}}
+  - {name: DeepSeek V4 Flash, model: openai-api/azure/deepseek-v4-flash, family: deepseek, released: 2026-04-24, price: {input: 0.21, output: 0.56, cache_read: 0.031}, generate: {reasoning_effort: high}}
+  - {name: DeepSeek V4 Flash 0731, model: openai-api/azure/deepseek-v4-flash-0731, family: deepseek, released: 2026-07-31, price: {input: 0.21, output: 0.56, cache_read: 0.031}, generate: {reasoning_effort: high}}
+  - {name: DeepSeek V4.1 Flash, model: openai-api/azure/deepseek-v4.1-flash, family: deepseek, released: 2026-09-10, price: {input: 0.3, output: 1.2, cache_read: 0.03}, generate: {reasoning_effort: high}}
+  - {name: DeepSeek V4.1 Flash 1017, model: openrouter/deepseek/deepseek-v4.1-flash-1017, family: deepseek, released: 2026-10-17, generate: {reasoning_effort: high}, price: {input: 0.098, output: 0.294, cache_read: 0.00294}, model_args: {provider: {order: [deepinfra/fp8], allow_fallbacks: false}}}
   # Z.ai GLM: Bedrock for 4.7 and 5 (thinking only at "high" there; see docs/design.md), Z.ai fp8 for 5.1 to 5.3
   - {name: GLM-4.7, model: bedrock/zai.glm-4.7, family: zai, released: 2025-12-22, price: {input: 0.6, output: 2.2, cache_read: 0}, generate: {reasoning_effort: high}}
   - {name: GLM-5, model: bedrock/zai.glm-5, family: zai, released: 2026-02-12, price: {input: 1.0, output: 3.2, cache_read: 0}, generate: {reasoning_effort: high}}
@@ -60,7 +61,7 @@ judges:
   - {name: Claude Opus 5.5, model: bedrock/global.anthropic.claude-opus-5-5, family: anthropic, price: {input: 4, output: 20, cache_read: 0.2, cache_write: 5}, weight: 0.142858, report_with_dropout: true}
   - {name: GPT-6 Astra, model: openai/gpt-6-astra, family: openai, price: {input: 5, output: 25, cache_read: 0.5}, generate: {batch: true}, weight: 0.142857, report_with_dropout: true}
   - {name: Gemini 4 Argon, model: openrouter/google/gemini-4-argon, family: google, price: {input: 2, output: 10, cache_read: 0.1}, weight: 0.142857, report_with_dropout: true, model_args: {provider: {order: [google-vertex/global], allow_fallbacks: false}}}
-  - {name: Kimi K3, model: openrouter/moonshotai/kimi-k3, family: moonshot, price: {input: 3, output: 15, cache_read: 0.3}, weight: 0.142857, report_with_dropout: true, model_args: {provider: {order: [moonshotai], allow_fallbacks: false}}}
-  - {name: DeepSeek V4.1 Flash, model: openai-api/azure/deepseek-v4.1-flash, family: deepseek, price: {input: 0.3, output: 1.2, cache_read: 0.03}, weight: 0.142857, report_with_dropout: true}
+  - {name: Kimi K3.1 Pro, model: openrouter/moonshotai/kimi-k3.1-pro, family: moonshot, price: {input: 2, output: 10, cache_read: 0.2}, weight: 0.142857, report_with_dropout: true, model_args: {provider: {order: [moonshotai], allow_fallbacks: false}}}
+  - {name: DeepSeek V4.1 Flash 1017, model: openrouter/deepseek/deepseek-v4.1-flash-1017, family: deepseek, price: {input: 0.098, output: 0.294, cache_read: 0.00294}, generate: {reasoning_effort: high}, weight: 0.142857, report_with_dropout: true, model_args: {provider: {order: [deepinfra/fp8], allow_fallbacks: false}}}
   - {name: Qwen3.8 Max Prime, model: openrouter/qwen/qwen3.8-max-prime, family: alibaba, price: {input: 4, output: 12, cache_read: 0.5}, weight: 0.142857, report_with_dropout: true, model_args: {provider: {order: [alibaba], allow_fallbacks: false}}}
   - {name: GLM-5.3, model: openrouter/z-ai/glm-5.3, family: zai, price: {input: 1.4, output: 4.4, cache_read: 0.26}, weight: 0.142857, report_with_dropout: true, model_args: {provider: {order: [z-ai/fp8], allow_fallbacks: false}}}

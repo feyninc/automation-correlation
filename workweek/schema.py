@@ -25,6 +25,15 @@ def seconds(t: str) -> int:
     return (int(d) - 1) * 86400 + int(h) * 3600 + int(mi) * 60 + int(s or 0)
 
 
+WEEKDAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+
+
+def show(t: int | str) -> str:
+    """A time as models, judges and the simulated worker read it: "Monday 11:05" (internally "D1 11:05")."""
+    sec = seconds(t) if isinstance(t, str) else t
+    return WEEKDAYS[sec // 86400] + fmt(sec)[2:] if 0 <= sec < 5 * 86400 else fmt(sec)
+
+
 def fmt(sec: int) -> str:
     if sec < 0:
         return "D0"
@@ -66,6 +75,7 @@ class Worker(_M):
     email: str
     signature: str = ""
     hours: dict[str, list[str]] = {}   # "D1": ["08:40", "17:30"]: when the worker is at work; default 08:00-17:00
+    lunch_minutes: int = 30
 
     def day_hours(self, day: int) -> tuple[int, int]:
         """Seconds since the day's midnight when the worker arrives and leaves."""
@@ -159,6 +169,7 @@ class WorkerAction(_M):
     produces: str | None = None  # exchange id or "<doc id>@<version index>"
     summary: str                # one line shown in the feed
     note: str = ""              # hidden: why (for graders and the realism review)
+    minutes: float = 0.0        # time it takes when it is not a need's work (a meeting, an in-person task)
 
 
 Predicate = dict[str, Any]

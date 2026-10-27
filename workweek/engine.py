@@ -21,7 +21,7 @@ from inspect_ai.util import sandbox, store
 from . import config as cfgmod
 from . import prompts, providers  # importing providers also patches Inspect
 from .apps import FileOut, render_world, thread_file
-from .schema import Episode, fmt, seconds
+from .schema import Episode, fmt, seconds, show
 from .world import DAYS, Event, events, feed_lines, ticks
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -125,7 +125,7 @@ class Sim:
         recent = feed_lines(self.feed[-25:]) or "(nothing yet)"
         case = prompts.WORKER_CASE.format(worker_name=self.ep.worker.name, worker_title=self.ep.worker.title,
                                           employer=self.ep.employer.name, profession_prompt=self.ep.profession_prompt,
-                                          intents=intents, recent=recent, when=fmt(t), question=question)
+                                          intents=intents, recent=recent, when=show(t), question=question)
         out = await self.user_model.generate([ChatMessageSystem(content=prompts.WORKER_SYSTEM),
                                               ChatMessageUser(content=case)])
         answer = (out.completion or "").strip()
@@ -242,7 +242,7 @@ async def follow_call(sim: Sim, model: Model, messages: list, t: int) -> int:
         speaker = next((c.name for c in sim.ep.contacts if c.id == x.author), x.author)
         sim.work = {"output_tokens": [], "tool_s": 0.0, "answers": x.id, "patience_s": x.meta.get("patience_s")}
         messages.append(ChatMessageUser(content=prompts.CALL_TURN.format(
-            when=fmt(s), path=path, speaker=speaker, text=x.body, first_name=sim.first)))
+            when=show(s), path=path, speaker=speaker, text=x.body, first_name=sim.first)))
         await agent_turn(sim, model, messages, s, budget=4)
         if sim.call is None:
             return s
@@ -284,8 +284,8 @@ def workweek_agent(run_path: str = "config/run.yaml", start: str = "D1 00:00", e
                 if any(sim.call_thread(e.path) and sim.call_thread(e.path).call_end() >= t for e in live):
                     call_note = " A live call is in progress (see the feed)."
                 end_of_day = t % 86400 == day_end
-                text = (prompts.END_OF_DAY.format(when=fmt(t), first_name=sim.first, n_new=len(new)) if end_of_day else
-                        prompts.TICK.format(when=fmt(t), n_new=len(new), call_note=call_note))
+                text = (prompts.END_OF_DAY.format(when=show(t), first_name=sim.first, n_new=len(new)) if end_of_day else
+                        prompts.TICK.format(when=show(t), n_new=len(new), call_note=call_note))
                 tick_starts.append(len(messages))
                 if len(tick_starts) > KEEP_TOOL_OUTPUT_TICKS:
                     elide(messages, tick_starts[-KEEP_TOOL_OUTPUT_TICKS - 1])

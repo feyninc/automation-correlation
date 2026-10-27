@@ -1,12 +1,13 @@
 """Snapshot each model's speed on the provider it runs on, from OpenRouter's endpoint stats (last 30 minutes).
 
-    uv run python scripts/speed.py                      # writes data/openrouter/speed-<date>.csv
+    uv run python scripts/speed.py                      # writes data/openrouter/speed-snapshot-<date>.csv
+
+A cross-check only: the grader's timing uses the week averages in `run.speed_file` (config/run.yaml).
 
 For every tested model, judge and the simulated worker: p50/p90 latency to first token (seconds) and p50/p90
 throughput (output tokens a second) of the OpenRouter endpoint that matches its route (OpenAI for GPT, Amazon
 Bedrock for Bedrock, Azure for Azure where listed, else the lab's own endpoint; the pinned provider for OpenRouter
-routes). The grader turns tokens into time with these (docs/design.md, section 6). Run it a few times on different
-days; the grader uses the newest file.
+routes).
 """
 import csv
 import datetime as dt
@@ -88,7 +89,7 @@ def main():
         rows.append({"role": role, "name": spec.name, "openrouter_id": oid, "provider": prov, "basis": basis,
                      "ttft_p50_s": round(lat["p50"] / 1000, 3), "ttft_p90_s": round(lat["p90"] / 1000, 3),
                      "tps_p50": round(thr["p50"], 1), "tps_p90": round(thr["p90"], 1)})
-    out = ROOT / f"data/openrouter/speed-{dt.date.today().isoformat()}.csv"
+    out = ROOT / f"data/openrouter/speed-snapshot-{dt.date.today().isoformat()}.csv"
     fields = ["role", "name", "openrouter_id", "provider", "basis", "ttft_p50_s", "ttft_p90_s", "tps_p50", "tps_p90"]
     with open(out, "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=fields)

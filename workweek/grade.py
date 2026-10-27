@@ -21,7 +21,7 @@ from inspect_ai.model import ChatMessageSystem, ChatMessageUser, GenerateConfig,
 from . import checks, config as cfgmod, creds, prompts, providers  # noqa: F401
 from .apps import document_file, render_world, thread_file
 from .engine import ROOT, load_episode
-from .schema import Episode, fmt, seconds
+from .schema import Episode, seconds, show
 
 PROPOSALS_IN_FLIGHT = 16    # proposals judged at once across all logs (each by the whole panel)
 
@@ -58,14 +58,13 @@ def to_prop(ep: Episode, idx, p: dict) -> checks.Prop:
                        drafts=drafts)
 
 
-def speeds() -> dict[str, tuple[float, float]]:
-    """Model name -> (p50 seconds to first token, p50 output tokens a second), from the newest speed snapshot."""
-    files = sorted((ROOT / "data/openrouter").glob("speed-*.csv"))
-    if not files:
+def speeds(run: cfgmod.RunConfig) -> dict[str, tuple[float, float]]:
+    """Model name -> (p50 seconds to first token, p50 output tokens a second), from the run's speed file."""
+    if not run.run.speed_file:
         return {}
     out = {}
-    for r in csv.DictReader(open(files[-1])):
-        if r["role"] == "tested" and r.get("ttft_p50_s") and r.get("tps_p50"):
+    for r in csv.DictReader(open(ROOT / run.run.speed_file)):
+        if r.get("ttft_p50_s") and r.get("tps_p50"):
             out[r["name"]] = (float(r["ttft_p50_s"]), float(r["tps_p50"]))
     return out
 
@@ -232,9 +231,9 @@ def open_work(ep: Episode, t: int, needs: list) -> str:
         if not seconds(n.discoverable_at) <= t <= seconds(n.deadline):
             continue
         done = next((seconds(x.at) for th in ep.threads for x in th.exchanges if x.id == n.reference.exchange_id), None)
-        status = f"done by {ep.worker.name.split()[0]} at {fmt(done)}" if done is not None and done <= t else "not done yet"
+        status = f"done by {ep.worker.name.split()[0]} at {show(done)}" if done is not None and done <= t else "not done yet"
         mark = " [the proposal does this work]" if n in needs else ""
-        rows.append(f"- {n.title} (due {n.deadline}; {status}){mark}")
+        rows.append(f"- {n.title} (due {show(n.deadline)}; {status}){mark}")
     return "\n".join(rows) or "(none)"
 
 
@@ -248,10 +247,10 @@ def history(ep: Episode, p: dict, t: int, needs: list, earlier: list[dict]) -> s
     for a in ep.worker_actions:
         if seconds(a.at) <= t and (a.target in ids or any(n.reference.exchange_id == a.produces for n in needs)):
             body = next((x.body for th in ep.threads for x in th.exchanges if x.id == a.produces), "")
-            rows.append(f"- {a.at} {first} {a.summary}" + (f": \"{body[:400]}\"" if body else ""))
+            rows.append(f"- {show(a.at)} {first} {a.summary}" + (f": \"{body[:400]}\"" if body else ""))
     for q in earlier:
         text = str(q["drafts"][0].get("text", "")) if q["drafts"] else ""
-        rows.append(f"- {q['t']} the assistant already proposed ({q['action']} on {q['target']}): \"{text[:300]}\"")
+        rows.append(f"- {show(q['t'])} the assistant already proposed ({q['action']} on {q['target']}): \"{text[:300]}\"")
     return "\n".join(rows[-HISTORY_ROWS:]) or "(nothing yet)"
 
 
@@ -278,7 +277,7 @@ def judge_prompt(ep: Episode, p: dict, needs: list, earlier: list[dict] = ()) ->
             first_name=first, reference=x.body if x else need.reference.text or "(none)",
             reference_label=f"What {first} actually did" if x else f"A good version ({first} did not do it)")
     case = prompts.JUDGE_CASE.format(
-        worker_name=ep.worker.name, worker_title=ep.worker.title, employer=ep.employer.name, when=fmt(t),
+        worker_name=ep.worker.name, worker_title=ep.worker.title, employer=ep.employer.name, when=show(t),
         profession_prompt=ep.profession_prompt, target=p["target"], action=p["action"],
         drafts="\n\n".join(_draft(i, d) for i, d in enumerate(p["drafts"], 1)), planned_work=planned,
         open_work=open_work(ep, t, needs), history=history(ep, p, t, needs, list(earlier)),
@@ -443,7 +442,7 @@ def value(ep: Episode, p: dict, j: dict | None, earned: list, price, usage: dict
 
 
 async def grade_log(log, run: cfgmod.RunConfig, judges, gate: asyncio.Semaphore) -> list[dict]:
-    speed = speeds()
+    speed = speeds(run)
     model_name = log.eval.model
     spec = next((m for m in run.models if m.model == model_name or model_name.endswith(m.model.split("/", 1)[-1])), None)
     family = spec.family if spec else ""
