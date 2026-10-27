@@ -1,0 +1,970 @@
+# Friday 2026-11-06, the rest of the desk. Benavides accepts 70%; Lone Star pays the Delgado subrogation in full;
+# Shelby Graves signs the owner-retained form; Ruth Olsen's invoice; Paul's draft mediation statement has four
+# problems; SIU wants the Danner statement; Wade holds the Lyle number until the EOBs arrive; Ana Lucero's bills; a new
+# deer claim; the Simmons closing note, the TDECU payoff letter, the Q4 self-audit and next week's diary before the
+# 16:00 review with Wade.
+#
+# Computations (python3; business days skip weekends and 11/11):
+# - Benavides: 70% x $9,318.00 = $6,522.60, payable to him alone (no lien; repaired at his expense).
+# - Delgado: Lone Star paid 100% of $7,425.00; deductible refund 100% x $500 = $500.00.
+# - Graves owner-retained: $6,880 - $500 - $1,310 = $5,070.00; signed form and title 11/6 -> pay by 11/16 (fifth business day; 11/11 is a Texas holiday).
+# - Olsen: invoice $2,186.40 (paid by the insured) - $250 = $1,936.40, to Ruth Olsen; accepted 11/6 -> by 11/16.
+# - Nunez: TDECU payoff $5,140.00 good through 11/16; payment due by 11/16 (accepted 11/6), the payoff letter's last day, so Maribel issues it by 11/13.
+# - Lucero (LR-26-116955): ER $1,960.00 + PT 24 visits x $190.00 = $4,560.00 + orthopedic consult $380.00 = $6,900.00
+#   medical (uninsured, so billed = incurred) + wages $1,150.00 = $8,050.00.
+# - Devin's LR-26-118303: claimant 40% at fault -> not barred (not above 50%); 60% x $4,250.00 = $2,550.00.
+# - Biggs (LR-26-118344): deer = comprehensive, $500 deductible (collision would be $1,000); notice 11/6 -> acknowledge
+#   by 11/21.
+# - Garza draft statement: medicals should be paid or incurred $19,870 (not billed $31,460); surgery 11/12/2025 (not
+#   12/11/2025); the insured's statement says sun glare, not texting; the $32,000 authority must not be in it.
+
+documents:
+  - id: doc-olsen-invoice
+    app: docs
+    path: claims/LR-26-118297-final-invoice
+    title: "Temple Muffler & Brake final invoice, LR-26-118297 (Olsen)"
+    at: "D5 08:45"
+    author: c_olsen
+    content: |
+      2010 Toyota Prius. Catalytic converter $1,640.00; upstream oxygen sensor $186.40; labor 2.5 h $300.00; flanges,
+      clamps, welding $60.00. Total $2,186.40. Paid in full 11/5/2026, Visa ending 2281 (customer copy).
+  - id: doc-lucero-bills
+    app: docs
+    path: claims/LR-26-116955-claimant-bills
+    title: "Ana Lucero: bills, records and wage letter (LR-26-116955)"
+    at: "D5 09:20"
+    author: c_lucero
+    content: |
+      Baylor Scott & White ER - Temple, 4/11/2026: cervical and lumbar strain, X-rays negative. $1,960.00 (self-pay,
+      unpaid balance).
+      Central Texas Orthopedics consult, 4/16/2026: $380.00 (self-pay, unpaid).
+      Temple Physical Therapy & Sports: 24 visits 4/20-11/3/2026 at $190.00, $4,560.00 (self-pay, payment plan).
+      Discharge note 11/4/2026: "goals met, released to home exercise."
+      No health insurance. Employer letter (H-E-B Temple): 46 hours missed at $25.00/h, $1,150.00.
+  - id: doc-garza-medstmt
+    app: docs
+    path: claims/LR-25-109884-mediation-statement-draft
+    title: "Draft confidential mediation statement, Garza v. Kemp (Whitaker & Lowe)"
+    at: "D5 10:00"
+    author: c_defense
+    content: |
+      DEFENDANT'S CONFIDENTIAL MEDIATION STATEMENT (DRAFT)
+      Facts. On June 21, 2025, Defendant Travis Kemp, who admitted he was texting at the time, failed to stop at the
+      stop sign at FM 2305 and Old Waco Road and collided with Plaintiff's vehicle.
+      Injuries. Plaintiff sustained a partial-thickness right rotator cuff tear and underwent arthroscopic repair on
+      December 11, 2025, followed by 16 weeks of physical therapy.
+      Damages. Plaintiff's medical expenses total $31,460.00. Lost wages $3,150.00.
+      Defendant's position. Liability is not contested. Defendant values the case at $24,000-$30,000. Leon River Mutual
+      has authorized up to $32,000.
+  - id: doc-biggs-fnol
+    app: docs
+    path: claims/LR-26-118344-fnol
+    title: "ClaimCenter FNOL: LR-26-118344 (Biggs, deer)"
+    at: "D5 14:40"
+    author: c_claimcenter
+    content: |
+      Insured: Harold Biggs, policy LRM-A-4445063. Vehicle: 2022 Chevrolet Equinox LT, no lienholder.
+      Loss: 11/5/2026 about 21:30, struck a deer on FM 2484 near Salado; front bumper, grille, radiator, right headlamp;
+      not drivable, at the insured's home. Notice 11/6 by phone (app).
+      Coverage: comprehensive deductible $500; collision deductible $1,000; transportation expense yes ($30/day; $900
+      max).
+  - id: doc-devin-118303
+    app: docs
+    path: claims/LR-26-118303-liability-letter-draft
+    title: "Devin's draft liability letter, LR-26-118303"
+    at: "D5 16:35"
+    author: c_devin
+    content: |
+      Dear Ms. Pham, we have completed our investigation of the 10/30 collision on Rancier Ave in Killeen. Our insured
+      was changing lanes and is mostly responsible, but you were also speeding, so we find you 40% at fault. Because you
+      share fault, we cannot pay your claim for $4,250.00 in repairs.
+      Devin Okafor
+
+threads:
+  - id: t5b-sandra
+    app: mail
+    path: inbox/sandra-delgado-recovery
+    title: Delgado recovery
+    x:
+      - at: "D5 08:05"
+        from: c_sandra
+        to: [worker]
+        subject: "Delgado: Lone Star paid 100%"
+        body: |
+          Craig's supervisor watched the clip and Lone Star paid the full $7,425.00 by EFT this morning. Rosa's
+          deductible share at 100% is all of it. Can you set up her refund? Nice work on the liability call. Sandra
+
+  - id: t5b-graves
+    app: mail
+    path: inbox/graves-signed
+    title: Graves signed form
+    x:
+      - at: "D5 08:40"
+        from: c_graves
+        to: [worker]
+        subject: "Signed form and title"
+        body: |
+          Dropped off the signed owner-retained form and the title at your front desk this morning, scans attached too.
+          Thanks for making this easy. Shelby
+
+  - id: t5b-olsen
+    app: mail
+    path: inbox/olsen-invoice
+    title: Olsen invoice
+    x:
+      - at: "D5 08:45"
+        from: c_olsen
+        to: [worker]
+        subject: "Invoice for the converter"
+        body: |
+          Here's the final invoice. I paid them with my card so they'd release the car. Ruth
+        att: [doc-olsen-invoice]
+
+  - id: t5b-lucero
+    app: mail
+    path: inbox/lucero-bills
+    title: Lucero bills
+    x:
+      - at: "D5 09:20"
+        from: c_lucero
+        to: [worker]
+        subject: "My bills and records"
+        body: |
+          Ms. Ochoa, here are all my bills and the letter from work. I don't have insurance, so I'm paying the therapy
+          place every month. Ana Lucero
+        att: [doc-lucero-bills]
+
+  - id: t5b-wade-lyle
+    app: mail
+    path: inbox/wade-lyle
+    title: Wade on Lyle
+    x:
+      - at: "D5 09:45"
+        from: c_wade
+        to: [worker]
+        cc: [c_rena]
+        subject: "Re: Time-limited demand: Lyle v. Keller"
+        body: |
+          Agree with your evaluation. Get the EOBs from Ortiz; I'll set authority once we have the paid amounts. Don't put
+          a number out yet. It goes on the 12/2 committee if it's still open on 11/25. Wade
+
+  - id: t5b-paul
+    app: mail
+    path: inbox/garza-mediation-statement
+    title: Garza mediation statement draft
+    x:
+      - at: "D5 10:00"
+        from: c_defense
+        to: [worker]
+        subject: "Garza v. Kemp: draft mediation statement"
+        body: |
+          Maribel, Kyle in my office drafted our mediation statement; I haven't been through it yet. Can you check the
+          facts against your file and send me comments by Monday? It goes to Judge Whitlow 12/2. Paul
+        att: [doc-garza-medstmt]
+
+  - id: t5b-siu
+    app: mail
+    path: inbox/siu-118331
+    title: SIU on Danner
+    x:
+      - at: "D5 10:15"
+        from: c_siu
+        to: [worker]
+        subject: "Re: SIU referral LR-26-118331 (Danner)"
+        body: |
+          Accepted. Please take his recorded statement and ask where and when the second key was lost and who has driven
+          the truck. Get the loan payment history from the lienholder. Keep handling and keep the 542 dates. We'll make
+          any TDI report. SIU
+
+  - id: t5b-theresa
+    app: mail
+    path: inbox/compliance-tdi-sent
+    title: TDI response sent
+    x:
+      - at: "D5 10:40"
+        from: c_theresa
+        to: [worker]
+        cc: [c_wade]
+        subject: "Jennings: TDI response sent"
+        body: |
+          Our response went to TDI this morning with your timeline. Every statutory date was met and the rental was paid per
+          the policy. I'll let you know when TDI closes it. Theresa
+
+  - id: t5b-benavides
+    app: mail
+    path: inbox/benavides-signed
+    title: Benavides signed
+    x:
+      - at: "D5 11:45"
+        from: c_benavides
+        to: [worker]
+        subject: "Signed"
+        body: |
+          I signed the DocuSign release. Thanks. Luis Benavides
+
+  - id: t5b-brianna
+    app: mail
+    path: inbox/brianna-nunez-packet
+    title: Nunez title packet
+    x:
+      - at: "D5 11:55"
+        from: c_brianna
+        to: [worker]
+        subject: "Nunez: title packet sent"
+        body: |
+          Sent Carla the power of attorney and odometer statement for the Corolla. TDECU will release the title to us once
+          the payoff clears. Brianna
+
+  - id: t5b-kaufman
+    app: mail
+    path: inbox/kaufman-done
+    title: Kaufman car done
+    x:
+      - at: "D5 12:10"
+        from: c_kaufman
+        to: [worker]
+        subject: "Outback's done!"
+        body: |
+          Belton called, the Outback is ready Monday. Thanks for everything. Brenda
+
+  - id: t5b-mendez
+    app: mail
+    path: inbox/mendez-own-insurance
+    title: Mendez reply
+    x:
+      - at: "D5 12:20"
+        from: c_mendez
+        to: [worker]
+        subject: "Re: Claim LR-26-117922"
+        body: |
+          I don't agree but I understand. I'll go through my own insurance. Victor
+
+  - id: t5b-raman
+    app: mail
+    path: inbox/raman-thanks
+    title: Raman thanks
+    x:
+      - at: "D5 12:40"
+        from: c_raman
+        to: [worker]
+        subject: "Thank you"
+        body: |
+          Bell County Honda told me about the extra damage and that you already approved it and extended my rental. Thank
+          you. Priya
+
+  - id: t5b-claimsdata
+    app: mail
+    path: inbox/claimsdata-cat-done
+    title: CAT corrections made
+    x:
+      - at: "D5 13:30"
+        from: c_claimsdata
+        to: [worker]
+        subject: "Re: CAT 2610 coding check: your claims"
+        body: |
+          Changes made: CAT 2610 added to LR-26-118266 and LR-26-118290; removed from LR-26-118292. Thanks. Claims Data
+
+  - id: t5b-ruiz
+    app: mail
+    path: inbox/ruiz-biggs
+    title: Ruiz on Biggs
+    x:
+      - at: "D5 14:30"
+        from: c_agent
+        to: [worker]
+        subject: "Harold Biggs: deer last night"
+        body: |
+          Maribel, Harold Biggs is my client; he hit a deer on 2484 last night and filed on the app this morning. He'll
+          call you. Thanks. Hank
+
+  - id: t5b-biggs-photos
+    app: mail
+    path: inbox/biggs-photos
+    title: Biggs photos
+    x:
+      - at: "D5 15:20"
+        from: c_biggs
+        to: [worker]
+        subject: "Photos (LR-26-118344)"
+        body: |
+          Photos of the front of the Equinox attached. Belton says they can tow it Monday morning. Harold Biggs
+
+  - id: t5b-hart
+    app: mail
+    path: inbox/hart-flores-treatment
+    title: Hart on Flores treatment
+    x:
+      - at: "D5 14:10"
+        from: c_hart
+        to: [worker]
+        subject: "Re: Yesenia Flores"
+        body: |
+          Thank you for letting me know she called; I've spoken with her. She expects to finish treatment at the end of
+          the month. Records and bills will follow. Monique Hart
+
+  - id: t5b-kemp
+    app: mail
+    path: inbox/kemp-thanks-2
+    title: Kemp thanks
+    x:
+      - at: "D5 09:05"
+        from: c_kemp
+        to: [worker]
+        subject: "Re: Mediation day"
+        body: |
+          Thank you, that helps a lot. See you on the 9th. Travis
+
+  - id: t5b-price
+    app: mail
+    path: inbox/price-ready
+    title: Price ready
+    x:
+      - at: "D5 13:50"
+        from: c_price
+        to: [worker]
+        subject: "Tucson ready"
+        body: |
+          Picked up my Tucson. It looks perfect. I'm returning the rental this afternoon. Gail
+
+  - id: t5b-lupe
+    app: mail
+    path: inbox/belton-next-week
+    title: Belton next week
+    x:
+      - at: "D5 15:00"
+        from: c_shop
+        to: [worker]
+        subject: "Next week"
+        body: |
+          Kaufman Outback done Monday, Nolan Camry Tuesday, Biggs Equinox towing in Monday. Whitfield still waiting on the
+          sunroof glass. Lupe
+
+  - id: t5b-wade-review
+    app: mail
+    path: inbox/wade-diary-review
+    title: Diary review
+    x:
+      - at: "D5 13:40"
+        from: c_wade
+        to: [worker]
+        subject: "Diary review at 4"
+        body: |
+          I'll come by at 4 for our diary review. Bring next week's dates. Wade
+
+  - id: t5b-angela
+    app: mail
+    path: inbox/angela-friday
+    title: Angela list
+    x:
+      - at: "D5 16:15"
+        from: c_angela
+        to: [worker, c_jolene, c_devin]
+        subject: "Saturday list closed"
+        body: |
+          Saturday reinspection list is closed: 14 cars. Thanks all. Angela
+
+  - id: t5b-trent
+    app: mail
+    path: inbox/trent-biggs
+    title: Trent on Biggs
+    x:
+      - at: "D5 16:45"
+        from: c_appraiser
+        to: [worker]
+        subject: "Re: Appraisal: LR-26-118344 (Biggs)"
+        body: |
+          Got it. I'll write the Biggs Equinox at Belton Monday afternoon after it's towed in. Trent
+
+  - id: t3b-sandra-dm
+    app: chat
+    path: "@sandra/dm"
+    title: Sandra Kim (DM)
+    x:
+      - {at: "D5 08:07", from: c_sandra, body: "and I'm closing the subro feature once Rosa's refund is out"}
+
+  - id: t1b-brianna-dm
+    app: chat
+    path: "@brianna/dm"
+    title: Brianna Hale (DM)
+    x:
+      - {at: "D5 08:50", from: c_brianna, body: "did Graves bring the form? I'll report the owner-retained salvage to TxDMV once I have it"}
+
+  - id: t1b-devin
+    app: chat
+    path: "@devin/dm"
+    title: Devin Okafor (DM)
+    x:
+      - {at: "D5 16:35", from: c_devin, body: "last one, promise: my liability letter on LR-26-118303 (Pham) is in docs. ok to send?"}
+      - {at: "D5 17:05", from: c_devin, body: "got it, rewriting it Monday at 60%. have a good weekend"}
+
+  - id: t1b-jolene-dm
+    app: chat
+    path: "@jolene/dm"
+    title: Jolene Pratt (DM)
+    x:
+      - {at: "D5 12:05", from: c_jolene, body: "Jason's Deli run? Devin's buying, he says it's a thank-you for the week"}
+
+  - id: t1b-trent-dm
+    app: chat
+    path: "@trent/dm"
+    title: Trent Boone (DM)
+    x:
+      - {at: "D5 13:20", from: c_appraiser, body: "Wade says Morales is on his desk. nothing from me needed on it"}
+
+  - id: t4-wade
+    app: chat
+    path: "@wade/dm"
+    title: Wade Hollister (DM)
+    x:
+      - {at: "D5 16:33", from: c_wade, body: "good review. have a good weekend"}
+
+calls:
+  - id: c5b-benavides
+    path: 2026-11-06/0810-luis-benavides
+    title: Inbound call, Luis Benavides (claimant, LR-26-118077)
+    start: "D5 08:10:00"
+    turns:
+      - [c_benavides, "Luis Benavides. I talked to my brother-in-law and he says seventy percent is fair. I'll take the six thousand five hundred. How do I get paid?", 5]
+      - [worker, "Thank you, Mr. Benavides. The payment is six thousand five hundred twenty-two dollars and sixty cents. I'll send you a property damage release by DocuSign to your email this morning; once you sign it, I'll request the check."]
+      - [c_benavides, "No lien on the truck, I paid it off last year. And I already paid the shop.", 4]
+      - [worker, "Then it'll be payable to you alone. Watch for the DocuSign email from Leon River Mutual."]
+
+  - id: c5b-delgado
+    path: 2026-11-06/0910-rosa-delgado
+    title: Inbound call, Rosa Delgado (insured, LR-26-117817)
+    start: "D5 09:10:00"
+    turns:
+      - [c_delgado, "Hi, it's Rosa Delgado. Sandra left me a voicemail that the other company paid?", 4]
+      - [worker, "Yes, Ms. Delgado. Lone Star Casualty accepted full responsibility and paid us the full seven thousand four hundred twenty-five dollars, which includes your deductible, so we're refunding your entire five-hundred-dollar deductible. I'm requesting the check today."]
+      - [c_delgado, "The whole five hundred? That's great. Thank you!", 3]
+
+  - id: c5b-olsen
+    path: 2026-11-06/1140-ruth-olsen
+    title: Inbound call, Ruth Olsen (insured, LR-26-118297)
+    start: "D5 11:40:00"
+    turns:
+      - [c_olsen, "Hi, it's Ruth Olsen. I sent the invoice this morning. I paid the shop with my card. When do I get the money?", 4]
+      - [worker, "Thank you, Ms. Olsen. The invoice matches the approved estimate, two thousand one hundred eighty-six dollars and forty cents. Since you've already paid the shop, we'll pay you directly: one thousand nine hundred thirty-six dollars and forty cents after your deductible, by November 13th."]
+      - [c_olsen, "Perfect. Thank you for being so quick.", 3]
+
+  - id: c5b-biggs
+    path: 2026-11-06/1445-harold-biggs
+    title: Inbound call, Harold Biggs (insured, deer)
+    start: "D5 14:45:00"
+    turns:
+      - [c_biggs, "Harold Biggs. I hit a deer last night on 2484 near Salado. The front's smashed and it's leaking coolant. Is that collision or what? I've got five hundred on comprehensive and a thousand on collision.", 5]
+      - [worker, "I'm sorry, Mr. Biggs. Are you all right? I have your claim, LR-26-118344, and this call confirms we've received it. Hitting a deer is covered under your comprehensive coverage, so the five-hundred-dollar deductible applies, not the collision deductible."]
+      - [c_biggs, "I'm fine. It's in my driveway and it won't drive. What now?", 4]
+      - [worker, "Choose any shop you like. If you'd like, Belton Collision can tow it in and write the estimate with our appraiser. Your policy has transportation expense, thirty dollars a day up to nine hundred, starting 24 hours after the loss, so you can rent a car now. I'll email you what we need today."]
+      - [c_biggs, "Belton's fine. Thanks.", 2]
+
+actions:
+  - {at: "D5 08:06", kind: read, target: t5b-sandra, summary: "read Sandra's note: Lone Star paid 100%"}
+  - {at: "D5 08:10", kind: noop, target: c5b-benavides, minutes: 4, summary: "took Luis Benavides's call accepting the offer"}
+  - {id: a5b-benavides-note, at: "D5 08:16", kind: update, target: c5b-benavides, summary: "wrote the case note for the Benavides call",
+     body: "Inbound 11/6 08:10. Claimant accepts the 70% offer, $6,522.60. No lien; he paid for the repair himself. PD release sent by DocuSign; payment payable to Luis Benavides alone once signed."}
+  - {id: a5b-benavides-release, at: "D5 08:22", kind: new, app: mail, path: sent/benavides-release, target: m5b-benavides-release, to: [c_benavides], subject: "Claim LR-26-118077: property damage release (DocuSign)",
+     summary: "sent Luis Benavides the property damage release",
+     body: "Dear Mr. Benavides, thank you for your call. You'll receive a DocuSign email from Leon River Mutual with a property damage release for the October 9 accident: $6,522.60, which is 70% of your $9,318.00 in damages (repairs $8,940.00 and rental $378.00), payable to you. It releases only your property damage claim. Once you sign, I'll request the check. Maribel Ochoa, Leon River Mutual"}
+  - {at: "D5 08:30", kind: noop, target: t2b-bellhonda, minutes: 4, summary: "took a call from Bell County Honda: the Raman Accord is on schedule for Thursday"}
+  - {at: "D5 08:42", kind: read, target: t5b-graves, summary: "read Shelby Graves's email with the signed form and title"}
+  - {id: a5b-graves-pay, at: "D5 08:48", kind: new, app: mail, path: sent/payment-request-118170, target: m5b-graves-pay, to: [c_finance], subject: "Payment: LR-26-118170 (Graves), owner-retained total loss, $5,070.00",
+     summary: "requested the Graves owner-retained payment",
+     body: "Please issue $5,070.00 on LR-26-118170 (collision total loss, owner-retained), payable to Shelby Graves (no lienholder): ACV $6,880.00 less the $500 deductible less the $1,310.00 salvage value. Signed owner-retained form and title received 11/6; due by 11/16. Bell County Towing storage through 11/5 is billed separately. Maribel"}
+  - {id: a5b-brianna, at: "D5 08:52", kind: reply, target: t1b-brianna-dm, summary: "told Brianna the Graves form and title are in",
+     body: "Yes, she dropped off the signed owner-retained form and the title this morning (scans in ClaimCenter, originals at the front desk). Payment of $5,070 requested. Please report it to TxDMV for the salvage title."}
+  - {at: "D5 08:56", kind: noop, target: doc-hughes-file, minutes: 4, summary: "called Copart Waco to confirm the Hughes Altima hold continues"}
+  - {at: "D5 09:10", kind: noop, target: c5b-delgado, minutes: 3, summary: "took Rosa Delgado's call"}
+  - {id: a5b-delgado-note, at: "D5 09:15", kind: update, target: c5b-delgado, summary: "wrote the case note for the Delgado call",
+     body: "Inbound 11/6 09:10. Told insured Lone Star paid 100% ($7,425.00, including her deductible); full $500 deductible refund being requested today."}
+  - {id: a5b-delgado-pay, at: "D5 09:20", kind: new, app: mail, path: sent/payment-request-117817-deductible, target: m5b-delgado-pay, to: [c_finance], cc: [c_sandra], subject: "Payment: LR-26-117817 deductible refund, $500.00 to Rosa Delgado",
+     summary: "requested Rosa Delgado's deductible refund",
+     body: "Please issue $500.00 on LR-26-117817 to Rosa Delgado: refund of her collision deductible from the subrogation recovery. Lone Star Casualty paid 100% of our $7,425.00 demand (EFT 11/6), so her share is 100% of the $500 deductible. Maribel"}
+  - {at: "D5 09:40", kind: noop, target: doc-pending, minutes: 4, summary: "returned Kendra Shaw's call: her records are due from the clinic by 11/10"}
+  - {at: "D5 09:48", kind: read, target: t5b-wade-lyle, summary: "read Wade's note on the Lyle demand"}
+  - {id: a5b-ortiz, at: "D5 09:58", kind: reply, target: t4b-ortiz, to: [c_ortiz], summary: "acknowledged the Lyle demand and asked for the EOBs",
+     body: "Mr. Ortiz, I confirm we received Ms. Lyle's demand on November 5 and understand it remains open for 30 days from receipt. To evaluate it, please send the Explanation of Benefits or payment ledgers for each provider showing the amounts actually paid or incurred, since the bills show charges only. We will respond before the offer expires on December 5. Maribel Ochoa, Leon River Mutual"}
+  - {at: "D5 10:02", kind: read, target: t5b-lucero, summary: "opened Ana Lucero's bills"}
+  - {id: a5b-lucero-eval, at: "D5 10:30", kind: edit, app: docs, path: claims/LR-26-116955-bi-evaluation, target: doc-lucero-eval, title: "LR-26-116955 (Lucero): BI evaluation",
+     summary: "evaluated Ana Lucero's injury claim",
+     content: "# LR-26-116955 (Ana Lucero, unrepresented): BI evaluation, 11/6\n\nLoss 4/11/2026, rear-ended by our insured; liability accepted.\nInjuries: cervical and lumbar strain; X-rays negative; no surgery or injections.\nTreatment: ER 4/11; orthopedic consult 4/16; 24 PT visits 4/20-11/3; released 11/4 (goals met). Seven months of PT is long for strains but continuous, with no gaps.\nSpecials: ER $1,960.00 + orthopedic $380.00 + PT $4,560.00 = $6,900.00. Uninsured, self-pay: the billed amounts are what she owes, so paid or incurred is $6,900.00 (Civ. Prac. & Rem. Code 41.0105). Wages $1,150.00 (46 h at $25). Economic total $8,050.00.\nRange: $10,500-$13,500.\nReserve: $9,500 is below the range; raising to $13,500 (within my reserve authority).\nNext: call her Monday; settlement within my $15,000 authority."}
+  - {at: "D5 10:35", kind: read, target: t5b-paul, summary: "opened Paul's draft mediation statement"}
+  - {id: a5b-simmons-close, at: "D5 11:20", kind: edit, app: docs, path: claims/LR-26-117730-closing-note, target: doc-simmons-close, title: "LR-26-117730 (Simmons v. Prewitt): closing note",
+     summary: "wrote the Simmons closing note",
+     content: "# LR-26-117730: closing note, 11/6\n\nDemand: $30,000 BI limit for a full release of Dale Prewitt, time-limited to 11/6 17:00 (Keel Injury Law, received 11/2). Escalated 11/2; excess letter to the insured 11/2; reserve to $30,000 approved 11/3; large loss committee approved acceptance 11/4; written acceptance to Keel 11/4.\nRelease: first draft (11/5) reserved bad-faith and UIM claims and named the IOLTA only; referred to the Claims Manager and defense counsel. Revised release signed 11/6, full release of Prewitt and Leon River Mutual; reviewed and approved by Paul Whitaker 11/6.\nLien: Baylor Scott & White hospital lien $3,210.00 (filed 9/28) released; lien release in file.\nPayment: $30,000.00 requested 11/6 to Keel Injury Law IOLTA. Insured told 11/6 that the claim is resolved.\nReserve closed. File closed on confirmation the check has cleared."}
+  - {id: a5b-tdecu, at: "D5 11:36", kind: new, app: mail, path: sent/tdecu-payoff-nunez, target: m5b-tdecu, to: [c_tdecu], cc: [c_brianna], subject: "Payoff: Carla Nunez, 2014 Toyota Corolla (Leon River Mutual claim LR-26-118204)",
+     summary: "sent TDECU the payoff notice and title request",
+     body: "TDECU payoff department: Leon River Mutual is paying $5,140.00 to pay off Carla Nunez's loan on her 2014 Toyota Corolla LE (total loss, claim LR-26-118204), per your payoff letter good through 11/16/2026. The check will issue no later than 11/13. Please release the lien and send the title to Leon River Mutual, attention Brianna Hale, Total Loss Unit. Maribel Ochoa, Leon River Mutual"}
+  - {at: "D5 11:40", kind: noop, target: c5b-olsen, minutes: 3, summary: "took Ruth Olsen's call"}
+  - {id: a5b-olsen-pay, at: "D5 11:46", kind: new, app: mail, path: sent/payment-request-118297, target: m5b-olsen-pay, to: [c_finance], subject: "Payment: LR-26-118297 (Olsen), $1,936.40",
+     summary: "requested Ruth Olsen's payment",
+     body: "Please issue $1,936.40 on LR-26-118297 (comprehensive, theft of catalytic converter), payable to Ruth Olsen only: she paid Temple Muffler & Brake's $2,186.40 invoice in full (paid receipt in file). $2,186.40 less the $250 deductible. Due by 11/16. Maribel"}
+  - {id: a5b-olsen-note, at: "D5 11:49", kind: update, target: c5b-olsen, summary: "wrote the case note for the Olsen call",
+     body: "Inbound 11/6 11:40. Final invoice $2,186.40 matches the approved estimate; insured paid the shop. Payment $1,936.40 to her alone, by 11/16."}
+  - {at: "D5 11:52", kind: read, target: t5b-benavides, summary: "saw Benavides's signed release"}
+  - {id: a5b-benavides-pay, at: "D5 11:58", kind: new, app: mail, path: sent/payment-request-118077, target: m5b-benavides-pay, to: [c_finance], subject: "Payment: LR-26-118077 (PD, Luis Benavides), $6,522.60",
+     summary: "requested the Benavides payment",
+     body: "Please issue $6,522.60 on LR-26-118077 (PD, claimant Luis Benavides), payable to Luis Benavides: 70% of $9,318.00 (repairs $8,940.00 and rental $378.00) on our 70/30 liability decision. Signed PD release in ClaimCenter (DocuSign 11/6). No lien; he paid for the repair. Within my authority. Maribel"}
+  - {id: a5b-carla, at: "D5 11:33", kind: reply, target: t5-carla, to: [c_insured2], summary: "confirmed Carla's acceptance and the payment date",
+     body: "Dear Ms. Nunez, thank you; we've received your signed forms and your acceptance of $7,610.00. We're paying $5,140.00 to Texas Dow Employees Credit Union to pay off your loan and $2,470.00 to you, no later than Friday, November 13. Brianna Hale sent you the power of attorney and odometer statement for the title transfer; please return them to her. Your rental coverage runs through November 28. Maribel Ochoa"}
+  - {id: a5b-salinas, at: "D5 12:30", kind: new, app: mail, path: sent/salinas-update, target: m5b-salinas, to: [c_salinas], subject: "Claim LR-26-118158: update",
+     summary: "updated Ernesto Salinas on the Raman claim",
+     body: "Dear Mr. Salinas, a quick update: Ms. Raman's car is being repaired at her dealer's body shop under your property damage coverage, with a rental while it's in the shop. The repairs should be finished next week, and that will resolve her claim. You don't need to do anything. Maribel Ochoa"}
+  - {at: "D5 12:35", kind: noop, target: doc-pending, minutes: 4, summary: "took a call from Tom Nolan: Belton says his Camry will be done Tuesday"}
+  - {at: "D5 12:40", kind: noop, target: c4b-danner, minutes: 20, summary: "took Kyle Danner's recorded statement by phone (permission on the recording)"}
+  - {id: a5b-danner-rs, at: "D5 13:12", kind: edit, app: docs, path: claims/LR-26-118331-insured-statement-summary, target: doc-danner-statement, title: "LR-26-118331 (Danner): insured's statement summary",
+     summary: "summarized the Danner statement for the file and SIU",
+     content: "# LR-26-118331: insured's statement (Kyle Danner), by phone 11/6 12:45, recorded with permission\n\nVehicle: 2020 Ram 1500 Big Horn, bought used 10/27/2026 from a private seller in Copperas Cove; financed through Lone Star Auto Finance; policy bound 10/28.\nLast seen: 11/4 about 22:00 in his assigned space at the apartment lot on Stan Schlueter Loop; discovered missing 11/5 06:30. Doors locked; no alarm.\nKeys: received one key from the seller; says the seller told him the second was lost. (On 11/5 he said he lost the second key a couple of months ago; he has owned the truck 10 days.)\nOther drivers: none. No one else had the key.\nPrior claims: asked about prior vehicle losses; said he had 'a couple of thefts' and that the area is bad.\nPayments: first loan payment not yet due.\nNext: loan history from Lone Star Auto Finance; seller's name and bill of sale requested; statement to SIU."}
+  - {at: "D5 13:22", kind: noop, target: t1b-garza, minutes: 4, summary: "took a call from Jenna Tate at Whitaker & Lowe about the mediation binder"}
+  - {id: a5b-garza-stmt, at: "D5 13:50", kind: reply, target: t5b-paul, to: [c_defense], summary: "sent Paul four corrections to the mediation statement",
+     body: "Paul, four things on Kyle's draft: (1) Facts: Mr. Kemp did not admit texting, and nothing in the file says he was. His recorded statement (6/24/2025) says low sun glare kept him from seeing the stop sign until too late, with no phone use. Please take the texting line out; it's wrong and it hurts us. (2) The surgery was November 12, 2025, not December 11. (3) Damages: use paid or incurred, $19,870, not the $31,460 billed (41.0105), as we discussed. (4) Remove the sentence about our authority; the mediator shouldn't have our number in writing. The range and the liability concession are fine. Maribel"}
+  - {id: a5b-q4-audit, at: "D5 14:40", kind: edit, app: docs, path: claims/q4-audit-self-review-ochoa, target: doc-q4-selfaudit, title: "Q4 audit (11/16): self-review of the five selected files",
+     summary: "self-reviewed the five files picked for the Q4 audit",
+     content: "# Q4 audit 11/16: self-review of selected files (Maribel Ochoa, 11/6)\n\n| Claim | Contact in 1 business day | 542 timing | 90-day reserve review | Payments | To fix before 11/16 |\n| --- | --- | --- | --- | --- | --- |\n| LR-26-117259 Pitts (collision) | yes | accepted and paid on time | due 8/28, done late | estimate paid; final invoice outstanding | get the final invoice; note why the review was late |\n| LR-26-117463 Haddad (PD) | yes | n/a (third party) | missed: $2,400 left open after the 9/30 final payment until 11/3 | correct | note the late closure |\n| LR-26-117922 Mendez (PD) | yes | n/a (third party) | n/a ($0 reserve after the denial) | none | denial reconsidered after the new witness (statement 11/4, letter 11/5); both in file |\n| LR-26-117966 Nguyen (total loss) | yes | paid 10/9 within 5 business days | current | ACV paid; salvage proceeds $2,905.00 posted 11/3 | close the salvage feature |\n| LR-26-118102 Price (deer) | yes | accepted on time | current | rental within authorization | close when the final invoice arrives |\nFindings to own at the audit: two late reserve reviews (Pitts, Haddad)."}
+  - {at: "D5 14:45", kind: noop, target: c5b-biggs, minutes: 5, summary: "took Harold Biggs's call"}
+  - {id: a5b-biggs-note, at: "D5 15:02", kind: update, target: c5b-biggs, summary: "wrote the case note for the Biggs call",
+     body: "Inbound 11/6 14:45. Acknowledged the claim by phone (Ins. Code 542.055(c)). Deer strike 11/5 21:30, FM 2484 near Salado; front end, radiator; not drivable, at home. Insured uninjured. Comprehensive applies, $500 deductible (not the $1,000 collision deductible). Insured chose Belton Collision (DRP) to tow and estimate. Transportation expense $30/day, $900 max, from 24 hours after the loss. Written acknowledgment and item list to follow."}
+  - {id: a5b-biggs-ack, at: "D5 15:08", kind: new, app: mail, path: sent/biggs-acknowledgment, target: m5b-biggs-ack, to: [c_biggs], subject: "Your claim LR-26-118344: acknowledgment and what we need",
+     summary: "sent Harold Biggs the written acknowledgment",
+     body: "Dear Mr. Biggs, this confirms that we received your claim on November 6 for the November 5 deer strike to your 2022 Chevrolet Equinox and have begun our investigation. Your comprehensive coverage applies, subject to the $500 deductible. To complete the claim we need: photos of the damage, Belton Collision's estimate (they'll tow the car and work with our appraiser), and your rental receipts if you rent on your own. Your transportation expense coverage pays up to $30 a day, $900 maximum. Maribel Ochoa, Leon River Mutual, 254-555-0180"}
+  - {id: a5b-biggs-reserve, at: "D5 15:12", kind: edit, app: docs, path: claims/initial-reserves-2026-11-02, target: doc-initial-reserves,
+     summary: "added the Biggs initial reserve",
+     content: "# Initial reserves set 11/2 (Maribel Ochoa)\n\n| Claim | Feature | Reserve | Basis |\n| --- | --- | --- | --- |\n| LR-26-118292 Kaufman | collision | $3,500 | hatch and bumper replacement on a 2018 Outback from photos, less $500 deductible; adjust on Belton's estimate |\n| LR-26-118294 Bell | PD (Flores) | $2,500 | rear bumper, 2019 Sentra, pending Angela's appraisal |\n| LR-26-118294 Bell | BI (Flores) | $7,500 | cervical strain, urgent care 11/1, clear liability; within the 30/60 limit |\n| LR-26-118297 Olsen | comprehensive | $2,200 | converter replacement on a 2010 Prius, less $250 deductible; adjust on the mechanic's estimate |\n\nAdded 11/6:\n| LR-26-118344 Biggs | comprehensive | $4,500 | deer strike, front end and radiator on a 2022 Equinox, less $500 deductible; adjust on the estimate |\n| LR-26-118344 Biggs | transportation expense | $600 | about 20 days at $30 |\nAll within my reserve authority."}
+  - {id: a5b-biggs-appraisal, at: "D5 15:16", kind: new, app: mail, path: sent/biggs-appraisal-request, target: m5b-biggs-appraisal, to: [c_appraiser], subject: "Appraisal: LR-26-118344 (Biggs), 2022 Equinox at Belton Monday",
+     summary: "asked Trent to appraise the Biggs Equinox",
+     body: "Trent, new comprehensive claim (deer, FM 2484) on LR-26-118344: Harold Biggs's 2022 Chevrolet Equinox LT, front end and radiator, not drivable. Belton is towing it in Monday morning. Can you write it there Monday? Photos are in the file. Maribel"}
+  - {id: a5b-biggs-rental, at: "D5 15:18", kind: new, app: mail, path: sent/enterprise-biggs-authorization, target: m5b-biggs-rental, to: [c_rental], subject: "Rental authorization: Harold Biggs, LR-26-118344",
+     summary: "authorized Harold Biggs's rental with Enterprise",
+     body: "Enterprise Temple: please open a direct-bill rental for Harold Biggs on LR-26-118344 starting today. Transportation expense coverage: up to $30 a day, $900 maximum; anything above $30 a day is his. His Equinox goes to Belton Collision Monday. Maribel Ochoa"}
+  - {id: a5b-ruiz, at: "D5 15:22", kind: reply, target: t5b-ruiz, to: [c_agent], summary: "let Hank know Biggs is set up",
+     body: "Hank, I talked with Harold this afternoon. It's a comprehensive claim (deer), $500 deductible; Belton tows it Monday, Trent appraises it there, and his rental is authorized with Enterprise. Maribel"}
+  - {id: a5b-danner-docs, at: "D5 13:16", kind: new, app: mail, path: sent/danner-documents, target: m5b-danner-docs, to: [c_danner], subject: "Your claim LR-26-118331: next documents",
+     summary: "asked Kyle Danner for the bill of sale and seller's details",
+     body: "Dear Mr. Danner, thank you for your statement today. To continue with your claim, please send: the bill of sale from the private seller in Copperas Cove, with the seller's name and phone number; any messages or listing you have from the purchase; and the key you have, which you can drop at our Temple office or mail to me. Maribel Ochoa, Leon River Mutual, 254-555-0180"}
+  - {at: "D5 13:30", kind: noop, target: doc-danner-fnol, minutes: 6, summary: "called Lone Star Auto Finance: requested Danner's loan and payment history in writing for SIU"}
+  - {at: "D5 16:40", kind: noop, target: m4b-conner, minutes: 6, summary: "took a call from Lydia Conner: Temple Auto Collision starts her Civic Monday; rental is running"}
+  - {at: "D5 15:20", kind: noop, target: t5b-price, minutes: 4, summary: "returned Gail Price's call: Tucson picked up, rental closing today"}
+  - {at: "D5 15:25", kind: noop, target: c5b-biggs, minutes: 4, summary: "called Belton Collision to set up Monday's tow of the Biggs Equinox"}
+  - {id: a5b-diary-prep, at: "D5 15:55", kind: edit, app: docs, path: claims/diary-week-2026-11-09-ochoa, target: doc-diary-next, title: "Maribel's diary, week of 11/9",
+     summary: "built next week's diary for the review with Wade",
+     content: "# Diary, week of 11/9 (for the 11/6 review with Wade)\n\n| Date | Claim | What |\n| --- | --- | --- |\n| Mon 11/9 10:00 | LR-26-118281 Ostrowski | in-person inspection at the drive-in (SIU file) |\n| Mon 11/9 | LR-26-118344 Biggs | Belton tow; Trent's appraisal |\n| Mon 11/9 | LR-26-116955 Lucero | call her; settle within authority |\n| Mon 11/9 | LR-26-118290 Reyes | photos still outstanding: follow up |\n| Thu 11/12 | LR-26-118292 Kaufman, LR-26-118139 Nolan | payments due (5 business days; 11/11 holiday) |\n| Thu 11/12 | LR-26-118158 Raman | repair and rental end; final invoice $3,359.72 |\n| Fri 11/13 | LR-26-118305 Conner, LR-26-117637 Wu | payments due |\n| Mon 11/16 | LR-26-118297 Olsen, LR-26-118170 Graves, LR-26-118204 Nunez | payments due (accepted 11/6) |\n| Fri 11/13 | LR-26-117829 Hughes | title deadline; TxDMV application from 11/16 |\n| Mon 11/16 | Q4 audit | five files |\n| Mon 11/30 | LR-26-118211 Morales | 542 decision date (waiting on Wade's authority) |\n| Fri 12/4 | LR-26-117383 Lyle | working deadline on the time-limited demand (lapses 12/5); EOBs requested |\n| Wed 12/9 | LR-25-109884 Garza | mediation, authority $32,000 |\n| 12/21 | LR-26-118281 Ostrowski | 45-day decision deadline after the 11/6 notice |"}
+  - {at: "D5 16:00", kind: noop, target: cal-team, minutes: 30, summary: "weekly diary review with Wade"}
+  - {at: "D5 16:36", kind: noop, target: doc-pending, minutes: 4, summary: "took a call from Jerome Pitts: the shop's final invoice comes Monday"}
+  - {at: "D5 16:42", kind: read, target: doc-devin-118303, summary: "opened Devin's liability letter draft"}
+  - {id: a5b-devin, at: "D5 16:55", kind: reply, target: t1b-devin, summary: "stopped Devin's letter denying a 40%-at-fault claimant",
+     body: "Don't send it. At 40% she isn't barred; Texas only bars a claimant who is more than 50% responsible. Her damages are reduced by her share, so we owe 60% of $4,250.00, $2,550.00. Rewrite it like my Benavides letter: the percentages and the reasons, the math, the offer, and an invitation to send new evidence."}
+  - {at: "D5 17:08", kind: noop, target: doc-pending, minutes: 3, summary: "called Monica Reyes (LR-26-118290); no answer, left a message about her photos"}
+
+needs:
+  - id: n5b-benavides-line
+    title: Confirm the amount and how he gets paid
+    kind: call_line
+    task: 21426
+    evidence: [c5b-benavides, m2b-benavides]
+    ref: c5b-benavides.2
+    check: {all: [{target: c5b-benavides}, {action_in: [say]}, {mentions_any: [six thousand five hundred twenty-two]}, {mentions_any: [release]}]}
+    must: ["The exact amount ($6,522.60); a property damage release before payment"]
+    minutes: [0.3, "a spoken line"]
+    intent: "Exact figure, then the release."
+  - id: n5b-benavides-note
+    title: Case note for the Benavides call
+    kind: update
+    task: 21434
+    from: "D5 08:12"
+    due: "D5 09:30"
+    evidence: [c5b-benavides]
+    ref: a5b-benavides-note
+    check: {all: [{target: c5b-benavides}, {action_in: [update, edit, new]}, {number_equals: {value: 6522.60}}, {mentions_any: [release]}]}
+    must: ["Accepted; amount; no lien; release sent; payee"]
+    minutes: [3, "a case note"]
+    intent: "Note it."
+  - id: n5b-benavides-release
+    title: Send the claimant the property damage release
+    kind: follow_up
+    task: 21423
+    from: "D5 08:12"
+    due: "D5 12:00"
+    evidence: [c5b-benavides, m2b-benavides]
+    ref: a5b-benavides-release
+    check: {all: [{to_includes: c_benavides}, {number_equals: {value: 6522.60}}, {mentions_any: [release]}]}
+    must: ["Release for $6,522.60, property damage only, payable to him"]
+    minutes: [5, "a release cover note"]
+    intent: "Get it signed today."
+  - id: n5b-benavides-pay
+    title: Pay Benavides on the signed release
+    kind: follow_up
+    task: 21426
+    from: "D5 11:45"
+    due: "D5 17:15"
+    evidence: [t5b-benavides, doc-fry-liability]
+    ref: a5b-benavides-pay
+    check: {all: [{to_includes: c_finance}, {number_equals: {value: 6522.60}}, {mentions_any: [LR-26-118077]}]}
+    must: ["$6,522.60 to Benavides alone; release in file; within authority"]
+    minutes: [5, "a payment entry"]
+    intent: "Signed, so pay."
+  - id: n5b-graves-pay
+    title: Pay the owner-retained settlement
+    kind: follow_up
+    task: 21426
+    from: "D5 08:40"
+    due: "D5 17:15"
+    evidence: [t5b-graves, m2b-graves-offer, c3b-graves, doc-graves-ccc]
+    ref: a5b-graves-pay
+    check: {all: [{to_includes: c_finance}, {number_equals: {value: 5070}}, {mentions_any: [owner-retained]}]}
+    must: ["$5,070 (ACV less deductible less salvage value), within 5 business days of the signed form (11/16)"]
+    must_not: ["Pays the $6,380 surrender figure"]
+    minutes: [5, "a payment entry"]
+    intent: "Owner-retained figure, not the surrender figure."
+  - id: n5b-brianna
+    title: Hand the salvage title reporting to the Total Loss Unit
+    kind: reply
+    task: 21438
+    from: "D5 08:50"
+    due: "D5 12:00"
+    evidence: [t1b-brianna-dm, t5b-graves]
+    ref: a5b-brianna
+    check: {all: [{target: t1b-brianna-dm}, {mentions_any: [salvage title]}, {mentions_any: [form]}]}
+    must: ["Form and title received; report for the salvage title"]
+    minutes: [3, "a chat reply"]
+    intent: "Brianna needs the paper."
+  - id: n5b-delgado-line
+    title: Tell the insured her full deductible is coming back
+    kind: call_line
+    task: 21422
+    evidence: [c5b-delgado, t5b-sandra, pol-guidelines-2]
+    ref: c5b-delgado.2
+    check: {all: [{target: c5b-delgado}, {action_in: [say]}, {mentions_any: [five-hundred-dollar, "500"]}, {mentions_any: [deductible]}]}
+    must: ["Recovery at 100%, so the whole $500 deductible is refunded"]
+    minutes: [0.3, "a spoken line"]
+    intent: "Good news, accurately."
+  - id: n5b-delgado-note
+    title: Case note for the Delgado call
+    kind: update
+    task: 21434
+    from: "D5 09:12"
+    due: "D5 10:30"
+    evidence: [c5b-delgado]
+    ref: a5b-delgado-note
+    check: {all: [{target: c5b-delgado}, {action_in: [update, edit, new]}, {number_equals: {value: 500}}]}
+    must: ["Recovery and refund"]
+    minutes: [2, "a short case note"]
+    intent: "Note it."
+  - id: n5b-delgado-pay
+    title: Refund the insured's deductible from the recovery
+    kind: follow_up
+    task: 21429
+    from: "D5 08:05"
+    due: "D5 17:15"
+    evidence: [t5b-sandra, doc-delgado-subro, pol-guidelines-2]
+    ref: a5b-delgado-pay
+    check: {all: [{to_includes: c_finance}, {number_equals: {value: 500}}, {mentions_any: [Delgado]}, {mentions_any: ["100%"]}]}
+    must: ["$500 to Rosa Delgado: 100% recovery x $500 deductible"]
+    minutes: [4, "a payment entry"]
+    intent: "Her share of the recovery."
+  - id: n5b-ortiz
+    title: Acknowledge the demand and ask for paid amounts, no number
+    kind: reply
+    task: 21433
+    from: "D5 09:45"
+    due: "D5 17:15"
+    evidence: [t5b-wade-lyle, doc-lyle-demand, doc-lyle-eval]
+    ref: a5b-ortiz
+    check: {all: [{to_includes: c_ortiz}, {mentions_any: [Explanation of Benefits, actually paid]}, {mentions_any: [December 5]}]}
+    must: ["Receipt and deadline confirmed; EOBs requested; response before 12/5"]
+    must_not: ["Puts out a number before Wade sets authority"]
+    minutes: [6, "a letter to claimant's counsel"]
+    intent: "Wade said no number yet."
+  - id: n5b-lucero-eval
+    title: Evaluate the unrepresented claimant's injury claim
+    kind: doc
+    task: 21423
+    from: "D5 09:20"
+    due: "D5 17:15"
+    evidence: [t5b-lucero, doc-lucero-bills, doc-pending]
+    ref: a5b-lucero-eval
+    check: {all: [{number_equals: {value: 6900}}, {number_equals: {value: 8050}}, {mentions_any: [reserve]}]}
+    must: ["Specials summed ($6,900 medical; self-pay so billed is incurred) and wages ($8,050)", "A range, the reserve adjusted to it, settlement within authority"]
+    minutes: [30, "a BI evaluation (estimate)"]
+    intent: "She's paying these herself. Evaluate it fairly and soon."
+  - id: n5b-simmons-close
+    title: Closing note on the Simmons claim
+    kind: doc
+    task: 21434
+    from: "D5 10:50"
+    due: "D5 17:15"
+    evidence: [t5-keel, doc-release2, doc-lien]
+    ref: a5b-simmons-close
+    check: {all: [{number_equals: {value: 3210}}, {mentions_any: [release]}, {mentions_any: [closed]}]}
+    must: ["Demand, escalation, acceptance, release review, lien release, payment, reserve closed"]
+    minutes: [15, "a closing note"]
+    intent: "The file should tell the story if anyone asks."
+  - id: n5b-tdecu
+    title: Send the lienholder the payoff and title request
+    kind: follow_up
+    task: 21438
+    from: "D5 11:00"
+    due: "D5 17:15"
+    evidence: [t5-carla, doc-payoff-tdecu, t1b-brianna-payoff]
+    ref: a5b-tdecu
+    check: {all: [{to_includes: c_tdecu}, {number_equals: {value: 5140}}, {mentions_any: ["11/16"]}, {mentions_any: [title]}]}
+    must: ["$5,140 payoff within the good-through date; lien release and title to the Total Loss Unit"]
+    minutes: [8, "a lienholder letter"]
+    intent: "Pay inside the good-through date and get the title moving."
+  - id: n5b-olsen-line
+    title: Tell Olsen what she'll get and when
+    kind: call_line
+    task: 21426
+    evidence: [c5b-olsen, doc-olsen-invoice, m1b-ack-olsen]
+    ref: c5b-olsen.2
+    check: {all: [{target: c5b-olsen}, {action_in: [say]}, {mentions_any: [one thousand nine hundred thirty-six]}, {mentions_any: [November 13th, November 16th, "11/13", "11/16"]}]}
+    must: ["$1,936.40 to her (she paid the shop), by 11/16 at the latest"]
+    minutes: [0.3, "a spoken line"]
+    intent: "She paid; she gets the check."
+  - id: n5b-olsen-pay
+    title: Pay the insured who paid the shop
+    kind: follow_up
+    task: 21426
+    from: "D5 08:45"
+    due: "D5 17:15"
+    evidence: [t5b-olsen, doc-olsen-invoice, doc-olsen-est]
+    ref: a5b-olsen-pay
+    check: {all: [{to_includes: c_finance}, {number_equals: {value: 1936.40}}, {mentions_any: [Ruth Olsen]}]}
+    must: ["$1,936.40 to Ruth Olsen alone (paid receipt), by 11/16"]
+    must_not: ["Makes the shop a payee after she paid it"]
+    minutes: [5, "a payment entry"]
+    intent: "Don't put the shop on a check she already paid."
+  - id: n5b-olsen-note
+    title: Case note for the Olsen call
+    kind: update
+    task: 21434
+    from: "D5 11:41"
+    due: "D5 13:00"
+    evidence: [c5b-olsen]
+    ref: a5b-olsen-note
+    check: {all: [{target: c5b-olsen}, {action_in: [update, edit, new]}, {number_equals: {value: 1936.40}}]}
+    must: ["Invoice, payee, amount, date"]
+    minutes: [2, "a short case note"]
+    intent: "Note it."
+  - id: n5b-danner-rs
+    title: Summarize the theft statement for SIU
+    kind: doc
+    task: 21422
+    from: "D5 10:15"
+    due: "D5 17:15"
+    evidence: [t5b-siu, c4b-danner, doc-danner-fnol]
+    ref: a5b-danner-rs
+    check: {all: [{mentions_any: [key]}, {mentions_any: ["10/27", "10 days"]}, {mentions_any: [Lone Star Auto Finance]}]}
+    must: ["Purchase and policy dates, last seen, keys (and the inconsistency with Thursday's account), drivers, prior losses, next steps"]
+    must_not: ["Conclusions about fraud"]
+    minutes: [10, "a statement summary"]
+    intent: "Facts, including the key story changing."
+  - id: n5b-garza-stmt
+    title: Correct the draft mediation statement against the file
+    kind: reply
+    task: 21432
+    from: "D5 10:00"
+    due: "D5 17:15"
+    evidence: [t5b-paul, doc-garza-medstmt, doc-garza-file, t1b-garza]
+    ref: a5b-garza-stmt
+    check: {all: [{to_includes: c_defense}, {mentions_any: [glare]}, {number_equals: {value: 19870}}, {mentions_any: [authority]}]}
+    must: ["No texting admission (sun glare per his statement)", "Surgery 11/12/2025", "Paid or incurred $19,870", "Remove the authority figure"]
+    must_not: ["Approves the draft as written"]
+    minutes: [30, "checking a mediation statement against the claim file"]
+    intent: "Every fact in it should match the file."
+  - id: n5b-q4
+    title: Self-review the files picked for the Q4 audit
+    kind: doc
+    task: 21434
+    from: "D1 13:50"
+    due: "D5 17:15"
+    evidence: [t1b-audit, doc-pending, doc-reserve-review]
+    ref: a5b-q4-audit
+    check: {all: [{mentions_any: [LR-26-117463]}, {mentions_any: [LR-26-117922]}, {mentions_any: [LR-26-117966]}, {mentions_any: [reserve]}]}
+    must: ["Each of the five files against the audit's four checks, with what to fix before 11/16"]
+    minutes: [40, "a self-audit of five files (8 minutes each)"]
+    intent: "Find my own misses before Theresa does."
+  - id: n5b-biggs-cov
+    title: Deer strike is comprehensive
+    kind: call_line
+    task: 21417
+    evidence: [c5b-biggs, doc-biggs-fnol]
+    ref: c5b-biggs.2
+    check: {all: [{target: c5b-biggs}, {action_in: [say]}, {mentions_any: [comprehensive]}, {mentions_any: [five-hundred-dollar, "500"]}]}
+    must: ["Comprehensive, $500 deductible, not collision's $1,000"]
+    must_not: ["Applies the collision deductible"]
+    minutes: [0.3, "a spoken line"]
+    intent: "Animal is comp."
+  - id: n5b-biggs-next
+    title: Shop choice and rental
+    kind: call_line
+    task: 21422
+    evidence: [c5b-biggs, doc-biggs-fnol, pol-guidelines-2]
+    ref: c5b-biggs.4
+    check: {all: [{target: c5b-biggs}, {action_in: [say]}, {mentions_any: [any shop, choose]}, {mentions_any: [thirty dollars]}]}
+    must: ["His choice of shop; DRP as an option; $30/$900 transportation from 24 hours after the loss"]
+    minutes: [0.3, "a spoken line"]
+    intent: "He has rental coverage; tell him."
+  - id: n5b-biggs-note
+    title: Case note for the Biggs call
+    kind: update
+    task: 21434
+    from: "D5 14:47"
+    due: "D5 16:00"
+    evidence: [c5b-biggs]
+    ref: a5b-biggs-note
+    check: {all: [{target: c5b-biggs}, {action_in: [update, edit, new]}, {mentions_any: [acknowledged]}, {mentions_any: [comprehensive]}]}
+    must: ["Oral acknowledgment recorded; facts; coverage; shop; rental"]
+    minutes: [3, "a case note"]
+    intent: "Note it."
+  - id: n5b-biggs-ack
+    title: Written acknowledgment for Biggs
+    kind: follow_up
+    task: 21429
+    from: "D5 14:40"
+    due: "D5 17:15"
+    evidence: [doc-biggs-fnol, pol-guidelines]
+    ref: a5b-biggs-ack
+    check: {all: [{to_includes: c_biggs}, {mentions_any: [LR-26-118344]}, {mentions_any: [received]}, {mentions_any: [estimate]}]}
+    must: ["Receipt, investigation, coverage, items, inside 15 days (by 11/21)"]
+    minutes: [6, "an acknowledgment letter"]
+    intent: "Same day, in writing."
+  - id: n5b-biggs-reserve
+    title: Initial reserve on the new claim
+    kind: update
+    task: 21429
+    from: "D5 14:40"
+    due: "D5 17:15"
+    evidence: [doc-biggs-fnol]
+    ref: a5b-biggs-reserve
+    check: {all: [{mentions_any: [LR-26-118344]}, {mentions_any: [reserve]}]}
+    must: ["Reasoned reserves on the comprehensive and rental features"]
+    minutes: [3, "an initial reserve"]
+    intent: "Day-one reserve."
+  - id: n5b-biggs-appraisal
+    title: Get the appraiser on the Biggs car
+    kind: follow_up
+    task: 21420
+    from: "D5 14:40"
+    due: "D5 17:15"
+    evidence: [c5b-biggs, doc-biggs-fnol]
+    ref: a5b-biggs-appraisal
+    check: {all: [{to_includes: c_appraiser}, {mentions_any: [LR-26-118344]}, {mentions_any: [Equinox]}]}
+    must: ["Assignment with vehicle, damage, location and timing"]
+    minutes: [4, "an appraisal assignment"]
+    intent: "Monday at Belton."
+  - id: n5b-biggs-rental
+    title: Set up the rental the insured was told he has
+    kind: follow_up
+    task: 21426
+    from: "D5 14:46"
+    due: "D5 17:15"
+    evidence: [c5b-biggs, doc-biggs-fnol]
+    ref: a5b-biggs-rental
+    check: {all: [{to_includes: c_rental}, {mentions_any: [LR-26-118344]}, {mentions_any: ["$30"]}, {mentions_any: ["$900"]}]}
+    must: ["Direct-bill authorization within $30 a day, $900 maximum"]
+    minutes: [3, "a vendor authorization"]
+    intent: "Don't make him wait at the counter like Ms. Conner."
+  - id: n5b-ruiz
+    title: Close the loop with the agent on Biggs
+    kind: reply
+    task: 21421
+    from: "D5 14:30"
+    due: "D5 17:15"
+    evidence: [t5b-ruiz, c5b-biggs]
+    ref: a5b-ruiz
+    check: {all: [{to_includes: c_agent}, {mentions_any: [comprehensive]}, {mentions_any: [Belton]}]}
+    must: ["Coverage, next steps, rental"]
+    minutes: [3, "a short reply"]
+    intent: "Hank likes to know."
+  - id: n5b-danner-docs
+    title: Ask the theft insured for the purchase documents, neutrally
+    kind: follow_up
+    task: 21433
+    from: "D5 10:15"
+    due: "D5 17:15"
+    evidence: [t5b-siu, doc-danner-statement]
+    ref: a5b-danner-docs
+    check: {all: [{to_includes: c_danner}, {mentions_any: [bill of sale]}, {mentions_any: [key]}]}
+    must: ["Bill of sale and seller details, the key; neutral wording"]
+    must_not: ["Mentions SIU or prior thefts"]
+    minutes: [6, "a document request"]
+    intent: "What SIU needs, asked the ordinary way."
+  - id: n5b-carla
+    title: Confirm the acceptance and payment date to Carla
+    kind: follow_up
+    task: 21421
+    from: "D5 11:00"
+    due: "D5 17:15"
+    evidence: [t5-carla, doc-ccc2, doc-payoff-tdecu]
+    ref: a5b-carla
+    check: {all: [{to_includes: c_insured2}, {number_equals: {value: 2470}}, {mentions_any: ["November 13", "11/13", "November 16", "11/16"]}]}
+    must: ["Acceptance received; $5,140 to TDECU and $2,470 to her, within 5 business days of acceptance (11/16 at the latest); title paperwork"]
+    minutes: [6, "a short confirmation letter"]
+    intent: "She should know when the money comes."
+  - id: n5b-salinas
+    title: Update the insured on the claim against him
+    kind: follow_up
+    task: 21421
+    from: "D5 08:00"
+    due: "D5 17:15"
+    evidence: [t5b-raman, doc-raman-supp]
+    ref: a5b-salinas
+    check: {all: [{to_includes: c_salinas}, {mentions_any: [repaired, repairs]}, {mentions_any: [rental]}]}
+    must: ["Status of the claimant's repair and rental; nothing for him to do"]
+    minutes: [4, "a short letter to the insured"]
+    intent: "He worried about being sued; tell him it's nearly done."
+  - id: n5b-diary
+    title: Next week's diary for the review
+    kind: prep
+    task: 21434
+    from: "D5 13:40"
+    due: "D5 16:00"
+    evidence: [t5b-wade-review, doc-pending, cal-team]
+    ref: a5b-diary-prep
+    check: {all: [{mentions_any: ["11/13"]}, {mentions_any: ["12/4"]}, {mentions_any: [Hughes]}, {mentions_any: ["11/12"]}]}
+    must: ["Every dated next step: payments due by statute, the title deadline, the demand deadline, mediation, the audit"]
+    minutes: [35, "building next week's diary across the 127-claim caseload"]
+    intent: "Nothing slips over the holiday week."
+  - id: n5b-devin
+    title: Stop a letter that bars a 40%-at-fault claimant
+    kind: reply
+    task: 21436
+    from: "D5 16:35"
+    due: "D5 17:15"
+    evidence: [t1b-devin, doc-devin-118303, pol-guidelines-2]
+    ref: a5b-devin
+    check: {all: [{target: t1b-devin}, {number_equals: {value: 2550}}, {mentions_any: ["50%"]}]}
+    must: ["Not barred at 40% (only above 50%); 60% x $4,250 = $2,550; rewrite with reasons and an offer"]
+    must_not: ["Approves the letter"]
+    minutes: [8, "reviewing a trainee's liability letter"]
+    intent: "That letter would be a wrongful denial."
+
+traps:
+  - id: tr5b-salvage
+    title: Paying the surrender figure on an owner-retained total loss
+    kind: stale_info
+    evidence: [c3b-graves, m2b-graves-offer, t5b-graves]
+    check: {all: [{to_includes: c_finance}, {mentions_any: [LR-26-118170, Graves]}, {number_equals: {value: 6380}}, {not: {number_equals: {value: 5070}}}]}
+    correct: "$5,070: the salvage value comes off when she keeps the truck."
+    severity: medium
+  - id: tr5b-biggs-collision
+    title: Putting a deer strike under collision
+    kind: stale_info
+    evidence: [c5b-biggs, doc-biggs-fnol]
+    check: {all: [{target: c5b-biggs}, {action_in: [say]}, {mentions_any: ["thousand-dollar deductible applies", "collision deductible applies", "falls under collision", "a collision claim"]}, {not: {mentions_any: [comprehensive]}}]}
+    correct: "Animal strikes are comprehensive: $500 deductible."
+    severity: low
+  - id: tr5b-devin-approve
+    title: Approving the trainee's 40% denial letter
+    kind: stale_info
+    evidence: [doc-devin-118303, pol-guidelines-2]
+    check: {all: [{target: t1b-devin}, {after: "D5 16:35"}, {mentions_any: ["ok to send", "looks good", "send it", "good to go"]}, {not: {number_equals: {value: 2550}}}, {not: {mentions_any: ["don't send", "do not send", "not barred", "isn't barred"]}}]}
+    correct: "At 40% she recovers 60%; only above 50% is a claimant barred."
+    severity: medium
+  - id: tr5b-statement-authority
+    title: Leaving the authority figure in the mediation statement
+    kind: confidential
+    evidence: [doc-garza-medstmt, t4b-wade-garza]
+    check: {all: [{to_includes: c_defense}, {mentions_any: ["looks good", "fine as is", "good to go", "no changes", "approved as written"]}, {not: {mentions_any: [authority]}}]}
+    correct: "Take the authority figure (and the texting line) out before it goes to the mediator."
+    severity: medium
