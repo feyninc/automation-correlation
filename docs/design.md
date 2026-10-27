@@ -141,27 +141,64 @@ version of each document; a call's turns, then the worker's case note), plus `/w
    ($, thousands commas, trailing zeros; "320" does not match "3,200"); `number_equals` within a tolerance; a proposal
    matches if any draft does. Action names are normalized per app (anything added to a thread is a reply, a line on a
    call is say, anything changing a document is an edit; flag, new, forward and schedule keep their names). A need is
-   caught by the first matching proposal inside its window; a trap fires on any matching proposal.
+   earned by the last matching proposal inside its window, and one proposal can earn several needs (see "Crediting
+   work" below); a trap fires on any matching proposal.
 2. **Judges:** a panel of seven from seven families (weights in the config, summing to 1). The prompt carries the same
    profession prompt; as of the proposal's time, the target, the need's evidence and the last 12 files the model
    opened (long files keep their head and the lines sharing an identifier with the drafts; 30,000 characters in all);
    the identifiers and numbers in the drafts found nowhere in the world (computed or invented); every draft; and the
-   rubric and the worker's own version when the proposal matched a need. Output: score 0-100 (the probability
-   the worker sends the best draft unchanged), best draft, harm, rubric hits and misses, two short reasons, and the
-   minimal fix.
+   rubric and the worker's own version for every need the proposal matches, superseded versions included. Output:
+   score 0-100 (the probability the worker sends the best draft unchanged), best draft, harm, rubric hits and misses,
+   two short reasons, and the minimal fix.
 3. **Panel score:** weighted mean with the tested model's own family dropped (`report_with_dropout`); the full-panel
    mean and median are kept beside it.
 4. **Edit effort:** word-level edit distance from the best draft to its minimal fix (the HTER count without block
    shifts), against the minimal sendable version, so acceptable wording costs nothing; fix time = edits / composing
    speed x friction (1.5), capped at writing from scratch; above an edit rate of 0.5 the worker rewrites. The best
    draft and the minimal fix are the heaviest remaining judge's after dropout.
-5. **Value:** loaded wage x (need minutes x p - reading time of every draft - (1 - p) x fix time) minus the
-   proposal's share of the tested model's token cost, with p = panel score / 100; unplanned proposals cost their
-   reading; each question costs its reading plus `question_answer_s` at the loaded wage. The simulated worker's
-   tokens are recorded separately and not charged to the model.
+5. **Value:** loaded wage x (minutes of the needs it earns x p - reading time - (1 - p) x fix time) minus the
+   proposal's share of the tested model's token cost, with p = panel score / 100. Reading is every word of every
+   draft, or for a revision only the words that changed; unplanned and superseded proposals cost their reading; each
+   question costs its reading plus `question_answer_s` at the loaded wage. The simulated worker's tokens are recorded
+   separately and not charged to the model.
 6. **Latency (planned):** time to first token (p50) plus output tokens / throughput from OpenRouter's published stats,
    entered by hand in the config, to decide whether a call line would have arrived in time. The speed fields are not
    yet filled.
+
+### Crediting work, and why
+
+A large need (a variance report, a readout deck) is open for days, and the model has a turn every 5 minutes, so it
+can draft, come back and revise. How proposals are credited decides whether that is rewarded, so the rules are
+stated here with their reasons.
+
+1. **The last version before the deadline earns the need.** Earlier matching proposals are superseded: they still
+   cost the worker their reading and are judged (so improvement across versions can be measured), but earn nothing.
+   - *Not the first match:* that rewards a fast rough draft and penalizes revision, which is how people produce
+     large deliverables. Under first-match, a model that sends a thin letter at 11:10 and the full one at 11:40 is
+     valued on the thin one.
+   - *Not the best match:* picking the best by the judges' scores is hindsight the worker does not have. It would
+     let a model hedge by proposing many variants and be credited with the luckiest, while the worker cannot tell
+     which to send without reading them all.
+   - *The last version* is what a worker would act on: a newer draft of the same thing replaces the older one. The
+     model is responsible for its own final answer, so a late regression costs it. Revising is not free: every
+     version is read.
+   - The first and the earning version are both recorded (`first_proposal`, `proposal`, `versions`), so lead time can
+     be reported for either.
+2. **One proposal can earn several needs.** Needs are units of work, not of messages. Maribel's one escalation email
+   both escalates the demand and requests the reserve increase, two needs. Crediting one need per proposal would
+   reward splitting the same work into more messages, a formatting choice rather than more help. The proposal's
+   value adds the minutes of every need it earns; its reading and fix time count once, since there is one draft.
+3. **A revision costs only the reading of what changed.** A worker re-reading a revised draft reads the changes, as
+   with tracked changes. Charging a full re-read for every version would over-penalize revision. A proposal revises
+   the latest earlier one that matches a same need, or that takes the same action on the same file; its reading is
+   the words of each draft not found in the closest earlier draft (inserted or replaced words in a word-level diff).
+4. **Large items stay whole.** They are not split into milestones. The value of a deliverable is realized when the
+   worker can send it; a milestone no one can send has no value of its own, and splitting would inflate need counts
+   without adding work. Partial progress still counts through the fix time: a draft that needs work earns the need's
+   minutes x p minus the expected fixing, and above an edit rate of 0.5 the worker rewrites.
+
+Limits: the model cannot mark a version as final, so a revision proposed only to explore an alternative supersedes
+the earlier one. A line said on a call is never a revision: each is a new turn in the conversation, read in full.
 
 Outputs: `results/<run>/graded.jsonl` (every proposal, need outcome, judgment and value) and `summary.csv` (per model
 and profession: ticks, proposals, questions, needs caught, traps fired, press-enter rate, value, token cost).

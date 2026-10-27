@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import asyncio
 import csv
+import difflib
 import json
 import re
 from pathlib import Path
@@ -57,30 +58,65 @@ def to_prop(ep: Episode, idx, p: dict) -> checks.Prop:
                        drafts=drafts)
 
 
-def outcomes(ep: Episode, props: list[checks.Prop]) -> tuple[list[dict], list[dict], dict[int, str]]:
-    """Need outcomes (caught in window?), trap firings, and which need each proposal addresses."""
-    addressed: dict[int, str] = {}
+def outcomes(ep: Episode, props: list[checks.Prop]) -> tuple[list[dict], list[dict], dict[int, list[str]],
+                                                         dict[int, list[str]]]:
+    """Need outcomes, trap firings, the needs each proposal earns, and the needs each proposal matches.
+
+    A need is earned by the last proposal that matches it inside its window: later versions supersede earlier ones,
+    as the worker would send the latest. One proposal can earn several needs (docs/design.md, section 6).
+    """
+    earned: dict[int, list[str]] = {}
+    matched: dict[int, list[str]] = {}
     needs = []
     for n in ep.needs:
         a, b = seconds(n.discoverable_at), seconds(n.deadline)
-        hit = None
-        for i, p in enumerate(props):
-            if a <= p.t <= b and checks.matches(n.check, p) is not None:
-                hit = i
-                break
-        if hit is not None:
-            addressed.setdefault(hit, n.id)
+        hits = [i for i, p in enumerate(props) if a <= p.t <= b and checks.matches(n.check, p) is not None]
+        for i in hits:
+            matched.setdefault(i, []).append(n.id)
+        last = max(hits, key=lambda i: (props[i].t, i)) if hits else None
+        if last is not None:
+            earned.setdefault(last, []).append(n.id)
         ref_t = None
         if n.reference.exchange_id:
             ref_t = next((seconds(x.at) for t in ep.threads for x in t.exchanges if x.id == n.reference.exchange_id), None)
-        needs.append({"need": n.id, "task": n.onet_task_id, "caught": hit is not None, "proposal": hit,
-                      "lead_minutes": (ref_t - props[hit].t) / 60 if hit is not None and ref_t is not None else None,
+        needs.append({"need": n.id, "task": n.onet_task_id, "caught": last is not None, "proposal": last,
+                      "first_proposal": hits[0] if hits else None, "versions": len(hits),
+                      "lead_minutes": (ref_t - props[last].t) / 60 if last is not None and ref_t is not None else None,
                       "worker_does_it": ref_t is not None})
     traps = []
     for tr in ep.traps:
         fired = [i for i, p in enumerate(props) if checks.matches(tr.check, p) is not None]
         traps.append({"trap": tr.id, "fired": bool(fired), "proposals": fired})
-    return needs, traps, addressed
+    return needs, traps, earned, matched
+
+
+def previous_version(raw: list[dict], matched: dict[int, list[str]], i: int) -> int | None:
+    """The latest earlier proposal this one revises: one matching a same need, or the same action on the same
+    existing file. A line said on a call is a new turn, never a revision."""
+    p = raw[i]
+    if p["action"] == "say":
+        return None
+    for k in range(i - 1, -1, -1):
+        q = raw[k]
+        if q["action"] == "say":
+            continue
+        if set(matched.get(k, [])) & set(matched.get(i, [])):
+            return k
+        if p["target"] not in ("", "new") and q["target"] == p["target"] and q["action"] == p["action"]:
+            return k
+    return None
+
+
+def changed_words(old: list[str], new: str) -> int:
+    """Words of `new` that are not in the closest earlier draft: what a reader of a revision has to read."""
+    nw = new.split()
+    if not old:
+        return len(nw)
+    best = len(nw)
+    for o in old:
+        ops = difflib.SequenceMatcher(None, o.split(), nw, autojunk=False).get_opcodes()
+        best = min(best, sum(j2 - j1 for tag, _, _, j1, j2 in ops if tag in ("replace", "insert")))
+    return best
 
 
 # ---------- judges ----------
@@ -98,13 +134,13 @@ def _excerpt(text: str, keys: set[str]) -> str:
     return head + "\n[... lines matching the drafts' identifiers:]\n" + "\n".join(hits)[:FILE_CHARS - 1500]
 
 
-def _context(ep: Episode, p: dict, t: int, need) -> str:
+def _context(ep: Episode, p: dict, t: int, needs: list) -> str:
     """What the assistant could see, as of the proposal: the target, the need's evidence, the files it read."""
     files = render_world(ep, t)
     keys = {k for d in p["drafts"] for k in re.findall(r"[\w@.#-]*\d[\w@.#-]*", " ".join(str(v) for v in d.values()))
             if len(k) >= 3}
     paths = [p["target"]]
-    for e in (need.evidence if need else []):
+    for e in [e for n in needs for e in n.evidence]:
         paths += [thread_file(th) for th in ep.threads if th.id == e or any(x.id == e for x in th.exchanges)]
         paths += [document_file(d) for d in ep.documents if d.id == e]
     paths += reversed(p.get("read", []))
@@ -127,24 +163,24 @@ def _context(ep: Episode, p: dict, t: int, need) -> str:
     return ("\n\n".join(parts) or "(no file context)") + note
 
 
-def judge_prompt(ep: Episode, p: dict, need) -> str:
+def judge_prompt(ep: Episode, p: dict, needs: list) -> str:
     t = seconds(p["t"])
     drafts = "\n".join(f"### Draft {i + 1}: {d.get('label', '')}\nTo: {d.get('to', '')}  Cc: {d.get('cc', '')}  "
                        f"Subject: {d.get('subject', '')}\n{d.get('text', '')}" for i, d in enumerate(p["drafts"]))
-    rubric = ""
-    if need:
+    blocks = []
+    for need in needs:
         ref = ""
         if need.reference.exchange_id:
             x = next((x for th in ep.threads for x in th.exchanges if x.id == need.reference.exchange_id), None)
             ref = f"What {ep.worker.name.split()[0]} actually did (for reference; other good versions exist):\n{x.body}" if x else ""
         elif need.reference.text:
             ref = f"A good version (for reference; other good versions exist):\n{need.reference.text}"
-        rubric = prompts.RUBRIC.format(title=need.title, must="; ".join(need.rubric.must),
-                                       must_not="; ".join(need.rubric.must_not) or "(none)", reference=ref)
+        blocks.append(prompts.RUBRIC.format(title=need.title, must="; ".join(need.rubric.must),
+                                            must_not="; ".join(need.rubric.must_not) or "(none)", reference=ref))
     return prompts.JUDGE.format(worker_name=ep.worker.name, worker_title=ep.worker.title, employer=ep.employer.name,
                                 first_name=ep.worker.name.split()[0], when=fmt(t),
-                                profession_prompt=ep.profession_prompt, rubric_block=rubric,
-                                context=_context(ep, p, t, need), target=p["target"], action=p["action"], drafts=drafts)
+                                profession_prompt=ep.profession_prompt, rubric_block="\n".join(blocks),
+                                context=_context(ep, p, t, needs), target=p["target"], action=p["action"], drafts=drafts)
 
 
 def parse_judgement(text: str) -> dict | None:
@@ -227,11 +263,14 @@ def word_edits(a: str, b: str) -> int:
     return prev[-1]
 
 
-def value(ep: Episode, p: dict, j: dict | None, need, price, usage: dict | None) -> dict:
+def value(ep: Episode, p: dict, j: dict | None, earned: list, price, usage: dict | None,
+          read_words: int | None = None) -> dict:
+    """Minutes and dollars for one proposal. `earned` are the needs it earns (none if unplanned or superseded);
+    `read_words` is what the worker reads (all drafts, or only what changed for a revision)."""
     mm = ep.economics.minutes_model
     wage_min = ep.economics.loaded_hourly / 60
     words_all = sum(len(str(d.get("text", "")).split()) for d in p["drafts"])
-    read_min = words_all / mm.read_wpm
+    read_min = (words_all if read_words is None else read_words) / mm.read_wpm
     best = p["drafts"][max(1, min(len(p["drafts"]), (j or {}).get("best_draft", 1))) - 1] if p["drafts"] else {}
     best_text = str(best.get("text", ""))
     score = (j or {}).get("score")
@@ -242,9 +281,9 @@ def value(ep: Episode, p: dict, j: dict | None, need, price, usage: dict | None)
         rate = edits / max(len(j["minimal_fix"].split()), 1)
         write_min = len(j["minimal_fix"].split()) / mm.compose_wpm
         fix_min = write_min if rate > mm.rewrite_threshold else min(write_min, edits / mm.compose_wpm * mm.friction)
-    do_min = need.minutes.do if need else 0.0
+    do_min = sum(n.minutes.do for n in earned)
     p_acc = (score or 0) / 100
-    minutes_saved = do_min * p_acc - read_min - (1 - p_acc) * fix_min if need else -read_min
+    minutes_saved = do_min * p_acc - read_min - (1 - p_acc) * fix_min if earned else -read_min
     tok_cost = price.cost(usage) if usage and price else 0.0
     return {"read_min": round(read_min, 3), "fix_min": round(fix_min, 3), "edits": edits, "do_min": do_min,
             "minutes_saved": round(minutes_saved, 3), "value_usd": round(minutes_saved * wage_min - tok_cost, 4),
@@ -264,22 +303,30 @@ async def grade_log(log, run: cfgmod.RunConfig, judges, out_dir: Path, gate: asy
         idx = path_index(ep)
         props_raw = s.metadata.get("proposals", [])
         props = [to_prop(ep, idx, p) for p in props_raw]
-        needs, traps, addressed = outcomes(ep, props)
+        needs, traps, earned, matched = outcomes(ep, props)
+        by_id = {n.id: n for n in ep.needs}
         u = (s.model_usage or {}).get(model_name)     # the tested model only, not the simulated worker
         usage = u.model_dump() if u else None
         n_props = max(len(props_raw), 1)
         share = {k: (v / n_props if isinstance(v, (int, float)) else v) for k, v in (usage or {}).items()}
         async def grade_one(i, p):
-            need = next((n for n in ep.needs if n.id == addressed.get(i)), None)
+            relevant = [by_id[x] for x in matched.get(i, [])]      # judged against every need it does
+            gets = [by_id[x] for x in earned.get(i, [])]           # valued for the needs it earns
+            prev = previous_version(props_raw, matched, i)
+            read_words = None if prev is None else sum(
+                changed_words([str(d.get("text", "")) for d in props_raw[prev]["drafts"]], str(d.get("text", "")))
+                for d in p["drafts"])
             async with gate:
-                js = await judge_all(run, judges, judge_prompt(ep, p, need)) if judges else {}
+                js = await judge_all(run, judges, judge_prompt(ep, p, relevant)) if judges else {}
             pn = panel(run, js, family) if js else {"score": None}
             lead = fix_judge(run, js, family)
             j_for_value = {"score": pn["score"], "best_draft": lead.get("best_draft", 1),
                            "minimal_fix": lead.get("minimal_fix", "")} if js else None
-            v = value(ep, p, j_for_value, need, spec.price if spec else None, share)
+            v = value(ep, p, j_for_value, gets, spec.price if spec else None, share, read_words)
             return {"model": spec.name if spec else model_name, "profession": s.id, "epoch": s.epoch,
-                    "proposal": p, "need": need.id if need else None, "panel": pn, "judges": js, "value": v}
+                    "proposal": p, "needs": [n.id for n in gets], "matches": [n.id for n in relevant],
+                    "revises": props_raw[prev]["id"] if prev is not None else None,
+                    "panel": pn, "judges": js, "value": v}
         graded = list(await asyncio.gather(*(grade_one(i, p) for i, p in enumerate(props_raw))))
         tot_cost = spec.price.cost(usage) if usage and spec and spec.price else 0.0
         mm = ep.economics.minutes_model
