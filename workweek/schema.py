@@ -65,6 +65,13 @@ class Worker(_M):
     team: str
     email: str
     signature: str = ""
+    hours: dict[str, list[str]] = {}   # "D1": ["08:40", "17:30"]: when the worker is at work; default 08:00-17:00
+
+    def day_hours(self, day: int) -> tuple[int, int]:
+        """Seconds since the day's midnight when the worker arrives and leaves."""
+        a, b = self.hours.get(f"D{day}", ["08:00", "17:00"])
+        to_s = lambda x: int(x.split(":")[0]) * 3600 + int(x.split(":")[1]) * 60
+        return to_s(a), to_s(b)
 
 
 class Employer(_M):
@@ -229,6 +236,9 @@ class MinutesModel(_M):
     friction: float = 1.5            # editing someone else's draft vs writing (assumption, sensitivity-tested)
     rewrite_threshold: float = 0.5   # edit rate above which the worker rewrites
     question_answer_s: float = 30.0  # the worker answering one simulated-worker question, beyond reading it
+    triage_s: float = 10.0           # noticing, switching to and deciding on a written proposal, beyond reading it
+    call_glance_s: float = 2.0       # glancing at a suggested line during a call, beyond reading it
+    call_read_words: int = 10        # words of a suggested line the worker reads before starting to speak
     overrides: dict[str, float] = {}
 
 

@@ -58,19 +58,55 @@ def to_prop(ep: Episode, idx, p: dict) -> checks.Prop:
                        drafts=drafts)
 
 
-def outcomes(ep: Episode, props: list[checks.Prop]) -> tuple[list[dict], list[dict], dict[int, list[str]],
-                                                         dict[int, list[str]]]:
+def speeds() -> dict[str, tuple[float, float]]:
+    """Model name -> (p50 seconds to first token, p50 output tokens a second), from the newest speed snapshot."""
+    files = sorted((ROOT / "data/openrouter").glob("speed-*.csv"))
+    if not files:
+        return {}
+    out = {}
+    for r in csv.DictReader(open(files[-1])):
+        if r["role"] == "tested" and r.get("ttft_p50_s") and r.get("tps_p50"):
+            out[r["name"]] = (float(r["ttft_p50_s"]), float(r["tps_p50"]))
+    return out
+
+
+def call_timing(ep: Episode, p: dict, speed: tuple[float, float] | None) -> dict | None:
+    """Would a line proposed on a call have reached the worker in time? Computed offline: the model's output tokens for
+    the turn at its p50 speed, plus its tool time, plus the worker reading the line's first words, against the
+    caller's patience (strict: from the end of the caller's line) and against the caller's line plus patience
+    (streaming: as if the assistant heard the line as it was spoken)."""
+    w = p.get("work") or {}
+    if p["action"] != "say" or not w.get("answers"):
+        return None
+    x = next((x for th in ep.threads for x in th.exchanges if x.id == w["answers"]), None)
+    mm = ep.economics.minutes_model
+    read_s = min(len(str(p["drafts"][0].get("text", "")).split()), mm.call_read_words) / mm.read_wpm * 60
+    patience = (x.meta.get("patience_s") if x else None) or w.get("patience_s") or 5
+    speaking = len(x.body.split()) / 150 * 60 if x else 0.0
+    if not speed:
+        return {"latency_s": None, "read_s": round(read_s, 2), "patience_s": patience, "on_time": None,
+                "on_time_streaming": None}
+    ttft, tps = speed
+    latency = sum(ttft + n / tps for n in w["output_tokens"]) + w.get("tool_s", 0.0)
+    return {"latency_s": round(latency, 2), "read_s": round(read_s, 2), "patience_s": patience,
+            "on_time": latency + read_s <= patience, "on_time_streaming": latency + read_s <= speaking + patience}
+
+
+def outcomes(ep: Episode, props: list[checks.Prop], late: set[int] = frozenset()) -> tuple[
+        list[dict], list[dict], dict[int, list[str]], dict[int, list[str]]]:
     """Need outcomes, trap firings, the needs each proposal earns, and the needs each proposal matches.
 
     A need is earned by the last proposal that matches it inside its window: later versions supersede earlier ones,
-    as the worker would send the latest. One proposal can earn several needs (docs/design.md, section 6).
+    as the worker would send the latest. One proposal can earn several needs (docs/design.md, section 6). A call line
+    that would have arrived too late (`late`) earns nothing; traps still fire on it, as they measure what was proposed.
     """
     earned: dict[int, list[str]] = {}
     matched: dict[int, list[str]] = {}
     needs = []
     for n in ep.needs:
         a, b = seconds(n.discoverable_at), seconds(n.deadline)
-        hits = [i for i, p in enumerate(props) if a <= p.t <= b and checks.matches(n.check, p) is not None]
+        hits = [i for i, p in enumerate(props)
+                if i not in late and a <= p.t <= b and checks.matches(n.check, p) is not None]
         for i in hits:
             matched.setdefault(i, []).append(n.id)
         last = max(hits, key=lambda i: (props[i].t, i)) if hits else None
@@ -284,12 +320,16 @@ def parse_judgement(text: str) -> dict | None:
     return j
 
 
+NO_BATCH = False            # --no-batch: skip batch APIs (quick checks)
 JUDGE_ATTEMPTS = 4          # per judge and proposal: API errors and unparseable replies are retried with backoff
 
 
 async def judge_all(run: cfgmod.RunConfig, judges, prompt: str) -> dict[str, dict]:
     async def one(j):
-        model = get_model(j.model, config=GenerateConfig(**{**run.generate_for(j), "max_tokens": 16000}), **j.model_args)
+        gen = {**run.generate_for(j), "max_tokens": 16000}
+        if NO_BATCH:
+            gen.pop("batch", None)
+        model = get_model(j.model, config=GenerateConfig(**gen), **j.model_args)
         last = {"error": "no attempt"}
         for attempt in range(JUDGE_ATTEMPTS):
             if attempt:
@@ -374,6 +414,7 @@ def value(ep: Episode, p: dict, j: dict | None, earned: list, price, usage: dict
     wage_min = ep.economics.loaded_hourly / 60
     words_all = sum(len(str(d.get("text", "")).split()) for d in p["drafts"])
     read_min = (words_all if read_words is None else read_words) / mm.read_wpm
+    read_min += (mm.call_glance_s if p["action"] == "say" else mm.triage_s) / 60    # attention, beyond reading
     best = p["drafts"][max(1, min(len(p["drafts"]), (j or {}).get("best_draft", 1))) - 1] if p["drafts"] else {}
     best_text = str(best.get("text", ""))
     score = (j or {}).get("score")
@@ -397,6 +438,7 @@ def value(ep: Episode, p: dict, j: dict | None, earned: list, price, usage: dict
 
 
 async def grade_log(log, run: cfgmod.RunConfig, judges, gate: asyncio.Semaphore) -> list[dict]:
+    speed = speeds()
     model_name = log.eval.model
     spec = next((m for m in run.models if m.model == model_name or model_name.endswith(m.model.split("/", 1)[-1])), None)
     family = spec.family if spec else ""
@@ -406,7 +448,9 @@ async def grade_log(log, run: cfgmod.RunConfig, judges, gate: asyncio.Semaphore)
         idx = path_index(ep)
         props_raw = s.metadata.get("proposals", [])
         props = [to_prop(ep, idx, p) for p in props_raw]
-        needs, traps, earned, matched = outcomes(ep, props)
+        timing = [call_timing(ep, p, speed.get(spec.name) if spec else None) for p in props_raw]
+        late = {i for i, tm in enumerate(timing) if tm and tm["on_time"] is False}
+        needs, traps, earned, matched = outcomes(ep, props, late)
         by_id = {n.id: n for n in ep.needs}
         u = (s.model_usage or {}).get(model_name)     # the tested model only, not the simulated worker
         usage = u.model_dump() if u else None
@@ -425,7 +469,8 @@ async def grade_log(log, run: cfgmod.RunConfig, judges, gate: asyncio.Semaphore)
                 js = await judge_all(run, judges, judge_prompt(ep, p, relevant, earlier)) if judges else {}
             return {"model": spec.name if spec else model_name, "profession": s.id, "epoch": s.epoch,
                     "proposal": p, "needs": [n.id for n in gets], "matches": [n.id for n in relevant],
-                    "revises": props_raw[prev]["id"] if prev is not None else None, "judges": js,
+                    "revises": props_raw[prev]["id"] if prev is not None else None, "timing": timing[i],
+                    "judges": js,
                     "_value_args": (ep, gets, spec.price if spec else None, share, read_words, family)}
         graded = list(await asyncio.gather(*(grade_one(i, p) for i, p in enumerate(props_raw))))
         tot_cost = spec.price.cost(usage) if usage and spec and spec.price else 0.0
@@ -458,7 +503,10 @@ def main():
     ap.add_argument("logs")
     ap.add_argument("--judges", default="all")
     ap.add_argument("--out", default=None)
+    ap.add_argument("--no-batch", action="store_true", help="call batch-enabled judges directly (quick checks)")
     a = ap.parse_args()
+    global NO_BATCH
+    NO_BATCH = a.no_batch
     creds.load()
     run = cfgmod.load(ROOT / "config/run.yaml")
     judges = [] if a.judges == "none" else [j for j in run.judges if a.judges == "all" or j.name in a.judges.split(",")]

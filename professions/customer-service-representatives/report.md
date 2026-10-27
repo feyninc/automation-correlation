@@ -30,7 +30,10 @@
 
 ## Errors (0)
 
-## Warnings (3)
+## Warnings (6)
+- a023: worker acts at D2 07:35, outside working hours
+- a024: worker acts at D2 07:40, outside working hours
+- a091: worker acts at D5 07:50, outside working hours
 - n2-raj-rate: very short mention '$5'
 - n2-v7-read: very short mention 'v7'
 - n4-walter-note: very short mention 'v7'

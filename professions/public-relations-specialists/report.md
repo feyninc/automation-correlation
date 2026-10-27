@@ -35,7 +35,11 @@
 
 ## Errors (0)
 
-## Warnings (6)
+## Warnings (10)
+- a001: worker acts at D1 07:45, outside working hours
+- a070: worker acts at D4 06:40, outside working hours
+- a071: worker acts at D4 07:50, outside working hours
+- a4-hold: worker acts at D4 07:55, outside working hours
 - n1-qa: very short mention 'Q:'
 - n2-okeke-brief: very short mention 'ER'
 - n2-advisory: very short mention 'CT'

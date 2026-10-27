@@ -1,6 +1,7 @@
 # The run: tested models, judges, the simulated worker. Model strings are passed to Inspect AI as is.
 # Prices: USD per million tokens on the route used. speed: from OpenRouter's model page (p50 time to first token,
-# throughput) for the same host where listed, else the best provider; entered by hand (the API returns none).
+# throughput): scripts/speed.py snapshots them into data/openrouter/speed-<date>.csv. batch: true sends a judge's calls
+# through its provider's batch API (OpenAI's, at half price); grade with --no-batch for quick checks.
 run:
   cadence_minutes: 5
   seeds: 3
@@ -57,7 +58,7 @@ models:
 
 judges:
   - {name: Claude Opus 5.5, model: bedrock/global.anthropic.claude-opus-5-5, family: anthropic, price: {input: 4, output: 20, cache_read: 0.2, cache_write: 5}, weight: 0.142858, report_with_dropout: true}
-  - {name: GPT-6 Astra, model: openai/gpt-6-astra, family: openai, price: {input: 10, output: 50, cache_read: 1.0}, weight: 0.142857, report_with_dropout: true}
+  - {name: GPT-6 Astra, model: openai/gpt-6-astra, family: openai, price: {input: 5, output: 25, cache_read: 0.5}, generate: {batch: true}, weight: 0.142857, report_with_dropout: true}
   - {name: Gemini 4 Argon, model: openrouter/google/gemini-4-argon, family: google, price: {input: 2, output: 10, cache_read: 0.1}, weight: 0.142857, report_with_dropout: true, model_args: {provider: {order: [google-vertex/global], allow_fallbacks: false}}}
   - {name: Kimi K3, model: openrouter/moonshotai/kimi-k3, family: moonshot, price: {input: 3, output: 15, cache_read: 0.3}, weight: 0.142857, report_with_dropout: true, model_args: {provider: {order: [moonshotai], allow_fallbacks: false}}}
   - {name: DeepSeek V4.1 Flash, model: openai-api/azure/deepseek-v4.1-flash, family: deepseek, price: {input: 0.3, output: 1.2, cache_read: 0.03}, weight: 0.142857, report_with_dropout: true}

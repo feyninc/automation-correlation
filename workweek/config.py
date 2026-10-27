@@ -32,11 +32,6 @@ class Price(BaseModel):
                 + (usage.get("input_tokens_cache_write") or 0) * write) / 1e6
 
 
-class Speed(BaseModel):
-    ttft_p50_s: float | None = None
-    throughput_tps: float | None = None
-
-
 class ModelSpec(BaseModel):
     name: str
     model: str                         # passed to Inspect unchanged
@@ -45,7 +40,6 @@ class ModelSpec(BaseModel):
     generate: dict[str, Any] = {}       # Inspect GenerateConfig fields (reasoning_effort, ...)
     model_args: dict[str, Any] = {}     # provider routing etc.
     price: Price | None = None
-    speed: Speed = Speed()
 
 
 class JudgeSpec(ModelSpec):
@@ -104,9 +98,6 @@ class RunConfig(BaseModel):
     def generate_for(self, m: ModelSpec) -> dict[str, Any]:
         return {**self.defaults.get("generate", {}), **m.generate,
                 "max_tokens": self.run.max_output_tokens_per_call}
-
-    def missing_speed(self) -> list[str]:
-        return [m.name for m in self.models if m.speed.ttft_p50_s is None or m.speed.throughput_tps is None]
 
     def missing_credentials(self) -> list[str]:
         out = []

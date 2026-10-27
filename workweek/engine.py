@@ -7,6 +7,7 @@ Nothing the model proposes reaches the world; proposals and questions are record
 from __future__ import annotations
 
 import json
+import time
 from pathlib import Path
 
 from inspect_ai import Task, task
@@ -71,6 +72,7 @@ class Sim:
         self.ep, self.run = ep, run
         self.start, self.end = start, end
         self.written: dict[str, bytes] = {}
+        self.work = {"output_tokens": [], "tool_s": 0.0}   # since the prompt being answered: for offline timing
         self.read: list[str] = []   # world files named in bash commands, most recent last (the judges see them)
         self.feed: list[Event] = []
         self.last = -1
@@ -138,8 +140,10 @@ async def run_tool(sim: Sim, call, t: int) -> tuple[str, bool]:
     name = call.function
     if name == "bash":
         sim.note_reads(str(a.get("command", "")))
+        t0 = time.monotonic()
         r = await sandbox().exec(["bash", "-lc", str(a.get("command", ""))], user="assistant",
                                  cwd="/home/assistant", timeout=60)
+        sim.work["tool_s"] += time.monotonic() - t0
         out = (r.stdout or "") + (("\n[stderr]\n" + r.stderr) if r.stderr else "")
         if len(out) > MAX_TOOL_OUTPUT:
             out = out[:MAX_TOOL_OUTPUT] + f"\n[... output truncated at {MAX_TOOL_OUTPUT} characters]"
@@ -159,7 +163,9 @@ async def run_tool(sim: Sim, call, t: int) -> tuple[str, bool]:
         pid = f"p{len(sim.proposals) + 1:04d}"
         sim.proposals.append({"id": pid, "t": fmt(t), "tick": sim.ticks_run, "target": a.get("target", ""),
                               "action": a.get("action", ""), "drafts": drafts, "note": a.get("note", ""),
-                              "in_call": sim.call, "read": sim.read[-READ_KEPT:]})
+                              "in_call": sim.call, "read": sim.read[-READ_KEPT:],
+                              "work": {**sim.work, "output_tokens": list(sim.work["output_tokens"]),
+                                       "tool_s": round(sim.work["tool_s"], 2)}})
         return f"Saved proposal {pid} with {len(drafts)} draft(s). {sim.first} will review it; nothing was sent.", False
     if name == "ask_worker":
         q = str(a.get("question", "")).strip()
@@ -195,6 +201,7 @@ def elide(messages: list, keep_from: int) -> None:
 async def agent_turn(sim: Sim, model: Model, messages: list, t: int, budget: int) -> None:
     for _ in range(budget):
         out = await model.generate(messages, tools=TOOLS)
+        sim.work["output_tokens"].append(out.usage.output_tokens if out.usage else 0)
         calls = out.message.tool_calls or []
         if not calls:
             calls = providers.recover_tool_calls(out.message.text, {t.name for t in TOOLS})
@@ -232,6 +239,7 @@ async def follow_call(sim: Sim, model: Model, messages: list, t: int) -> int:
         await sim.sync(s, events(sim.ep, sim.last, s))
         sim.last = s
         speaker = next((c.name for c in sim.ep.contacts if c.id == x.author), x.author)
+        sim.work = {"output_tokens": [], "tool_s": 0.0, "answers": x.id, "patience_s": x.meta.get("patience_s")}
         messages.append(ChatMessageUser(content=prompts.CALL_TURN.format(
             when=fmt(s), path=path, speaker=speaker, text=x.body, first_name=sim.first)))
         await agent_turn(sim, model, messages, s, budget=4)
@@ -243,7 +251,7 @@ async def follow_call(sim: Sim, model: Model, messages: list, t: int) -> int:
 
 
 @solver
-def workweek_agent(run_path: str = "config/run.yaml", start: str = "D1 08:00", end: str = "D5 17:00"):
+def workweek_agent(run_path: str = "config/run.yaml", start: str = "D1 00:00", end: str = "D5 23:59"):
     async def solve(state: TaskState, generate: Generate) -> TaskState:
         run = cfgmod.load(ROOT / run_path)
         ep = load_episode(ROOT / state.metadata["episode"])
@@ -256,7 +264,8 @@ def workweek_agent(run_path: str = "config/run.yaml", start: str = "D1 08:00", e
                                         employer=ep.employer.name, first_name=sim.first,
                                         profession_prompt=ep.profession_prompt.strip())
         for day in range(1, 6):
-            day_ticks = [x for x in ticks(day, cadence) if s0 <= x <= s1]
+            day_start, day_end = ep.worker.day_hours(day)
+            day_ticks = [x for x in ticks(day, cadence, day_start, day_end) if s0 <= x <= s1]
             if not day_ticks:
                 continue
             messages: list = [ChatMessageSystem(content=system),
@@ -273,7 +282,7 @@ def workweek_agent(run_path: str = "config/run.yaml", start: str = "D1 08:00", e
                 call_note = ""
                 if any(sim.call_thread(e.path) and sim.call_thread(e.path).call_end() >= t for e in live):
                     call_note = " A live call is in progress (see the feed)."
-                end_of_day = t % 86400 == 17 * 3600
+                end_of_day = t % 86400 == day_end
                 text = (prompts.END_OF_DAY.format(when=fmt(t), first_name=sim.first, n_new=len(new)) if end_of_day else
                         prompts.TICK.format(when=fmt(t), n_new=len(new), call_note=call_note))
                 tick_starts.append(len(messages))
@@ -281,6 +290,7 @@ def workweek_agent(run_path: str = "config/run.yaml", start: str = "D1 08:00", e
                     elide(messages, tick_starts[-KEEP_TOOL_OUTPUT_TICKS - 1])
                 messages.append(ChatMessageUser(content=text))
                 sim.ticks_run += 1
+                sim.work = {"output_tokens": [], "tool_s": 0.0}
                 await agent_turn(sim, model, messages, t, budget)
                 if sim.call:
                     resume = await follow_call(sim, model, messages, t)
@@ -298,7 +308,7 @@ def workweek_agent(run_path: str = "config/run.yaml", start: str = "D1 08:00", e
 
 
 @task
-def workweek(professions: str = "all", start: str = "D1 08:00", end: str = "D5 17:00",
+def workweek(professions: str = "all", start: str = "D1 00:00", end: str = "D5 23:59",
              run_path: str = "config/run.yaml", epochs: int = 1):
     paths = sorted(p.parent for p in (ROOT / "professions").glob("*/episode/profession.json"))
     if professions != "all":
