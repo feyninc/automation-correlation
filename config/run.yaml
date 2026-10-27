@@ -1,0 +1,64 @@
+# The run: tested models, judges, the simulated worker. Model strings are passed to Inspect AI as is.
+# Prices: USD per million tokens on the route used. speed: from OpenRouter's model page (p50 time to first token,
+# throughput) for the same host where listed, else the best provider; entered by hand (the API returns none).
+run:
+  cadence_minutes: 5
+  seeds: 3
+  max_tool_calls_per_tick: 25
+  max_output_tokens_per_call: 16000
+  send_arm: false
+  professions: all
+  eci_factor: {value: 1.0, source: "ECI wages and salaries, May 2025 to the run quarter; set on 2026-10-30 release"}
+
+user_model:
+  name: Gemini 4 Argon (simulated worker)
+  model: openrouter/google/gemini-4-argon
+  family: google
+  generate: {reasoning_effort: medium}
+  model_args: {provider: {order: [google-vertex/global], allow_fallbacks: false}}
+
+defaults:
+  generate: {reasoning_effort: medium}
+
+models:
+  # OpenAI, on OpenAI's API
+  - {name: GPT-5.2, model: openai/gpt-5.2, family: openai, released: 2025-12-11, price: {input: 1.75, output: 14, cache_read: 0.175}}
+  - {name: GPT-5.4, model: openai/gpt-5.4, family: openai, released: 2026-03-05, price: {input: 2.5, output: 15, cache_read: 0.25}}
+  - {name: GPT-5.5, model: openai/gpt-5.5, family: openai, released: 2026-04-23, price: {input: 5, output: 30, cache_read: 0.5}}
+  - {name: GPT-5.6 Sol, model: openai/gpt-5.6-sol, family: openai, released: 2026-07-09, price: {input: 4, output: 20, cache_read: 0.4}}
+  - {name: GPT-6 Sol, model: openai/gpt-6-sol, family: openai, released: 2026-09-22, price: {input: 2, output: 10, cache_read: 0.2}}
+  - {name: GPT-6.1 Sol, model: openai/gpt-6.1-sol, family: openai, released: 2026-09-29, price: {input: 2, output: 10, cache_read: 0.1}}
+  # Anthropic, on Bedrock (global inference profiles)
+  - {name: Claude Opus 4.5, model: bedrock/global.anthropic.claude-opus-4-5-20251101-v1:0, family: anthropic, released: 2025-11-24, price: {input: 5, output: 25, cache_read: 0.5, cache_write: 6.25}}
+  - {name: Claude Opus 4.6, model: bedrock/global.anthropic.claude-opus-4-6-v1, family: anthropic, released: 2026-02-05, price: {input: 5, output: 25, cache_read: 0.5, cache_write: 6.25}}
+  - {name: Claude Opus 4.7, model: bedrock/global.anthropic.claude-opus-4-7, family: anthropic, released: 2026-04-16, price: {input: 5, output: 25, cache_read: 0.5, cache_write: 6.25}}
+  - {name: Claude Opus 4.8, model: bedrock/global.anthropic.claude-opus-4-8, family: anthropic, released: 2026-05-28, price: {input: 5, output: 25, cache_read: 0.5, cache_write: 6.25}}
+  - {name: Claude Opus 5, model: bedrock/global.anthropic.claude-opus-5, family: anthropic, released: 2026-07-24, price: {input: 5, output: 25, cache_read: 0.5, cache_write: 6.25}}
+  - {name: Claude Opus 5.5, model: bedrock/global.anthropic.claude-opus-5-5, family: anthropic, released: 2026-09-22, price: {input: 4, output: 20, cache_read: 0.2, cache_write: 5}}
+  # Moonshot Kimi: Azure Foundry where offered, else OpenRouter
+  - {name: Kimi K2 Thinking, model: openrouter/moonshotai/kimi-k2-thinking, family: moonshot, released: 2025-11-06, price: {input: 0.6, output: 2.5, cache_read: 0.15}, model_args: {provider: {order: [novita/bf16], allow_fallbacks: false}}}
+  - {name: Kimi K2.5, model: openai-api/azure/kimi-k2.5, family: moonshot, released: 2026-01-27, price: {input: 0.6, output: 3, cache_read: 0.1}}
+  - {name: Kimi K2.6, model: openai-api/azure/kimi-k2.6, family: moonshot, released: 2026-04-20, price: {input: 0.95, output: 4, cache_read: 0.16}}
+  - {name: Kimi K3, model: openrouter/moonshotai/kimi-k3, family: moonshot, released: 2026-07-16, price: {input: 3, output: 15, cache_read: 0.3}, model_args: {provider: {order: [moonshotai], allow_fallbacks: false}}}
+  - {name: Kimi K3.1 Pro, model: openrouter/moonshotai/kimi-k3.1-pro, family: moonshot, released: 2026-10-23, price: {input: 2, output: 10, cache_read: 0.2}, model_args: {provider: {order: [moonshotai], allow_fallbacks: false}}}
+  # DeepSeek: Azure Foundry where offered, else OpenRouter (DeepInfra fp8)
+  - {name: DeepSeek V3.2, model: openai-api/azure/deepseek-v3.2, family: deepseek, released: 2025-12-01, price: {input: 0.58, output: 1.68, cache_read: 0.058}}
+  - {name: DeepSeek V4 Flash, model: openai-api/azure/deepseek-v4-flash, family: deepseek, released: 2026-04-24, price: {input: 0.21, output: 0.56, cache_read: 0.031}}
+  - {name: DeepSeek V4 Flash 0731, model: openai-api/azure/deepseek-v4-flash-0731, family: deepseek, released: 2026-07-31, price: {input: 0.21, output: 0.56, cache_read: 0.031}}
+  - {name: DeepSeek V4.1 Flash, model: openai-api/azure/deepseek-v4.1-flash, family: deepseek, released: 2026-09-10, price: {input: 0.3, output: 1.2, cache_read: 0.03}}
+  - {name: DeepSeek V4.1 Flash 1017, model: openrouter/deepseek/deepseek-v4.1-flash-1017, family: deepseek, released: 2026-10-17, price: {input: 0.098, output: 0.294, cache_read: 0.00294}, model_args: {provider: {order: [deepinfra/fp8], allow_fallbacks: false}}}
+  # Z.ai GLM: Bedrock for 4.7 and 5 (thinking only at "high" there; see docs/reasoning.md), Z.ai fp8 for 5.1 to 5.3
+  - {name: GLM-4.7, model: bedrock/zai.glm-4.7, family: zai, released: 2025-12-22, price: {input: 0.6, output: 2.2, cache_read: 0}, generate: {reasoning_effort: high}}
+  - {name: GLM-5, model: bedrock/zai.glm-5, family: zai, released: 2026-02-12, price: {input: 1.0, output: 3.2, cache_read: 0}, generate: {reasoning_effort: high}}
+  - {name: GLM-5.1, model: openrouter/z-ai/glm-5.1, family: zai, released: 2026-04-07, price: {input: 1.4, output: 4.4, cache_read: 0.26}, model_args: {provider: {order: [z-ai/fp8], allow_fallbacks: false}}}
+  - {name: GLM-5.2, model: openrouter/z-ai/glm-5.2, family: zai, released: 2026-06-16, price: {input: 1.4, output: 4.4, cache_read: 0.26}, model_args: {provider: {order: [z-ai/fp8], allow_fallbacks: false}}}
+  - {name: GLM-5.3, model: openrouter/z-ai/glm-5.3, family: zai, released: 2026-08-18, price: {input: 1.4, output: 4.4, cache_read: 0.26}, model_args: {provider: {order: [z-ai/fp8], allow_fallbacks: false}}}
+
+judges:
+  - {name: Claude Opus 5.5, model: bedrock/global.anthropic.claude-opus-5-5, family: anthropic, weight: 0.142858, report_with_dropout: true}
+  - {name: GPT-6 Astra, model: openai/gpt-6-astra, family: openai, weight: 0.142857, report_with_dropout: true}
+  - {name: Gemini 4 Argon, model: openrouter/google/gemini-4-argon, family: google, weight: 0.142857, report_with_dropout: true, model_args: {provider: {order: [google-vertex/global], allow_fallbacks: false}}}
+  - {name: Kimi K3, model: openrouter/moonshotai/kimi-k3, family: moonshot, weight: 0.142857, report_with_dropout: true, model_args: {provider: {order: [moonshotai], allow_fallbacks: false}}}
+  - {name: DeepSeek V4.1 Flash, model: openai-api/azure/deepseek-v4.1-flash, family: deepseek, weight: 0.142857, report_with_dropout: true}
+  - {name: Qwen3.8 Max Prime, model: openrouter/qwen/qwen3.8-max-prime, family: alibaba, weight: 0.142857, report_with_dropout: true, model_args: {provider: {order: [alibaba], allow_fallbacks: false}}}
+  - {name: GLM-5.3, model: openrouter/z-ai/glm-5.3, family: zai, weight: 0.142857, report_with_dropout: true, model_args: {provider: {order: [z-ai/fp8], allow_fallbacks: false}}}

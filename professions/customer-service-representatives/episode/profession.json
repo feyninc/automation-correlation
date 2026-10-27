@@ -1,0 +1,1383 @@
+{
+ "meta": {
+  "schema_version": "1.0",
+  "soc": "43-4051.00",
+  "title": "Customer Service Representatives",
+  "onet_version": "31.0",
+  "week_start": "2026-11-02",
+  "status": "draft",
+  "generator": "workweek.compile (hand-written week)",
+  "sha256": "3ff771a6af94ae1ac17422104b6c65a7ada5e0663b30876afa865f18d4169aae"
+ },
+ "economics": {
+  "soc": "43-4051.00",
+  "title": "Customer Service Representatives",
+  "median_hourly_wage": {
+   "value": 21.53,
+   "source": "BLS OEWS May 2025 via O*NET OnLine (data/wages-onetonline-2026-10-26.csv)",
+   "note": ""
+  },
+  "eci_factor": {
+   "value": 1.0,
+   "source": "BLS ECI wages and salaries, civilian workers (https://www.bls.gov/eci/); not yet applied",
+   "note": "set on 2026-10-30 from the Q3 2026 release"
+  },
+  "loaded_multiplier": {
+   "value": 1.456,
+   "source": "BLS ECEC June 2026, private office and administrative support occupations: total compensation $36.73 / wages $25.22 (https://www.bls.gov/news.release/ecec.t04.htm)",
+   "note": ""
+  },
+  "employment": {
+   "value": 2666000.0,
+   "source": "BLS via O*NET OnLine, 2025",
+   "note": ""
+  },
+  "projection": "Decline (-1% or lower) (2025-2035), 289,500 openings a year",
+  "observed_exposure": {
+   "value": 0.7011,
+   "source": "Anthropic Economic Index, labor market impacts (Massenkoff and McCrory, 2026-03-05)",
+   "note": ""
+  },
+  "task_penetration": {
+   "18565": 0.991,
+   "2578": 0.9951,
+   "2580": 0.0,
+   "2581": 0.9913,
+   "2583": 0.0,
+   "2584": 0.0,
+   "2582": 1.0,
+   "2579": 0.9872,
+   "2587": 0.0,
+   "2586": 1.0,
+   "2589": 0.0,
+   "2585": 0.0,
+   "2591": 0.0
+  },
+  "minutes_model": {
+   "read_wpm": 238.0,
+   "compose_wpm": 20.0,
+   "friction": 1.5,
+   "rewrite_threshold": 0.5,
+   "question_answer_s": 25.0,
+   "overrides": {}
+  }
+ },
+ "employer": {
+  "name": "Northbeam Fiber, Inc.",
+  "industry": "telecommunications (fiber internet and interconnected VoIP Home Phone)",
+  "size": 1900,
+  "location": "Salem, Oregon",
+  "timezone": "America/Los_Angeles",
+  "description": "Regional fiber-to-the-home internet provider with a Home Phone (interconnected VoIP) add-on; about 210,000 internet and 38,000 Home Phone customers in the Willamette Valley, southwest Washington and Siskiyou County, California. The Salem contact center has about 160 reps across Tier 1 (phone and digital), Tier 2 Billing, Tier 2 Technical, Loyalty and Account Security."
+ },
+ "worker": {
+  "id": "worker",
+  "name": "Marisol Ortega",
+  "title": "Customer Care Representative II (Tier 1, blended phone and digital)",
+  "manager": "c_derek",
+  "team": "Tier 1 Team 4",
+  "email": "marisol.ortega@northbeamfiber.com",
+  "signature": "Marisol Ortega | Customer Care | Northbeam Fiber | 1-800-555-0144"
+ },
+ "profession_prompt": "Marisol is a bilingual (English and Spanish) Tier 1 customer care representative. Her day is phone calls, plus\nscheduled \"digital blocks\" for email and chat tickets, plus internal chat with her team and the other support\ngroups. Customers call or write about bills, payments, service problems, moves, plan changes and cancellations.\n\nGood help in this job means:\n- the right answer for this customer, from their account and the current policies, not a guess;\n- identity verified before anything about an account is shared;\n- offers, credits and promises that stay within what a Tier 1 rep may approve, and clean hand-offs to the team\n  that owns the rest (with the details that team needs);\n- complete case notes for every contact, and follow-ups that do not slip;\n- a calm, clear, courteous tone, short enough to say on a call or read on a phone.\nPolicies and procedures are in the knowledge base; customer accounts are in the billing console records.",
+ "apps": [
+  "mail",
+  "chat",
+  "phone",
+  "tickets",
+  "calendar",
+  "docs",
+  "policies",
+  "records",
+  "contacts"
+ ],
+ "contacts": [
+  {
+   "id": "c_derek",
+   "name": "Derek Hamm",
+   "role": "Team Lead, Tier 1 Team 4",
+   "org": "Northbeam Fiber",
+   "email": "derek.hamm@northbeamfiber.com",
+   "phone": null,
+   "relation": "manager",
+   "notes": ""
+  },
+  {
+   "id": "c_priya",
+   "name": "Priya Raman",
+   "role": "Contact Center Operations Manager",
+   "org": "Northbeam Fiber",
+   "email": "priya.raman@northbeamfiber.com",
+   "phone": null,
+   "relation": "skip-level manager",
+   "notes": ""
+  },
+  {
+   "id": "c_lena",
+   "name": "Lena Kowalczyk",
+   "role": "Tier 2 Billing Escalations Specialist",
+   "org": "Northbeam Fiber",
+   "email": "lena.kowalczyk@northbeamfiber.com",
+   "phone": null,
+   "relation": "Tier 2 Billing",
+   "notes": ""
+  },
+  {
+   "id": "c_jamal",
+   "name": "Jamal Whitfield",
+   "role": "Tier 2 Technical Support",
+   "org": "Northbeam Fiber",
+   "email": "jamal.whitfield@northbeamfiber.com",
+   "phone": null,
+   "relation": "Tier 2 Technical",
+   "notes": ""
+  },
+  {
+   "id": "c_kevin",
+   "name": "Kevin Tran",
+   "role": "NOC Duty Manager",
+   "org": "Northbeam Fiber",
+   "email": "kevin.tran@northbeamfiber.com",
+   "phone": null,
+   "relation": "Network Operations Center",
+   "notes": ""
+  },
+  {
+   "id": "c_shauna",
+   "name": "Shauna Bell",
+   "role": "Loyalty Specialist",
+   "org": "Northbeam Fiber",
+   "email": "shauna.bell@northbeamfiber.com",
+   "phone": null,
+   "relation": "Loyalty (retention)",
+   "notes": ""
+  },
+  {
+   "id": "c_ray",
+   "name": "Ray Delgado",
+   "role": "Account Security Analyst",
+   "org": "Northbeam Fiber",
+   "email": "ray.delgado@northbeamfiber.com",
+   "phone": null,
+   "relation": "Account Security",
+   "notes": ""
+  },
+  {
+   "id": "c_tomas",
+   "name": "Tomas Reyes",
+   "role": "Quality Analyst",
+   "org": "Northbeam Fiber",
+   "email": "tomas.reyes@northbeamfiber.com",
+   "phone": null,
+   "relation": "QA",
+   "notes": ""
+  },
+  {
+   "id": "c_analucia",
+   "name": "Ana Lucia Pereira",
+   "role": "Workforce Management Analyst",
+   "org": "Northbeam Fiber",
+   "email": "analucia.pereira@northbeamfiber.com",
+   "phone": null,
+   "relation": "WFM",
+   "notes": ""
+  },
+  {
+   "id": "c_brent",
+   "name": "Brent Olsen",
+   "role": "Field Operations Scheduler",
+   "org": "Northbeam Fiber",
+   "email": "brent.olsen@northbeamfiber.com",
+   "phone": null,
+   "relation": "Field Ops dispatch",
+   "notes": ""
+  },
+  {
+   "id": "c_kayla",
+   "name": "Kayla Nguyen",
+   "role": "Customer Care Representative II",
+   "org": "Northbeam Fiber",
+   "email": "kayla.nguyen@northbeamfiber.com",
+   "phone": null,
+   "relation": "peer, Team 4",
+   "notes": ""
+  },
+  {
+   "id": "c_omar",
+   "name": "Omar Haddad",
+   "role": "Customer Care Representative I",
+   "org": "Northbeam Fiber",
+   "email": "omar.haddad@northbeamfiber.com",
+   "phone": null,
+   "relation": "peer, Team 4 (6 weeks in)",
+   "notes": ""
+  },
+  {
+   "id": "c_jess",
+   "name": "Jess Moreland",
+   "role": "Knowledge and Training Manager",
+   "org": "Northbeam Fiber",
+   "email": "jess.moreland@northbeamfiber.com",
+   "phone": null,
+   "relation": "knowledge base",
+   "notes": ""
+  },
+  {
+   "id": "c_brady",
+   "name": "Brady Coates",
+   "role": "Residential Sales Manager",
+   "org": "Northbeam Fiber",
+   "email": "brady.coates@northbeamfiber.com",
+   "phone": null,
+   "relation": "Sales (not in Marisol's chain)",
+   "notes": ""
+  },
+  {
+   "id": "c_hannah",
+   "name": "Hannah Stiles",
+   "role": "Compliance Manager, Legal and Regulatory",
+   "org": "Northbeam Fiber",
+   "email": "hannah.stiles@northbeamfiber.com",
+   "phone": null,
+   "relation": "Compliance",
+   "notes": ""
+  },
+  {
+   "id": "c_wendy",
+   "name": "Wendy Marsh",
+   "role": "Billing Operations Supervisor",
+   "org": "Northbeam Fiber",
+   "email": "wendy.marsh@northbeamfiber.com",
+   "phone": null,
+   "relation": "Billing Operations",
+   "notes": ""
+  },
+  {
+   "id": "c_mortiz",
+   "name": "Marisol Ortiz",
+   "role": "Billing Operations Analyst",
+   "org": "Northbeam Fiber",
+   "email": "marisol.ortiz@northbeamfiber.com",
+   "phone": null,
+   "relation": "Billing Operations (different person, similar name)",
+   "notes": ""
+  },
+  {
+   "id": "c_itsec",
+   "name": "IT Security",
+   "role": "phishing reports mailbox",
+   "org": "Northbeam Fiber",
+   "email": "report-phish@northbeamfiber.com",
+   "phone": null,
+   "relation": "internal",
+   "notes": ""
+  },
+  {
+   "id": "c_system",
+   "name": "Northbeam systems",
+   "role": "automated notices",
+   "org": "Northbeam Fiber",
+   "email": "no-reply@northbeamfiber.com",
+   "phone": null,
+   "relation": "system",
+   "notes": ""
+  },
+  {
+   "id": "c_hector",
+   "name": "Hector Alvarado",
+   "role": "customer NB-40318827",
+   "org": "customer",
+   "email": "hector.alvarado@fastmail.com",
+   "phone": "503-555-0181",
+   "relation": "customer",
+   "notes": ""
+  },
+  {
+   "id": "c_gary",
+   "name": "Gary Lindqvist",
+   "role": "customer NB-40211736",
+   "org": "customer",
+   "email": null,
+   "phone": "503-555-0127",
+   "relation": "customer",
+   "notes": ""
+  },
+  {
+   "id": "c_tanya",
+   "name": "Tanya Brooks",
+   "role": "customer NB-40299018",
+   "org": "customer",
+   "email": "tbrooks.salem@gmail.com",
+   "phone": "503-555-0163",
+   "relation": "customer",
+   "notes": ""
+  },
+  {
+   "id": "c_walter",
+   "name": "Walter Kim",
+   "role": "customer NB-40188364",
+   "org": "customer",
+   "email": null,
+   "phone": "541-555-0192",
+   "relation": "customer",
+   "notes": ""
+  },
+  {
+   "id": "c_amara",
+   "name": "Amara Okafor",
+   "role": "customer NB-40350961",
+   "org": "customer",
+   "email": "amara.okafor@outlook.com",
+   "phone": "971-555-0140",
+   "relation": "customer",
+   "notes": ""
+  },
+  {
+   "id": "c_curtis",
+   "name": "Curtis Wainwright",
+   "role": "former customer NB-40122953",
+   "org": "customer",
+   "email": "cwainwright@comcast.net",
+   "phone": "503-555-0118",
+   "relation": "customer",
+   "notes": ""
+  },
+  {
+   "id": "c_naomi",
+   "name": "Naomi Fischer",
+   "role": "customer NB-40377412",
+   "org": "customer",
+   "email": "naomi.fischer@proton.me",
+   "phone": "503-555-0175",
+   "relation": "customer",
+   "notes": ""
+  },
+  {
+   "id": "c_ruth",
+   "name": "Ruth Engel",
+   "role": "customer NB-40255190",
+   "org": "customer",
+   "email": null,
+   "phone": "503-555-0109",
+   "relation": "customer",
+   "notes": ""
+  },
+  {
+   "id": "c_lupe",
+   "name": "Guadalupe Serrano",
+   "role": "customer NB-40362208",
+   "org": "customer",
+   "email": "lupe.serrano@yahoo.com",
+   "phone": "503-555-0151",
+   "relation": "customer",
+   "notes": ""
+  },
+  {
+   "id": "c_ben",
+   "name": "Ben Hartley",
+   "role": "customer NB-40271944",
+   "org": "customer",
+   "email": "ben.hartley@icloud.com",
+   "phone": "360-555-0133",
+   "relation": "customer",
+   "notes": ""
+  },
+  {
+   "id": "c_irene",
+   "name": "Irene Castillo",
+   "role": "customer NB-40144870",
+   "org": "customer",
+   "email": null,
+   "phone": "541-555-0168",
+   "relation": "customer",
+   "notes": ""
+  },
+  {
+   "id": "c_pete",
+   "name": "Pete Danforth",
+   "role": "customer NB-40395511",
+   "org": "customer",
+   "email": "pdanforth@gmail.com",
+   "phone": "503-555-0199",
+   "relation": "customer",
+   "notes": ""
+  },
+  {
+   "id": "c_sana",
+   "name": "Sana Iqbal",
+   "role": "customer NB-40407713",
+   "org": "customer",
+   "email": "sana.iqbal@gmail.com",
+   "phone": "971-555-0124",
+   "relation": "customer",
+   "notes": ""
+  },
+  {
+   "id": "c_mike",
+   "name": "Mike Ostrowski",
+   "role": "customer NB-40229604",
+   "org": "customer",
+   "email": null,
+   "phone": "503-555-0186",
+   "relation": "customer",
+   "notes": ""
+  },
+  {
+   "id": "c_june",
+   "name": "June Albright",
+   "role": "customer NB-40166392",
+   "org": "customer",
+   "email": "junealbright@aol.com",
+   "phone": "503-555-0112",
+   "relation": "customer",
+   "notes": ""
+  },
+  {
+   "id": "c_doris",
+   "name": "Doris Whitaker",
+   "role": "customer NB-40135566",
+   "org": "customer",
+   "email": null,
+   "phone": "503-555-0137",
+   "relation": "customer",
+   "notes": ""
+  },
+  {
+   "id": "c_kenji",
+   "name": "Kenji Mori",
+   "role": "customer NB-40383309",
+   "org": "customer",
+   "email": "kenji.mori@gmail.com",
+   "phone": "503-555-0115",
+   "relation": "customer",
+   "notes": ""
+  },
+  {
+   "id": "c_alana",
+   "name": "Alana Brightwater",
+   "role": "customer NB-40312075",
+   "org": "customer",
+   "email": "alana.bw@gmail.com",
+   "phone": "971-555-0147",
+   "relation": "customer",
+   "notes": ""
+  },
+  {
+   "id": "c_frank",
+   "name": "Frank Ruiz",
+   "role": "customer NB-40246681",
+   "org": "customer",
+   "email": null,
+   "phone": "541-555-0103",
+   "relation": "customer",
+   "notes": ""
+  },
+  {
+   "id": "c_beth",
+   "name": "Beth Lavoie",
+   "role": "customer NB-40370448",
+   "org": "customer",
+   "email": "beth.lavoie@hotmail.com",
+   "phone": "503-555-0158",
+   "relation": "customer",
+   "notes": ""
+  },
+  {
+   "id": "c_raj",
+   "name": "Raj Patel",
+   "role": "customer NB-40391127",
+   "org": "customer",
+   "email": "raj.patel.or@gmail.com",
+   "phone": "503-555-0173",
+   "relation": "customer",
+   "notes": ""
+  },
+  {
+   "id": "c_spoof",
+   "name": "Northbeam IT Service Desk",
+   "role": "unknown external sender",
+   "org": "unknown",
+   "email": "it-servicedesk@northbeam-fiber-support.com",
+   "phone": null,
+   "relation": "unknown",
+   "notes": ""
+  },
+  {
+   "id": "c_jordan",
+   "name": "Jordan Mehta",
+   "role": "customer NB-40342281",
+   "org": "customer",
+   "email": "jordan.mehta@gmail.com",
+   "phone": "503-555-0129",
+   "relation": "customer",
+   "notes": ""
+  },
+  {
+   "id": "c_megan",
+   "name": "Megan Fry",
+   "role": "customer NB-40321184",
+   "org": "customer",
+   "email": "megan.fry@outlook.com",
+   "phone": "503-555-0195",
+   "relation": "customer",
+   "notes": ""
+  },
+  {
+   "id": "c_lou",
+   "name": "Lou Brenner",
+   "role": "customer NB-40299870",
+   "org": "customer",
+   "email": null,
+   "phone": "503-555-0148",
+   "relation": "customer",
+   "notes": ""
+  },
+  {
+   "id": "c_tess",
+   "name": "Tess Navarro",
+   "role": "customer NB-40381102",
+   "org": "customer",
+   "email": "tessnavarro@gmail.com",
+   "phone": "503-555-0166",
+   "relation": "customer",
+   "notes": ""
+  },
+  {
+   "id": "c_harold",
+   "name": "Harold Price",
+   "role": "customer NB-40108221",
+   "org": "customer",
+   "email": null,
+   "phone": "503-555-0104",
+   "relation": "customer",
+   "notes": ""
+  },
+  {
+   "id": "c_nina",
+   "name": "Nina Okoro",
+   "role": "customer NB-40377809",
+   "org": "customer",
+   "email": "nina.okoro@gmail.com",
+   "phone": "971-555-0131",
+   "relation": "customer",
+   "notes": ""
+  },
+  {
+   "id": "c_sam",
+   "name": "Sam Whitfield",
+   "role": "customer NB-40333107",
+   "org": "customer",
+   "email": "sam.w.keizer@gmail.com",
+   "phone": "503-555-0182",
+   "relation": "customer",
+   "notes": ""
+  },
+  {
+   "id": "c_vera",
+   "name": "Vera Castellanos",
+   "role": "customer NB-40419933",
+   "org": "customer",
+   "email": "vcastellanos@sisqtel.net",
+   "phone": "530-555-0150",
+   "relation": "customer",
+   "notes": ""
+  },
+  {
+   "id": "c_greg",
+   "name": "Greg Halvorsen",
+   "role": "customer NB-40350277",
+   "org": "customer",
+   "email": "ghalvorsen@gmail.com",
+   "phone": "503-555-0191",
+   "relation": "customer",
+   "notes": ""
+  },
+  {
+   "id": "c_ivy",
+   "name": "Ivy Tran",
+   "role": "customer NB-40362290",
+   "org": "customer",
+   "email": "ivy.tran.or@gmail.com",
+   "phone": "503-555-0134",
+   "relation": "customer",
+   "notes": ""
+  },
+  {
+   "id": "c_karen",
+   "name": "Karen Albright",
+   "role": "June Albright's daughter",
+   "org": "customer",
+   "email": null,
+   "phone": null,
+   "relation": "customer",
+   "notes": ""
+  }
+ ],
+ "ledger": {
+  "plan_300": 55.0,
+  "plan_1g": 75.0,
+  "plan_2g": 95.0,
+  "home_phone": 20.0,
+  "late_fee": 10.0,
+  "tier1_credit_cap_30d": 40.0,
+  "arrangement_cap": 250.0
+ },
+ "grounding": {
+  "sources": [
+   "BLS OEWS May 2025 and projections via O*NET OnLine: https://www.onetonline.org/link/summary/43-4051.00",
+   "BLS Occupational Outlook Handbook, Customer Service Representatives: https://www.bls.gov/ooh/office-and-administrative-support/customer-service-representatives.htm",
+   "Call Centre Helper, industry standard metrics (AHT 6:03, occupancy 83.3%, shrinkage 30%): https://www.callcentrehelper.com/industry-standards-metrics-125584.htm",
+   "47 CFR 64.2010 (CPNI authentication): https://www.law.cornell.edu/cfr/text/47/64.2010",
+   "47 CFR 64.2003 (definitions; readily available biographical information): https://www.law.cornell.edu/cfr/text/47/64.2003",
+   "PCI SSC, Protecting Telephone-Based Payment Card Data v3.0: https://www.pcisecuritystandards.org/documents/Protecting_Telephone_Based_Payment_Card_Data_v3-0_nov_2018.pdf",
+   "15 U.S.C. 8403 (ROSCA): https://www.law.cornell.edu/uscode/text/15/8403",
+   "FTC Negative Option Rule recodified 2026-02-12: https://www.federalregister.gov/documents/2026/02/12/2026-02866/revision-of-the-negative-option-rule-withdrawal-of-the-cars-rule-removal-of-the-non-compete-rule-to",
+   "Cal. Bus. & Prof. Code 17602 (automatic renewal; cancellation): https://codes.findlaw.com/ca/business-and-professions-code/bpc-sect-17602/",
+   "47 CFR 64.1200 (TCPA: prerecorded calls, calling hours, company do-not-call lists): https://www.law.cornell.edu/cfr/text/47/64.1200",
+   "SQM Group, first-call resolution benchmarks (telecom FCR 56%): https://www.sqmgroup.com/resources/library/blog/fcr-metric-operating-philosophy",
+   "Brynjolfsson, Li and Raymond, Generative AI at Work: https://www.nber.org/papers/w31161"
+  ],
+  "onet_tasks": {
+   "18565": {
+    "task": "Confer with customers by telephone or in person to provide information about products or services, take or enter orders, cancel accounts, or obtain details of complaints.",
+    "type": "Core",
+    "FT": 5.8767,
+    "IM": 4.67
+   },
+   "2578": {
+    "task": "Keep records of customer interactions or transactions, recording details of inquiries, complaints, or comments, as well as actions taken.",
+    "type": "Core",
+    "FT": 5.7882,
+    "IM": 4.53
+   },
+   "2580": {
+    "task": "Check to ensure that appropriate changes were made to resolve customers' problems.",
+    "type": "Core",
+    "FT": 5.270499999999999,
+    "IM": 4.39
+   },
+   "2581": {
+    "task": "Contact customers to respond to inquiries or to notify them of claim investigation results or any planned adjustments.",
+    "type": "Core",
+    "FT": 4.856599999999999,
+    "IM": 4.22
+   },
+   "2583": {
+    "task": "Determine charges for services requested, collect deposits or payments, or arrange for billing.",
+    "type": "Core",
+    "FT": 5.175599999999999,
+    "IM": 4.18
+   },
+   "2584": {
+    "task": "Complete contract forms, prepare change of address records, or issue service discontinuance orders, using computers.",
+    "type": "Core",
+    "FT": 5.485648564856485,
+    "IM": 4.1
+   },
+   "2582": {
+    "task": "Refer unresolved customer grievances to designated departments for further investigation.",
+    "type": "Core",
+    "FT": 4.059200000000001,
+    "IM": 4.07
+   },
+   "2579": {
+    "task": "Resolve customers' service or billing complaints by performing activities such as exchanging merchandise, refunding money, or adjusting bills.",
+    "type": "Supplemental",
+    "FT": 4.988,
+    "IM": 4.19
+   },
+   "2587": {
+    "task": "Review insurance policy terms to determine whether a particular loss is covered by insurance.",
+    "type": "Supplemental",
+    "FT": 4.362,
+    "IM": 4.05
+   },
+   "2586": {
+    "task": "Solicit sales of new or additional services or products.",
+    "type": "Supplemental",
+    "FT": 5.2401,
+    "IM": 3.87
+   },
+   "2589": {
+    "task": "Compare disputed merchandise with original requisitions and information from invoices and prepare invoices for returned goods.",
+    "type": "Supplemental",
+    "FT": 3.7989798979897995,
+    "IM": 3.64
+   },
+   "2585": {
+    "task": "Obtain and examine all relevant information to assess validity of complaints and to determine possible causes, such as extreme weather conditions that could increase utility bills.",
+    "type": "Supplemental",
+    "FT": 4.745774577457746,
+    "IM": 3.63
+   },
+   "2591": {
+    "task": "Recommend improvements in products, packaging, shipping, service, or billing methods and procedures to prevent future problems.",
+    "type": "Supplemental",
+    "FT": 3.4314568543145683,
+    "IM": 3.16
+   }
+  }
+ },
+ "documents": [
+  {
+   "id": "kb-verification",
+   "app": "policies",
+   "path": "verification-standard",
+   "title": "Account Verification Standard (v4)",
+   "format": "md",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "# Account Verification Standard (v4, effective 2025-03-01)\n\nApplies to every account, internet-only or with Home Phone.\n\n1. Before you discuss, change or disclose anything about an account, verify the caller or writer is the account\n   holder or an authorized user listed on the account.\n2. Accepted: the 6-digit account PIN, or a one-time passcode (OTP) sent by text or email to the contact details\n   on file. Do not verify with date of birth, the last four of an SSN, the service address, or other details a\n   stranger could find. (Federal CPNI rules forbid using \"readily available biographical information\" for Home\n   Phone call detail; Northbeam applies the same rule to all accounts.)\n3. Email and chat tickets that come from the email address or app login on file count as verified for questions\n   about that account's own bills and payments. Any change to the account (plan, address, contacts, PIN,\n   authorized users) still needs the PIN or an OTP.\n4. Authorized users are listed under \"Authorized users\" in Beam360. A spouse or relative who is not listed is not\n   authorized, whatever they say.\n5. If the caller cannot verify: you may take a message, give general information that is not about the account\n   (outage status for an area, plan prices), or offer an OTP to the contact on file.\n6. Suspected impersonation or account takeover: do not tip off the caller; end politely, note the account, and\n   send a referral to Account Security (Ray Delgado's queue) with the time, number and what was asked.\n7. Changes to the PIN, email or address on file trigger an automatic notice to the contact details already on\n   file.\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "kb-credits",
+   "app": "policies",
+   "path": "credits-refunds-authority",
+   "title": "Credits, Refunds and Authority Matrix (v9)",
+   "format": "md",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "# Credits, refunds and authority matrix (v9, effective 2026-07-01)\n\n| Item | Tier 1 rep may | Otherwise |\n| --- | --- | --- |\n| Goodwill credit | up to $40.00 per account per rolling 30 days, with a reason code | Team lead up to $100; above that Tier 2 Billing |\n| Late fee ($10.00) | waive once per 12 months | Team lead |\n| Payment arrangement | up to $250.00, at most two installments, within 30 days | Tier 2 Billing |\n| Refund of a payment (duplicate, overpayment) | no: send to Tier 2 Billing with the confirmation numbers | Tier 2 Billing (5-7 business days to the card) |\n| Equipment fee reversal | no | Tier 2 Billing, with the return tracking number |\n| Outage credit | apply by formula (see Outage Credits) | Billing Operations sets incident policy |\n| Retention offers | only offers in the Offer Library | Loyalty |\n| Price-lock or promotion extension | no | Loyalty |\n\nNever promise a credit, refund or waiver you cannot apply yourself; say what you will request and when the\ncustomer will hear back.\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "kb-outage",
+   "app": "policies",
+   "path": "outage-credits",
+   "title": "Outage Credits (v3)",
+   "format": "md",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "# Outage credits (v3, effective 2025-11-01)\n\n- Eligible: a confirmed network outage (an incident number from NOC) of 4 hours or more at the service address.\n- Amount: one day of the monthly service charge (monthly charge / 30) for each started 24-hour period of the\n  outage, for internet and Home Phone separately. Round to the cent.\n- Do not give restoration times (ETR) that NOC has not posted on the incident page.\n- Home Phone customers lose dial tone, including 911, during a fiber outage. Tell them to use a mobile phone for\n  emergencies; customers with medical alarms on Home Phone get a priority callback when service returns.\n- Tag every contact with the incident number.\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "kb-cancel",
+   "app": "policies",
+   "path": "cancellations",
+   "title": "Cancellations and Retention (v6)",
+   "format": "md",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "# Cancellations and retention (v6)\n\n- Customers may cancel by phone, chat, email or in the app. Process the cancellation the customer asks for; do\n  not require them to call another number.\n- You may present one retention offer from the Offer Library before processing. If the customer says no,\n  process the cancellation.\n- Final bill: service is billed a month in advance; a cancellation is prorated to the day and credited on the\n  final bill. Equipment must be returned within 30 days to avoid the $150.00 unreturned-equipment fee.\n- California customers: tell them they may cancel at any time by saying they want to cancel, before any\n  retention offer (Cal. Bus. & Prof. Code 17602(e)). Voicemail cancellation requests are called back within\n  one business day.\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "kb-pci",
+   "app": "policies",
+   "path": "card-data",
+   "title": "Card Data Handling (PCI DSS)",
+   "format": "md",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "# Card data handling\n\n- Never take card numbers, expiry dates or security codes by voice, chat or email.\n- By phone: transfer the customer to Secure Pay (the IVR) from the softphone; the recording pauses automatically.\n- By chat or email: send the payment link from Beam360. If a customer pastes card data into a chat or email, do\n  not repeat it; use Redact in the ticket to remove it, and tell the customer you have removed it.\n- You may see the last four digits of a card on file in Beam360; you may read them back to confirm which card.\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "kb-arrangements",
+   "app": "policies",
+   "path": "payment-arrangements",
+   "title": "Payment Arrangements and Late Fees",
+   "format": "md",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "# Payment arrangements and late fees\n\n- Bills are issued on the 1st and due on the 18th. A $10.00 late fee posts 15 days after the due date if the\n  balance is unpaid.\n- Tier 1 may set up an arrangement up to $250.00, in at most two installments, the last within 30 days.\n  Arrangements stop collection activity while kept.\n- Service is suspended for non-payment 45 days after the due date; customers get a written notice 10 days\n  before.\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "kb-escalation",
+   "app": "policies",
+   "path": "escalation-paths",
+   "title": "Escalation Paths and Response Times",
+   "format": "md",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "# Escalation paths\n\n| Team | Takes | How | Response |\n| --- | --- | --- | --- |\n| Tier 2 Billing (Lena Kowalczyk's queue) | refunds, fee reversals, credits over authority, billing errors | email t2-billing@ with account, amounts, confirmation numbers | 1 business day |\n| Tier 2 Technical (Jamal Whitfield's queue) | faults outside a known incident, repeat tech issues | ticket transfer with test results | same day |\n| Field Ops dispatch (Brent Olsen) | technician visits | dispatch request with access notes | next available window |\n| Loyalty (Shauna Bell) | customers asking for offers outside the library, repeat cancellers | warm transfer or callback request | same day |\n| Account Security (Ray Delgado) | impersonation, takeover, suspicious requests | referral form, never tell the caller | 4 hours |\n| Compliance (Hannah Stiles) | regulator complaints, legal threats, recording and consent questions | email | 1 business day |\n\nEvery escalation states: account number, what the customer asked, what you already did, amounts and dates, and\nwhat the customer was told to expect.\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "kb-casenotes",
+   "app": "policies",
+   "path": "case-notes",
+   "title": "Case Notes Standard",
+   "format": "md",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "# Case notes\n\nEvery contact gets a case note in the ticket or the call record before you take the next contact:\nreason for contact; verification method; what you found; what you did or promised (with amounts, dates and\nreference numbers); what happens next and who owns it. No card data, no PINs, no passwords in notes. Use\nplain sentences; others will read them while the customer is on the line.\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "kb-plans",
+   "app": "policies",
+   "path": "plans-and-prices",
+   "title": "Plans, Prices and Add-ons (November 2026)",
+   "format": "md",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "# Plans and prices (residential, November 2026)\n\n| Plan | Monthly | Notes |\n| --- | --- | --- |\n| Fiber 300 | $55.00 | 300/300 Mbps |\n| Fiber 1 Gig | $75.00 | 1000/1000 Mbps |\n| Fiber 2 Gig | $95.00 | 2000/2000 Mbps, includes Wi-Fi 7 gateway |\n| Home Phone | $20.00 | unlimited US and Canada; international by the minute |\n| Whole-Home Wi-Fi extender | $8.00 | per extender |\n\n12-month promotions take $20.00 off the plan price and end automatically; customers get a notice 30 days before.\nNo contracts; equipment is included and must be returned when service ends.\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "kb-offers",
+   "app": "policies",
+   "path": "offer-library",
+   "title": "Offer Library (Q4 2026)",
+   "format": "md",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "# Offer library (Q4 2026), for Tier 1\n\n- SAVE10: $10.00 off for 6 months, once per account per 24 months, for customers asking to cancel or downgrade\n  because of price.\n- SPEEDUP: free upgrade from Fiber 300 to Fiber 1 Gig for 3 months, then $75.00, for customers with speed\n  complaints on Fiber 300 who are not in a known incident.\n- EXT1: first Whole-Home Wi-Fi extender free for 12 months.\nAnything else (price locks, promotion extensions, multi-offer stacks) goes to Loyalty.\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "kb-moves",
+   "app": "policies",
+   "path": "moves",
+   "title": "Moves and Transfers",
+   "format": "md",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "# Moves\n\nCheck serviceability of the new address in Beam360. Schedule the install at the new address and the disconnect at\nthe old one on the move date; no fee for moves inside the footprint. Outside the footprint, process as a\ncancellation (see Cancellations) with the equipment return instructions.\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "doc-macros",
+   "app": "docs",
+   "path": "team4/macros",
+   "title": "Team 4 reply macros (shared)",
+   "format": "md",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "# Reply macros (edit before sending; fill every bracket)\n\n## Outage acknowledgement\nHi [first name], thanks for reaching out, and I'm sorry your service is down. We're working on a confirmed\noutage in your area (incident [number]). [ETR sentence only if NOC has posted one.] Outage credits apply\nautomatically once service is back. If you have Home Phone, please use a mobile phone for emergencies until\nservice returns.\n\n## Payment link\nHi [first name], you can pay securely here: [link from Beam360]. For your security we never take card details by\nchat or email.\n\n## Refund in progress\nHi [first name], I've asked our billing team to refund [amount] (confirmation [number]). You'll get an email when\nit's processed; refunds take 5-7 business days to reach your card.\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "rec-gary",
+   "app": "records",
+   "path": "beam360/NB-40211736",
+   "title": "Account NB-40211736 (Gary Lindqvist)",
+   "format": "json",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "{\"account\": \"NB-40211736\", \"holder\": \"Gary Lindqvist\", \"authorized_users\": [], \"service_address\": \"4418 Willow Lake Rd N, Keizer OR 97303\",\n \"plan\": \"Fiber 300\", \"plan_price\": 55.00, \"promo\": {\"code\": \"NEW20\", \"amount\": -20.00, \"ended\": \"2026-10-31\"},\n \"addons\": [], \"statement_2026-11-01\": {\"plan\": 55.00, \"taxes_fees\": 1.62, \"total\": 56.62, \"due\": \"2026-11-18\"},\n \"statement_2026-10-01\": {\"plan\": 55.00, \"promo\": -20.00, \"taxes_fees\": 1.62, \"total\": 36.62},\n \"promo_end_notice_sent\": \"2026-10-01 (email)\", \"balance\": 56.62, \"credits_last_30d\": 0.00,\n \"offers_used\": [], \"contact\": {\"phone\": \"503-555-0127\", \"email\": null}, \"pin_set\": true}\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "rec-doris",
+   "app": "records",
+   "path": "beam360/NB-40135566",
+   "title": "Account NB-40135566 (Doris Whitaker)",
+   "format": "json",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "{\"account\": \"NB-40135566\", \"holder\": \"Doris Whitaker\", \"authorized_users\": [\"Paul Whitaker (son)\"], \"service_address\": \"1907 Fir Grove Ln SE, Salem OR 97302\",\n \"plan\": \"Fiber 300\", \"plan_price\": 55.00, \"addons\": [{\"name\": \"Home Phone\", \"price\": 20.00, \"medical_alarm_on_line\": true}],\n \"statement_2026-11-01\": {\"plan\": 55.00, \"home_phone\": 20.00, \"taxes_fees\": 3.11, \"total\": 78.11, \"due\": \"2026-11-18\"},\n \"balance\": 78.11, \"autopay\": true, \"credits_last_30d\": 0.00, \"contact\": {\"phone\": \"503-555-0137\", \"email\": null}, \"pin_set\": true,\n \"notes\": [\"2025-04-12 customer uses LifeLine medical alarm on the Home Phone line\"]}\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "rec-hector",
+   "app": "records",
+   "path": "beam360/NB-40318827",
+   "title": "Account NB-40318827 (Hector Alvarado)",
+   "format": "json",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "{\"account\": \"NB-40318827\", \"holder\": \"Hector Alvarado\", \"authorized_users\": [], \"service_address\": \"2210 Hawthorne Ave NE, Salem OR 97301\",\n \"plan\": \"Fiber 1 Gig\", \"plan_price\": 75.00, \"statement_2026-10-01\": {\"total\": 80.00, \"due\": \"2026-10-18\"},\n \"payments\": [{\"date\": \"2026-10-16\", \"amount\": 80.00, \"method\": \"Visa ending 4417\", \"confirmation\": \"PMT-7781204\"},\n              {\"date\": \"2026-10-16\", \"amount\": 80.00, \"method\": \"Visa ending 4417\", \"confirmation\": \"PMT-7781213\"}],\n \"balance\": -80.00, \"credits_last_30d\": 0.00, \"contact\": {\"phone\": \"503-555-0181\", \"email\": \"hector.alvarado@fastmail.com\"}, \"pin_set\": true}\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "rec-curtis",
+   "app": "records",
+   "path": "beam360/NB-40122953",
+   "title": "Account NB-40122953 (Curtis Wainwright, closed)",
+   "format": "json",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "{\"account\": \"NB-40122953\", \"holder\": \"Curtis Wainwright\", \"status\": \"closed 2026-09-28\", \"final_bill\": \"2026-10-01\",\n \"charges_2026-11-01\": [{\"item\": \"Unreturned equipment fee (gateway SN NBG7-22K419)\", \"amount\": 150.00}],\n \"equipment\": [{\"type\": \"gateway\", \"serial\": \"NBG7-22K419\", \"status\": \"not received\"}],\n \"contact\": {\"phone\": \"503-555-0118\", \"email\": \"cwainwright@comcast.net\"}, \"pin_set\": true}\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "doc-returns-log",
+   "app": "docs",
+   "path": "logistics/equipment-returns-october-2026",
+   "title": "Equipment returns received, October 2026 (warehouse log)",
+   "format": "csv",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "received,tracking,serial_scanned,account,condition\n2026-10-03,1Z9F44W20398811275,NBG7-31M022,NB-40265530,good\n2026-10-06,1Z9F44W20398822410,NBG7-22K491,unmatched,good\n2026-10-06,1Z9F44W20398822993,NBX2-09A114,NB-40188364,good\n2026-10-09,1Z9F44W20398830172,NBG7-40B771,NB-40300612,damaged\n2026-10-14,1Z9F44W20398847005,NBG7-18C330,NB-40211102,good\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "rec-kenji",
+   "app": "records",
+   "path": "beam360/NB-40383309",
+   "title": "Account NB-40383309 (Kenji Mori)",
+   "format": "json",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "{\"account\": \"NB-40383309\", \"holder\": \"Kenji Mori\", \"authorized_users\": [\"Emi Mori\"], \"service_address\": \"655 Cherry Ave NE, Keizer OR 97303\",\n \"plan\": \"Fiber 1 Gig\", \"plan_price\": 75.00, \"addons\": [], \"statement_2026-11-01\": {\"total\": 77.21, \"due\": \"2026-11-18\"},\n \"balance\": 77.21, \"contact\": {\"phone\": \"503-555-0115\", \"email\": \"kenji.mori@gmail.com\"}, \"pin_set\": true,\n \"tech_history\": [\"2026-10-22 slow Wi-Fi upstairs; gateway in basement; offered extender\"]}\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "rec-alana",
+   "app": "records",
+   "path": "beam360/NB-40312075",
+   "title": "Account NB-40312075 (Alana Brightwater)",
+   "format": "json",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "{\"account\": \"NB-40312075\", \"holder\": \"Alana Brightwater\", \"authorized_users\": [], \"service_address\": \"3301 Liberty Rd S, Salem OR 97302\",\n \"plan\": \"Fiber 2 Gig\", \"plan_price\": 95.00, \"statement_2026-11-01\": {\"total\": 97.84, \"due\": \"2026-11-18\"},\n \"balance\": 97.84, \"late_fee_waivers_12m\": 1, \"contact\": {\"phone\": \"971-555-0147\", \"email\": \"alana.bw@gmail.com\"}, \"pin_set\": true,\n \"history\": [\"2026-03-04 late fee waived (courtesy)\"]}\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "rec-frank",
+   "app": "records",
+   "path": "beam360/NB-40246681",
+   "title": "Account NB-40246681 (Frank Ruiz)",
+   "format": "json",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "{\"account\": \"NB-40246681\", \"holder\": \"Frank Ruiz\", \"authorized_users\": [], \"service_address\": \"118 4th St, Independence OR 97351\",\n \"plan\": \"Fiber 300\", \"plan_price\": 55.00, \"statement_2026-10-01\": {\"total\": 56.62, \"due\": \"2026-10-18\", \"paid\": 0.00},\n \"statement_2026-11-01\": {\"previous_balance\": 56.62, \"late_fee\": 10.00, \"current\": 56.62, \"total\": 123.24, \"due\": \"2026-11-18\"},\n \"balance\": 123.24, \"arrangements\": [], \"contact\": {\"phone\": \"541-555-0103\", \"email\": null}, \"pin_set\": true}\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "rec-beth",
+   "app": "records",
+   "path": "beam360/NB-40370448",
+   "title": "Account NB-40370448 (Beth Lavoie)",
+   "format": "json",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "{\"account\": \"NB-40370448\", \"holder\": \"Beth Lavoie\", \"authorized_users\": [], \"service_address\": \"2870 Hyacinth St NE, Salem OR 97301\",\n \"plan\": \"Fiber 1 Gig\", \"plan_price\": 75.00, \"promo\": {\"code\": \"NEW20\", \"amount\": -20.00, \"ends\": \"2027-02-28\"},\n \"move_request\": null, \"contact\": {\"phone\": \"503-555-0158\", \"email\": \"beth.lavoie@hotmail.com\"}, \"pin_set\": true}\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "rec-raj",
+   "app": "records",
+   "path": "beam360/NB-40391127",
+   "title": "Account NB-40391127 (Raj Patel)",
+   "format": "json",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "{\"account\": \"NB-40391127\", \"holder\": \"Raj Patel\", \"authorized_users\": [\"Meera Patel\"], \"service_address\": \"4790 Sunnyview Rd NE, Salem OR 97305\",\n \"plan\": \"Fiber 300\", \"plan_price\": 55.00, \"addons\": [{\"name\": \"Home Phone\", \"price\": 20.00}],\n \"usage_2026-10\": {\"international_minutes\": 0}, \"contact\": {\"phone\": \"503-555-0173\", \"email\": \"raj.patel.or@gmail.com\"}, \"pin_set\": true}\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "rec-jordan",
+   "app": "records",
+   "path": "beam360/NB-40342281",
+   "title": "Account NB-40342281 (Jordan Mehta)",
+   "format": "json",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "{\"account\": \"NB-40342281\", \"holder\": \"Jordan Mehta\", \"authorized_users\": [], \"service_address\": \"7120 Wheatland Rd N, Keizer OR 97303\",\n \"segment\": \"KZN-3\", \"plan\": \"Fiber 1 Gig\", \"plan_price\": 75.00, \"addons\": [], \"incident\": \"INC-20261103-0042\",\n \"contact\": {\"phone\": \"503-555-0129\", \"email\": \"jordan.mehta@gmail.com\"}, \"pin_set\": true}\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "rec-megan",
+   "app": "records",
+   "path": "beam360/NB-40321184",
+   "title": "Account NB-40321184 (Megan Fry)",
+   "format": "json",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "{\"account\": \"NB-40321184\", \"holder\": \"Megan Fry\", \"authorized_users\": [], \"service_address\": \"455 Jackson St E, Monmouth OR 97361\",\n \"segment\": \"MON-2\", \"plan\": \"Fiber 300\", \"plan_price\": 55.00, \"incident\": null,\n \"device_status_2026-11-03T08:40\": {\"gateway\": \"online\", \"light_level_dbm\": -27.9, \"alarm\": \"low optical power since 2026-11-02 21:14\"},\n \"contact\": {\"phone\": \"503-555-0195\", \"email\": \"megan.fry@outlook.com\"}, \"pin_set\": true}\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "rec-lou",
+   "app": "records",
+   "path": "beam360/NB-40299870",
+   "title": "Account NB-40299870 (Lou Brenner)",
+   "format": "json",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "{\"account\": \"NB-40299870\", \"holder\": \"Lou Brenner\", \"authorized_users\": [], \"service_address\": \"4630 Ridge Dr N, Keizer OR 97303\",\n \"segment\": \"KZN-2\", \"plan\": \"Fiber 300\", \"plan_price\": 55.00, \"addons\": [{\"name\": \"Home Phone\", \"price\": 20.00, \"medical_alarm_on_line\": true}],\n \"incident\": \"INC-20261103-0042\", \"contact\": {\"phone\": \"503-555-0148\", \"email\": null}, \"pin_set\": true}\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "rec-tess",
+   "app": "records",
+   "path": "beam360/NB-40381102",
+   "title": "Account NB-40381102 (Tess Navarro)",
+   "format": "json",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "{\"account\": \"NB-40381102\", \"holder\": \"Tess Navarro\", \"authorized_users\": [], \"service_address\": \"8010 Chemawa Ln N, Keizer OR 97303\",\n \"segment\": \"KZN-3\", \"plan\": \"Fiber 2 Gig\", \"plan_price\": 95.00, \"incident\": \"INC-20261103-0042\",\n \"contact\": {\"phone\": \"503-555-0166\", \"email\": \"tessnavarro@gmail.com\"}, \"pin_set\": true}\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "rec-harold",
+   "app": "records",
+   "path": "beam360/NB-40108221",
+   "title": "Account NB-40108221 (Harold Price)",
+   "format": "json",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "{\"account\": \"NB-40108221\", \"holder\": \"Harold Price\", \"authorized_users\": [\"Carol Price\"], \"service_address\": \"1290 Shoreline Dr N, Keizer OR 97303\",\n \"segment\": \"KZN-1\", \"plan\": \"Fiber 300\", \"plan_price\": 55.00, \"addons\": [{\"name\": \"Home Phone\", \"price\": 20.00}],\n \"incident\": \"INC-20261103-0042\", \"contact\": {\"phone\": \"503-555-0104\", \"email\": null}, \"pin_set\": true}\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "rec-nina",
+   "app": "records",
+   "path": "beam360/NB-40377809",
+   "title": "Account NB-40377809 (Nina Okoro)",
+   "format": "json",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "{\"account\": \"NB-40377809\", \"holder\": \"Nina Okoro\", \"authorized_users\": [], \"service_address\": \"990 Dearborn Ave NE, Keizer OR 97303\",\n \"segment\": \"KZS-1\", \"plan\": \"Fiber 1 Gig\", \"plan_price\": 75.00, \"incident\": null,\n \"device_status_2026-11-03T12:10\": {\"gateway\": \"online\", \"light_level_dbm\": -18.2, \"wifi_clients\": 14},\n \"contact\": {\"phone\": \"971-555-0131\", \"email\": \"nina.okoro@gmail.com\"}, \"pin_set\": true}\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "rec-sam",
+   "app": "records",
+   "path": "beam360/NB-40333107",
+   "title": "Account NB-40333107 (Sam Whitfield)",
+   "format": "json",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "{\"account\": \"NB-40333107\", \"holder\": \"Sam Whitfield\", \"authorized_users\": [], \"service_address\": \"7744 Wheatland Rd N, Keizer OR 97303\",\n \"segment\": \"KZN-3\", \"plan\": \"Fiber 300\", \"plan_price\": 55.00, \"addons\": [{\"name\": \"Home Phone\", \"price\": 20.00}],\n \"incident\": \"INC-20261103-0042\", \"contact\": {\"phone\": \"503-555-0182\", \"email\": \"sam.w.keizer@gmail.com\"}, \"pin_set\": true}\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "rec-vera",
+   "app": "records",
+   "path": "beam360/NB-40419933",
+   "title": "Account NB-40419933 (Vera Castellanos)",
+   "format": "json",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "{\"account\": \"NB-40419933\", \"holder\": \"Vera Castellanos\", \"authorized_users\": [], \"service_address\": \"212 Miner St, Yreka CA 96097\",\n \"state\": \"CA\", \"plan\": \"Fiber 1 Gig\", \"plan_price\": 75.00, \"billing_cycle\": \"1st to end of month, billed in advance\",\n \"statement_2026-11-01\": {\"total\": 78.45, \"paid\": 78.45}, \"offers_used\": [], \"equipment\": [{\"type\": \"gateway\", \"serial\": \"NBG7-51F230\"}],\n \"contact\": {\"phone\": \"530-555-0150\", \"email\": \"vcastellanos@sisqtel.net\"}, \"pin_set\": true}\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "rec-greg",
+   "app": "records",
+   "path": "beam360/NB-40350277",
+   "title": "Account NB-40350277 (Greg Halvorsen)",
+   "format": "json",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "{\"account\": \"NB-40350277\", \"holder\": \"Greg Halvorsen\", \"authorized_users\": [], \"service_address\": \"7055 Wheatland Rd N, Keizer OR 97303\",\n \"segment\": \"KZN-3\", \"plan\": \"Fiber 300\", \"plan_price\": 55.00, \"addons\": [{\"name\": \"Home Phone\", \"price\": 20.00}],\n \"incident\": \"INC-20261103-0042\", \"restored\": \"2026-11-04 09:52\", \"contact\": {\"phone\": \"503-555-0191\", \"email\": \"ghalvorsen@gmail.com\"}, \"pin_set\": true}\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "rec-ivy",
+   "app": "records",
+   "path": "beam360/NB-40362290",
+   "title": "Account NB-40362290 (Ivy Tran)",
+   "format": "json",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "{\"account\": \"NB-40362290\", \"holder\": \"Ivy Tran\", \"authorized_users\": [], \"service_address\": \"5320 River Rd N, Keizer OR 97303\",\n \"segment\": \"KZN-1\", \"plan\": \"Fiber 2 Gig\", \"plan_price\": 95.00, \"incident\": \"INC-20261103-0042\", \"restored\": \"2026-11-03 13:35\",\n \"statement_2026-11-01\": {\"total\": 97.84, \"due\": \"2026-11-18\"}, \"contact\": {\"phone\": \"503-555-0134\", \"email\": \"ivy.tran.or@gmail.com\"}, \"pin_set\": true}\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "rec-walter",
+   "app": "records",
+   "path": "beam360/NB-40188364",
+   "title": "Account NB-40188364 (Walter Kim)",
+   "format": "json",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "{\"account\": \"NB-40188364\", \"holder\": \"Walter Kim\", \"authorized_users\": [], \"service_address\": \"2140 NW Kings Blvd, Corvallis OR 97330\",\n \"state\": \"OR\", \"plan\": \"Fiber 1 Gig\", \"plan_price\": 75.00, \"addons\": [], \"customer_since\": \"2021-06-14\",\n \"statement_2026-11-01\": {\"total\": 78.12, \"due\": \"2026-11-18\"}, \"offers_used\": [], \"promotions\": [],\n \"usage_30d_gb\": 61, \"contact\": {\"phone\": \"541-555-0192\", \"email\": null}, \"pin_set\": true}\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "rec-ruth",
+   "app": "records",
+   "path": "beam360/NB-40255190",
+   "title": "Account NB-40255190 (Ruth Engel)",
+   "format": "json",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "{\"account\": \"NB-40255190\", \"holder\": \"Ruth Engel\", \"authorized_users\": [], \"service_address\": \"1185 Hawthorne Ave NE, Salem OR 97301\",\n \"plan\": \"Fiber 300\", \"plan_price\": 55.00, \"addons\": [{\"name\": \"Home Phone\", \"price\": 20.00}],\n \"statement_2026-11-01\": {\"total\": 82.66, \"due\": \"2026-11-18\", \"lines\": [\n   {\"item\": \"Fiber 300\", \"amount\": 55.00}, {\"item\": \"Home Phone\", \"amount\": 20.00},\n   {\"item\": \"911 surcharge\", \"amount\": 0.75}, {\"item\": \"911 surcharge\", \"amount\": 0.75},\n   {\"item\": \"Federal Universal Service Fee\", \"amount\": 3.92}, {\"item\": \"Taxes and regulatory fees\", \"amount\": 2.24}]},\n \"contact\": {\"phone\": \"503-555-0109\", \"email\": null}, \"pin_set\": true}\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "rec-tanya",
+   "app": "records",
+   "path": "beam360/NB-40299018",
+   "title": "Account NB-40299018 (Tanya Brooks)",
+   "format": "json",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "{\"account\": \"NB-40299018\", \"holder\": \"Tanya Brooks\", \"authorized_users\": [], \"service_address\": \"3390 Sunnyview Rd NE, Salem OR 97305\",\n \"plan\": \"Fiber 300\", \"plan_price\": 55.00, \"addons\": [{\"name\": \"Home Phone\", \"price\": 20.00}], \"features\": {\"international_block\": false},\n \"statement_2026-11-01\": {\"total\": 120.29, \"due\": \"2026-11-18\", \"international_calls\": [\n   {\"date\": \"2026-10-12 19:42\", \"to\": \"+1-876-555-0182\", \"destination\": \"Jamaica mobile\", \"minutes\": 24, \"rate\": 0.60, \"amount\": 14.40},\n   {\"date\": \"2026-10-13 08:15\", \"to\": \"+1-876-555-0182\", \"destination\": \"Jamaica mobile\", \"minutes\": 21, \"rate\": 0.60, \"amount\": 12.60},\n   {\"date\": \"2026-10-17 20:03\", \"to\": \"+1-876-555-0139\", \"destination\": \"Jamaica mobile\", \"minutes\": 19, \"rate\": 0.60, \"amount\": 11.40}]},\n \"credits\": [{\"date\": \"2026-10-20\", \"type\": \"goodwill\", \"amount\": 15.00, \"reason\": \"technician missed 10/19 appointment\", \"by\": \"Tier 1\"}],\n \"contact\": {\"phone\": \"503-555-0163\", \"email\": \"tbrooks.salem@gmail.com\"}, \"pin_set\": true}\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "rec-amara",
+   "app": "records",
+   "path": "beam360/NB-40350961",
+   "title": "Account NB-40350961 (Amara Okafor)",
+   "format": "json",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "{\"account\": \"NB-40350961\", \"holder\": \"Amara Okafor\", \"authorized_users\": [], \"service_address\": \"4870 Center St NE, Salem OR 97301\",\n \"plan\": \"Fiber 1 Gig\", \"plan_price\": 75.00, \"contact\": {\"phone\": \"971-555-0140\", \"email\": \"amara.okafor@outlook.com\"}, \"pin_set\": true,\n \"events\": [\n   {\"at\": \"2026-11-04 17:41\", \"event\": \"inbound call from 503-555-0122, verified by PIN, asked to change the email on file to amara.okafor.billing@gmail.com\"},\n   {\"at\": \"2026-11-04 17:43\", \"event\": \"OTP sent to 971-555-0140 to confirm the email change; not entered; caller disconnected\"},\n   {\"at\": \"2026-11-04 17:43\", \"event\": \"email change not applied\"}]}\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "rec-mike",
+   "app": "records",
+   "path": "beam360/NB-40229604",
+   "title": "Account NB-40229604 (Mike Ostrowski)",
+   "format": "json",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "{\"account\": \"NB-40229604\", \"holder\": \"Mike Ostrowski\", \"authorized_users\": [], \"service_address\": \"925 Brown Rd NE, Salem OR 97301\",\n \"plan\": \"Fiber 2 Gig\", \"plan_price\": 95.00, \"addons\": [{\"name\": \"Home Phone\", \"price\": 20.00}, {\"name\": \"Whole-Home Wi-Fi extender\", \"price\": 8.00}],\n \"balance\": {\"statement_2026-10-01\": {\"amount\": 135.24, \"due\": \"2026-10-18\", \"paid\": 0.00}, \"late_fee_2026-11-02\": 10.00,\n             \"statement_2026-11-01\": {\"amount\": 135.24, \"due\": \"2026-11-18\"}, \"total_due\": 280.48},\n \"late_fee_waivers\": [{\"date\": \"2026-03-04\", \"amount\": 10.00}], \"arrangements\": [],\n \"suspension_date_if_unpaid\": \"2026-12-02\", \"contact\": {\"phone\": \"503-555-0186\", \"email\": null}, \"pin_set\": true}\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "rec-naomi",
+   "app": "records",
+   "path": "beam360/NB-40377412",
+   "title": "Account NB-40377412 (Naomi Fischer)",
+   "format": "json",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "{\"account\": \"NB-40377412\", \"holder\": \"Naomi Fischer\", \"authorized_users\": [], \"service_address\": \"2299 Liberty St S, Salem OR 97302\",\n \"plan\": \"Fiber 1 Gig\", \"plan_price\": 75.00, \"billing_cycle\": \"1st to end of month, billed in advance\",\n \"statement_2026-11-01\": {\"total\": 78.40, \"paid\": 78.40}, \"equipment\": [{\"type\": \"gateway\", \"serial\": \"NBG7-48C771\"}],\n \"contact\": {\"phone\": \"503-555-0175\", \"email\": \"naomi.fischer@proton.me\", \"app_login\": \"naomi.fischer@proton.me\"}, \"pin_set\": true}\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "rec-sana",
+   "app": "records",
+   "path": "beam360/NB-40407713",
+   "title": "Account NB-40407713 (Sana Iqbal)",
+   "format": "json",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "{\"account\": \"NB-40407713\", \"holder\": \"Sana Iqbal\", \"authorized_users\": [], \"service_address\": \"640 Ratcliff Dr SE, Salem OR 97302\",\n \"plan\": \"Fiber 300\", \"plan_price\": 55.00, \"statement_2026-11-01\": {\"total\": 58.37, \"due\": \"2026-11-18\"}, \"autopay\": false,\n \"payment_link\": \"https://pay.northbeamfiber.com/l/NB-40407713\", \"contact\": {\"phone\": \"971-555-0124\", \"email\": \"sana.iqbal@gmail.com\"}, \"pin_set\": true}\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "doc-service-area",
+   "app": "docs",
+   "path": "coverage/service-area",
+   "title": "Service area (counties)",
+   "format": "md",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "# Northbeam Fiber service area\n\nOregon: Marion, Polk, Yamhill, Linn, Benton and Lane counties (not every address; check serviceability in Beam360).\nWashington: Clark and Cowlitz counties. California: Siskiyou County.\nNot served: Portland metro (Multnomah, Washington, Clackamas), central and eastern Oregon, the coast.\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "doc-home-phone",
+   "app": "policies",
+   "path": "home-phone-features",
+   "title": "Home Phone features and international rates",
+   "format": "md",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "# Home Phone features\n\n- Voicemail, caller ID, call waiting: included.\n- International and Caribbean call block: free. Blocks outbound calls to every international destination,\n  including the +1 area codes billed at international rates (809, 829, 849 Dominican Republic; 876 Jamaica; 649\n  Turks and Caicos; 284 British Virgin Islands; 473 Grenada; 268 Antigua; 664 Montserrat; 767 Dominica). A Tier 1\n  rep may add or remove it after verification.\n- World 300: $5.00 a month for 300 minutes to 40 countries (list in Beam360).\n\n| Destination | Per minute |\n| --- | --- |\n| Canada | included |\n| Mexico | $0.03 |\n| India | $0.04 |\n| Philippines | $0.15 |\n| Dominican Republic | $0.25 |\n| Jamaica (mobile) | $0.60 |\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "doc-1on1",
+   "app": "calendar",
+   "path": "2026-11-05/1on1-derek",
+   "title": "1:1 with Derek 15:30-16:00",
+   "format": "md",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "Weekly 1:1, Derek Hamm and Marisol Ortega, Thursday 15:30-16:00, Derek's desk.\nStanding agenda: last week's QA, anything stuck, coaching goal (case-note completeness), time off.\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "rec-lupe",
+   "app": "records",
+   "path": "beam360/NB-40362208",
+   "title": "Account NB-40362208 (Guadalupe Serrano)",
+   "format": "json",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "{\"account\": \"NB-40362208\", \"holder\": \"Guadalupe Serrano\", \"authorized_users\": [], \"service_address\": \"1720 Hayesville Dr NE, Salem OR 97305\",\n \"language\": \"es\", \"plan\": \"Fiber 1 Gig\", \"plan_price\": 75.00,\n \"addons\": [{\"name\": \"Whole-Home Wi-Fi extender\", \"price\": 8.00, \"added\": \"2026-10-20\", \"by\": \"technician visit WO-771402\"}],\n \"offers_used\": [], \"credits_last_30d\": 0.00,\n \"statement_2026-11-01\": {\"total\": 89.73, \"due\": \"2026-11-18\", \"lines\": [\n   {\"item\": \"Fiber 1 Gig\", \"amount\": 75.00}, {\"item\": \"Whole-Home Wi-Fi extender (10/20-10/31, prorated)\", \"amount\": 3.20},\n   {\"item\": \"Whole-Home Wi-Fi extender\", \"amount\": 8.00}, {\"item\": \"Taxes and regulatory fees\", \"amount\": 3.53}]},\n \"work_orders\": [{\"id\": \"WO-771402\", \"date\": \"2026-10-20\", \"note\": \"Weak Wi-Fi in back bedroom. Installed 1 extender. Told customer first extender is free for 12 months (EXT1).\"}],\n \"contact\": {\"phone\": \"503-555-0151\", \"email\": \"lupe.serrano@yahoo.com\"}, \"pin_set\": true}\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "rec-june",
+   "app": "records",
+   "path": "beam360/NB-40166392",
+   "title": "Account NB-40166392 (June Albright)",
+   "format": "json",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "{\"account\": \"NB-40166392\", \"holder\": \"June Albright\", \"authorized_users\": [], \"service_address\": \"3055 Garden Rd SE, Salem OR 97302\",\n \"plan\": \"Fiber 300\", \"plan_price\": 55.00, \"addons\": [{\"name\": \"Home Phone\", \"price\": 20.00}],\n \"contact\": {\"phone\": \"503-555-0112\", \"email\": \"junealbright@aol.com\"}, \"pin_set\": true}\n",
+     "note": ""
+    }
+   ]
+  }
+ ]
+}

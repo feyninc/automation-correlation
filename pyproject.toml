@@ -1,0 +1,24 @@
+[project]
+name = "workweek"
+version = "0.1.0"
+description = "Simulated working weeks for measuring unprompted AI assistance across model releases"
+requires-python = ">=3.12"
+dependencies = [
+    "inspect-ai==0.3.285",
+    "pydantic>=2.9",
+    "pyyaml>=6",
+    "openpyxl>=3.1",
+    "openai>=1.60",
+    "anthropic>=0.40",
+    "aioboto3>=13",
+]
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["workweek"]

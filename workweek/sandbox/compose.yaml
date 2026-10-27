@@ -1,0 +1,9 @@
+services:
+  default:
+    build: .
+    image: workweek-sandbox:1
+    init: true
+    network_mode: none
+    command: tail -f /dev/null
+    mem_limit: 1g
+    cpus: 1.0
