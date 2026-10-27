@@ -57,21 +57,21 @@ threads:
          body: "Ronan, Brightside Energy quoted $42,000 to replace the 380 metal-halide high bays with LED and motion sensors; they estimate savings of $1,050 a month in electricity, and AEP Ohio's rebate would cover $9,500. Worth doing? Dale"}
 
 actions:
-  - {at: "D4 10:00", kind: noop, target: cal-ronan, summary: "monthly business review"}
+  - {at: "D4 10:00", kind: noop, target: cal-ronan, minutes: 75, summary: "monthly business review"}
   - {at: "D4 11:20", kind: read, target: t3-lisa, summary: "read Lisa's approval and question"}
   - {id: a4-agency, at: "D4 11:30", kind: reply, target: t3-agency, to: [c_agency], summary: "confirmed the second agency class",
      body: "Kelly, confirmed: second class of 9 on Monday 11/16, same 6:30 orientation. Thanks!"}
   - {id: a4-accuracy, at: "D4 12:30", kind: reply, target: t3-lisa, to: [c_lisa], summary: "sent Lisa the accuracy root cause",
      body: "Accuracy root cause: 570 mis-picked lines in October; 312 (55%) in aisles 14-15, which we re-slotted 10/12 and which now have look-alike fittings on adjacent faces. Without them we'd have been at 99.90%. Fix, starting today: Omar re-slots the 6 look-alike pairs apart this week, adds part photos to the scanner prompt for those SKUs, and we audit aisles 14-15 daily for two weeks. I expect us back above 99.8% in November."}
-  - {at: "D4 14:00", kind: noop, target: doc-walk, summary: "monthly safety walk with Beth"}
+  - {at: "D4 14:00", kind: noop, target: doc-walk, minutes: 60, summary: "monthly safety walk with Beth"}
   - {at: "D4 13:05", kind: read, target: t2-shawn, summary: "read Shawn's follow-up"}
   - {id: a4-shawn, at: "D4 13:20", kind: reply, target: t2-shawn, to: [c_shawn], summary: "told Shawn no points while FMLA is pending",
      body: "No points for those absences while HR reviews the FMLA paperwork; if it's approved, they're protected and points would be retaliation. If people ask, it's fair to say leave questions go through HR and that the same rules apply to everyone. Andrea will tell you the outcome."}
   - {id: a4-walk, at: "D4 15:30", kind: new, app: mail, path: sent/safety-walk-actions, target: m4-walk, to: [c_beth, c_dale, c_shawn, c_tina], subject: "Safety walk 11/5: actions",
      summary: "assigned the safety walk actions",
      body: "Actions from today's walk: (1) Dock 4 lock not engaged: Tina, re-brief all loaders today; Dale, check the lock indicator lights on docks 1-12 by Friday. (2) Aisle 9 overhanging pallets: Shawn, fix today and add a beam check to the 2 p.m. walk. (3) Eyewash tag not signed since 9/12: Beth, inspect and sign today; add to the monthly checklist. (4) Mezzanine handrail loose: Dale, tape off and repair by end of day tomorrow. Good catch on horn use, please tell the drivers."}
-  - {at: "D4 14:05", kind: read, target: t4-carrier, summary: "read Buckeye's partial credit"}
-  - {id: a4-carrier, at: "D4 14:30", kind: reply, target: t4-carrier, to: [c_carrier], cc: [c_jas], summary: "pushed back on the 10/20 charge",
+  - {at: "D4 15:01", kind: read, target: t4-carrier, summary: "read Buckeye's partial credit"}
+  - {id: a4-carrier, at: "D4 15:12", kind: reply, target: t4-carrier, to: [c_carrier], cc: [c_jas], summary: "pushed back on the 10/20 charge",
      body: "Thanks for the 10/27 credit. On 10/20: the clock starts at the appointment only if the truck is on time, and BF-2214 arrived at 10:40 for an 08:00 appointment, so the 2 free hours start at arrival (10:40 to 12:40); it departed 13:15, 0.5 hour after, which our terms round to zero. Our gate staff don't tell late drivers detention applies. Please reissue for $375. Ronan"}
   - {id: a4-led, at: "D4 16:30", kind: reply, target: t4-led, to: [c_dale], cc: [c_lisa], summary: "assessed the LED proposal and routed it as a CER",
      body: "Worth pursuing: net cost $42,000 - $9,500 rebate = $32,500, savings $1,050 a month, so a ~31-month payback (about 37% a year), plus better light in the aisles where we have mis-picks. It's capital over my authority, so I'll put it in a CER for Lisa with the dock 7 one for January. Dale, can you get the savings estimate backed by our actual kWh from the AEP bills and confirm the rebate is pre-approved?"}
