@@ -30,7 +30,5 @@
 
 ## Errors (0)
 
-## Warnings (3)
-- a001: worker acts at D1 07:55, outside working hours
-- a1-phish: worker acts at D1 07:58, outside working hours
+## Warnings (1)
 - n3-axis: very short mention '0%'

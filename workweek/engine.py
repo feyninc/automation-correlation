@@ -123,10 +123,11 @@ class Sim:
         visible = [n for n in self.ep.needs if seconds(n.discoverable_at) <= t]
         intents = "\n".join(f"- {n.title}: {n.worker_intent}" for n in visible) or "- (nothing specific yet)"
         recent = feed_lines(self.feed[-25:]) or "(nothing yet)"
-        msg = prompts.WORKER_SIM.format(worker_name=self.ep.worker.name, worker_title=self.ep.worker.title,
-                                        employer=self.ep.employer.name, profession_prompt=self.ep.profession_prompt,
-                                        intents=intents, recent=recent, when=fmt(t), question=question)
-        out = await self.user_model.generate([ChatMessageUser(content=msg)])
+        case = prompts.WORKER_CASE.format(worker_name=self.ep.worker.name, worker_title=self.ep.worker.title,
+                                          employer=self.ep.employer.name, profession_prompt=self.ep.profession_prompt,
+                                          intents=intents, recent=recent, when=fmt(t), question=question)
+        out = await self.user_model.generate([ChatMessageSystem(content=prompts.WORKER_SYSTEM),
+                                              ChatMessageUser(content=case)])
         answer = (out.completion or "").strip()
         u = out.usage
         self.questions.append({"t": fmt(t), "question": question, "answer": answer,

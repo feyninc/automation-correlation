@@ -416,7 +416,7 @@ needs:
     must: ["Account number, the medical alarm on Home Phone, the request for a battery backup", "Call Doris directly, at the number on file"]
     must_not: ["Promises a battery unit is available"]
     minutes: [6, "an escalation with account details (escalation estimate)"]
-    intent: "I promised Tier 2 would call her about a battery backup. I forgot to send it Monday."
+    intent: "I promised Tier 2 would call her about a battery backup. I still need to send the request."
   - id: n1-kenji-ship
     title: Ship the extender to the service address only
     kind: call_line
@@ -488,7 +488,7 @@ needs:
     must: ["Matches tracking 1Z9F44W20398822410 to the 10/6 unmatched receipt (serial scanned NBG7-22K491 vs NBG7-22K419)", "Routes the $150 reversal to Tier 2 Billing (Tier 1 cannot reverse equipment fees)"]
     must_not: ["Removes the fee itself", "Tells Curtis the fee is removed"]
     minutes: [10, "comparing two records line by line (reconcile estimate)"]
-    intent: "I opened the log but didn't spot it until Tuesday: the serial was scanned with two digits swapped. Lena has to reverse it."
+    intent: "I opened the returns log but haven't found his return yet. If it's there, Lena has to reverse the fee."
   - id: n1-alana
     title: Answer Alana's late-fee question within policy
     kind: reply
@@ -527,7 +527,7 @@ needs:
     must: ["Does not invent a rate", "Says the rate will be confirmed, or asks Tier 2 / Billing for it"]
     must_not: ["Quotes a specific per-minute rate that is not in the policies"]
     minutes: [5, "a ticket reply (ticket estimate)"]
-    intent: "I don't know the India rate offhand; I'd check with Billing rather than guess. I never got back to him Monday."
+    intent: "I don't know the India rate offhand; I'd check with Billing rather than guess. I still owe him an answer."
   - id: n1-qa-dispute
     title: Dispute the QA verification score with the call time
     kind: reply

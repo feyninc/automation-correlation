@@ -16,7 +16,7 @@ import re
 from pathlib import Path
 
 from inspect_ai.log import list_eval_logs, read_eval_log
-from inspect_ai.model import ChatMessageUser, GenerateConfig, get_model
+from inspect_ai.model import ChatMessageSystem, ChatMessageUser, GenerateConfig, get_model
 
 from . import checks, config as cfgmod, creds, prompts, providers  # noqa: F401
 from .apps import document_file, render_world, thread_file
@@ -176,7 +176,7 @@ MAX_FACTS = 40
 HISTORY_ROWS = 8
 
 
-def draft_facts(p: dict) -> tuple[list[str], list[float]]:
+def facts_in(p: dict) -> tuple[list[str], list[float]]:
     """The checkable facts in a proposal's drafts: identifiers (ids, emails, dates, times) and amounts."""
     ids, nums = [], []
     for d in p["drafts"]:
@@ -199,9 +199,9 @@ def _locate(files: dict, order: list[str], fact, is_num: bool) -> str | None:
     return None
 
 
-def fact_table(ep: Episode, p: dict, t: int, needs: list, files: dict, order: list[str]) -> str:
-    """Each fact in the drafts, located in the world as of t, or found nowhere (computed or invented)."""
-    ids, nums = draft_facts(p)
+def draft_facts(ep: Episode, p: dict, t: int, needs: list, files: dict, order: list[str]) -> str:
+    """Each number, identifier, date, email and person in the drafts, looked up in the world as of t."""
+    ids, nums = facts_in(p)
     key = " ".join(need.reference.text or next((x.body for th in ep.threads for x in th.exchanges
                                                  if x.id == need.reference.exchange_id), "") for need in needs)
     rows = []
@@ -210,16 +210,18 @@ def fact_table(ep: Episode, p: dict, t: int, needs: list, files: dict, order: li
         shown = (str(int(fact)) if is_num and fact.is_integer() and 1900 <= fact <= 2100
                  else f"{fact:,.2f}".rstrip("0").rstrip(".") if is_num else fact)
         if where:
-            rows.append(f"- {shown}: {where}")
+            path, line = where.split(": ", 1)
+            rows.append(f"- {shown}: in {path}: \"{line}\"")
         elif (any(abs(abs(n) - fact) < 0.005 for n in checks.numbers(key)) if is_num else fact.lower() in key.lower()):
-            rows.append(f"- {shown}: not in the world, but in {ep.worker.name.split()[0]}'s own version (computed)")
+            rows.append(f"- {shown}: not in the world; in {ep.worker.name.split()[0]}'s own version (computed)")
         else:
-            rows.append(f"- {shown}: FOUND NOWHERE in the world (computed from other figures, or invented)")
+            rows.append(f"- {shown}: appears nowhere (computed from other figures, or invented)")
     text = " ".join(str(d.get(k, "") or "") for d in p["drafts"] for k in ("to", "cc", "text"))
     for c in ep.contacts:
-        first, last = c.name.split()[0], c.name.split()[-1]
-        if any(len(w) >= 3 and re.search(rf"\b{re.escape(w)}\b", text) for w in {c.name, first, last}):
-            rows.append(f"- {c.name}: {c.role}, {c.org}" + (f", {c.email}" if c.email else "") + " (contacts)")
+        local = (c.email or "").split("@")[0].lower()      # a name word counts if it is in the contact's own address
+        words = [w for w in {c.name.split()[0], c.name.split()[-1]} if len(w) >= 3 and w.lower() in local]
+        if re.search(rf"\b{re.escape(c.name)}\b", text) or any(re.search(rf"\b{re.escape(w)}\b", text) for w in words):
+            rows.append(f"- {c.name}: in /world/contacts.csv: {c.role}, {c.org}" + (f", {c.email}" if c.email else ""))
     return "\n".join(rows[:MAX_FACTS]) or "(no identifiers, amounts or people)"
 
 
@@ -231,7 +233,7 @@ def open_work(ep: Episode, t: int, needs: list) -> str:
             continue
         done = next((seconds(x.at) for th in ep.threads for x in th.exchanges if x.id == n.reference.exchange_id), None)
         status = f"done by {ep.worker.name.split()[0]} at {fmt(done)}" if done is not None and done <= t else "not done yet"
-        mark = " (this proposal does this work)" if n in needs else ""
+        mark = " [the proposal does this work]" if n in needs else ""
         rows.append(f"- {n.title} (due {n.deadline}; {status}){mark}")
     return "\n".join(rows) or "(none)"
 
@@ -253,37 +255,40 @@ def history(ep: Episode, p: dict, t: int, needs: list, earlier: list[dict]) -> s
     return "\n".join(rows[-HISTORY_ROWS:]) or "(nothing yet)"
 
 
-def judge_prompt(ep: Episode, p: dict, needs: list, earlier: list[dict] = ()) -> str:
+def _draft(i: int, d: dict) -> str:
+    head = [f"{k.capitalize()}: {d[k]}" for k in ("to", "cc", "subject") if d.get(k)]
+    label = f" ({d['label']})" if d.get("label") else ""
+    return f"<draft n=\"{i}\">{label}\n" + "".join(h + "\n" for h in head) + ("\n" if head else "") + \
+        f"{d.get('text', '')}\n</draft>"
+
+
+def judge_prompt(ep: Episode, p: dict, needs: list, earlier: list[dict] = ()) -> tuple[str, str]:
+    """The judge's system prompt (the same for every proposal) and the case for this proposal."""
     t = seconds(p["t"])
+    first = ep.worker.name.split()[0]
     files = render_world(ep, t)
     order = [p["target"]] + [thread_file(th) for n in needs for e in n.evidence for th in ep.threads if th.id == e] \
         + [document_file(d) for n in needs for e in n.evidence for d in ep.documents if d.id == e] \
         + list(reversed(p.get("read", [])))
-    drafts = "\n".join(f"### Draft {i + 1}: {d.get('label', '')}\nTo: {d.get('to', '')}  Cc: {d.get('cc', '')}  "
-                       f"Subject: {d.get('subject', '')}\n{d.get('text', '')}" for i, d in enumerate(p["drafts"]))
-    blocks = []
+    planned = ""
     for need in needs:
-        ref = ""
-        if need.reference.exchange_id:
-            x = next((x for th in ep.threads for x in th.exchanges if x.id == need.reference.exchange_id), None)
-            ref = f"What {ep.worker.name.split()[0]} actually did (for reference; other good versions exist):\n{x.body}" if x else ""
-        elif need.reference.text:
-            ref = f"A good version (for reference; other good versions exist):\n{need.reference.text}"
-        blocks.append(prompts.RUBRIC.format(title=need.title, must="; ".join(need.rubric.must),
-                                            must_not="; ".join(need.rubric.must_not) or "(none)", reference=ref))
-    return prompts.JUDGE.format(worker_name=ep.worker.name, worker_title=ep.worker.title, employer=ep.employer.name,
-                                first_name=ep.worker.name.split()[0], when=fmt(t),
-                                profession_prompt=ep.profession_prompt,
-                                rubric_block="\n".join(blocks) or prompts.NO_RUBRIC,
-                                open_work=open_work(ep, t, needs), history=history(ep, p, t, needs, list(earlier)),
-                                facts=fact_table(ep, p, t, needs, files, order),
-                                context=_context(ep, p, t, needs, files, order), target=p["target"],
-                                action=p["action"], drafts=drafts)
+        x = next((x for th in ep.threads for x in th.exchanges if x.id == need.reference.exchange_id), None)
+        planned += prompts.PLANNED_WORK.format(
+            title=need.title, must="; ".join(need.rubric.must), must_not="; ".join(need.rubric.must_not) or "nothing listed",
+            first_name=first, reference=x.body if x else need.reference.text or "(none)",
+            reference_label=f"What {first} actually did" if x else f"A good version ({first} did not do it)")
+    case = prompts.JUDGE_CASE.format(
+        worker_name=ep.worker.name, worker_title=ep.worker.title, employer=ep.employer.name, when=fmt(t),
+        profession_prompt=ep.profession_prompt, target=p["target"], action=p["action"],
+        drafts="\n\n".join(_draft(i, d) for i, d in enumerate(p["drafts"], 1)), planned_work=planned,
+        open_work=open_work(ep, t, needs), history=history(ep, p, t, needs, list(earlier)),
+        facts=draft_facts(ep, p, t, needs, files, order), context=_context(ep, p, t, needs, files, order))
+    return prompts.JUDGE_SYSTEM, case
 
 
 def _context(ep: Episode, p: dict, t: int, needs: list, files: dict, order: list[str]) -> str:
     """The files themselves, as of the proposal: the target, the need's evidence, the files the assistant opened."""
-    ids, _ = draft_facts(p)
+    ids, _ = facts_in(p)
     keys = set(ids) | {k for d in p["drafts"] for k in re.findall(r"[\w@.#-]*\d[\w@.#-]*", str(d.get("text", "")))
                        if len(k) >= 3}
     parts, used, seen = [], 0, set()
@@ -324,7 +329,7 @@ NO_BATCH = False            # --no-batch: skip batch APIs (quick checks)
 JUDGE_ATTEMPTS = 4          # per judge and proposal: API errors and unparseable replies are retried with backoff
 
 
-async def judge_all(run: cfgmod.RunConfig, judges, prompt: str) -> dict[str, dict]:
+async def judge_all(run: cfgmod.RunConfig, judges, prompt: tuple[str, str]) -> dict[str, dict]:
     async def one(j):
         gen = {**run.generate_for(j), "max_tokens": 16000}
         if NO_BATCH:
@@ -335,7 +340,7 @@ async def judge_all(run: cfgmod.RunConfig, judges, prompt: str) -> dict[str, dic
             if attempt:
                 await asyncio.sleep(5 * 2 ** (attempt - 1))
             try:
-                out = await model.generate([ChatMessageUser(content=prompt)])
+                out = await model.generate([ChatMessageSystem(content=prompt[0]), ChatMessageUser(content=prompt[1])])
             except Exception as e:  # noqa: BLE001  (any provider error: retry, then record it)
                 last = {"error": f"{type(e).__name__}: {str(e)[:300]}"}
                 continue
@@ -496,6 +501,13 @@ def finish(run: cfgmod.RunConfig, rows: list[dict], offsets: dict[str, float]) -
             j_for_value = {"score": g["panel"]["score"], "best_draft": lead.get("best_draft", 1),
                            "minimal_fix": lead.get("minimal_fix", "")} if js else None
             g["value"] = value(ep, g["proposal"], j_for_value, gets, price, share, read_words)
+            if g.get("timing") and g["timing"]["on_time"] is False:
+                # a late call line is dropped before the worker sees it, as any assistant would once the worker has
+                # started answering; what it would have cost if shown anyway is kept for the sensitivity analysis
+                g["value_if_shown"] = g["value"]
+                tok = g["value"]["token_cost_usd_share"]
+                g["value"] = {"read_min": 0.0, "fix_min": 0.0, "edits": 0, "do_min": 0.0, "minutes_saved": 0.0,
+                              "value_usd": round(-tok, 4), "token_cost_usd_share": tok, "suppressed": True}
 
 
 def main():

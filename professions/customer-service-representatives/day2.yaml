@@ -445,7 +445,7 @@ needs:
     check: {all: [{target: c2-sam}, {action_in: [say]}, {mentions_any: ["911", "Home Phone", "emergency"]}]}
     must: ["Mentions that his Home Phone (and 911) is also down overnight"]
     minutes: [0.3, "a spoken line (call line estimate)"]
-    intent: "He has Home Phone; I forgot to tell him 911 is down overnight."
+    intent: "He has Home Phone, so 911 is down too until the repair."
   - id: n2-nina
     title: Nina is not in the outage; troubleshoot her Wi-Fi
     kind: call_line

@@ -34,10 +34,7 @@
 
 ## Errors (0)
 
-## Warnings (6)
-- a053: worker acts at D4 05:55, outside working hours
-- a4-backfill-note: worker acts at D4 06:15, outside working hours
-- a4-ravi-ok: worker acts at D4 06:20, outside working hours
+## Warnings (3)
 - n1-intl: very short mention 'UK'
 - n2-ravi: very short mention 'CS'
 - n3-ravi: very short mention 'IC'

@@ -48,9 +48,6 @@
 
 ## Errors (0)
 
-## Warnings (5)
-- a064: worker acts at D4 07:52, outside working hours
-- a4-ctp: worker acts at D4 07:58, outside working hours
-- a4-charger: worker acts at D4 17:30, outside working hours
+## Warnings (2)
 - n1-carla: very short mention 'HR'
 - n1-actions: very short mention 'QC'

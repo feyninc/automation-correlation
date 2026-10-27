@@ -38,8 +38,7 @@
 
 ## Errors (0)
 
-## Warnings (5)
-- a4-printer: worker acts at D4 07:30, outside working hours
+## Warnings (4)
 - n1-cart: very short mention '1A'
 - n2-karen: very short mention '3B'
 - n3-agenda: very short mention '3B'

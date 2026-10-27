@@ -34,8 +34,5 @@
 
 ## Errors (0)
 
-## Warnings (4)
-- a001: worker acts at D1 06:45, outside working hours
-- a003: worker acts at D1 07:00, outside working hours
-- a1-record: worker acts at D1 07:20, outside working hours
+## Warnings (1)
 - n4-shawn: very short mention 'HR'

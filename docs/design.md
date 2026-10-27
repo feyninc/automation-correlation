@@ -65,7 +65,10 @@ continue an earlier thread (same id, new exchanges, optional state change) or ad
   state at that time.
 - **Needs**: id, O*NET task, window (`from`, `due`), evidence, a reference (`ref` to the worker's own action or call
   line, or `ref_text` when the worker never does it), the code check, the rubric (`must`, `must_not`), minutes to do it
-  unaided with their basis, and the worker's private intent (used only by the simulated worker).
+  unaided with their basis, and the worker's private intent (used only by the simulated worker). An intent is what
+  the worker thinks when the need appears: no hindsight about later days, and the method rather than a computed
+  answer (a 10-27 review removed five hindsight intents, one of which gave away a need's answer, and five computed
+  credit amounts; 10 of 567 intents still contain a number a check needs, all facts the worker was told).
 - **Traps**: a check that fires on a harmful proposal, the correct behavior, severity, an optional dollar bound with
   its source, and `worker_mistakes` (the worker's own actions the trap is allowed to match).
 
@@ -133,9 +136,11 @@ version of each document; a call's turns, then the worker's case note), plus `/w
   caller's last line gets that line first); `wait()`. A call ends at its last spoken turn; a case note written
   afterwards does not keep it live.
 - **System prompt:** fixed harness instructions plus the profession's `profession_prompt` (`workweek/prompts.py`).
-- **Simulated worker** (`user_model`, Gemini 4 Argon, owner 10-26): answers `ask_worker` in at most three sentences
-  from the profession prompt, the private intents of needs already discoverable, and recent activity. Each question
-  costs the worker reading plus `question_answer_s` (default 30 s).
+- **Simulated worker** (`user_model`, Gemini 4 Argon, owner 10-26): answers `ask_worker` in at most three sentences.
+  A fixed system prompt (`WORKER_SYSTEM`: stay in character, answer only what was asked, use only what the case says,
+  claim an action only if the activity shows it) and a case (`WORKER_CASE`: `<you>` the worker, employer, moment and
+  profession prompt; `<your_views>` the intents of the needs discoverable by then; `<what_has_happened>` the last 25
+  feed lines; `<question>`). Each question costs the worker reading plus `question_answer_s` (default 30 s).
 - **Output:** proposals, questions and tick counts in the sample metadata of the Inspect log, with token usage per
   call.
 
@@ -147,14 +152,18 @@ version of each document; a call's turns, then the worker's case note), plus `/w
    call is say, anything changing a document is an edit; flag, new, forward and schedule keep their names). A need is
    earned by the last matching proposal inside its window, and one proposal can earn several needs (see "Crediting
    work" below); a trap fires on any matching proposal.
-2. **Judges:** a panel of seven from seven families (weights in the config, summing to 1). Each gets a packet built so
-   that judging is reading, not searching (see "Making judging easy" below): the profession prompt; the rubric and the
-   worker's own version for every need the proposal matches; the planned work open at that moment and whether the
-   worker had done it; what the worker and the assistant had already done on the matter; a fact table; the files
-   (target, evidence and the last 12 files the model opened; long files keep their head and the lines sharing an
-   identifier with the drafts; 30,000 characters); and every draft. Output: a checklist (needed, right place, facts
-   correct, within authority, complete), then score 0-100 (the probability the worker sends the best draft
-   unchanged) bounded by the checklist, best draft, harm, rubric hits and misses, two short reasons, the minimal fix.
+2. **Judges:** a panel of seven from seven families (weights in the config, summing to 1). Each judge gets a fixed
+   system prompt (`JUDGE_SYSTEM`: what is graded and how, the parts of the case, the checklist, the score bands, the
+   reply format) and one case per proposal (`JUDGE_CASE`), in labeled parts so judging is reading, not searching (see
+   "Making judging easy" below): `<job>` the person, moment and profession prompt; `<proposal>` the target, action and
+   drafts; `<planned_work>` for every need the proposal matches, its must and must-not and the worker's own version;
+   `<open_work>` the planned work open then and whether the worker had done it; `<already_done>` what the worker and
+   the assistant had done on the matter; `<draft_facts>` every number, identifier, date, email and named person in the
+   drafts, looked up in the world as of that moment; `<files>` the target, evidence and the last 12 files the model
+   opened (long files keep their head and the lines sharing an identifier with the drafts; 30,000 characters). No
+   tools: one call per judge per proposal. Output: a checklist (needed, right place, facts correct, within authority,
+   complete), then score 0-100 (the probability the worker sends the best draft unchanged) bounded by the checklist,
+   best draft, harm, rubric hits and misses, two short reasons, the minimal fix.
 3. **Panel score:** each judge's score less its offset (its mean deviation from the other judges on the same
    proposals, over the whole run), then the weighted mean with the tested model's own family left out
    (`report_with_dropout`). The uncalibrated and full-panel means and the median are kept beside it; offsets are
@@ -174,8 +183,10 @@ version of each document; a call's turns, then the worker's case note), plus `/w
    its tools took; the grader converts tokens to seconds with the model's p50 time to first token and throughput on
    its route (`scripts/speed.py`, OpenRouter's endpoint stats, `data/openrouter/speed-<date>.csv`), adds the worker
    reading the line's first 10 words, and compares with the caller's patience (strict) or the caller's line plus
-   patience (streaming, as if the assistant heard the line as it was spoken: an upper bound). A late line earns no
-   need; traps still fire on it, since they measure what was proposed. Provider-neutral speeds rather than our own
+   patience (streaming, as if the assistant heard the line as it was spoken: an upper bound). A late line is dropped
+   before the worker sees it, as any assistant would once the worker has started answering: it earns no need and
+   costs nothing but its tokens (`value_if_shown` keeps what it would have cost if shown anyway, for sensitivity);
+   traps still fire on it, since they measure what was proposed. Provider-neutral speeds rather than our own
    wall clock keep queueing and retries on our routes (Bedrock's 503s, Azure's slow DeepSeek) out of the measure.
 7. **Attention:** every proposal shown costs time beyond reading it, whether accepted or not (agents ignored 62% of
    AI suggestions in Brynjolfsson, Li and Raymond 2023). Written proposal: 10 s (4-60 s for sensitivity), from about
@@ -192,7 +203,7 @@ version of each document; a call's turns, then the worker's case note), plus `/w
 Judges do not see the episode's history or the model's notes, and should not have to: a draft is right or wrong
 against the world, whatever the model's process. So the packet hands them what checking needs.
 
-- **Fact table:** every identifier (claim and account numbers, emails, dates, times), amount and person in the drafts,
+- **Draft facts:** every identifier (claim and account numbers, emails, dates, times), amount and person in the drafts,
   located deterministically in the world as of the proposal (file and line), or marked as in the worker's own version
   (computed), or as found nowhere (computed from other figures, or invented). Where a fact came from (a file read days
   earlier, the model's notes) no longer matters.
@@ -204,9 +215,9 @@ against the world, whatever the model's process. So the packet hands them what c
 Measured on the same proposals graded with the old and the new prompt (63 from the claims sample, 40 from six models
 in the customer-service sample): agreement on accept (score at least 50) stayed at Fleiss kappa 0.34-0.44 and the
 typical spread across judges barely moved, while judges became 4-8 points stricter. Where old and new grades differed
-most, the new ones were right: a draft naming a caller with an email the fact table located on another customer's
-account fell from 60 to 2; a QA dispute that was Marisol's planned work rose from 27 to 69. So the packet buys
-validity, not agreement, at about 60% more judge cost ($0.16 a proposal against $0.10).
+most, the new ones were right: a draft naming a caller with an email the draft-facts lookup located on another
+customer's account fell from 60 to 2; a QA dispute that was Marisol's planned work rose from 27 to 69. So the packet
+buys validity, not agreement, at about 60% more judge cost ($0.16 a proposal against $0.10).
 
 The disagreement that remains is mostly in level, not ranking: each judge correlates 0.72-0.94 with the mean of the
 other six, and with judges' offsets removed the seven-judge panel's reliability is ICC(3,k) 0.90-0.94. The offsets
@@ -334,14 +345,14 @@ GPT-6.1 Sol, DeepSeek V4.1 Flash; claims and customer service, D1 08:00-17:00; `
 - Cost rises with the day's inbound items, with an elasticity of 0.6 (Opus 4.8) to 1.2 (DeepSeek V4.1 Flash)
   between claims (6.6 items a day) and customer service (19.4). Realistic volume (section 3) multiplies the inbound
   items, so it multiplies cost by about that factor to the power 0.6-1.2.
-- Tested models, one seed (27 models x 11 professions x 5 days), at today's volume: $3,200-5,800 (mid $4,400). Routes without prompt
-  caching (DeepSeek V3.2 on Azure, GLM-4.7 and GLM-5 on Bedrock) cost more than their prices suggest.
+- Tested models, one seed (27 models x 11 professions x 5 days), at today's volume: $3,200-5,800 (mid $4,400). Routes
+  without prompt caching (DeepSeek V3.2 on Azure, GLM-4.7 and GLM-5 on Bedrock) cost more than their prices suggest.
 - Judges: 11-27 proposals a profession-day (pilot), so 16,000-40,000 a seed; at $0.16 a proposal (seven judges, the
   packet) $2,600-6,400 (mid $4,500). GPT-6 Astra now judges through OpenAI's Batch API at half price, about a sixth
   off the judge cost; Inspect batches only OpenAI's, Anthropic's own and Google's own APIs, so the Bedrock, Azure and
   OpenRouter judges cannot.
-- Per seed in all, at today's volume: $5,800-12,200 (mid about $8,900); three seeds $17,000-37,000. About $2,300 a seed runs through
-  OpenRouter (8 tested models, 4 judges, the simulated worker), which had $13.50 of credit left on 2026-10-27.
+- Per seed in all, at today's volume: $5,800-12,200 (mid about $8,900); three seeds $17,000-37,000. About $2,300 a
+  seed runs through OpenRouter (8 tested models, 4 judges, the simulated worker); its credit tops up automatically.
 - Wall clock: a day took 11-14 minutes for GPT-6.1 Sol and Opus 4.8 (both professions in parallel) and 79 minutes for
   DeepSeek V4.1 Flash on Azure, which sets the pace of a full run.
 

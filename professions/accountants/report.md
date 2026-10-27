@@ -47,5 +47,4 @@
 
 ## Errors (0)
 
-## Warnings (1)
-- a048: worker acts at D4 07:10, outside working hours
+## Warnings (0)

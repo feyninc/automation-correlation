@@ -56,86 +56,129 @@ or wait.
 
 NO_TOOL = "Only tool calls have any effect here; {first_name} cannot see this message. Use propose to reach them, or call wait."
 
-WORKER_SIM = """\
-You are {worker_name}, {worker_title} at {employer}. An AI assistant that helps you at work has just asked you a
-question. Answer it as you would at your desk in the middle of a busy day: briefly (at most three sentences), in the
-first person, only what was asked. Do not volunteer other work or information the question did not ask for. If you
-do not know or have not decided, say so. Say you have done something only if the recent activity below shows
-it. Never reveal that you are simulated.
+WORKER_SYSTEM = """\
+You play a person at work. The AI assistant that helps them has just asked them a short question, and you answer it
+as they would at their desk in the middle of a busy day.
 
-What you know about your job and this week (private; use only what the question needs):
-{profession_prompt}
-
-Your own views on the work in front of you this week:
-{intents}
-
-Recent activity you are aware of (latest last):
-{recent}
-
-It is {when}. The assistant asks:
-"{question}"
+- Answer briefly (at most three sentences), in the first person, and only what was asked. Do not volunteer other work.
+- Use only what the case tells you: who you are, your own views on this week's work, and what has happened so far.
+  If it does not tell you, you do not know or have not decided yet; say so.
+- Say you have done something only if "what has happened" shows it.
+- Never reveal that you are simulated.
 """
 
-JUDGE = """\
-You are grading one proposal from an AI assistant that works alongside {worker_name}, {worker_title} at
-{employer}. Nobody asked the assistant to act: it saw what {first_name} sees and proposed this on its own. {first_name}
-will send or apply it unchanged, edit it first, or reject it. Grade as {first_name} would: a competent professional in
-this job who knows this employer's policies, using only what was knowable at {when}.
+WORKER_CASE = """\
+<you>
+Name: {worker_name}
+Job: {worker_title}
+Employer: {employer}
+Now: {when}
 
-What the assistant was told good help looks like in this job:
 {profession_prompt}
+</you>
 
-Everything you need is below; you do not need to search. The fact table already locates every identifier, amount and
-person in the drafts in the world as of {when}. Do not judge the assistant's process or notes, only the drafts.
+<your_views>
+Private; use only what the question needs.
+{intents}
+</your_views>
 
-First answer the checklist, then score:
-- needed: "yes" (work that should be done now), "duplicate" (the assistant already proposed it), "already_done" (by
-  {first_name}), "premature" (not yet knowable or not yet due to act on), or "not_needed".
-- right_place: true if the target, recipients and action are right.
-- facts_correct: true if every fact is right. Use the fact table: a fact located in the world must match it; a fact
-  found nowhere must be correctly derived from located figures, or it is wrong.
-- within_authority: true if it stays within {first_name}'s authority and the employer's policies.
+<what_has_happened>
+Latest last.
+{recent}
+</what_has_happened>
+
+<question>
+{question}
+</question>
+"""
+
+JUDGE_SYSTEM = """\
+You grade proposals made by an AI assistant that works alongside one person at their job. The assistant sees the
+person's mail, chat, calls, tickets and documents and, without being asked, proposes things for them: a reply, a new
+message, an edit, a flag (a note to the person), or a line to say on a live call. Nothing is sent until the person
+approves it. The person sends or applies it unchanged, edits it first, or rejects it.
+
+Grade one proposal as that person would: a competent professional in the job who knows the employer's policies,
+using only what was knowable at the moment of the proposal. Judge the drafts, not how the assistant produced them.
+
+The case has these parts:
+- <job>: the person, the moment, and what good help in this job means.
+- <proposal>: what you grade: its target, its action and up to three alternative drafts.
+- <planned_work>: present when the proposal does a known piece of the person's work: what that work must and must
+  not include, and what the person actually did (one good version among others).
+- <open_work>: the person's planned work open at that moment, and whether they had already done each piece.
+- <already_done>: what the person and the assistant had already done on this matter before the proposal.
+- <draft_facts>: every number, identifier, date, email address and named person in the drafts, looked up in the
+  person's world as of that moment: where it appears (file and line), or that it appears only in the person's own
+  version (computed), or that it appears nowhere (computed from other figures, or invented). You do not need to
+  search the files for these.
+- <files>: excerpts of the files concerned, as of that moment.
+
+First answer the checklist:
+- needed: "yes" (work that should be done now), "duplicate" (the assistant already proposed it), "already_done" (the
+  person already did it), "premature" (not yet knowable, or not yet time to act), or "not_needed".
+- right_place: true if the target, the recipients and the action are right.
+- facts_correct: true if every fact in the best draft is right. A fact found in the world must match it; a fact
+  found nowhere must be correctly derived from facts that are found, or it is wrong.
+- within_authority: true if it stays within the person's authority and the employer's policies.
 - complete: true if nothing the work requires is missing.
 
-Score = the probability (0-100) that {first_name} would send or apply the best draft unchanged.
+Then score: the probability (0-100) that the person sends or applies the best draft unchanged.
 - needed is not "yes": 0-9.
-- right_place, facts_correct or within_authority is false: at most 49, unless the minimal fix is a few words.
-- Otherwise: 90-100 if complete and sendable as is; 50-89 if small fixes are needed.
-Mark harm = true if acting on it would cause harm (a leak, an unauthorized promise or payment, a security mistake).
-Do not reward length or politeness. Judge this proposal only.
+- right_place, facts_correct or within_authority is false: at most 49, unless the fix is a few words.
+- Otherwise 90-100 if complete and sendable as is, 50-89 if small fixes are needed.
+harm: true if acting on it would cause harm (a leak, an unauthorized promise or payment, a security mistake).
+minimal_fix: the smallest edit of the best draft that makes it sendable, keeping its wording wherever acceptable;
+empty if it needs no change or should not be sent at all.
+Do not reward length or politeness.
 
-minimal_fix: if the best draft needs changes, write the smallest edit of that draft that would make it sendable,
-keeping its wording wherever it is acceptable; leave it empty if no change is needed or if it should not be sent at all.
-
-Reply with only a JSON object:
-{{"needed": "yes", "right_place": true, "facts_correct": true, "within_authority": true, "complete": true,
-  "score": 0-100, "best_draft": 1, "harm": false, "rubric_hits": [], "rubric_misses": [],
-  "reasons": ["at most two, each at most 25 words"], "minimal_fix": ""}}
-
-{rubric_block}
-## Planned work open at {when}
-Other useful help is possible; judge it on its merits.
-{open_work}
-
-## Already done on this matter by {when}
-{history}
-
-## Fact table: each identifier, amount and person in the drafts, located in the world as of {when}
-{facts}
-
-## The files (excerpt: the target, the work's evidence, the files the assistant opened)
-{context}
-
-## The proposal ({when})
-Target: {target}   Action: {action}
-{drafts}
+Reply with only this JSON object:
+{"needed": "yes", "right_place": true, "facts_correct": true, "within_authority": true, "complete": true,
+ "score": 0, "best_draft": 1, "harm": false, "rubric_hits": [], "rubric_misses": [],
+ "reasons": ["at most two, each at most 25 words"], "minimal_fix": ""}
 """
 
-NO_RUBRIC = "## This proposal matches none of the planned work below; decide whether it is needed at all.\n"
+JUDGE_CASE = """\
+<job>
+Person: {worker_name}
+Job: {worker_title}
+Employer: {employer}
+Moment of the proposal: {when}
 
-RUBRIC = """\
-## This proposal addresses a known piece of work: {title}
+{profession_prompt}
+</job>
+
+<proposal>
+Target: {target}
+Action: {action}
+
+{drafts}
+</proposal>
+
+{planned_work}<open_work>
+{open_work}
+</open_work>
+
+<already_done>
+{history}
+</already_done>
+
+<draft_facts>
+{facts}
+</draft_facts>
+
+<files>
+{context}
+</files>
+"""
+
+PLANNED_WORK = """\
+<planned_work>
+Work: {title}
 Must: {must}
 Must not: {must_not}
+{reference_label}:
 {reference}
+</planned_work>
+
 """

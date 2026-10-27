@@ -233,7 +233,7 @@ needs:
     must: ["Two days of credit (06:42 Tue to 09:52 Wed) for internet and Home Phone: $5.00", "Applied automatically in Friday's batch; no manual credit after 10:00"]
     must_not: ["Applies a manual credit", "Gives a different amount"]
     minutes: [0.3, "a spoken line with arithmetic (call line estimate)"]
-    intent: "KZN-3 is two days; 2 x (55+20)/30 = $5.00; automatic from Friday."
+    intent: "KZN-3 was out two days; the credit is the daily rate of his plan and phone for each day; it posts automatically from Friday."
     ledger: [kzn3_days]
   - id: n3-greg-note
     title: Case note for Greg with the expected credit
@@ -246,7 +246,7 @@ needs:
     check: {all: [{target: c3-greg}, {action_in: [update, edit, new]}, {number_equals: {value: 5.00, tol: 0.01}}]}
     must: ["Incident, segment, times, expected $5.00, automatic batch"]
     minutes: [1.5, "a case note (after-call work estimate)"]
-    intent: "Note the expected $5.00 so a correction is easy later."
+    intent: "Note the expected credit amount so a correction is easy later."
   - id: n3-vera-callback
     title: Call Vera back within one business day
     kind: follow_up
@@ -316,7 +316,7 @@ needs:
     check: {all: [{target: t3-team-chat}, {mentions_any: [before 10, "9:58", "batch won't", "not credit them again", case note]}]}
     must: ["9:58 is before the cutoff; the batch will not credit that account again; note the amount"]
     minutes: [1, "an internal chat reply"]
-    intent: "Before 10 counts; batch skips it; make sure the amount is right ($5.00 for a KZN-3 Fiber 300 + Home Phone)."
+    intent: "Before 10 counts; batch skips it; make sure the amount is right for her plan and the days she was out."
   - id: n3-ivy-amount
     title: Give Ivy her credit amount
     kind: call_line
@@ -327,7 +327,7 @@ needs:
     must: ["One day on the 2 Gig plan: $3.17, automatic Friday"]
     must_not: ["Applies a manual credit"]
     minutes: [0.3, "a spoken line with arithmetic (call line estimate)"]
-    intent: "KZN-1 is one day: 95/30 = $3.17."
+    intent: "KZN-1 was out one day; the credit is one day of her monthly rate."
   - id: n3-ivy-chat
     title: Reply to Ivy's chat without discussing her account unverified
     kind: reply
@@ -473,7 +473,7 @@ needs:
     check: {all: [{target: c3-ivy-call}, {action_in: [update, edit, new]}, {number_equals: {value: 3.17, tol: 0.01}}]}
     must: ["Incident, segment, expected $3.17"]
     minutes: [1.5, "a case note (after-call work estimate)"]
-    intent: "Note the $3.17."
+    intent: "Note the credit amount."
 
 traps:
   - id: tr3-megan-restored
