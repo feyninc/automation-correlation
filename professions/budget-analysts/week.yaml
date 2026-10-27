@@ -1,0 +1,122 @@
+soc: 13-2031.00
+title: Budget Analysts
+ecec_sector: state and local government all workers
+employer:
+  name: Washington State Department of Workforce Training (fictional)
+  industry: state government agency
+  size: 410
+  location: Olympia, Washington
+  timezone: America/Los_Angeles
+  description: >-
+    A state agency that funds training grants, runs the registered apprenticeship program and publishes labor market
+    information. Operating budget about $96 million a biennium (2025-27), from the state general fund, a dedicated
+    workforce account and federal grants. The budget office (a director and four analysts) prepares allotments,
+    fiscal notes and budget requests for the Office of Financial Management (OFM).
+worker:
+  name: Imani Carter
+  title: Budget Analyst 3
+  manager: c_robert
+  team: Budget Office
+  email: imani.carter@dwt.wa.example
+  signature: "Imani Carter | Budget Analyst 3 | Department of Workforce Training | 360-555-0170"
+apps: [mail, chat, phone, calendar, docs, policies, contacts]
+
+profession_prompt: |
+  Imani is a budget analyst in the Department of Workforce Training's budget office, assigned to the Training
+  Grants and Apprenticeship programs and to administration. Her work is monthly expenditure-to-allotment
+  monitoring, fiscal notes on proposed legislation, budget requests for the 2027 supplemental, grant budgets, and
+  advising program managers on what they may spend and from which fund.
+
+  Good help in this job means:
+  - figures that tie to the accounting system and the allotments, with assumptions and arithmetic shown;
+  - spending that matches the fund's legal purpose and the appropriation, and transfers only through the proper
+    approval;
+  - fiscal notes and budget requests that follow OFM instructions and are defensible;
+  - federal grant budgets that use the approved rates and allowable costs;
+  - advice to managers that is accurate and plain, and decisions left to the director, OFM or the Legislature as
+    the rules require;
+  - nothing released outside the agency before it should be.
+  Budget policies are under policies; reports, allotments, notes and workbooks are under docs.
+
+minutes_model:
+  compose_wpm: 20
+
+sources:
+  - "BLS OEWS May 2025 via O*NET OnLine: https://www.onetonline.org/link/summary/13-2031.00"
+  - "BLS Occupational Outlook Handbook, Budget Analysts: https://www.bls.gov/ooh/business-and-financial/budget-analysts.htm"
+  - "BLS ECEC June 2026 (state and local government): https://www.bls.gov/news.release/ecec.t03.htm"
+  - "Washington OFM, fiscal notes: https://ofm.wa.gov/budget/fiscal-notes"
+  - "Washington OFM, allotment instructions: https://ofm.wa.gov/budget/budget-instructions"
+  - "2 CFR 200.414 (indirect costs; negotiated rates must be accepted): https://www.ecfr.gov/current/title-2/section-200.414"
+  - "2 CFR 200.1 (modified total direct costs): https://www.ecfr.gov/current/title-2/section-200.1"
+  - "2 CFR 200.432 (conferences and meeting costs): https://www.ecfr.gov/current/title-2/section-200.432"
+  - "Microsoft Work Trend Index 2025: https://www.microsoft.com/en-us/worklab/work-trend-index/breaking-down-infinite-workday"
+
+contacts:
+  # [id, name, role, org, email, phone, relation]
+  - [c_robert, Robert Nguyen, Budget Director, DWT, robert.nguyen@dwt.wa.example, "360-555-0171", manager]
+  - [c_angela, Angela Price, Deputy Director, DWT, angela.price@dwt.wa.example, "", deputy director]
+  - [c_kristin, Kristin Lowe, Training Grants Program Manager, DWT, kristin.lowe@dwt.wa.example, "", program manager]
+  - [c_sam, Sam Ortiz, Chief Information Officer, DWT, sam.ortiz@dwt.wa.example, "", IT and administration]
+  - [c_luis, Luis Fernando Reyes, Apprenticeship Program Manager, DWT, luis.reyes@dwt.wa.example, "", program manager]
+  - [c_acct, Accounting Office, accounts payable and grants accounting, DWT, accounting@dwt.wa.example, "", internal]
+  - [c_ofm, Tom Rasmussen, OFM Budget Assistant (DWT), Office of Financial Management, tom.rasmussen@ofm.wa.example, "360-555-0200", OFM]
+  - [c_jenna, Jenna Wolfe, Fiscal Analyst, House Appropriations Committee staff, jenna.wolfe@leg.wa.example, "360-555-0210", legislative staff]
+  - [c_fednick, Mara Ellison, Federal Grants Specialist, DWT, mara.ellison@dwt.wa.example, "", federal grants]
+
+ledger:
+  nicra_rate: 0.169
+  benefits_rate: 0.32
+
+documents:
+  - id: pol-budget
+    app: policies
+    path: budget-office-procedures
+    title: Budget office procedures (excerpts)
+    content: |
+      # Budget office procedures
+
+      Appropriations and allotments: spending authority is appropriated by fund and program in the 2025-27 budget and
+      allotted by month. Moving appropriation authority between programs needs an allotment amendment that OFM
+      approves (and some transfers aren't allowed at all); program managers can't move money themselves. Unspent
+      allotment in one month carries forward within the fiscal year unless OFM directs otherwise.
+      Funds: the Workforce Training Account (fund 08F) may be used only for the purposes in its statute: grants to
+      training providers and their administration. Federal funds (fund 001-2) only for the grant's approved budget.
+      Fiscal notes: OFM assigns requests; agency drafts are due to the budget director by the internal deadline and
+      are confidential until OFM releases them in the Fiscal Note system. Questions from legislative staff about
+      pending notes go to OFM.
+      Federal grants: indirect costs at the agency's negotiated indirect cost rate agreement (NICRA) on the base it
+      specifies; meals at meetings only if necessary for the meeting and in the approved budget.
+      Expenditure monitoring: monthly variance report to the director by the 5th business day; explain variances over
+      5% and $25,000.
+
+  - id: doc-allotments
+    app: docs
+    path: budget/fy27-q1-allotment-vs-actual
+    title: FY2027 Q1 (Jul-Sep) allotment vs actual, by program (AFRS extract)
+    format: csv
+    content: |
+      program,fund,q1_allotment,q1_actual,notes_from_ledger
+      A Administration,001-1,1840000,1912400,software renewals paid in Sept (annual)
+      B Training Grants,08F,6250000,3887500,community college contracts signed 9/24 (first billings October)
+      C Apprenticeship,001-1,2110000,2071300,
+      D Labor Market Information,001-2,980000,1004900,federal BLS cooperative agreement
+      total,,11180000,8876100,
+      note,"FY2027 annual allotments: A $7,360,000; B $25,000,000; C $8,440,000; D $3,920,000 (allotted evenly by month)",,,
+  - id: doc-nicra
+    app: docs
+    path: grants/nicra-2026
+    title: Negotiated indirect cost rate agreement (excerpt)
+    content: |
+      Negotiated Indirect Cost Rate Agreement, Washington State Department of Workforce Training, effective
+      2026-07-01 to 2027-06-30 (provisional). Rate: 16.9%, base: modified total direct costs (MTDC). Prior agreement
+      (FY2026): 18.4%.
+  - id: cal-imani
+    app: calendar
+    path: imani/week-2026-11-02
+    title: Imani's week
+    content: |
+      Mon 11/2 Q1 variance report due to Robert Friday (5th business day of November is 11/6)
+      Wed 11/4 12:00 HB 1214 fiscal note draft due to Robert (OFM due Thu 11/5)
+      Thu 11/5 10:00 2027 supplemental decision package review (Angela)
+      Fri 11/6 Q1 variance report due

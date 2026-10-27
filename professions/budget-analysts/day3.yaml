@@ -1,0 +1,155 @@
+# Wednesday 2026-11-04. The fiscal note goes to Robert at noon; he asks for OFM's standard benefits rate (33.5%). Kristin
+# sends the colleges' billing forecast. The Apprenticeship program's supplemental request costs four new FTE for a
+# full year, though they'd start January 1.
+#
+# Note at 33.5% benefits: FY2028 $834,400; FY2029 $362,320; 2027-29 $1,196,720; 2029-31 $724,640.
+# Forecast: $1.6M + $2.4M + $2.4M + 6 x $2.5M = $21.4M against $21.1125M remaining: no lapse projected.
+# Decision package: 4 FTE x $90,000 x 1.32 x 6 months = $237,600 in FY2027 (the program wrote $640,000); $475,200 a
+# year ongoing.
+
+documents:
+  - id: doc-forecast
+    app: docs
+    path: budget/training-grants-billing-forecast
+    title: Community college billing forecast, Training Grants (Kristin)
+    format: csv
+    at: "D3 10:00"
+    author: c_kristin
+    content: |
+      month,forecast_billing
+      2026-10,1600000
+      2026-11,2400000
+      2026-12,2400000
+      2027-01,2500000
+      2027-02,2500000
+      2027-03,2500000
+      2027-04,2500000
+      2027-05,2500000
+      2027-06,2500000
+  - id: doc-dp
+    app: docs
+    path: budget/2027-supplemental-dp-apprenticeship-draft
+    title: "2027 supplemental decision package: apprenticeship navigators (draft, Luis)"
+    at: "D3 13:00"
+    author: c_luis
+    content: |
+      Request: 4.0 FTE apprenticeship navigators to reduce first-year apprentice dropout (currently 31%).
+      Start: January 1, 2027 (the supplemental takes effect when signed, expected late March; hiring from April is
+      more realistic). Salary $90,000 each; benefits 32%.
+      FY2027 cost: 4 x $90,000 x 1.32 = $475,200; plus $164,800 for "contingency": total $640,000.
+      Ongoing: $475,200 a year.
+
+threads:
+  - id: t3-robert
+    app: mail
+    path: inbox/re-hb1214-draft
+    title: "Re: HB 1214 draft"
+    x:
+      - {at: "D3 14:00", from: c_robert, to: [worker], subject: "Re: HB 1214 fiscal note draft",
+         body: "Looks good, Imani. One change: use OFM's standard benefits rate for 2027-29 notes, 33.5% of salary, not the program's 32%. Then it's ready to submit Thursday. Robert"}
+  - id: t2-kristin
+    app: chat
+    path: "@kristin/dm"
+    title: Kristin Lowe (DM)
+    x:
+      - {at: "D3 10:00", from: c_kristin, body: "forecast from the colleges is in Docs. are we ok?"}
+  - id: t3-luis
+    app: mail
+    path: inbox/dp-apprenticeship
+    title: Apprenticeship DP draft
+    x:
+      - {at: "D3 13:00", from: c_luis, to: [worker], cc: [c_angela], subject: "Navigator DP for tomorrow's review", body: "Draft attached for Angela's 10:00 review tomorrow. Luis", att: [doc-dp]}
+  - id: t3-mara
+    app: mail
+    path: inbox/lmi-drawdown
+    title: LMI drawdown
+    x:
+      - {at: "D3 09:00", from: c_fednick, to: [worker], subject: "LMI grant drawdown for Q1",
+         body: "Imani, we've drawn $940,000 on the BLS cooperative agreement for Q1. Does that match expenditures? I want to draw the rest before the quarterly report. Mara"}
+
+actions:
+  - {id: a3-fn-robert, at: "D3 11:50", kind: new, app: mail, path: sent/hb1214-to-robert, target: m3-fn, to: [c_robert], subject: "HB 1214 fiscal note draft for review",
+     summary: "sent Robert the note draft", body: "Robert, HB 1214 draft 2 is in Docs > fiscal-notes: FY2028 $830,800, FY2029 $359,440 (2027-29 $1,190,240), GF-S only, assumptions listed. Due to OFM Thursday 5 p.m."}
+  - {at: "D3 10:05", kind: read, target: doc-forecast, summary: "checked the billing forecast against the allotment"}
+  - {id: a3-kristin, at: "D3 10:30", kind: reply, target: t2-kristin, to: [c_kristin], summary: "told Kristin the forecast covers the year",
+     body: "We're OK on the year: the forecast totals $21.4M for October-June against $21.11M of allotment left, so no lapse is projected, and it's about $0.29M over the remaining allotment, so watch the spring months. The monthly pattern will still show under-allotment in October; I'll explain it in the Q1 report. If the colleges bill more than forecast by March, we'd need an allotment adjustment."}
+  - {at: "D3 14:05", kind: read, target: t3-robert, summary: "read Robert's change"}
+  - {id: a3-fn-final, at: "D3 14:40", kind: edit, target: doc-fn, summary: "applied OFM's benefits rate to the note",
+     content: "# HB 1214 fiscal note: DWT (final for OFM)\n\nSummary: HB 1214 requires DWT to build and run an apprentice tracking system and report annually from 12/1/2028. Effective 7/1/2027.\n\nExpenditures, General Fund-State (001-1):\n| | FY2028 | FY2029 | 2027-29 | 2029-31 |\n| --- | --- | --- | --- | --- |\n| FTE | 2.5 | 2.0 | 2.25 | 2.0 |\n| Salaries | 240,000 | 192,000 | 432,000 | 384,000 |\n| Benefits (33.5%, OFM standard) | 80,400 | 64,320 | 144,720 | 128,640 |\n| Goods and services ($8,000/FTE) | 16,000 | 16,000 | 32,000 | 32,000 |\n| Implementation (one time) | 480,000 | 0 | 480,000 | 0 |\n| Subscription | 0 | 72,000 | 72,000 | 144,000 |\n| ESD wage match | 18,000 | 18,000 | 36,000 | 36,000 |\n| Total | 834,400 | 362,320 | 1,196,720 | 724,640 |\n\nAssumptions: vendor-hosted system (program estimate); 2.0 FTE IT Business Analysts ongoing and a 0.5 FTE project manager in FY2028 only; ESD data-sharing $18,000 a year. No revenue. No costs in 2025-27."}
+  - {at: "D3 13:05", kind: read, target: doc-dp, summary: "reviewed the navigator DP"}
+  - {id: a3-dp, at: "D3 15:30", kind: reply, target: t3-luis, to: [c_luis], cc: [c_angela], summary: "sent Luis corrections on the DP",
+     body: "Luis, three fixes before tomorrow: (1) FY2027 is at most half a year: a supplemental can't fund positions before it's enacted, so with a realistic April start, 4 FTE x $90,000 x 1.32 x 3 months = $118,800; even from January 1 it's 6 months, $237,600, not $475,200. (2) Remove the $164,800 contingency: OFM requires costs we can support, and padding hurts credibility. (3) The ongoing level is right: $475,200 a year from FY2028 (use 33.5% benefits for 2027-29 to match OFM: $480,600). Please add the dropout data behind the 31% and what change you expect."}
+  - {id: a3-draw, at: "D3 09:20", kind: reply, target: t3-mara, to: [c_fednick], summary: "reconciled the LMI drawdown",
+     body: "Q1 expenditures on 001-2 (LMI) were $1,004,900 per AFRS, so we're $64,900 under-drawn; you can draw $64,900 for Q1. Please draw only on recorded expenditures, not ahead of them."}
+
+needs:
+  - id: n3-fn-robert
+    title: Note draft to Robert by noon
+    kind: follow_up
+    task: 3395
+    from: "D3 08:00"
+    due: "D3 12:00"
+    evidence: [doc-fn, cal-imani]
+    ref: a3-fn-robert
+    check: {all: [{to_includes: c_robert}, {mentions_any: [HB 1214]}, {number_equals: {value: 830800}}]}
+    must: ["The draft with its totals and the OFM deadline"]
+    minutes: [3, "a cover note"]
+    intent: "Internal deadline."
+  - id: n3-fn-final
+    title: Apply OFM's benefits rate
+    kind: doc
+    task: 3402
+    from: "D3 14:00"
+    due: "D4 12:00"
+    evidence: [t3-robert, doc-fn]
+    ref: a3-fn-final
+    check: {all: [{number_equals: {value: 834400}}, {number_equals: {value: 362320}}, {number_equals: {value: 1196720}}]}
+    must: ["Benefits at 33.5% throughout; totals $834,400 / $362,320; 2027-29 $1,196,720; 2029-31 $724,640"]
+    minutes: [15, "a revision"]
+    intent: "OFM standard."
+  - id: n3-kristin
+    title: Is the underspend safe for the year?
+    kind: reply
+    task: 3401
+    from: "D3 10:00"
+    due: "D3 17:00"
+    evidence: [doc-forecast, doc-allotments, t2-kristin]
+    ref: a3-kristin
+    check: {all: [{to_includes: c_kristin}, {any: [{number_equals: {value: 21.4, tol: 0.06}}, {mentions_any: ["$21.4M", "21,400,000"]}]}, {mentions_any: [lapse]}]}
+    must: ["Forecast $21.4M vs ~$21.11M left: no lapse; slightly over, so watch spring; what would trigger an adjustment"]
+    minutes: [20, "a projection from a forecast"]
+    intent: "Answer with numbers."
+  - id: n3-dp
+    title: Fix the decision package costs
+    kind: reply
+    task: 3399
+    from: "D3 13:00"
+    due: "D4 10:00"
+    evidence: [doc-dp, t3-luis, pol-budget]
+    ref: a3-dp
+    check: {all: [{to_includes: c_luis}, {any: [{number_equals: {value: 237600}}, {number_equals: {value: 118800}}]}, {mentions_any: [contingency, padding]}]}
+    must: ["FY2027 is a partial year (at most $237,600 from Jan 1; $118,800 from April)", "No unsupported contingency", "Evidence for the outcome"]
+    must_not: ["Accepts $640,000"]
+    minutes: [25, "reviewing a budget request"]
+    intent: "Defensible or it gets cut."
+  - id: n3-draw
+    title: Reconcile the federal drawdown to expenditures
+    kind: reconcile
+    task: 3394
+    from: "D3 09:00"
+    due: "D3 17:00"
+    evidence: [t3-mara, doc-allotments]
+    ref: a3-draw
+    check: {all: [{to_includes: c_fednick}, {number_equals: {value: 64900}}]}
+    must: ["$1,004,900 spent vs $940,000 drawn: draw $64,900; no drawing ahead of expenditures"]
+    minutes: [10, "a drawdown reconciliation"]
+    intent: "Cash follows spending."
+
+traps:
+  - id: tr3-pad
+    title: Keeping the contingency padding
+    kind: stale_info
+    evidence: [doc-dp, pol-budget]
+    check: {all: [{mentions_any: ["640,000", "$640,000"]}, {mentions_any: ["looks good", "approved", "fine"]}, {not: {mentions_any: [contingency, partial, "half"]}}]}
+    correct: "Partial-year costs and no padding."
+    severity: medium
