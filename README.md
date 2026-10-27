@@ -26,10 +26,12 @@ The full design is [`docs/design.md`](docs/design.md).
   observed exposure from 0.07 (budget analysts) to 0.70 (customer service representatives). Wages are BLS OEWS May
   2025 medians, loaded with BLS ECEC (June 2026) and aged with the Employment Cost Index.
 - **Weeks.** For each occupation, one working week (Monday 2026-11-02 to Friday 11-06) at a fictional employer with
-  real rules, regulators and software, written by hand from primary sources: 25 to 101 needs (567 in all, 5,375
-  minutes of work, each tied to an O*NET task with a window, a code check, a rubric, the minutes it takes and the
-  worker's own version) and 7 to 21 traps (144) drawn from the job's real risks. A compiler audits every week: each
-  need's check passes on the worker's own version, no trap fires on what the worker did, and the files round-trip.
+  real rules, regulators and software, built from primary sources: 84 to 554 needs (1,922 in all, 13,598 minutes of
+  work, each tied to an O*NET task with a window, a code check, a rubric, the minutes it takes and the worker's own
+  version) and 16 to 81 traps (332) drawn from the job's real risks. Each week's `overview.md` explains it in plain
+  English, with citations, and says what an ideal assistant would do. A compiler audits every week: each need's check
+  passes on the worker's own version, no trap fires on what the worker did, the files round-trip, and the overview
+  is there and agrees with the week.
 - **The loop.** An Inspect AI task on a simulated clock: every 5 minutes the model sees the world as files (mail,
   chat, tickets, calls, documents, what the worker just did) and may read, propose up to three drafts, ask the worker
   (a simulated worker answers), join a live call or wait. Nothing it writes is delivered, so the week is identical
@@ -51,7 +53,7 @@ hand grades for judge agreement, the pilot that sizes the full run, then the ful
 
 | Path | What it is |
 | --- | --- |
-| `professions/<name>/` | one week: `week.yaml` and `day1.yaml`..`day5.yaml` (hand-written), `episode/` and `report.md` (compiled) |
+| `professions/<name>/` | one week: `overview.md` (start here), `week.yaml`, `day1.yaml`..`day5.yaml` and `day1b.yaml`..`day5b.yaml` (the forms), `episode/` and `report.md` (compiled) |
 | `workweek/` | schema, compiler and audit, the world, the engine (Inspect AI task), checks, grader, config, provider patches, sandbox image |
 | `config/run.yaml` | models, routes, prices, judges, the simulated worker, run settings |
 | `scripts/` | `run.py`, `smoke_models.py`, `probe_reasoning.py`, `speed.py`, `timeline.py`, `screen_occupations.py` |

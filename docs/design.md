@@ -18,7 +18,7 @@ how fast is it changing across model releases?
 
 | Path | What it is |
 | --- | --- |
-| `professions/<name>/` | one profession: `week.yaml` (job, people, policies, standing documents) and `day1.yaml`..`day5.yaml` (what happens each day), written by hand; `episode/` (compiled: `profession.json` plus one JSON per date) and `report.md` (build report), generated |
+| `professions/<name>/` | one profession: `overview.md` (the week in plain English, with citations, and what an ideal assistant does), `week.yaml` (job, people, policies, standing documents), `day1.yaml`..`day5.yaml` and `day1b.yaml`..`day5b.yaml` (what happens each day); `episode/` (compiled: `profession.json` plus one JSON per date) and `report.md` (build report), generated |
 | `workweek/` | `schema.py` (Pydantic models), `compile.py` (forms to episodes, the audit), `apps.py` (the world as files), `world.py` (events, feed, ticks), `engine.py` (the Inspect AI task), `prompts.py`, `checks.py` (the shared check evaluator), `grade.py` (offline grading), `config.py`, `creds.py`, `providers.py`, `sandbox/` (Docker image) |
 | `config/run.yaml` | models, prices, judges and weights, the simulated worker, run settings |
 | `scripts/` | `run.py` (run models x professions over a window), `smoke_models.py` (one tool call per route), `probe_reasoning.py`, `speed.py` (OpenRouter speed snapshot for offline timing), `timeline.py` (release timeline and model set), `screen_occupations.py` |
@@ -69,14 +69,21 @@ the pre-2024 2 CFR 200.1 rule, a fiscal note missing 2031-33, a UTC conversion a
 order, a battery-backup reply that contradicted 47 CFR 9.20, a wrong Ins. Code subsection, unquoted "#" that cut
 YAML values short, and several stale links.
 
+Each week then got its `overview.md` (10-27), written from the reviewed forms: every count and claim checked against
+the day files and policies, every link fetched (bls.gov, ftc.gov, pcma.org and FindLaw refuse scripted requests; those links are the pages' own
+published addresses).
+
 Known simplifications: HB 1214 has a bill number on 11/2, before Washington's pre-filing would give it one; market
 research and software development have no phone app, so their calls are timed activity only; traffic is about half of
 email, below the 60% machine-generated share measured in consumer mail.
 
 ### The form
 
-`week.yaml` holds the job and everything true on Monday morning; each `dayN.yaml` holds that day's documents,
-threads, calls, the worker's actions, needs and traps. Lists from all files are concatenated. A later file can
+`week.yaml` holds the job and everything true on Monday morning; each `dayN.yaml` and `dayNb.yaml` holds that day's
+documents, threads, calls, the worker's actions, needs and traps. Lists from all files are concatenated.
+`overview.md` is the account for a human reader: who the worker is, the rules that govern the work (each linked to
+its source), how the week unfolds day by day (linking the day files), and what an ideal assistant would do at the
+week's decision points. A later file can
 continue an earlier thread (same id, new exchanges, optional state change) or add a version of an earlier document
 (same id, `at` and `content`).
 
@@ -115,7 +122,10 @@ audit fails the build on:
    mention and number parts) its reference text;
 3. a trap that fires on any worker action, except listed worker mistakes;
 4. two threads or documents that render to the same file; a thread in a document app or the reverse;
-5. a split/merge round trip that changes the episode (the per-day JSON must rebuild the same episode).
+5. a split/merge round trip that changes the episode (the per-day JSON must rebuild the same episode);
+6. a missing `overview.md`, one that doesn't link every day file, or one whose stated need and trap counts ("N ...
+   (needs)", "N ... (traps)") differ from the compiled week, so a new profession can't be added without its overview
+   and an edited week can't drift from it.
 
 The build report lists counts per day and app, the time budget per day (the needs the worker does, other timed work,
 lunch and 20 s to skim each inbound item, against the minutes present; a warning outside 80-110%), the task mix
@@ -405,14 +415,8 @@ GPT-6.1 Sol, DeepSeek V4.1 Flash; claims and customer service, D1 08:00-17:00; `
 
 ## 10. Open
 
-- Need counts: 25 to 101 per week against the ~100 target; raising the analyst weeks to ~100 would mean either
-  splitting big deliverables into many small needs (inflating counts without adding work) or writing more items. The
-  owner should decide; minutes are reported either way.
-- Volume: inbound items are 1/15 to 1/45 of a Microsoft 365 worker's mail and chat, which makes noticing easier and
-  runs cheaper; a templated low-information noise arm (newsletters, notifications, cc's, calendar replies) would test
-  how much recall depends on it.
-- Coverage: planned work is 0.8-3.2 hours of each day; value is per benchmark week and the press-enter rate is over
-  planned work, not the whole job, unless scaled by task time shares.
+- Coverage: needs are 26-59% of the hours present (section 3); value is per benchmark week and the press-enter rate
+  is over that work, not the whole job, unless scaled by task time shares.
 - ECI factor on 2026-10-30.
 - Hand grades (about 100 proposals) and judge agreement; the friction (1.5) and rewrite threshold (0.5) sensitivity.
 - Seeds (3 planned) and the pilot that sizes the full run.

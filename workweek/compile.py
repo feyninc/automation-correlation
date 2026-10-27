@@ -568,8 +568,25 @@ def build(path: str | Path) -> tuple[Episode, list[str]]:
     back = merge_days(out)
     if _canonical(back) != _canonical(ep):
         errs.append("split/merge round trip changed the episode")
+    errs += overview_errors(out.parent, ep)
     (out.parent / "report.md").write_text(report(ep, errs, warns))
     return ep, errs
+
+
+def overview_errors(root: Path, ep: Episode) -> list[str]:
+    """Every week has an overview.md that links each day form and states the week's need and trap counts."""
+    f = root / "overview.md"
+    if not f.exists():
+        return ["overview.md is missing: write the plain-English account of the week and what an ideal assistant does"]
+    text, errs = f.read_text(), []
+    for day in sorted(root.glob("day*.yaml")):
+        if f"({day.name})" not in text:
+            errs.append(f"overview.md does not link {day.name}")
+    for kind, n in (("needs", len(ep.needs)), ("traps", len(ep.traps))):
+        m = re.search(rf"([\d,]+) [^.(]*\({kind}\)", text)
+        if not m or int(m.group(1).replace(",", "")) != n:
+            errs.append(f"overview.md must state the week's {n} {kind}, as 'N ... ({kind})'")
+    return errs
 
 
 if __name__ == "__main__":
