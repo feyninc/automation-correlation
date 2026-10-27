@@ -22,7 +22,7 @@ from .apps import document_file, render_world, thread_file
 from .engine import ROOT, load_episode
 from .schema import Episode, fmt, seconds
 
-PROPOSALS_IN_FLIGHT = 8     # proposals judged at once (each by the whole panel)
+PROPOSALS_IN_FLIGHT = 16    # proposals judged at once across all logs (each by the whole panel)
 
 # ---------- matching proposals to the world ----------
 
@@ -166,16 +166,27 @@ def parse_judgement(text: str) -> dict | None:
     return j
 
 
+JUDGE_ATTEMPTS = 4          # per judge and proposal: API errors and unparseable replies are retried with backoff
+
+
 async def judge_all(run: cfgmod.RunConfig, judges, prompt: str) -> dict[str, dict]:
     async def one(j):
         model = get_model(j.model, config=GenerateConfig(**{**run.generate_for(j), "max_tokens": 16000}), **j.model_args)
-        for _ in range(2):
-            out = await model.generate([ChatMessageUser(content=prompt)])
+        last = {"error": "no attempt"}
+        for attempt in range(JUDGE_ATTEMPTS):
+            if attempt:
+                await asyncio.sleep(5 * 2 ** (attempt - 1))
+            try:
+                out = await model.generate([ChatMessageUser(content=prompt)])
+            except Exception as e:  # noqa: BLE001  (any provider error: retry, then record it)
+                last = {"error": f"{type(e).__name__}: {str(e)[:300]}"}
+                continue
             parsed = parse_judgement(out.completion)
             if parsed:
                 parsed["usage"] = out.usage.model_dump() if out.usage else None
                 return j.name, parsed
-        return j.name, {"error": "unparseable", "raw": (out.completion or "")[:500]}
+            last = {"error": "unparseable", "raw": (out.completion or "")[:500]}
+        return j.name, last
     return dict(await asyncio.gather(*(one(j) for j in judges)))
 
 
@@ -243,8 +254,7 @@ def value(ep: Episode, p: dict, j: dict | None, need, price, usage: dict | None)
 # ---------- driver ----------
 
 
-async def grade_log(log_path: str, run: cfgmod.RunConfig, judges, out_dir: Path) -> list[dict]:
-    log = read_eval_log(log_path)
+async def grade_log(log, run: cfgmod.RunConfig, judges, out_dir: Path, gate: asyncio.Semaphore) -> list[dict]:
     model_name = log.eval.model
     spec = next((m for m in run.models if m.model == model_name or model_name.endswith(m.model.split("/", 1)[-1])), None)
     family = spec.family if spec else ""
@@ -259,8 +269,6 @@ async def grade_log(log_path: str, run: cfgmod.RunConfig, judges, out_dir: Path)
         usage = u.model_dump() if u else None
         n_props = max(len(props_raw), 1)
         share = {k: (v / n_props if isinstance(v, (int, float)) else v) for k, v in (usage or {}).items()}
-        gate = asyncio.Semaphore(PROPOSALS_IN_FLIGHT)
-
         async def grade_one(i, p):
             need = next((n for n in ep.needs if n.id == addressed.get(i)), None)
             async with gate:
@@ -301,10 +309,14 @@ def main():
     out = Path(a.out or ROOT / "results" / Path(a.logs).name)
     if (out / "graded.jsonl").exists():
         (out / "graded.jsonl").unlink()
-    logs = [l.name for l in list_eval_logs(a.logs)]
+    logs = [read_eval_log(l.name) for l in list_eval_logs(a.logs)]   # read before the event loop starts
+
+    async def grade_all():
+        gate = asyncio.Semaphore(PROPOSALS_IN_FLIGHT)
+        return [r for rows in await asyncio.gather(*(grade_log(lg, run, judges, out, gate) for lg in logs)) for r in rows]
+
     summary = []
-    for lp in logs:
-        for r in asyncio.run(grade_log(lp, run, judges, out)):
+    for r in sorted(asyncio.run(grade_all()), key=lambda r: (r["model"], r["profession"], r["epoch"])):
             sc = [g["panel"]["score"] for g in r["graded"] if g["panel"].get("score") is not None]
             summary.append({"model": r["model"], "profession": r["profession"], "epoch": r["epoch"], "ticks": r["ticks"],
                             "proposals": r["proposals"], "questions": r["questions"],

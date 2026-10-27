@@ -154,6 +154,8 @@ async def run_tool(sim: Sim, call, t: int) -> tuple[str, bool]:
         drafts = [d if isinstance(d, dict) else {"text": str(d)} for d in drafts][:3]
         if not drafts:
             return "A proposal needs at least one draft.", False
+        if a.get("action") in ("new", "forward") and not all(d.get("to") for d in drafts):
+            return "Nothing saved: a new or forwarded message needs a recipient (to) in every draft.", False
         pid = f"p{len(sim.proposals) + 1:04d}"
         sim.proposals.append({"id": pid, "t": fmt(t), "tick": sim.ticks_run, "target": a.get("target", ""),
                               "action": a.get("action", ""), "drafts": drafts, "note": a.get("note", ""),
