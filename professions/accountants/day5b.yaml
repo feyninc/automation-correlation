@@ -1,0 +1,423 @@
+# Friday 2026-11-06 (WD5), the rest of the day. After the close review Elena prepares the October borrowing base
+# certificate for Vince, reviews Jade's accrual package for the auditors (three balances are pre-adjustment), uploads
+# the Jan-Sep sales and use tax returns, answers the insurance broker's equipment question, and takes a call from the
+# audit manager about the missing checks and the bank confirmation. Rachel decides the floor jacks.
+#
+# Arithmetic (python3):
+# - Borrowing base at 10/31: AR 17,560,484.55 (aging rerun, ties to 1200) - over 90 days 41,300.00 (all Brennan, also
+#   in bankruptcy) = eligible 17,519,184.55 x 85% = 14,891,306.87. Inventory: raw 9,884,300.00 + finished goods
+#   14,212,600.00 - reserve 1,126,400.00 = 22,970,500.00 (WIP 2,410,500.00 and in transit 58,420.00 excluded) x 60%
+#   = 13,782,300.00, under the 15,000,000.00 cap. Borrowing base 28,673,606.87 (under the 40,000,000.00 commitment)
+#   - revolver 11,500,000.00 = availability 17,173,606.87.
+# - Jade's PBC 5 draft vs the final balances: 2200 185,798.33 vs 160,918.33 (JE-10319, 24,880.00); 2250 322,450.00
+#   vs 333,388.33 (JE-10307 as corrected); 2240 186,124.50 vs 185,177.14 (JE-10311 after cutoff).
+# - Property schedule (additions over 25,000 since July): FA-2266 hydraulic press rebuild 64,200.00 (9/21); FA-2291
+#   Hoosier fixture 41,472.00 (10/27, incl. 3,072.00 use tax); on order: Rexroth test bench PO-4486 46,500.00.
+#   FA-2203 dock leveler 18,450.00 is under 25,000.
+# - Friday run: 161,889.59 approved = Eaton 63,210.00 + Columbus Steel Fab 18,240.00 sent earlier as separate ACHs
+#   (81,450.00) + 80,439.59 released with the run.
+
+threads:
+  - id: t5b-priscilla
+    app: mail
+    path: inbox/pbc-3-uploaded
+    title: PBC 3 uploaded
+    x:
+      - {at: "D5 08:20", from: c_priscilla, to: [worker], subject: "Request 3 uploaded", body: "The October payroll register is uploaded to request 3 in Suralink; it ties to the 10/16 and 10/30 ADP totals. Priscilla"}
+  - id: t5b-rachel-review
+    app: mail
+    path: inbox/close-review-prep
+    title: Close review prep
+    x:
+      - {at: "D5 08:40", from: c_rachel, to: [worker], subject: "10:00 close review", body: "Conference Room A at 10. Please bring the rec summary, the flux and the list of open items. Rachel"}
+  - id: t5b-kevin
+    app: mail
+    path: inbox/request-1-statements
+    title: Request 1 statements
+    x:
+      - {at: "D5 09:10", from: c_audit_assoc, to: [worker], subject: "Request 1: statements", body: "When you upload October's recs, please include the bank statements for each account (x4441 too). Kevin"}
+  - id: t5b-paul
+    app: mail
+    path: inbox/workflow-all-pass
+    title: Workflow tests pass
+    x:
+      - {at: "D5 09:20", from: c_paul, to: [worker, c_rachel], subject: "Approval workflow: all six pass", body: "Rachel's entries now route to Vince; all six cases pass in the sandbox. With Rachel's OK I'll move it to production tonight. Paul"}
+      - {at: "D5 12:10", from: c_rachel, to: [c_paul, worker], subject: "Re: Approval workflow: all six pass", body: "OK to move it tonight. Thank you both. Rachel"}
+  - id: t5b-columbus
+    app: mail
+    path: inbox/columbus-steel-48213
+    title: Columbus Steel Fab
+    x:
+      - {at: "D5 09:30", from: c_darnell, to: [worker], subject: "Fwd: Columbus Steel Fab", body: "FYI, Columbus Steel Fab's AR confirmed in writing they never received check 48213 and are expecting the ACH today. Darnell"}
+  - id: t5b-hartline
+    app: mail
+    path: inbox/hartline-corrected-statement
+    title: Hartline corrected statement
+    x:
+      - {at: "D5 09:45", from: c_monique, to: [c_hartline], cc: [worker], subject: "Corrected statement", body: "Attached is your corrected statement: INV-77193, 22,104.50, due 11/29. Thank you for your patience. Monique Baptiste, Westerby"}
+  - id: t5b-kettering
+    app: mail
+    path: inbox/kettering-invoice-kl-2491
+    title: Kettering Lane invoice
+    x:
+      - {at: "D5 10:05", from: c_kettering, to: [c_darnell], cc: [worker], subject: "Invoice KL-2491", body: "Attached is invoice KL-2491 for October services, 14,820.00. Colleen Ward, Kettering Lane LLP"}
+  - id: t5b-ken
+    app: mail
+    path: inbox/reforecast-monday
+    title: Reforecast Monday
+    x:
+      - {at: "D5 11:00", from: c_ken, to: [worker, c_hector], subject: "Monday reforecast", body: "I'll load October from the reviewed TB Monday morning, plus Elena's one-offs list. Ken"}
+  - id: t5b-gina
+    app: mail
+    path: inbox/test-bench-delivery
+    title: Test bench delivery
+    x:
+      - {at: "D5 11:20", from: c_gina, to: [c_ops], cc: [worker], subject: "PO-4486 acknowledged", body: "Rexroth acknowledged PO-4486; delivery and installation week of 12/7. Gina"}
+  - id: t5b-greg
+    app: mail
+    path: inbox/greg-bbc-timing
+    title: Borrowing base timing
+    x:
+      - {at: "D5 11:40", from: c_greg, to: [worker], subject: "Borrowing base timing", body: "Vince told our credit team the certificate comes with the package Tuesday. That works. Payee positive pay and the debit block go live Monday. Greg"}
+  - id: m3b-jacks
+    app: mail
+    path: sent/pbc-2-floor-jacks
+    title: "PBC 2 review: floor jacks"
+    x:
+      - {at: "D5 12:15", from: c_rachel, to: [worker], cc: [c_marco], subject: "Re: PBC 2 review: floor jacks capitalized below the per-item threshold", body: "Agree: write the jacks off to 6450 in November, and tell Brightline on request 2. Rachel"}
+  - id: m4b-access
+    app: mail
+    path: sent/auditor-netsuite-access
+    title: Brightline asks for read-only NetSuite access
+    x:
+      - {at: "D5 12:20", from: c_rachel, to: [worker, c_paul], subject: "Re: Brightline asks for read-only NetSuite access", body: "Approved: view-only auditor role for Kevin and Lauren through 11/20. Paul, please set it up and remove it then. Rachel"}
+  - id: t5b-paul-role
+    app: mail
+    path: inbox/auditor-role-created
+    title: Auditor role created
+    x:
+      - {at: "D5 12:40", from: c_paul, to: [worker, c_rachel, c_audit_assoc], subject: "NetSuite auditor access", body: "Kevin and Lauren have their own view-only users (role 'Auditor - View'), expiring 11/20. Paul"}
+  - id: t5b-marco
+    app: mail
+    path: inbox/pbc-7-ready
+    title: PBC 7 listing
+    x:
+      - {at: "D5 13:00", from: c_marco, to: [worker, c_rachel], subject: "PBC 7 JE listing ready", body: "The Jan-Oct JE listing with preparer and approver is ready for request 7, complete, including the three self-approved entries, with Paul's list attached. Waiting for Rachel's note on how she wants them presented. Marco"}
+  - id: t5b-andre
+    app: mail
+    path: inbox/kessel-acknowledged
+    title: Kessel acknowledged
+    x:
+      - {at: "D5 13:30", from: c_andre, to: [worker], subject: "Kessel", body: "Kessel's AP acknowledged the two credit memos and accepted that the July invoice stays as billed. Andre"}
+  - id: t5b-hoosier
+    app: mail
+    path: inbox/hoosier-payment-thanks
+    title: Hoosier payment
+    x:
+      - {at: "D5 16:22", from: c_hoosier, to: [worker], subject: "Remittance advice received", body: "Thank you for the remittance advice: 37,632.00 on HMT-20419 with the 2% discount. Hoosier Machine Tools"}
+  - id: t5b-lauren-invites
+    app: mail
+    path: inbox/fraud-interview-invitations
+    title: Interview invitations
+    x:
+      - {at: "D5 14:20", from: c_audit_mgr, to: [worker, c_rachel], subject: "Fraud inquiry interviews: invitations sent", body: "Invitations for Tuesday 11/10 are out. Thanks for a smooth first week. Lauren"}
+  - id: t5b-eaton
+    app: mail
+    path: inbox/eaton-hold-lifted
+    title: Eaton credit hold
+    x:
+      - {at: "D5 14:50", from: c_eaton, to: [worker, c_darnell], subject: "Account WES-1180", body: "We see your ACH for EH-559102 scheduled today. The credit hold is lifted. Thank you, Sharon Pruitt, Eaton Hydraulics Credit"}
+  - id: t5b-brett
+    app: mail
+    path: inbox/cascade-tagging
+    title: Cascade units
+    x:
+      - {at: "D5 15:20", from: c_brett, to: [c_rachel], cc: [worker, c_gail], subject: "Cascade units", body: "Cascade asked us in writing to set their 12 units aside for the December delivery. Gail is tagging and moving them to bay 9. Nothing for October, understood. Brett"}
+  - id: t5b-vince
+    app: mail
+    path: inbox/re-bbc-draft
+    title: BBC draft
+    x:
+      - {at: "D5 15:45", from: c_vince, to: [worker], subject: "Re: October borrowing base certificate (draft for your review)", body: "Thanks Elena. I'll review Monday and sign it for Tuesday's package. Vince"}
+  - id: t5b-rachel-weekend
+    app: mail
+    path: inbox/rachel-weekend
+    title: Have a good weekend
+    x:
+      - {at: "D5 16:15", from: c_rachel, to: [worker, c_marco, c_jade, c_monique, c_nadia, c_darnell], subject: "October", body: "Thank you all for a hard close with Tom out and the auditors in. Monday: reversal checks and the reforecast. Rachel"}
+  - id: t5b-broker
+    app: mail
+    path: inbox/property-schedule-thanks
+    title: Property schedule
+    x:
+      - {at: "D5 13:20", from: c_broker, to: [worker], subject: "Re: Cincinnati Mutual: equipment additions for the property schedule", body: "Perfect, thank you. I'll add the press rebuild and the fixture now and the test bench once it's delivered. Dan"}
+  - id: t5b-summit
+    app: mail
+    path: inbox/summit-first-payment
+    title: Summit first payment
+    x:
+      - {at: "D5 16:20", from: c_summit, to: [c_darnell], cc: [worker], subject: "Remittance advice", body: "Thanks for the remittance advice. We'll watch for the ACH at our new Fifth Third account. Summit Packaging AR"}
+  - id: t5b-it
+    app: mail
+    path: inbox/workflow-change-notice
+    title: Workflow change notice
+    x:
+      - {at: "D5 16:05", from: c_it, to: [worker, c_rachel, c_marco, c_jade, c_monique, c_nadia], subject: "Tonight: journal approval workflow change", body: "Tonight NetSuite's journal approval workflow changes: no one can approve an entry they created, even as a delegate, and out-of-office approvals route up a level. Westerby IT Service Desk"}
+
+  - id: t5b-nadia
+    app: mail
+    path: inbox/q4-reserve-review
+    title: Q4 reserve review
+    x:
+      - {at: "D5 10:15", from: c_nadia, to: [worker, c_rachel], subject: "Q4 inventory reserve review", body: "For planning: I'll start the 12/31 inventory reserve review the week of 12/7 with the usage history through November. Nadia"}
+  - id: t5b-kevin-thanks
+    app: mail
+    path: inbox/request-1-received
+    title: Request 1 received
+    x:
+      - {at: "D5 12:50", from: c_audit_assoc, to: [worker], subject: "Re: PBC 1 uploaded", body: "Got the October recs and the statements, thank you. Kevin"}
+  - id: t5b-darnell-run
+    app: mail
+    path: inbox/friday-run-released
+    title: Friday run released
+    x:
+      - {at: "D5 15:55", from: c_darnell, to: [worker, c_rachel], subject: "Friday run released", body: "Rachel approved and the run is released: 80,439.59 today, plus the Eaton and Columbus Steel Fab reissues (81,450.00) that went out earlier as separate ACHs, so 161,889.59 in all, without the Midwest duplicate (voided). Darnell"}
+
+  - id: t1-rachel
+    app: chat
+    path: "@rachel/dm"
+    title: Rachel Okafor (DM)
+    x:
+      - {at: "D5 08:35", from: c_rachel, body: "10:00 still good? I have the recs summary printed"}
+      - {at: "D5 12:05", from: c_rachel, body: "good review. thank you for the prep"}
+  - id: t1-jade
+    app: chat
+    path: "@jade/dm"
+    title: Jade Liu (DM)
+    x:
+      - {at: "D5 13:20", from: c_jade, body: "argh, I built it from my drafts. fixing all three"}
+      - {at: "D5 15:05", from: c_jade, body: "PBC 5 corrected and uploaded to Suralink"}
+  - id: t1-marco
+    app: chat
+    path: "@marco/dm"
+    title: Marco Silva (DM)
+    x:
+      - {at: "D5 11:55", from: c_marco, body: "PBC 7 listing is ready when Rachel is"}
+  - id: t3-darnell
+    app: chat
+    path: "@darnell/dm"
+    title: Darnell Hughes (DM)
+    x:
+      - {at: "D5 11:42", from: c_darnell, body: "Eaton ACH is out"}
+      - {at: "D5 14:05", from: c_darnell, body: "Columbus Steel Fab ACH is out too, after my callback"}
+  - id: t1b-paul
+    app: chat
+    path: "@paul/dm"
+    title: Paul Brandt (DM)
+    x:
+      - {at: "D5 09:25", from: c_paul, body: "all six pass now"}
+  - id: t2-monique
+    app: chat
+    path: "@monique/dm"
+    title: Monique Baptiste (DM)
+    x:
+      - {at: "D5 09:50", from: c_monique, body: "Hartline's corrected statement is out"}
+      - {at: "D5 15:30", from: c_monique, body: "Rachel signed the Brennan proof of claim, filed it this afternoon"}
+  - id: t1b-nadia
+    app: chat
+    path: "@nadia/dm"
+    title: Nadia Kowalski (DM)
+    x:
+      - {at: "D5 09:00", from: c_nadia, body: "inventory rec is updated with 1310 as its own line and signed as preparer"}
+  - id: t1b-hector
+    app: chat
+    path: "@hector/dm"
+    title: Hector Ramos (DM)
+    x:
+      - {at: "D5 11:10", from: c_hector, body: "Ken wants the reviewed TB first thing Monday. ok to pull it then?"}
+  - id: t4-ken
+    app: chat
+    path: "@ken/dm"
+    title: Ken Albrecht (DM)
+    x:
+      - {at: "D5 12:30", from: c_ken, body: "thanks for the one-offs list, exactly what I needed"}
+  - id: t1b-rosa
+    app: chat
+    path: "@rosa/dm"
+    title: Rosa Delgado (DM)
+    x:
+      - {at: "D5 10:50", from: c_rosa, body: "1099 list at the 2,000 threshold: 131 vendors, plus Kettering Lane for legal fees. sending W-9 requests Monday"}
+  - id: t1b-andre
+    app: chat
+    path: "@andre/dm"
+    title: Andre Fontaine (DM)
+    x:
+      - {at: "D5 13:35", from: c_andre, body: "Kessel's happy, sent you the email"}
+  - id: t1b-gail-dm
+    app: chat
+    path: "@gail/dm"
+    title: Gail Pinter (DM)
+    x:
+      - {at: "D5 15:25", from: c_gail, body: "Cascade's 12 are tagged and in bay 9 now"}
+  - id: t2-priscilla2
+    app: chat
+    path: "@priscilla/dm"
+    title: Priscilla Wade (DM)
+    x:
+      - {at: "D5 08:22", from: c_priscilla, body: "register is in Suralink"}
+  - id: t1b-tom
+    app: chat
+    path: "@tom/dm"
+    title: Tom Haldane (DM)
+    x:
+      - {at: "D5 16:20", from: c_tom, body: "see you Monday. I'll take the reversal checks off your plate"}
+
+calls:
+  - id: c5b-lauren
+    path: 2026-11-06/1438-lauren-pike
+    title: Call with Lauren Pike, Brightline & Moss
+    start: "D5 14:38:00"
+    turns:
+      - [c_audit_mgr, "Hi Elena, Lauren Pike. Thanks for your written answers on Wednesday, they were thorough. Following up on the bank recs: the altered check, 48213. Has it been reissued, and did any other checks from that mailing fail to arrive?", 8]
+      - [worker, "Yes. 48213 was stopped on November third and reissued by ACH today, after Darnell confirmed with Columbus Steel Fab at the number in our vendor master. One other check from the same week, 48195 to Eaton for sixty-three thousand two hundred ten dollars, never arrived; it was stopped on the fourth and paid by ACH today. Both are documented for the November rec."]
+      - [c_audit_mgr, "Good. On confirmations: we'll send the Commerce Union confirmation through Confirmation.com next week. Who should authorize it?", 6]
+      - [worker, "Rachel or Vince; they're the authorized signers on the accounts. I'll tell Rachel it's coming so she approves it promptly."]
+      - [c_audit_mgr, "Perfect. Have a good weekend.", 3]
+
+actions:
+  - {id: a5b-call-monique, at: "D5 08:40", kind: noop, target: t3b-monique-poc, minutes: 10, summary: "call with Monique about the Brennan proof of claim and the invoices attached"}
+  - {id: a5b-standup, at: "D5 09:00", kind: noop, target: cal-elena, minutes: 15, summary: "close stand-up"}
+  - {id: a5b-hector, at: "D5 11:15", kind: reply, target: t1b-hector, to: [c_hector], summary: "told Hector to pull the reviewed TB Monday",
+     body: "Yes, Monday morning is right. Rachel signed off the review today, so pull it after the reversals run."}
+  - {id: a5b-broker, at: "D5 12:45", kind: reply, target: t1b-broker, to: [c_broker], summary: "sent the broker the equipment additions over $25,000 since July",
+     body: "Hi Dan, equipment additions over $25,000 since July: FA-2266 Line 1 hydraulic press rebuild, 64,200.00, in service 9/21; FA-2291 hydraulic test fixture (Hoosier Machine Tools), 41,472.00 including use tax, in service 10/27. On order: a Bosch Rexroth pump test bench, 46,500.00 (PO-4486), delivery week of 12/7; I'll confirm when it's installed. Elena"}
+  - {id: a5b-jacks, at: "D5 12:55", kind: new, app: mail, path: sent/pbc-2-note-floor-jacks, target: m5b-jacks, to: [c_audit_assoc], cc: [c_audit_mgr, c_marco],
+     subject: "Request 2: note on FA-2188 (floor jacks)", summary: "told the auditors about the floor jacks correction",
+     body: "Kevin, a note on request 2: FA-2188, six floor jacks at 2,150.00 each (12,900.00, June), should have been expensed under our per-item $5,000 threshold. Rachel approved writing off the 12,040.00 net book value to 6450 small tools in November; the listing you have is as booked at 10/31. Elena"}
+  - {id: a5b-pbc5, at: "D5 13:00", kind: reply, target: t1-jade, to: [c_jade], summary: "sent Jade three corrections to the PBC 5 package",
+     body: "Jade, before request 5 goes up, three balances are from drafts rather than the final entries: 2200 should be 160,918.33 (after JE-10319 reversed the stale 24,880.00 June accrual; support is my 2200 rec), 2250 should be 333,388.33 (JE-10307 as corrected, with the bank's billing), and 2240 should be 185,177.14 (JE-10311, after removing the two November deliveries). Each line should tie to the 10/31 trial balance and to the support attached. Prepaids, accrued payroll and bonus are right."}
+  - {id: a5b-bbc, at: "D5 13:15", kind: edit, app: docs, path: finance/borrowing-base-2026-10-draft, target: doc-bbc, title: "Borrowing base certificate at 10/31/2026 (draft for Vince)",
+     summary: "prepared the October borrowing base certificate for Vince",
+     content: "# Borrowing base certificate at 10/31/2026 (prepared Elena Moretti 11/6; for Vince Calder's review and certification; due to Commerce Union by 11/20)\n\nAccounts receivable: aging at 10/31 (rerun 11/5, ties to GL 1200) 17,560,484.55\nLess ineligible: invoices over 90 days (41,300.00, all Brennan Ag Services, also excluded as a customer in bankruptcy); credit balances 0.00\nEligible receivables 17,519,184.55 x 85% = 14,891,306.87\n\nInventory (NetSuite valuation at 10/31, ties to GL 1300): raw materials 9,884,300.00 + finished goods 14,212,600.00 - reserve 1,126,400.00 = 22,970,500.00\nExcluded: work in process 2,410,500.00; in transit (1310) 58,420.00\nEligible inventory 22,970,500.00 x 60% = 13,782,300.00 (under the 15,000,000.00 cap)\n\nBorrowing base 28,673,606.87 (under the 40,000,000.00 commitment)\nLess revolver outstanding 11,500,000.00; letters of credit 0.00\nAvailability 17,173,606.87"}
+  - {id: a5b-bbc-mail, at: "D5 13:25", kind: new, app: mail, path: sent/bbc-2026-10-draft, target: m5b-bbc, to: [c_vince], cc: [c_rachel],
+     subject: "October borrowing base certificate (draft for your review)", summary: "sent Vince the borrowing base draft",
+     body: "Vince, the October borrowing base draft is in Docs > finance for your review and signature. Eligible AR 17,519,184.55 (the reviewed aging less Brennan's 41,300.00, which is both over 90 days and in bankruptcy) x 85% = 14,891,306.87; eligible inventory 22,970,500.00 (raw and finished goods net of the reserve, excluding WIP and the 58,420.00 in transit) x 60% = 13,782,300.00. Borrowing base 28,673,606.87; with 11,500,000.00 drawn, availability is 17,173,606.87. Due to the bank by 11/20; Greg knows it comes with Tuesday's package. Elena"}
+  - {id: a5b-call-summit, at: "D5 13:50", kind: noop, target: t3b-darnell-summit, minutes: 10, summary: "call from Summit Packaging's controller asking when the first payment to their new account goes out"}
+  - {id: a5b-call, at: "D5 14:38", kind: noop, target: c5b-lauren, summary: "took Lauren's call"}
+  - {id: a5b-lauren-note, at: "D5 14:46", kind: update, target: c5b-lauren, summary: "wrote the call note",
+     body: "Call note: Lauren Pike (Brightline). Asked about 48213: stopped 11/3, reissued by ACH 11/6 after Darnell's callback. Told her about 48195 (Eaton, 63,210.00, same week): never arrived, stopped 11/4, paid by ACH 11/6; both on the November rec. Bank confirmation goes through Confirmation.com next week: authorized signers are Rachel and Vince; telling Rachel."}
+  - {id: a5b-confirm, at: "D5 14:50", kind: new, app: mail, path: sent/bank-confirmation-heads-up, target: m5b-confirm, to: [c_rachel], cc: [c_vince],
+     subject: "Brightline's bank confirmation next week", summary: "told Rachel the bank confirmation needs her approval",
+     body: "Rachel, Lauren says Brightline will send the Commerce Union confirmation (deposit accounts and both loans) through Confirmation.com next week. It needs an authorized signer, so it will come to you or Vince; approving it quickly keeps the cash and debt testing on schedule. Elena"}
+  - {id: a5b-pbc6, at: "D5 15:50", kind: new, app: mail, path: sent/pbc-6-sales-use-tax-returns, target: m5b-pbc6, to: [c_audit_assoc], cc: [c_audit_mgr],
+     subject: "Request 6 uploaded: sales and use tax returns Jan-Sep", summary: "uploaded the Jan-Sep sales and use tax returns for the auditors",
+     body: "Kevin, request 6 is in Suralink: the Ohio UST-1 and consumer's use tax returns for January through September, each with its payment confirmation and a tie-out of the return to GL 2320 and 2310 for that month. One thing you'll see in October: Avalara's use tax report missed the Hoosier fixture because the bill had no tax code, so we added 3,072.00 by hand. I'm checking Jan-Sep for any other out-of-state bills without tax codes and will tell you what I find. Elena"}
+
+needs:
+  - id: n5b-broker
+    title: Give the broker the equipment additions
+    kind: reply
+    task: 21534
+    from: "D1 14:40"
+    due: "D5 16:30"
+    evidence: [t1b-broker, doc-fa-additions, doc-fa-rec, t4b-luis]
+    ref: a5b-broker
+    check: {all: [{to_includes: c_broker}, {number_equals: {value: 64200}}, {number_equals: {value: 41472}}]}
+    must: ["Additions over $25,000 since July with cost and in-service dates; the test bench on order", "The dock leveler is under $25,000"]
+    minutes: [10, "pulling additions from the register"]
+    intent: "Insured values should match the register."
+  - id: n5b-jacks
+    title: Tell the auditors about the jacks correction
+    kind: follow_up
+    task: 21510
+    from: "D5 12:15"
+    due: "D5 16:30"
+    evidence: [m3b-jacks, doc-fa-additions]
+    ref: a5b-jacks
+    check: {all: [{to_includes: c_audit_assoc}, {mentions_any: [FA-2188, jacks]}, {mentions_any: [November]}]}
+    must: ["The error, Rachel's decision (write off $12,040 in November), the listing as booked"]
+    minutes: [5, "a short note"]
+    intent: "They hear it from us."
+  - id: n5b-pbc5
+    title: Fix the draft balances in the accrual package before it goes to the auditors
+    kind: reconcile
+    task: 21514
+    from: "D4 15:30"
+    due: "D5 16:30"
+    evidence: [doc-pbc5, doc-2200-rec, doc-loan-billing, m3b-commission, doc-payroll-rec]
+    ref: a5b-pbc5
+    check: {all: [{to_includes: c_jade}, {number_equals: {value: 160918.33, tol: 0.01}}, {number_equals: {value: 333388.33, tol: 0.01}}, {number_equals: {value: 185177.14, tol: 0.01}}]}
+    must: ["2200 $160,918.33, 2250 $333,388.33, 2240 $185,177.14: final entries, not drafts", "Every line ties to the trial balance"]
+    must_not: ["Lets the package go up as drafted"]
+    minutes: [20, "reviewing an audit schedule package (estimate)"]
+    intent: "The auditors get final balances."
+  - id: n5b-bbc
+    title: Prepare the October borrowing base certificate
+    kind: doc
+    task: 21534
+    from: "D5 09:40"
+    due: "D5 16:30"
+    evidence: [doc-credit-agreement, t1-jade, doc-ar-aging, doc-ar-over60, doc-inventory-rec, doc-loan-activity, m3b-bbc]
+    ref: a5b-bbc-mail
+    check: {all: [{to_includes: c_vince}, {number_equals: {value: 17519184.55, tol: 0.01}}, {number_equals: {value: 17173606.87, tol: 0.01}}]}
+    must: ["Eligible AR $17,519,184.55 (Brennan out) x 85%; eligible inventory $22,970,500 (no WIP or in transit) x 60%", "Borrowing base $28,673,606.87, availability $17,173,606.87", "Vince certifies; due 11/20"]
+    must_not: ["Uses the pre-correction aging", "Sends it to the bank herself"]
+    minutes: [45, "a borrowing base certificate (estimate)"]
+    intent: "Ties to the reviewed aging and the valuation report; Vince signs."
+  - id: n5b-lauren-1
+    title: Tell the auditor about both missing checks
+    kind: call_line
+    task: 21510
+    evidence: [c5b-lauren, t5-darnell, t3b-darnell-48195]
+    ref: c5b-lauren.2
+    check: {all: [{target: c5b-lauren}, {action_in: [say]}, {mentions_any: ["48195"]}, {mentions_any: [ACH]}]}
+    must: ["48213 stopped and reissued by ACH; 48195 to Eaton also never arrived, stopped and paid by ACH"]
+    must_not: ["Leaves out 48195"]
+    minutes: [0.3, "a spoken line"]
+    intent: "She asked about the whole mailing."
+  - id: n5b-lauren-2
+    title: Name the authorized signers for the confirmation
+    kind: call_line
+    task: 21510
+    evidence: [c5b-lauren]
+    ref: c5b-lauren.4
+    check: {all: [{target: c5b-lauren}, {action_in: [say]}, {mentions_any: [Rachel]}, {mentions_any: [Vince]}]}
+    must: ["Rachel or Vince authorize; she'll alert Rachel"]
+    minutes: [0.3, "a spoken line"]
+    intent: "Not me."
+  - id: n5b-lauren-note
+    title: Note the call with the audit manager
+    kind: update
+    task: 21510
+    from: "D5 14:40"
+    due: "D5 16:30"
+    evidence: [c5b-lauren]
+    ref: a5b-lauren-note
+    check: {all: [{target: c5b-lauren}, {mentions_any: ["48195"]}, {mentions_any: [Confirmation.com, confirmation]}]}
+    must: ["Both topics and the follow-up"]
+    minutes: [5, "a call note"]
+    intent: "Write it down."
+  - id: n5b-confirm
+    title: Line up Rachel for the bank confirmation
+    kind: follow_up
+    task: 21510
+    from: "D5 14:40"
+    due: "D5 16:30"
+    evidence: [c5b-lauren]
+    ref: a5b-confirm
+    check: {all: [{to_includes: c_rachel}, {mentions_any: [Confirmation.com, confirmation]}, {mentions_any: [authorized signer, approve]}]}
+    must: ["Coming next week; needs an authorized signer"]
+    minutes: [3, "a short email"]
+    intent: "So it doesn't sit."
+  - id: n5b-pbc6
+    title: Upload the sales and use tax returns with tie-outs
+    kind: follow_up
+    task: 21526
+    from: "D2 14:00"
+    due: "D5 16:30"
+    evidence: [doc-pbc, doc-avalara-use, doc-tax-rec]
+    ref: a5b-pbc6
+    check: {all: [{to_includes: c_audit_assoc}, {mentions_any: [Suralink]}, {mentions_any: [UST-1]}, {mentions_any: [tax code, Hoosier]}]}
+    must: ["Each return with its payment and tie-out to 2320/2310", "Discloses the Avalara gap and checks prior months for the same issue"]
+    minutes: [25, "assembling nine months of returns with tie-outs (estimate)"]
+    intent: "If Avalara missed one bill, it may have missed others."

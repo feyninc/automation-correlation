@@ -107,7 +107,7 @@ threads:
 actions:
   - {at: "D4 07:10", kind: read, target: doc-pl, summary: "pulled the October P&L"}
   - {at: "D4 08:35", kind: read, target: t4-rachel, summary: "read Rachel's decision on Cascade"}
-  - {at: "D4 09:00", kind: noop, target: cal-elena, summary: "audit interim kickoff"}
+  - {at: "D4 09:00", kind: noop, target: cal-elena, minutes: 60, summary: "audit interim kickoff"}
   - {at: "D4 10:32", kind: read, target: t4-phish, summary: "read the fake Parker follow-up"}
   - {id: a4-phish, at: "D4 10:40", kind: forward, target: t4-phish, to: [c_itsec], cc: [c_darnell], summary: "reported the follow-up phish",
      body: "Second attempt from parkerfluid-connectors.com, now 'URGENT' with a credit-hold threat. Darnell, please don't reply; if you want to check Parker's account status, call them at the vendor-master number. Elena"}

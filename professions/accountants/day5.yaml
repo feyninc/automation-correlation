@@ -95,7 +95,7 @@ actions:
   - {at: "D5 09:05", kind: read, target: t5-hartline, summary: "read Hartline's refund request"}
   - {id: a5-hartline, at: "D5 09:30", kind: reply, target: t5-hartline, to: [c_hartline], cc: [c_monique], summary: "explained Hartline's statement and declined a refund",
      body: "Hello, thank you for checking. That credit was our error: your 10/29 wire of $18,430.00 for invoice 77120 was recorded twice in our system, so the statement showed it once as applied and once as unapplied. We corrected it on 11/4, so there's no overpayment and nothing to refund. Your current statement shows invoice 77193 for $22,104.50, due 11/29. Monique will send the corrected statement. Elena Moretti, Westerby Fluid Systems"}
-  - {at: "D5 10:00", kind: noop, target: cal-elena, summary: "close review with Rachel"}
+  - {at: "D5 10:00", kind: noop, target: cal-elena, minutes: 120, summary: "close review with Rachel"}
   - {at: "D5 11:35", kind: read, target: t5-darnell, summary: "read Darnell's reissue note"}
   - {id: a5-48213, at: "D5 11:45", kind: reply, target: t5-darnell, to: [c_darnell], summary: "noted the reissue for November's rec",
      body: "Thanks Darnell. October's rec keeps 48213 as outstanding with a note (returned 11/2, stop 11/3). In November I'll clear it against the stop and the ACH reissue so it isn't double-counted. Please send me the stop confirmation for the file."}
