@@ -1,0 +1,687 @@
+{
+ "meta": {
+  "schema_version": "1.0",
+  "soc": "27-3031.00",
+  "title": "Public Relations Specialists",
+  "onet_version": "31.0",
+  "week_start": "2026-11-02",
+  "status": "draft",
+  "generator": "workweek.compile (hand-written week)",
+  "sha256": "647198de5857ff99d74047daf57b54096f648128582bf52990d363447a20629e"
+ },
+ "economics": {
+  "soc": "27-3031.00",
+  "title": "Public Relations Specialists",
+  "median_hourly_wage": {
+   "value": 35.94,
+   "source": "BLS OEWS May 2025 via O*NET OnLine (data/wages-onetonline-2026-10-26.csv)",
+   "note": ""
+  },
+  "eci_factor": {
+   "value": 1.0,
+   "source": "BLS ECI wages and salaries, civilian workers (https://www.bls.gov/eci/); not yet applied",
+   "note": "set on 2026-10-30 from the Q3 2026 release"
+  },
+  "loaded_multiplier": {
+   "value": 1.523,
+   "source": "BLS ECEC June 2026, private hospitals: total compensation $66.85 / wages $43.88 (https://www.bls.gov/news.release/ecec.t04.htm)",
+   "note": ""
+  },
+  "employment": {
+   "value": 314500.0,
+   "source": "BLS via O*NET OnLine, 2025",
+   "note": ""
+  },
+  "projection": "",
+  "observed_exposure": {
+   "value": 0.453,
+   "source": "Anthropic Economic Index, labor market impacts (Massenkoff and McCrory, 2026-03-05)",
+   "note": ""
+  },
+  "task_penetration": {
+   "1764": 0.9841,
+   "20555": 0.9177,
+   "23951": 0.0,
+   "20554": 0.7411,
+   "1765": 0.0,
+   "1770": 0.0,
+   "1772": 0.6668,
+   "1769": 0.9314,
+   "20557": 0.7262,
+   "1768": 0.0,
+   "1775": 0.9393,
+   "19811": 0.0,
+   "1767": 0.0,
+   "1771": 0.0,
+   "1773": 0.0,
+   "19809": 0.0,
+   "19810": 0.0,
+   "1774": 0.0
+  },
+  "minutes_model": {
+   "read_wpm": 238.0,
+   "compose_wpm": 19.0,
+   "friction": 1.5,
+   "rewrite_threshold": 0.5,
+   "question_answer_s": 30.0,
+   "overrides": {}
+  }
+ },
+ "employer": {
+  "name": "Prairie Bend Health",
+  "industry": "nonprofit regional hospital system",
+  "size": 6400,
+  "location": "Lincoln, Nebraska",
+  "timezone": "America/Chicago",
+  "description": "Prairie Bend Health runs four hospitals and 30 clinics in southeast Nebraska, with its flagship Prairie Bend Medical Center in Lincoln. Marketing and Communications has 14 people: a director of media relations, two PR specialists who rotate the media line, social media, internal communications, design, video and marketing."
+ },
+ "worker": {
+  "id": "worker",
+  "name": "Erin Mathers",
+  "title": "Public Relations Specialist, Media Relations",
+  "manager": "c_doug",
+  "team": "Marketing and Communications",
+  "email": "erin.mathers@prairiebend.org",
+  "signature": "Erin Mathers | Media Relations | Prairie Bend Health | media line 402-555-0110"
+ },
+ "profession_prompt": "Erin is a public relations specialist in Prairie Bend Health's media relations team. This week she holds the media\nline (reporters' calls and patient condition requests), and she is running the media side of Thursday's\nannouncement of the largest gift in the system's history. Her week is reporters, statements, releases, pitches,\nthe executives and clinicians who speak for the hospital, and the colleagues in Legal, Privacy, Nursing and the\nFoundation who approve what is said.\n\nGood help in this job means:\n- fast, accurate, honest answers to reporters, with nothing confirmed about a patient that privacy rules don't\n  allow;\n- embargoes, approvals and decision rights respected: Legal, Privacy, executives, donors and the state approve\n  what is theirs;\n- releases, advisories, remarks and Q&As whose facts and figures match the latest source and AP style;\n- spokespeople prepared for the hard question, not just the easy one;\n- nothing sent or posted that can't be taken back without the right OK;\n- short, clear writing that a reporter or a busy executive can use.\nMedia policy and style are under policies; drafts, plans, logs and fact sheets are under docs.",
+ "apps": [
+  "mail",
+  "chat",
+  "phone",
+  "calendar",
+  "docs",
+  "policies",
+  "news",
+  "contacts"
+ ],
+ "contacts": [
+  {
+   "id": "c_doug",
+   "name": "Doug Brenner",
+   "role": "Director of Media Relations",
+   "org": "Prairie Bend Health",
+   "email": "doug.brenner@prairiebend.org",
+   "phone": "402-555-0111",
+   "relation": "manager",
+   "notes": ""
+  },
+  {
+   "id": "c_celeste",
+   "name": "Celeste Varga",
+   "role": "VP, Marketing and Communications",
+   "org": "Prairie Bend Health",
+   "email": "celeste.varga@prairiebend.org",
+   "phone": "402-555-0100",
+   "relation": "VP (decides on executives",
+   "notes": "postponements)"
+  },
+  {
+   "id": "c_priya",
+   "name": "Priya Nandakumar",
+   "role": "Social Media Manager",
+   "org": "Prairie Bend Health",
+   "email": "priya.nandakumar@prairiebend.org",
+   "phone": null,
+   "relation": "social media",
+   "notes": ""
+  },
+  {
+   "id": "c_ben",
+   "name": "Ben Ostrow",
+   "role": "Internal Communications Manager",
+   "org": "Prairie Bend Health",
+   "email": "ben.ostrow@prairiebend.org",
+   "phone": null,
+   "relation": "employee newsletter (PBH Pulse)",
+   "notes": ""
+  },
+  {
+   "id": "c_kyle",
+   "name": "Kyle Moreno",
+   "role": "Video Producer",
+   "org": "Prairie Bend Health",
+   "email": "kyle.moreno@prairiebend.org",
+   "phone": null,
+   "relation": "video",
+   "notes": ""
+  },
+  {
+   "id": "c_ceo",
+   "name": "Dr. Raymond Ellison",
+   "role": "President and CEO",
+   "org": "Prairie Bend Health",
+   "email": "raymond.ellison@prairiebend.org",
+   "phone": null,
+   "relation": "CEO",
+   "notes": ""
+  },
+  {
+   "id": "c_cno",
+   "name": "Dr. Lisa Ambrose",
+   "role": "Chief Nursing Officer",
+   "org": "Prairie Bend Health",
+   "email": "lisa.ambrose@prairiebend.org",
+   "phone": null,
+   "relation": "CNO",
+   "notes": ""
+  },
+  {
+   "id": "c_steven",
+   "name": "Steven Pike",
+   "role": "Associate General Counsel",
+   "org": "Prairie Bend Health",
+   "email": "steven.pike@prairiebend.org",
+   "phone": null,
+   "relation": "legal",
+   "notes": ""
+  },
+  {
+   "id": "c_nora",
+   "name": "Nora Calloway",
+   "role": "Privacy Officer",
+   "org": "Prairie Bend Health",
+   "email": "nora.calloway@prairiebend.org",
+   "phone": null,
+   "relation": "privacy",
+   "notes": ""
+  },
+  {
+   "id": "c_gloria",
+   "name": "Gloria Benitez",
+   "role": "Patient Relations Manager",
+   "org": "Prairie Bend Health",
+   "email": "gloria.benitez@prairiebend.org",
+   "phone": null,
+   "relation": "patient relations (grievances)",
+   "notes": ""
+  },
+  {
+   "id": "c_frank",
+   "name": "Frank Dvorak",
+   "role": "Director of Labor Relations",
+   "org": "Prairie Bend Health",
+   "email": "frank.dvorak@prairiebend.org",
+   "phone": null,
+   "relation": "labor relations",
+   "notes": ""
+  },
+  {
+   "id": "c_whitley",
+   "name": "Dr. Sam Whitley",
+   "role": "Medical Director",
+   "org": "Emergency Department",
+   "email": "Prairie Bend Health",
+   "phone": "sam.whitley@prairiebend.org",
+   "relation": "",
+   "notes": "ER physician spokesperson"
+  },
+  {
+   "id": "c_okeke",
+   "name": "Dr. Grace Okeke",
+   "role": "Pediatric Infectious Disease",
+   "org": "Prairie Bend Health",
+   "email": "grace.okeke@prairiebend.org",
+   "phone": null,
+   "relation": "physician expert",
+   "notes": ""
+  },
+  {
+   "id": "c_house",
+   "name": "House Supervisor (on duty)",
+   "role": "nursing supervisor",
+   "org": "Prairie Bend Medical Center",
+   "email": "house.supervisor@prairiebend.org",
+   "phone": "402-555-0150",
+   "relation": "patient condition source",
+   "notes": ""
+  },
+  {
+   "id": "c_hannah",
+   "name": "Hannah Voss",
+   "role": "President",
+   "org": "Prairie Bend Health Foundation",
+   "email": "hannah.voss@prairiebend.org",
+   "phone": null,
+   "relation": "foundation",
+   "notes": ""
+  },
+  {
+   "id": "c_ruth",
+   "name": "Ruth Kessler",
+   "role": "Trustee",
+   "org": "Kessler Family Foundation",
+   "email": "ruth@kesslerfamilyfdn.org",
+   "phone": null,
+   "relation": "donor",
+   "notes": ""
+  },
+  {
+   "id": "c_jamal",
+   "name": "Jamal Ortiz",
+   "role": "Press Secretary",
+   "org": "Office of the Governor",
+   "email": "jamal.ortiz@gov.ne.example",
+   "phone": null,
+   "relation": "state",
+   "notes": ""
+  },
+  {
+   "id": "c_dana",
+   "name": "Dana Corcoran",
+   "role": "Health Reporter",
+   "org": "The Prairie Ledger",
+   "email": "dcorcoran@prairieledger.com",
+   "phone": "402-555-0201",
+   "relation": "reporter (embargo agreed)",
+   "notes": ""
+  },
+  {
+   "id": "c_kim",
+   "name": "Kim Halsey",
+   "role": "Reporter",
+   "org": "KPRB Public Radio",
+   "email": "khalsey@kprb.org",
+   "phone": "402-555-0202",
+   "relation": "reporter (embargo agreed)",
+   "notes": ""
+  },
+  {
+   "id": "c_victor",
+   "name": "Victor Pollard",
+   "role": "Editor",
+   "org": "Prairie Business Journal",
+   "email": "vpollard@prairiebiz.com",
+   "phone": "402-555-0203",
+   "relation": "reporter (embargo agreed)",
+   "notes": ""
+  },
+  {
+   "id": "c_nate",
+   "name": "Nate Okoye",
+   "role": "Correspondent",
+   "org": "Associated Press",
+   "email": "nokoye@ap.example",
+   "phone": "402-555-0204",
+   "relation": "reporter (embargo agreed)",
+   "notes": ""
+  },
+  {
+   "id": "c_luis",
+   "name": "Luis Ferreira",
+   "role": "Assignment Editor",
+   "org": "NC9 News",
+   "email": "luis.ferreira@nc9news.com",
+   "phone": "402-555-0205",
+   "relation": "reporter (excluded from embargoes until 2026-12-01)",
+   "notes": ""
+  },
+  {
+   "id": "c_wkln",
+   "name": "WKLN 7 Newsroom",
+   "role": "assignment desk",
+   "org": "WKLN 7",
+   "email": "desk@wkln7.com",
+   "phone": "402-555-0206",
+   "relation": "TV newsroom",
+   "notes": ""
+  },
+  {
+   "id": "c_itsec",
+   "name": "IT Security",
+   "role": "phishing reports",
+   "org": "Prairie Bend Health",
+   "email": "phishing@prairiebend.org",
+   "phone": null,
+   "relation": "internal",
+   "notes": ""
+  },
+  {
+   "id": "c_meltwater",
+   "name": "Meltwater",
+   "role": "monitoring alerts",
+   "org": "Meltwater",
+   "email": "alerts@meltwater.com",
+   "phone": null,
+   "relation": "system",
+   "notes": ""
+  },
+  {
+   "id": "c_spoof",
+   "name": "Meltwater Support",
+   "role": "unknown sender",
+   "org": "unknown",
+   "email": "support@meltwater-login.co",
+   "phone": null,
+   "relation": "unknown",
+   "notes": ""
+  },
+  {
+   "id": "c_brad",
+   "name": "Brad Keane",
+   "role": "Producer",
+   "org": "WKLN 7",
+   "email": "bkeane@wkln7.com",
+   "phone": "402-555-0207",
+   "relation": "reporter (no embargo agreement)",
+   "notes": ""
+  },
+  {
+   "id": "c_tasha",
+   "name": "Tasha Greer",
+   "role": "Marketing Coordinator",
+   "org": "Prairie Bend Health",
+   "email": "tasha.greer@prairiebend.org",
+   "phone": null,
+   "relation": "marketing",
+   "notes": ""
+  },
+  {
+   "id": "c_starherald",
+   "name": "Lincoln Star Herald",
+   "role": "city desk",
+   "org": "Lincoln Star Herald",
+   "email": "citydesk@starherald.example",
+   "phone": "402-555-0208",
+   "relation": "newsroom",
+   "notes": ""
+  },
+  {
+   "id": "c_beckers",
+   "name": "Becker's Hospital Review",
+   "role": "editors",
+   "org": "Becker's Hospital Review",
+   "email": "editors@beckers.example",
+   "phone": null,
+   "relation": "trade press",
+   "notes": ""
+  },
+  {
+   "id": "c_prn",
+   "name": "PR Newswire",
+   "role": "customer service",
+   "org": "PR Newswire",
+   "email": "orders@prnewswire.example",
+   "phone": null,
+   "relation": "wire service",
+   "notes": ""
+  },
+  {
+   "id": "c_teresa",
+   "name": "Teresa Banks",
+   "role": "Director",
+   "org": "Eastside Health Coalition",
+   "email": "tbanks@eastsidehealth.example",
+   "phone": "402-555-0230",
+   "relation": "community coalition",
+   "notes": ""
+  }
+ ],
+ "ledger": {
+  "gift": 20000000.0,
+  "state_grant": 12000000.0,
+  "project_cost": 64000000.0,
+  "beds": 48.0
+ },
+ "grounding": {
+  "sources": [
+   "BLS OEWS May 2025 and projections via O*NET OnLine: https://www.onetonline.org/link/summary/27-3031.00",
+   "BLS Occupational Outlook Handbook, Public Relations Specialists: https://www.bls.gov/ooh/media-and-communication/public-relations-specialists.htm",
+   "45 CFR 164.510 (facility directories): https://www.law.cornell.edu/cfr/text/45/164.510",
+   "42 CFR 482.13 (patient grievances): https://www.law.cornell.edu/cfr/text/42/482.13",
+   "PRSA Code of Ethics: https://www.prsa.org/about/prsa-code-of-ethics",
+   "FTC Endorsement Guides, 16 CFR 255.5: https://www.law.cornell.edu/cfr/text/16/255.5",
+   "FTC Rule on Consumer Reviews and Testimonials, 16 CFR 465.5: https://www.law.cornell.edu/cfr/text/16/465.5",
+   "News embargo practice: https://en.wikipedia.org/wiki/News_embargo",
+   "AP Stylebook: https://www.apstylebook.com/",
+   "Karat et al. 1999, keyboard composition rates: https://doi.org/10.1145/302979.303160"
+  ],
+  "onet_tasks": {
+   "1764": {
+    "task": "Respond to requests for information from the media or designate an appropriate spokesperson or information source.",
+    "type": "Core",
+    "FT": 4.4998500149985,
+    "IM": 4.55
+   },
+   "20555": {
+    "task": "Plan or direct development or communication of programs to maintain favorable public or stockholder perceptions of an organization's accomplishments, agenda, or environmental responsibility.",
+    "type": "Core",
+    "FT": 4.090990900909909,
+    "IM": 4.41
+   },
+   "23951": {
+    "task": "Post and update content on the company's Web site and social media outlets.",
+    "type": "Core",
+    "FT": 4.7273000000000005,
+    "IM": 4.41
+   },
+   "20554": {
+    "task": "Write press releases or other media communications to promote clients.",
+    "type": "Core",
+    "FT": 4.2856,
+    "IM": 4.38
+   },
+   "1765": {
+    "task": "Establish or maintain cooperative relationships with representatives of community, consumer, employee, or public interest groups.",
+    "type": "Core",
+    "FT": 3.7273272672732727,
+    "IM": 4.23
+   },
+   "1770": {
+    "task": "Confer with other managers to identify trends or key group interests or concerns or to provide advice on business decisions.",
+    "type": "Core",
+    "FT": 3.3636636336366363,
+    "IM": 4.18
+   },
+   "1772": {
+    "task": "Coach client representatives in effective communication with the public or with employees.",
+    "type": "Core",
+    "FT": 3.1903999999999995,
+    "IM": 4.14
+   },
+   "1769": {
+    "task": "Study the objectives, promotional policies, or needs of organizations to develop public relations strategies that will influence public opinion or promote ideas, products, or services.",
+    "type": "Core",
+    "FT": 3.4285,
+    "IM": 4.1
+   },
+   "20557": {
+    "task": "Prepare or edit organizational publications, such as employee newsletters or stockholders' reports, for internal or external audiences.",
+    "type": "Core",
+    "FT": 3.4,
+    "IM": 3.9
+   },
+   "1768": {
+    "task": "Arrange public appearances, lectures, contests, or exhibits for clients to increase product or service awareness or to promote goodwill.",
+    "type": "Core",
+    "FT": 2.9999000000000002,
+    "IM": 3.86
+   },
+   "1775": {
+    "task": "Plan or conduct market or public opinion research to test products or determine potential for product success, communicating results to client or management.",
+    "type": "Core",
+    "FT": 1.8822882288228824,
+    "IM": 3.76
+   },
+   "19811": {
+    "task": "Develop plans or materials to communicate organizational activities that are beneficial to the environment, public safety, or other important social issues.",
+    "type": "Core",
+    "FT": 3.142885711428857,
+    "IM": 3.76
+   },
+   "1767": {
+    "task": "Confer with production or support personnel to produce or coordinate production of advertisements or promotions.",
+    "type": "Core",
+    "FT": 2.9523,
+    "IM": 3.52
+   },
+   "1771": {
+    "task": "Consult with advertising agencies or staff to arrange promotional campaigns in all types of media for products, organizations, or individuals.",
+    "type": "Core",
+    "FT": 2.7,
+    "IM": 3.4
+   },
+   "1773": {
+    "task": "Prepare or deliver speeches to further public relations objectives.",
+    "type": "Core",
+    "FT": 2.3182681731826817,
+    "IM": 3.36
+   },
+   "19809": {
+    "task": "Coordinate public responses to environmental management incidents or conflicts.",
+    "type": "Supplemental",
+    "FT": 2.0716,
+    "IM": 3.64
+   },
+   "19810": {
+    "task": "Develop marketing campaigns for environmental technologies or services.",
+    "type": "Supplemental",
+    "FT": 1.7499,
+    "IM": 2.83
+   },
+   "1774": {
+    "task": "Purchase advertising space or time as required to promote client's product or agenda.",
+    "type": "Supplemental",
+    "FT": 2.1054,
+    "IM": 2.78
+   }
+  }
+ },
+ "documents": [
+  {
+   "id": "pol-media",
+   "app": "policies",
+   "path": "media-relations-policy",
+   "title": "Media relations policy (MC-110)",
+   "format": "md",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "# MC-110 Media relations (rev. 2026-02)\n\n1. Media line: the on-call PR specialist answers reporters within 30 minutes, 24/7. Acknowledge, get the deadline,\n   and find the right source.\n2. Spokespeople: PR designates physician and staff spokespeople. Executives (CEO, CNO, VPs) speak only with the VP\n   of Marketing and Communications' agreement.\n3. Nothing is off the record. Do not speculate, and do not comment on personnel matters.\n4. Patients (HIPAA, 45 CFR 164.510): if a reporter asks for a patient by name and the patient has not opted out of\n   the facility directory, you may give a one-word condition (undetermined, good, fair, serious, critical) after\n   checking with the house supervisor. Do not confirm or deny anything about a patient asked about without a\n   name, or about a patient who opted out (\"no information\" status), even to say they are not a patient. Never\n   confirm a patient's presence or care in connection with a complaint, claim or lawsuit; refer to the approved\n   statement. A family's public statements do not change this.\n5. Personnel: do not confirm leave, discipline or employment actions for any employee.\n6. Embargoes: embargoed material goes only to reporters who agreed to the embargo in writing in advance. An outlet\n   that breaks an embargo is excluded from embargoed material for 12 months.\n7. Claims, lawsuits and complaints about care: statements are drafted by PR and approved by Legal and the Privacy\n   Officer, then the VP. Patient Relations, not PR, contacts patients and families about complaints.\n8. Filming or photographing patients requires the patient's prior written authorization (form MC-7), even with\n   faces blurred.\n9. Labor relations: statements about the nurses' union or the contract are approved by the VP and Labor\n   Relations.\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "pol-style",
+   "app": "policies",
+   "path": "house-style",
+   "title": "House style (AP with exceptions)",
+   "format": "md",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "# House style\n\nAP Stylebook, with: \"Dr.\" for physicians on first reference; \"Prairie Bend Health\" on first reference, then\n\"PBH\"; times in Central time with \"a.m./p.m.\" (CT); dates as \"Nov. 5\"; numbers as AP ($20 million, 48 beds).\nGovernor on first reference: \"Gov. Patricia Hartley\".\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "doc-gift-plan",
+   "app": "docs",
+   "path": "announcements/kessler-gift/plan",
+   "title": "Kessler gift announcement plan (Thu Nov. 5, 10:00 a.m. CT)",
+   "format": "md",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "# Kessler gift announcement: plan (Doug Brenner, rev. 10/30)\n\nWhat: the Kessler Family Foundation's $20 million gift, the largest in PBH's history, toward the Kessler\nChildren's Behavioral Health Hospital, a 48-bed psychiatric hospital for children and adolescents on the\nPrairie Bend Medical Center campus. With a $12 million state grant (Gov. Hartley attending).\nWhen: Thursday, Nov. 5, 10:00 a.m. CT, atrium of Prairie Bend Medical Center. Embargo lifts 10:00 a.m. CT.\nSpeakers: Dr. Ellison (CEO), Gov. Hartley, Ruth Kessler, a patient family (the Garcias, MC-7 signed).\nEmbargoed briefings (after written agreement): The Prairie Ledger (Dana Corcoran), KPRB (Kim Halsey), Prairie\nBusiness Journal (Victor Pollard), AP (Nate Okoye). Briefings Tue-Wed. NC9 is excluded from embargoes until\nDec. 1 (broke the June embargo). Election Day is Tuesday; no pitching Tuesday or Wednesday mornings.\nApprovals: release (Doug, Celeste, Hannah); donor quote (Ruth Kessler); Governor's quote and the grant language\n(Jamal Ortiz); CEO remarks (Celeste).\nSocial: Priya schedules posts in Sprout for 10:00 a.m. CT.\nMaterials: release, media advisory (Tue), CEO remarks, Q&A, fact board, b-roll.\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "doc-release",
+   "app": "docs",
+   "path": "announcements/kessler-gift/release-draft-v3",
+   "title": "Release draft v3: Kessler gift",
+   "format": "md",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "# EMBARGOED UNTIL 10 A.M. CT THURSDAY, NOV. 5, 2026 (draft v3)\n\n## Kessler family gives $20 million toward children's behavioral health hospital\n\nLINCOLN, Neb. -- The Kessler Family Foundation has given $20 million to Prairie Bend Health toward a $62 million,\n48-bed psychiatric hospital for children and adolescents, the largest gift in the system's 110-year history.\n\nThe Kessler Children's Behavioral Health Hospital will be built on the Prairie Bend Medical Center campus and is\nexpected to open in 2029. Funding includes the Kessler gift, a $12 million grant from the state, $26 million\nfrom PBH and $4 million from other donors.\n\n\"[Donor quote: pending Ruth Kessler]\"\n\n\"[Governor quote: pending Office of the Governor]\"\n\n\"Nebraska families wait too long, and travel too far, for psychiatric care for their children,\" said Dr. Raymond\nEllison, PBH president and CEO. \"This gift changes that.\"\n\nToday, children who need inpatient psychiatric care in southeast Nebraska are often sent out of state; PBH has\nno pediatric psychiatric beds.\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "doc-qa",
+   "app": "docs",
+   "path": "announcements/kessler-gift/qa-v2",
+   "title": "Kessler gift Q&A for spokespeople (v2)",
+   "format": "md",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "# Q&A for Dr. Ellison and Hannah Voss (v2, 10/29)\n\nQ: How much will it cost? A: $62 million; the Kessler gift, a state grant, PBH funds and other donors.\nQ: When will it open? A: 2029.\nQ: How will you staff it when you can't staff the ER? A: Our nursing vacancy rate is 9% (June), better than the\nnational average; we'll recruit and train specialized staff starting in 2027.\nQ: Why children's behavioral health? A: Demand has doubled since 2019; families travel out of state.\n[No questions yet on: current ER concerns, the nurses' contract]\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "doc-oncall",
+   "app": "docs",
+   "path": "media-line/handoff-2026-10-30",
+   "title": "Media line handoff (from Jules, Fri 10/30)",
+   "format": "md",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "# Media line handoff, Fri 10/30 (Jules Parker to Erin Mathers)\n\n- Open: KPRB wants a flu/RSV expert for Monday or Tuesday (Kim Halsey); Dr. Okeke is our pediatric ID expert.\n- Watch: the Prairie Ledger's Dana Corcoran has been asking around about ER waits.\n- No-information patients this week: Council member Pat Dunleavy (admitted 10/31, opted out).\n- The October media report is due to the exec team Tuesday 9 a.m. (clip log in Docs > media-line).\n- PBH Pulse items due Friday 2 p.m. (Ben).\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "doc-october-clips",
+   "app": "docs",
+   "path": "media-line/clip-log-2026-10",
+   "title": "Clip log, October 2026 (Meltwater export)",
+   "format": "csv",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "date,outlet,type,topic,sentiment,audience\n2026-10-01,Cornhusker Patch,online,community health fair,positive,5000\n2026-10-01,Lincoln Star Herald,print/online,ER wait times,positive,53000\n2026-10-02,The Prairie Ledger,print/online,cancer center award,positive,108000\n2026-10-02,Lincoln Star Herald,print/online,ER wait times,negative,53000\n2026-10-03,KPRB Public Radio,radio,hospital at home,neutral,36000\n2026-10-03,KPRB Public Radio,radio,flu and RSV season,positive,36000\n2026-10-04,Lincoln Star Herald,print/online,residency program,positive,53000\n2026-10-04,Associated Press (state wire),wire,ER wait times,positive,0\n2026-10-05,Lincoln Star Herald,print/online,residency program,positive,53000\n2026-10-06,NC9 News,TV,union contract talks,neutral,78000\n2026-10-06,Prairie Business Journal,print/online,price transparency,positive,12000\n2026-10-07,Healthcare Dive,trade,residency program,positive,0\n2026-10-07,WKLN 7,TV,ER wait times,positive,65000\n2026-10-08,Prairie Business Journal,print/online,cancer center award,negative,12000\n2026-10-08,WKLN 7,TV,union contract talks,positive,65000\n2026-10-09,KPRB Public Radio,radio,nurse staffing,neutral,36000\n2026-10-09,KTWO Radio,radio,new cardiology clinic,negative,17000\n2026-10-10,KPRB Public Radio,radio,hospital at home,positive,36000\n2026-10-11,WKLN 7,TV,union contract talks,positive,65000\n2026-10-11,Healthcare Dive,trade,residency program,negative,0\n2026-10-12,The Prairie Ledger,print/online,nurse staffing,positive,101000\n2026-10-12,Lincoln Star Herald,print/online,residency program,negative,53000\n2026-10-13,WKLN 7,TV,community health fair,positive,65000\n2026-10-13,WKLN 7,TV,union contract talks,neutral,65000\n2026-10-14,KPRB Public Radio,radio,flu and RSV season,neutral,36000\n2026-10-14,The Prairie Ledger,print/online,community health fair,positive,101000\n2026-10-15,The Prairie Ledger,print/online,residency program,positive,101000\n2026-10-16,Prairie Business Journal,print/online,new cardiology clinic,positive,12000\n2026-10-16,KPRB Public Radio,radio,hospital at home,neutral,36000\n2026-10-17,Prairie Business Journal,print/online,new cardiology clinic,neutral,12000\n2026-10-17,Prairie Business Journal,print/online,price transparency,positive,12000\n2026-10-18,Becker's Hospital Review,trade,price transparency,neutral,0\n2026-10-18,The Prairie Ledger,print/online,new cardiology clinic,neutral,101000\n2026-10-19,Becker's Hospital Review,trade,union contract talks,neutral,0\n2026-10-19,Prairie Business Journal,print/online,hospital at home,neutral,12000\n2026-10-20,Prairie Business Journal,print/online,cancer center award,neutral,12000\n2026-10-21,Becker's Hospital Review,trade,flu and RSV season,positive,0\n2026-10-21,WKLN 7,TV,new cardiology clinic,positive,65000\n2026-10-22,Lincoln Star Herald,print/online,ER wait times,neutral,53000\n2026-10-22,NC9 News,TV,residency program,positive,78000\n2026-10-23,Becker's Hospital Review,trade,community health fair,positive,0\n2026-10-23,Associated Press (state wire),wire,cancer center award,positive,0\n2026-10-24,Prairie Business Journal,print/online,nurse staffing,negative,12000\n2026-10-24,Prairie Business Journal,print/online,cancer center award,neutral,12000\n2026-10-25,WKLN 7,TV,community health fair,positive,65000\n2026-10-26,Lincoln Star Herald,print/online,price transparency,negative,53000\n2026-10-26,Associated Press (state wire),wire,hospital at home,neutral,0\n2026-10-27,WKLN 7,TV,community health fair,positive,65000\n2026-10-27,NC9 News,TV,nurse staffing,neutral,78000\n2026-10-28,NC9 News,TV,residency program,positive,78000\n2026-10-28,WKLN 7,TV,hospital at home,neutral,65000\n2026-10-29,KTWO Radio,radio,union contract talks,neutral,17000\n2026-10-29,Lincoln Star Herald,print/online,nurse staffing,positive,53000\n2026-10-30,Cornhusker Patch,online,new cardiology clinic,positive,5000\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "doc-vacancy",
+   "app": "docs",
+   "path": "nursing/rn-vacancy-2026-06",
+   "title": "RN vacancy report, June 2026 (Nursing)",
+   "format": "md",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "RN positions, all PBH hospitals, June 30, 2026: 1,214 budgeted, 109 open, vacancy rate 9.0%.\nEmergency departments: 118 budgeted, 8 open (6.8%).\n",
+     "note": ""
+    }
+   ]
+  },
+  {
+   "id": "cal-erin",
+   "app": "calendar",
+   "path": "erin/week-2026-11-02",
+   "title": "Erin's week",
+   "format": "md",
+   "versions": [
+    {
+     "at": "D0",
+     "author": "worker",
+     "content": "Mon 11/2 08:00 Media line on call (through Fri 17:00)\nMon 11/2 13:00-13:30 Announcement check-in (Doug, Hannah, Priya)\nTue 11/3 Election Day\nTue 11/3 09:00 October media report to exec team\nWed 11/4 14:00-15:00 CEO prep for Thursday (Dr. Ellison, Celeste, Doug)\nThu 11/5 10:00 Kessler gift announcement, atrium\nFri 11/6 14:00 PBH Pulse items due\nFri 11/6 16:30 Media line handoff to Jules\n",
+     "note": ""
+    }
+   ]
+  }
+ ]
+}
