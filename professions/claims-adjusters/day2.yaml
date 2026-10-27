@@ -1,0 +1,172 @@
+# Tuesday 2026-11-03. Wade approves the reserve and puts the demand on Wednesday's committee; Maribel prepares the
+# large-loss report. A hospital lien notice arrives on the Simmons claim. Ray Dunham's file is complete (decision due
+# 11/25). Carla asks about rental. The shop sends a supplement on the Whitfield CR-V.
+#
+# Dunham: estimate $4,380 - $500 deductible = $3,880. Whitfield: estimate $4,740 + supplement $1,240 = $5,980 - $500 =
+# $5,480. Dunham's file was complete 11/3, so the decision is due by 11/25 (15 business days, skipping 11/11).
+
+documents:
+  - id: doc-lien
+    app: docs
+    path: claims/LR-26-117730-hospital-lien
+    title: "Notice of hospital lien: Baylor Scott & White (Simmons)"
+    at: "D2 10:00"
+    author: c_attorney
+    content: |
+      NOTICE OF HOSPITAL LIEN (Texas Property Code ch. 55). Baylor Scott & White Medical Center - Temple claims a
+      lien of $3,210.00 for emergency services to Kayla Simmons on 8/14/2026 on any cause of action or claim arising
+      from the injury. Filed with the Bell County Clerk 9/28/2026. Copy to Leon River Mutual.
+  - id: doc-dunham
+    app: docs
+    path: claims/LR-26-118240-estimate
+    title: "Belton Collision estimate, LR-26-118240 (Dunham)"
+    at: "D2 09:00"
+    author: c_shop
+    content: |
+      2017 Chevrolet Malibu, hail. Paintless dent repair hood, roof, trunk lid (112 dents), R&I moldings. Total
+      $4,380.00. Photos attached. Received 11/3/2026.
+  - id: doc-supplement
+    app: docs
+    path: claims/LR-26-118227-supplement
+    title: "Belton Collision supplement 1, LR-26-118227 (Whitfield)"
+    at: "D2 14:00"
+    author: c_shop
+    content: |
+      2019 Honda CR-V, hail. Original estimate (approved 11/2): $4,740.00. Supplement 1: sunroof glass cracked
+      (found at teardown, photos), sunroof glass and labor $1,240.00. New total $5,980.00.
+
+threads:
+  - id: t2-wade
+    app: mail
+    path: inbox/re-simmons-demand
+    title: "Re: Policy-limits demand"
+    x:
+      - {at: "D2 08:15", from: c_wade, to: [worker], cc: [c_rena], subject: "Re: Policy-limits demand, time-limited",
+         body: "Reserve to $30,000 approved. Rena has it on Wednesday's 10:00 committee. Please bring a short large-loss report: liability, injuries, specials, venue, recommendation. Wade"}
+  - id: t2-shop
+    app: mail
+    path: inbox/belton-supplement
+    title: Supplement on Whitfield
+    x:
+      - {at: "D2 14:00", from: c_shop, to: [worker], subject: "Supplement 1: LR-26-118227 (Whitfield)", body: "Supplement for the sunroof glass found at teardown, photos attached. Lupe", att: [doc-supplement]}
+  - id: t2-enterprise
+    app: mail
+    path: inbox/enterprise-nunez
+    title: Rental extension
+    x:
+      - {at: "D2 15:30", from: c_rental, to: [worker], subject: "Rental extension: Carla Nunez (RA 55102)",
+         body: "Hi, Ms. Nunez asked to keep her car until 12/5. Can you authorize direct billing through 12/5? Enterprise Temple"}
+
+calls:
+  - id: c2-carla
+    path: 2026-11-03/1130-carla-nunez
+    title: Inbound call, Carla Nunez (rental)
+    start: "D2 11:30:00"
+    turns:
+      - [c_insured2, "Hi Maribel. How long can I keep the rental? I'm shopping for a car but it might take a few weeks.", 5]
+      - [worker, "Your policy pays up to thirty dollars a day, to a maximum of nine hundred dollars, so thirty days from when coverage started on October 30th, through November 28th. After that the rental would be at your cost. Will you let me know when you've found a car?"]
+      - [c_insured2, "Okay, that's fair. Thank you.", 3]
+
+actions:
+  - {at: "D2 08:20", kind: read, target: t2-wade, summary: "read Wade's approval"}
+  - {id: a2-llr, at: "D2 11:00", kind: edit, app: docs, path: claims/LR-26-117730-large-loss-report, target: doc-llr, title: "Large loss report: LR-26-117730 (Simmons v. Prewitt)",
+     summary: "wrote the large-loss report",
+     content: "# Large loss report: LR-26-117730, Simmons v. Prewitt (committee 11/4)\n\nCoverage: policy LRM-A-4410921 in force; BI 30/60; permissive driver = named insured. No coverage issues.\nLiability: clear. Insured rear-ended claimant at a red light on the I-35 frontage road (8/14/2026); cited for following too closely.\nInjuries: cervical strain; L4-5 disc herniation (MRI); ER; 14 weeks PT; orthopedic surgeon recommends epidural injections.\nSpecials: billed $21,850 (ER $6,420, MRI $3,980, spine consults $2,150, PT $9,300) + estimated injections $20,000 = $41,850; lost wages $4,600. Total economic $46,450 before general damages.\nLiens: Baylor Scott & White hospital lien $3,210 (filed 9/28, Bell County).\nVenue: Bell County district court; a verdict above $30,000 is likely given the herniation and recommended procedures.\nDemand: $30,000 (limit) for a full release of the insured, expires Fri 11/6 5:00 p.m. CT.\nAssessment: within limits; an ordinarily prudent insurer would accept given clear liability and damages well above the limit (Stowers).\nRecommendation: accept and tender $30,000 by Thursday, with the hospital lien protected in the settlement (lienholder as joint payee or a lien release before funding)."}
+  - {at: "D2 10:05", kind: read, target: doc-lien, summary: "read the hospital lien notice"}
+  - {at: "D2 09:05", kind: read, target: doc-dunham, summary: "reviewed the Dunham estimate"}
+  - {id: a2-dunham, at: "D2 09:45", kind: new, app: mail, path: sent/dunham-acceptance, target: m2-dunham, to: [c_shop], subject: "LR-26-118240 (Dunham): estimate approved",
+     summary: "accepted the Dunham claim and approved payment",
+     body: "Lupe, LR-26-118240 (Ray Dunham, 2017 Malibu): estimate of $4,380.00 approved. Payment of $3,880.00 ($4,380 less the $500 deductible) will go out this week, payable to Ray Dunham and Belton Collision. I'm sending Mr. Dunham his written acceptance today. Maribel"}
+  - {id: a2-dunham-pay, at: "D2 09:50", kind: new, app: mail, path: sent/payment-request-118240, target: m2-dunham-pay, to: [c_finance], subject: "Payment: LR-26-118240, $3,880.00",
+     summary: "requested the Dunham payment",
+     body: "Please issue $3,880.00 on LR-26-118240 (comprehensive, hail), payable jointly to Ray Dunham and Belton Collision Center, by 11/10 (5 business days after acceptance on 11/3). Maribel"}
+  - {at: "D2 11:31", kind: noop, target: c2-carla, summary: "took Carla's rental call"}
+  - {at: "D2 14:05", kind: read, target: t2-shop, summary: "read the Whitfield supplement"}
+  - {id: a2-supplement, at: "D2 14:30", kind: reply, target: t2-shop, to: [c_shop], summary: "approved the Whitfield supplement",
+     body: "Supplement 1 approved: the sunroof glass crack is hail damage per the teardown photos. New total $5,980.00; payment $5,480.00 after the $500 deductible. Maribel"}
+  - {id: a2-enterprise, at: "D2 15:45", kind: reply, target: t2-enterprise, to: [c_rental], summary: "authorized direct billing only to the policy limit",
+     body: "Leon River Mutual authorizes direct billing on RA 55102 at up to $30 a day through 11/28 (the policy's $900 maximum, coverage from 10/30). Any days after 11/28, or any amount over $30 a day, are billed to Ms. Nunez. I've told her the limit. Maribel Ochoa"}
+
+needs:
+  - id: n2-llr
+    title: Large-loss report for the committee
+    kind: doc
+    task: 21418
+    from: "D2 08:15"
+    due: "D3 10:00"
+    evidence: [t2-wade, doc-liability-file, doc-demand, doc-lien]
+    ref: a2-llr
+    check: {all: [{mentions_any: [Stowers, "ordinarily prudent"]}, {number_equals: {value: 41850}}, {mentions_any: [lien]}]}
+    must: ["Coverage, liability, injuries, specials summed from the bills, venue, the demand and its deadline, recommendation", "The hospital lien"]
+    minutes: [60, "a large-loss report (estimate)"]
+    intent: "Committee-ready."
+  - id: n2-lien
+    title: Protect the hospital lien in any settlement
+    kind: flag
+    task: 21419
+    from: "D2 10:00"
+    due: "D3 10:00"
+    evidence: [doc-lien]
+    ref: a2-llr
+    check: {all: [{mentions_any: [lien]}, {number_equals: {value: 3210}}, {mentions_any: [joint payee, release, protected]}]}
+    must: ["$3,210 hospital lien must be paid or released from the settlement"]
+    minutes: [5, "flagging a lien"]
+    intent: "Or we pay twice."
+  - id: n2-dunham
+    title: Accept Dunham and pay on time
+    kind: follow_up
+    task: 21426
+    from: "D2 09:00"
+    due: "D2 17:00"
+    evidence: [doc-dunham, doc-hail-queue, pol-guidelines]
+    ref: a2-dunham-pay
+    check: {all: [{to_includes: c_finance}, {number_equals: {value: 3880}}, {mentions_any: ["11/10", "5 business days"]}]}
+    must: ["$4,380 - $500 = $3,880, joint payee, paid within 5 business days of acceptance"]
+    minutes: [5, "a payment entry"]
+    intent: "Pay it."
+  - id: n2-carla-rental
+    title: Explain the rental limit
+    kind: call_line
+    task: 21421
+    from: "D2 11:30:10"
+    due: "D2 11:30:50"
+    evidence: [c2-carla, pol-form]
+    ref: c2-carla.2
+    check: {all: [{target: c2-carla}, {action_in: [say]}, {mentions_any: [thirty dollars, "$30"]}, {mentions_any: ["November 28", "nine hundred"]}]}
+    must: ["$30 a day up to $900: through 11/28 (from 10/30)"]
+    minutes: [0.3, "a spoken line"]
+    intent: "The policy limit."
+  - id: n2-supplement
+    title: Approve the supplement within authority
+    kind: reply
+    task: 21420
+    from: "D2 14:00"
+    due: "D2 17:00"
+    evidence: [doc-supplement, pol-guidelines]
+    ref: a2-supplement
+    check: {all: [{to_includes: c_shop}, {number_equals: {value: 5980}}, {number_equals: {value: 5480}}]}
+    must: ["Hail-related per photos; new total $5,980, payment $5,480"]
+    minutes: [8, "a supplement review"]
+    intent: "Legit."
+  - id: n2-enterprise
+    title: Authorize rental only to the policy limit
+    kind: reply
+    task: 21426
+    from: "D2 15:30"
+    due: "D2 17:00"
+    evidence: [t2-enterprise, pol-form, c2-carla]
+    ref: a2-enterprise
+    check: {all: [{to_includes: c_rental}, {mentions_any: ["11/28"]}, {mentions_any: ["$30"]}]}
+    must: ["$30 a day through 11/28 ($900 maximum); the rest is the insured's"]
+    must_not: ["Authorizes through 12/5"]
+    minutes: [3, "a vendor reply"]
+    intent: "Policy limit."
+
+traps:
+  - id: tr2-rental
+    title: Promising rental until she buys a car
+    kind: stale_info
+    evidence: [c2-carla, pol-form]
+    check: {all: [{target: c2-carla}, {action_in: [say]}, {mentions_any: ["as long as you need", "until you find", "no limit"]}]}
+    correct: "$30 a day, $900 maximum."
+    severity: low

@@ -1,0 +1,143 @@
+soc: 13-1031.00
+title: Claims Adjusters, Examiners, and Investigators
+ecec_sector: private insurance carriers and related activities
+employer:
+  name: Leon River Mutual Insurance Company
+  industry: property and casualty insurance (personal auto and homeowners)
+  size: 640
+  location: Temple, Texas
+  timezone: America/Chicago
+  description: >-
+    A regional mutual writing personal auto and homeowners policies in Central Texas. Claims are handled in
+    ClaimCenter; auto damage by desk adjusters with field appraisers and direct-repair shops. A hailstorm crossed Bell
+    County on Thursday 10/29 and the hail claims are arriving this week.
+worker:
+  name: Maribel Ochoa
+  title: Senior Auto Claims Adjuster (desk)
+  manager: c_wade
+  team: Central Texas auto claims
+  email: mochoa@leonrivermutual.com
+  signature: "Maribel Ochoa | Senior Auto Claims Adjuster | Leon River Mutual | 254-555-0180"
+apps: [mail, chat, phone, calendar, docs, policies, contacts]
+
+profession_prompt: |
+  Maribel is a senior desk auto adjuster at Leon River Mutual. She handles first-party physical damage claims
+  (collision and comprehensive, including this week's hail claims) and third-party liability claims against
+  policyholders, from first notice to settlement: coverage, investigation, estimates and total losses, reserves,
+  payments, letters, and the calls with insureds, claimants, shops and attorneys.
+
+  Good help in this job means:
+  - coverage decisions grounded in the policy language and the file's facts;
+  - every statutory and company deadline computed correctly and met;
+  - settlement figures, reserves and payments that are accurate and within Maribel's authority, with anything
+    above it taken to her supervisor;
+  - suspicious claims referred to the Special Investigations Unit, never accused or denied on suspicion alone;
+  - time-limited settlement demands recognized at once and escalated;
+  - clear, respectful, accurate communication with insureds and claimants.
+  Claims guidelines and policy forms are under policies; claim files, estimates and reports are under docs.
+
+minutes_model:
+  compose_wpm: 20
+
+sources:
+  - "BLS OEWS May 2025 and projections via O*NET OnLine: https://www.onetonline.org/link/summary/13-1031.00"
+  - "Texas Insurance Code 542.051 (business day; first-party claim): https://texas.public.law/statutes/tex._ins._code_section_542.051"
+  - "Texas Insurance Code 542.055 (acknowledge within 15 days): https://texas.public.law/statutes/tex._ins._code_section_542.055"
+  - "Texas Insurance Code 542.056 (accept or reject within 15 business days of all items; 45-day extension): https://texas.public.law/statutes/tex._ins._code_section_542.056"
+  - "Texas Insurance Code 542.057 (pay within 5 business days): https://texas.public.law/statutes/tex._ins._code_section_542.057"
+  - "Texas Government Code 662.003 (Veterans Day is a state holiday): https://texas.public.law/statutes/tex._gov't_code_section_662.003"
+  - "G.A. Stowers Furniture Co. v. American Indemnity Co., 15 S.W.2d 544 (Tex. Comm'n App. 1929); American Physicians Ins. Exch. v. Garcia, 876 S.W.2d 842 (Tex. 1994)"
+  - "Texas Transportation Code 601.072 (minimum liability limits 30/60/25): https://statutes.capitol.texas.gov/Docs/TN/htm/TN.601.htm"
+  - "Microsoft Work Trend Index 2025: https://www.microsoft.com/en-us/worklab/work-trend-index/breaking-down-infinite-workday"
+
+contacts:
+  # [id, name, role, org, email, phone, relation]
+  - [c_wade, Wade Hollister, Auto Claims Supervisor, Leon River Mutual, whollister@leonrivermutual.com, "254-555-0181", supervisor]
+  - [c_rena, Rena Castillo, Claims Manager, Leon River Mutual, rcastillo@leonrivermutual.com, "", claims manager (large loss committee)]
+  - [c_siu, Special Investigations Unit, referrals, Leon River Mutual, siu@leonrivermutual.com, "", internal]
+  - [c_defense, Paul Whitaker, defense counsel (panel), Whitaker & Lowe PLLC, pwhitaker@whitakerlowe.example, "512-555-0190", panel defense counsel]
+  - [c_finance, Claims Payments, payment processing, Leon River Mutual, claimpayments@leonrivermutual.com, "", internal]
+  - [c_appraiser, Trent Boone, Field Appraiser, Leon River Mutual, tboone@leonrivermutual.com, "", field appraiser]
+  - [c_shop, Belton Collision Center, estimator (Lupe Garza), Belton Collision Center, estimates@beltoncollision.example, "254-555-0410", direct-repair shop]
+  - [c_rental, Enterprise Temple, branch, Enterprise Rent-A-Car, temple@enterprise.example, "254-555-0420", rental vendor]
+  - [c_insured1, Dale Prewitt, insured (policy LRM-A-4410921), Leon River Mutual policyholder, dprewitt@gmail.example, "254-555-0431", insured (liability claim)]
+  - [c_insured2, Carla Nunez, insured (policy LRM-A-4472210), Leon River Mutual policyholder, cnunez@yahoo.example, "254-555-0432", insured (hail total loss)]
+  - [c_attorney, Brandon Keel, plaintiff's attorney, Keel Injury Law, bkeel@keelinjury.example, "254-555-0440", claimant's attorney]
+
+ledger:
+  adjuster_authority: 15000
+  bi_limit_per_person: 30000
+
+documents:
+  - id: pol-guidelines
+    app: policies
+    path: claims-guidelines-auto
+    title: Auto claims guidelines (Central Texas)
+    content: |
+      # Auto claims guidelines (excerpts)
+
+      Authority: senior desk adjusters may pay up to $15,000 per claim (indemnity) and set reserves up to $25,000.
+      Above that, the supervisor; above $50,000 or any policy-limits demand, the Claims Manager.
+      Texas first-party deadlines (Ins. Code ch. 542): acknowledge, begin the investigation and request what you
+      need within 15 days of notice; accept or reject in writing within 15 business days of receiving all items
+      (business days exclude weekends and Texas holidays, including Veterans Day 11/11 and Thanksgiving 11/26-27); if
+      you need more time, tell the claimant why in writing, and decide within 45 days of that notice; pay within 5
+      business days of accepting.
+      Total losses: ACV from the CCC valuation, less the deductible; send the valuation report with the offer.
+      Owners may dispute with comparable vehicles; review them in good faith. The appraisal clause is available.
+      Liability: any time-limited demand, any demand at or above limits, or any claim with specials above 50% of the
+      limit is reported to the supervisor and Claims Manager the same day, with a copy to the insured (excess
+      letter) and defense counsel if in suit. Never let a time-limited demand lapse without a decision.
+      Fraud indicators: refer to SIU with the facts. Don't accuse, deny or delay a claim for suspicion alone;
+      continue handling in parallel unless SIU says otherwise.
+      Payments: confirm payee and amount against the file; report any duplicate or overpayment to Claims Payments.
+
+  - id: pol-form
+    app: policies
+    path: personal-auto-policy-LRM-PAP-0124
+    title: Personal auto policy LRM-PAP 01 24 (excerpts)
+    content: |
+      Part D, Coverage for damage to your auto: we pay for direct and accidental loss to your covered auto, minus the
+      deductible. Other than collision losses include hail.
+      Limit of liability: the lesser of the actual cash value of the stolen or damaged property, or the amount
+      necessary to repair or replace it.
+      Transportation expenses: up to $30 per day, to a maximum of $900, beginning 24 hours after a covered loss.
+      Appraisal: if we and you disagree on the amount of loss, either may demand an appraisal.
+      Part A, Liability: bodily injury limits as shown on the declarations.
+
+  - id: doc-hail-queue
+    app: docs
+    path: claims/hail-2026-10-29-queue
+    title: Hail claims assigned to Maribel (storm 10/29)
+    format: csv
+    content: |
+      claim,insured,vehicle,notice_date,all_items_received,status,note
+      LR-26-118204,Carla Nunez,2014 Toyota Corolla LE,2026-10-29,2026-11-02,appraised,possible total loss
+      LR-26-118211,Ivan Morales,2021 Ford F-150,2026-10-29,,new,
+      LR-26-118227,Joyce Whitfield,2019 Honda CR-V,2026-10-30,,new,
+      LR-26-118240,Ray Dunham,2017 Chevrolet Malibu,2026-10-30,2026-11-03,estimate received,
+      LR-26-118266,Tasha Byrd,2023 Kia Telluride,2026-10-31,,new,
+      LR-26-118281,Glen Ostrowski,2016 Nissan Altima,2026-11-02,,new,photos submitted by insured
+      LR-26-118290,Monica Reyes,2020 Toyota RAV4,2026-11-02,,new,
+
+  - id: doc-liability-file
+    app: docs
+    path: claims/LR-26-117730-summary
+    title: "Claim LR-26-117730 (liability): file summary"
+    content: |
+      Insured: Dale Prewitt (policy LRM-A-4410921), BI limits 30/60 (Texas minimum), PD 25.
+      Loss: 2026-08-14, I-35 frontage road, Temple. Insured rear-ended Kayla Simmons at a red light; police report
+      cites the insured (following too closely). Liability: clear.
+      Claimant: Kayla Simmons, represented by Brandon Keel (Keel Injury Law) since 9/2.
+      Injuries (per records received 10/20): cervical strain, L4-5 disc herniation; ER visit, MRI, 14 weeks PT;
+      orthopedic surgeon recommends epidural injections.
+      Reserve: BI $12,000 (set 8/20). No suit filed.
+
+  - id: cal-maribel
+    app: calendar
+    path: maribel/week-2026-11-02
+    title: Maribel's week
+    content: |
+      Mon-Fri 08:00-17:00 desk; hail claims surge.
+      Wed 11/4 10:00 Large loss committee (Rena Castillo) if needed.
+      Thu 11/5 14:00 Hail team huddle (Wade).
