@@ -511,4 +511,4 @@ One seed of the 20-model run (20 models x 55 profession-days) is about $16,000-1
 - ECI factor on 2026-10-30.
 - Hand grades (about 100 proposals) for judge accuracy; judge agreement on the full run; the friction (1.5) and
   rewrite threshold (0.5) sensitivity.
-- How many seeds.
+- How many seeds: `run.seeds` repeats each week (`scripts/run.py --seeds`); the run-to-run noise check sizes it.

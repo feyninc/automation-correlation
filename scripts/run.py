@@ -23,13 +23,16 @@ def main():
     ap.add_argument("--start", default="D1 00:00")
     ap.add_argument("--end", default="D5 23:59")
     ap.add_argument("--log-dir", default="logs/run")
+    ap.add_argument("--config", default="config/run.yaml", help="the run's config, relative to the repository")
+    ap.add_argument("--seeds", type=int, default=0, help="runs of each week (0: the config's run.seeds)")
     ap.add_argument("--max-samples", type=int, default=0, help="professions run at once per model (0: all of them)")
     ap.add_argument("--max-models", type=int, default=0, help="models run at once (0: all of them)")
     ap.add_argument("--max-sandboxes", type=int, default=48,
                     help="Docker sandboxes at once; about 30 MB each, so 48 leaves room on a 4 GB machine")
     a = ap.parse_args()
     creds.load()
-    cfg = config.load(ROOT / "config/run.yaml")
+    cfg = config.load(ROOT / a.config)
+    seeds = a.seeds or cfg.run.seeds
     missing = cfg.missing_credentials()
     if missing:
         raise SystemExit(f"missing credentials: {missing}")
@@ -39,8 +42,8 @@ def main():
         raise SystemExit(f"unknown models: {names - {m.name for m in specs}}")
     models = [get_model(m.model, config=GenerateConfig(**cfg.generate_for(m)), **cfg.model_args_for(m)) for m in specs]
     n_prof = len(list((ROOT / "professions").glob("*/episode"))) if a.professions == "all" else len(a.professions.split(","))
-    logs = inspect_eval(workweek(professions=a.professions, start=a.start, end=a.end), model=models,
-                        log_dir=a.log_dir, max_samples=a.max_samples or n_prof, max_tasks=a.max_models or len(models), max_sandboxes=a.max_sandboxes, display="none",
+    logs = inspect_eval(workweek(professions=a.professions, start=a.start, end=a.end, run_path=a.config, epochs=seeds),
+                        model=models, log_dir=a.log_dir, max_samples=a.max_samples or n_prof * seeds, max_tasks=a.max_models or len(models), max_sandboxes=a.max_sandboxes, display="none",
                         fail_on_error=False, retry_on_error=2)
     spent = dict.fromkeys(config.BILLED, 0.0)
     total = worker = 0.0

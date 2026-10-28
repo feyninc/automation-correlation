@@ -85,7 +85,7 @@ class JudgeSpec(ModelSpec):
 class RunSettings(BaseModel):
     cadence_minutes: float = 5
     speed_file: str = ""                # p50 time to first token and throughput per model (offline timing)
-    seeds: int = 3
+    seeds: int = 1                      # runs of each week (Inspect epochs), each with its own checkpoints
     max_tool_calls_per_tick: int = 25
     max_output_tokens_per_call: int = 16000
     compact_at: float = 0.8             # share of a model's context window at which its conversation is compacted

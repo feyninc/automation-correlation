@@ -27,11 +27,13 @@ SIM_FIELDS = ("last", "proposals", "questions", "ticks_run", "recovered", "measu
               "compaction_usage", "filtered", "call_retries", "long_usage", "read", "tick_index")
 
 
-def path(model: str, sample_id: str) -> Path | None:
+def path(model: str, sample_id: str, epoch: int = 1) -> Path | None:
+    """One file per model, profession and run of the week (a second run of it is `<profession>-2.json`)."""
     control = os.environ.get("WORKWEEK_CONTROL")
     if not control:
         return None
-    return Path(control) / "checkpoints" / re.sub(r"[^\w.-]+", "_", model) / f"{sample_id}.json"
+    name = sample_id if epoch == 1 else f"{sample_id}-{epoch}"
+    return Path(control) / "checkpoints" / re.sub(r"[^\w.-]+", "_", model) / f"{name}.json"
 
 
 async def save(where: Path | None, sim, messages: list, *, day: int, t: int, resume: int, phase: str,

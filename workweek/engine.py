@@ -409,7 +409,7 @@ def workweek_agent(run_path: str = "config/run.yaml", start: str = "D1 00:00", e
                                         employer=ep.employer.name, first_name=sim.first,
                                         profession_prompt=ep.profession_prompt.strip())
         days = [d for d in range(1, 6) if any(s0 <= x <= s1 for x in ticks(d, cadence, 0, 86400 - cadence))]
-        where, window = checkpoint.path(str(model), str(state.sample_id)), (s0, s1)
+        where, window = checkpoint.path(str(model), str(state.sample_id), state.epoch), (s0, s1)
         ck = await checkpoint.load(where, sim, window)            # a restarted week continues from its last tick
         prior = ck["usage"] if ck else {}
 
