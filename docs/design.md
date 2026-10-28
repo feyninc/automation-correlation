@@ -332,6 +332,12 @@ stated here with their reasons.
 Limits: the model cannot mark a version as final, so a revision proposed only to explore an alternative supersedes
 the earlier one. A line said on a call is never a revision: each is a new turn in the conversation, read in full.
 
+Grading runs as the weeks do: `--watch` grades each log as it finishes; concurrency is live
+(`results/<run>/control.json`), `results/<run>/PAUSE` holds new judging, each judge call is retried up to seven
+times (waits doubling from 5 s to 160 s), and every judgement is saved as it arrives (`judgements.jsonl`), so a
+rerun of the grader pays only for what is missing. A week that ended in an error is left out
+(`failed_weeks.json` lists any without a successful rerun); a week run more than once counts once.
+
 Outputs: `results/<run>/graded.jsonl` (every proposal, need outcome, judgment and value) and `summary.csv` (per model
 and profession: ticks, proposals, questions, needs caught, traps fired, press-enter rate, value, token cost).
 

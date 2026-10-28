@@ -348,7 +348,8 @@ def parse_judgement(text: str) -> dict | None:
 
 
 NO_BATCH = False            # --no-batch: skip batch APIs (quick checks)
-JUDGE_ATTEMPTS = 4          # per judge and proposal: API errors and unparseable replies are retried with backoff
+JUDGE_ATTEMPTS = 7          # per judge and proposal: API errors and unparseable replies are retried, waiting 5 s
+                            # doubling to 160 s (as the engine retries a tested model's calls)
 
 
 async def judge_all(run: cfgmod.RunConfig, judges, prompt: tuple[str, str]) -> dict[str, dict]:
@@ -480,14 +481,15 @@ class LiveGate:
         return self.limit
 
     async def __aenter__(self):
-        while self.active >= self.current():
-            await asyncio.sleep(0.5)
+        while self.active >= self.current() or (self.control and (self.control.parent / "PAUSE").exists()):
+            await asyncio.sleep(0.5)      # <out>/PAUSE holds new judging; judgements in flight finish
         self.active += 1
 
     async def __aexit__(self, *exc):
         self.active -= 1
 
 
+FAILED: list[dict] = []         # weeks that ended in an error, left out of the results
 JUDGED: dict[str, dict] = {}    # saved judgements by proposal key (<out>/judgements.jsonl), so a restart pays nothing twice
 JUDGED_FILE = None
 
@@ -499,6 +501,10 @@ async def grade_log(log, run: cfgmod.RunConfig, judges, gate) -> list[dict]:
     family = spec.family if spec else ""
     rows = []
     for s in log.samples or []:
+        if s.error:                      # a week that ended in an error: its rerun (another log) is graded instead
+            FAILED.append({"model": spec.name if spec else model_name, "profession": s.id, "epoch": s.epoch,
+                           "error": s.error.message[-300:]})
+            continue
         ep = load_episode(ROOT / s.metadata["episode"])
         idx = path_index(ep)
         props_raw = s.metadata.get("proposals", [])
@@ -628,7 +634,16 @@ def main():
     else:
         logs = [read_eval_log(l.name) for l in list_eval_logs(a.logs)]   # read before the event loop starts
         rows = asyncio.run(grade_all(logs))
-    rows = sorted(rows, key=lambda r: (r["model"], r["profession"], r["epoch"]))
+    # a week run more than once (a rerun after an error) counts once: the one with the most ticks
+    best = {}
+    for r in rows:
+        k = (r["model"], r["profession"], r["epoch"])
+        if k not in best or (r["ticks"] or 0) > (best[k]["ticks"] or 0):
+            best[k] = r
+    rows = sorted(best.values(), key=lambda r: (r["model"], r["profession"], r["epoch"]))
+    done = {(r["model"], r["profession"]) for r in rows}
+    (out / "failed_weeks.json").write_text(json.dumps(
+        [f for f in FAILED if (f["model"], f["profession"]) not in {(m, p) for m, p in done}], indent=1) + "\n")
     offsets = judge_offsets([g for r in rows for g in r["graded"]])
     finish(run, rows, offsets)
     (out / "judge_offsets.json").write_text(json.dumps(offsets, indent=1) + "\n")
