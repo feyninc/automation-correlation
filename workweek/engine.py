@@ -14,6 +14,7 @@ from __future__ import annotations
 import asyncio
 import json
 import os
+import re
 import time
 from pathlib import Path
 
@@ -292,7 +293,7 @@ async def replace(sim: Sim, model: Model, messages: list, fn) -> None:
 async def agent_turn(sim: Sim, model: Model, messages: list, t: int, budget: int) -> None:
     for _ in range(budget):
         await compact_if_due(sim, model, messages)
-        out, filtered, failed = None, 0, 0
+        out, filtered, failed, squeezed = None, 0, 0, False
         while out is None:
             try:
                 out = await model.generate(messages, tools=TOOLS)
@@ -302,8 +303,11 @@ async def agent_turn(sim: Sim, model: Model, messages: list, t: int, budget: int
                     if filtered == FILTER_ATTEMPTS:
                         sim.filtered.append({"at": fmt(t), "error": str(e)[-300:]})
                         return
-                elif compaction.too_long(e):
-                    raise
+                elif compaction.too_long(e):  # one turn grew past the window: compact now and try again, once
+                    if squeezed:
+                        raise
+                    squeezed = True
+                    await compact_if_due(sim, model, messages, force=True)
                 else:                  # an outage or throttling: wait and retry within the turn, not from Monday
                     failed += 1
                     if failed == CALL_ATTEMPTS:
@@ -320,6 +324,11 @@ async def agent_turn(sim: Sim, model: Model, messages: list, t: int, budget: int
                     sim.long_usage[f] = sim.long_usage.get(f, 0) + v
         sim.work["output_tokens"].append(out.usage.output_tokens if out.usage else 0)
         calls = out.message.tool_calls or []
+        for c in calls:                # a malformed tool name in the history makes every later request invalid
+            if not re.fullmatch(r"[A-Za-z0-9_-]+", c.function or ""):
+                known = {x.name for x in TOOLS}
+                tries = [re.split(r"[.:/]", c.function or "")[-1], re.sub(r"[^A-Za-z0-9_-]", "", c.function or "")]
+                c.function = next((x for x in tries if x in known), "invalid_tool")
         if not calls:
             calls = providers.recover_tool_calls(out.message.text, {t.name for t in TOOLS})
             if calls:
