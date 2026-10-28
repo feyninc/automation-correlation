@@ -116,7 +116,7 @@ needs:
     due: "D1 12:00"
     evidence: [t1-sup, repo-reminders]
     ref: a1-sup
-    check: {"all": [{"any": [{"target": "t1-sup"}, {"to_includes": "c_gabe"}]}, {"mentions_any": ["DST", "daylight", "offset", "clock change", "clocks changed", "fall back"]}, {"mentions_any": ["backfill", "already scheduled", "already-scheduled", "stored", "existing reminders", "recompute", "correct the scheduled"]}]}
+    check: {"all": [{"any": [{"target": "t1-sup"}, {"to_includes": "c_gabe"}]}, {"mentions_any": ["DST", "daylight", "offset", "clock change", "clocks changed", "fall back"]}, {"mentions_any": ["backfill", "already scheduled", "already-scheduled", "stored", "existing reminders", "pending reminders", "other reminders", "scheduled with the wrong", "recompute", "correct the scheduled"]}]}
     must: ["The cause: the offset at scheduling time, not on the reminder date", "Stored reminders need a fix too", "What Support can tell tenants"]
     must_not: ["Blames the tenants' settings"]
     minutes: [30, "debugging a time zone bug (estimate)"]

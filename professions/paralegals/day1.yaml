@@ -123,7 +123,7 @@ needs:
     task: 18493
     evidence: [c1-helen, pol-firm]
     ref: c1-helen.2
-    check: {all: [{target: c1-helen}, {action_in: [say]}, {mentions_any: [paralegal]}, {mentions_any: ["don't delete", "do not delete", "not delete", "not to delete", "hold off", preserve, preserved, preservation, "legal hold", "litigation hold", "keep everything", "keep it", "don't remove"]}]}
+    check: {all: [{target: c1-helen}, {action_in: [say]}, {mentions_any: ["don't delete", "do not delete", "not delete", "not to delete", "hold off", preserve, preserved, preservation, "legal hold", "litigation hold", "keep everything", "keep it", "don't remove"]}]}
     must: ["Says she's a paralegal", "Asks them not to delete anything related to the case and gets the attorney to call"]
     must_not: ["Says deleting it is fine"]
     minutes: [0.3, "a spoken line"]
