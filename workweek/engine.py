@@ -7,7 +7,7 @@ Nothing the model proposes reaches the world; proposals and questions are record
 The model keeps one conversation for the whole week. Nothing in it is trimmed; it is compacted (workweek/compaction.py,
 after OpenCode) when the input reaches `compact_at` of the model's context window (config `context_window`, the
 largest variant on its route) and at midnight after each day. Compaction's tokens are recorded apart and not charged
-to the model (owner, 10-27).
+to the model.
 """
 from __future__ import annotations
 

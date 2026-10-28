@@ -32,22 +32,30 @@ The full design is [`docs/design.md`](docs/design.md).
   English, with citations, and says what an ideal assistant would do. A compiler audits every week: each need's check
   passes on the worker's own version, no trap fires on what the worker did, the files round-trip, and the overview
   is there and agrees with the week.
-- **The loop.** An Inspect AI task on a simulated clock: every 5 minutes the model sees the world as files (mail,
-  chat, tickets, calls, documents, what the worker just did) and may read, propose up to three drafts, ask the worker
-  (a simulated worker answers), join a live call or wait. Nothing it writes is delivered, so the week is identical
-  for every model.
+- **The loop.** An Inspect AI task on a simulated clock that ticks every 5 minutes around the clock, Monday to
+  Friday: at each tick the model sees the world as files (mail, chat, tickets, calls, documents, what the worker just
+  did) and may read, propose up to three drafts, ask the worker (a simulated worker answers), join a live call or
+  wait. Nothing it writes is delivered, so the week is identical for every model. The model keeps one conversation
+  for the week at its largest context window, compacted in OpenCode's style at 80% of the window and at midnight.
 - **Grading.** Code checks match proposals to needs and traps; a panel of seven judges from seven model families
   scores each proposal 0-100 (the chance the worker sends it unchanged) and writes the minimal fix. The tested
   model's own family is left out of the weighted mean. The edit distance to that fix gives the worker's fix time.
 - **Value.** Loaded wage times (minutes saved x score - reading - expected fixing) minus token cost, per worker-week.
-- **Models.** Each lab's main line, the model in force on 2026-01-01 and every release since: OpenAI GPT-5.2 to
-  GPT-6.1 Sol, Claude Opus 4.5 to 5.5, Kimi K2 Thinking to K3.1 Pro, DeepSeek V3.2 to V4.1 Flash, GLM-4.7 to GLM-5.3
-  (27 models), each at its lab's medium reasoning setting.
+- **Models.** For each of five labs, its newest model on 1 January, 30 April and 31 July 2026 and its latest: 20
+  models, each at its lab's medium reasoning setting (DeepSeek at high, which has no medium).
 
-## Status (2026-10-27)
+  | In force on | OpenAI | Anthropic | Moonshot | DeepSeek | Z.ai |
+  | --- | --- | --- | --- | --- | --- |
+  | 2026-01-01 | GPT-5.2 | Claude Opus 4.5 | Kimi K2 Thinking | DeepSeek V3.2 | GLM-4.7 |
+  | 2026-04-30 | GPT-5.5 | Claude Opus 4.7 | Kimi K2.6 | DeepSeek V4 Flash | GLM-5.1 |
+  | 2026-07-31 | GPT-5.6 Sol | Claude Opus 5 | Kimi K3 | DeepSeek V4 Flash 0731 | GLM-5.2 |
+  | Latest | GPT-6.1 Sol | Claude Opus 5.5 | Kimi K3.1 Pro | DeepSeek V4.1 Flash 1017 | GLM-5.3 |
 
-All 11 weeks are written and compile with 0 audit errors; the engine and grader run end to end on all 27 models. Next:
-hand grades for judge agreement, the pilot that sizes the full run, then the full run.
+## Status
+
+All 11 weeks are written and compile with 0 audit errors; the engine, compaction and grader run end to end, and every
+model route passes a tool-call smoke test. Running: the cost of a full day in the current harness. Next: hand grades
+for judge accuracy, then the full run in batches of three professions.
 
 ## Layout
 
@@ -55,7 +63,7 @@ hand grades for judge agreement, the pilot that sizes the full run, then the ful
 | --- | --- |
 | `professions/<name>/` | one week: `overview.md` (start here), `week.yaml`, `day1.yaml`..`day5.yaml` and `day1b.yaml`..`day5b.yaml` (the forms), `episode/` and `report.md` (compiled) |
 | `workweek/` | schema, compiler and audit, the world, the engine (Inspect AI task), checks, grader, config, provider patches, sandbox image |
-| `config/run.yaml` | models, routes, prices, judges, the simulated worker, run settings |
+| `config/run.yaml` | models, routes, prices, context windows, judges, the simulated worker, run settings (cadence, compaction, snapshot dates) |
 | `scripts/` | `run.py`, `smoke_models.py`, `probe_reasoning.py`, `speed.py`, `timeline.py`, `screen_occupations.py` |
 | `data/` | O*NET, Economic Index, wages, ECEC, ECI, release timelines, probe outputs; see `data/README.md` |
 | `docs/` | `design.md`, the model timeline chart |
@@ -70,4 +78,6 @@ Credentials live outside the repository (`~/.config/automation-correlation/`).
     uv run python -m workweek.compile professions/claims-adjusters        # compile and audit one week
     uv run python scripts/run.py --models "GPT-5.5" --professions claims-adjusters \
         --start "D1 09:00" --end "D1 09:30" --log-dir logs/try                # run a window
+    uv run python scripts/run.py --professions claims-adjusters,paralegals,accountants \
+        --log-dir logs/batch-1                                                # the 20 run models, a full week
     uv run python -m workweek.grade logs/try                                 # grade it into results/

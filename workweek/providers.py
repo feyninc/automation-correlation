@@ -9,9 +9,9 @@ GLM tool calls in text: GLM-4.7 and GLM-5 on Bedrock sometimes writes a tool cal
 (`<tool_call>name<arg_key>k</arg_key><arg_value>v</arg_value></tool_call>`) as text instead of a structured call.
 `recover_tool_calls` turns that text into tool calls; the engine counts each recovery.
 
-Content filters: Azure's filter sometimes blocks an ordinary turn (DeepSeek V4.1 Flash, 10-27: "Response content
-blocked by label 'Jailbreak'" on a budget analyst's 08:30 tick). `content_filtered` recognizes such a refusal so the
-engine can retry the call, and record it, instead of losing the sample.
+Content filters: a provider's filter can block an ordinary turn (Azure: "Response content blocked by label
+'Jailbreak'"). `content_filtered` recognizes such a refusal so the engine can retry the call, and record it, instead of
+losing the sample.
 """
 import json
 import re

@@ -1,9 +1,10 @@
 """Run the workweek benchmark for some models, professions and a time window, then print what happened.
 
-    uv run python scripts/run.py --models all --professions all --start "D1 09:00" --end "D1 09:10" --log-dir logs/sample
+    uv run python scripts/run.py --models run --professions all --start "D1 09:00" --end "D1 09:10" --log-dir logs/sample
 
---models and --professions take "all" or comma-separated names (model names from config/run.yaml; profession folder
-names under professions/). The full run goes in batches of three professions, so each batch's cost is known before
+--models takes "run" (the default: each lab's newest model on or before each `run.snapshots` date, and its latest; 20
+models), "all" (every model in config/run.yaml) or comma-separated names. --professions takes "all" or profession
+folder names under professions/. The full run goes in batches of three professions, so each batch's cost is known before
 the next starts; the run prints what each sample cost. Grade the logs afterwards with `python -m workweek.grade`.
 """
 import argparse
@@ -17,7 +18,7 @@ from workweek.engine import ROOT, workweek
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--models", default="all")
+    ap.add_argument("--models", default="run")
     ap.add_argument("--professions", default="all")
     ap.add_argument("--start", default="D1 00:00")
     ap.add_argument("--end", default="D5 23:59")
@@ -30,8 +31,8 @@ def main():
     missing = cfg.missing_credentials()
     if missing:
         raise SystemExit(f"missing credentials: {missing}")
-    names = None if a.models == "all" else set(a.models.split(","))
-    specs = [m for m in cfg.models if names is None or m.name in names]
+    names = None if a.models in ("all", "run") else set(a.models.split(","))
+    specs = cfg.run_models() if a.models == "run" else [m for m in cfg.models if names is None or m.name in names]
     if names and len(specs) != len(names):
         raise SystemExit(f"unknown models: {names - {m.name for m in specs}}")
     models = [get_model(m.model, config=GenerateConfig(**cfg.generate_for(m)), **m.model_args) for m in specs]

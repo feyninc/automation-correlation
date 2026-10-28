@@ -1,7 +1,6 @@
-# Design, v2 (2026-10-27)
+# Design
 
-What is built, how it fits together, and what is still open. v1 planned an LLM generator for the weeks; v2 replaces it
-with hand-written weeks and a deterministic compiler (owner, 10-26: "I want you to write the episodes").
+What is built and how it fits together.
 
 ## 1. Question and measures
 
@@ -19,9 +18,9 @@ how fast is it changing across model releases?
 | Path | What it is |
 | --- | --- |
 | `professions/<name>/` | one profession: `overview.md` (the week in plain English, with citations, and what an ideal assistant does), `week.yaml` (job, people, policies, standing documents), `day1.yaml`..`day5.yaml` and `day1b.yaml`..`day5b.yaml` (what happens each day); `episode/` (compiled: `profession.json` plus one JSON per date) and `report.md` (build report), generated |
-| `workweek/` | `schema.py` (Pydantic models), `compile.py` (forms to episodes, the audit), `apps.py` (the world as files), `world.py` (events, feed, ticks), `engine.py` (the Inspect AI task), `prompts.py`, `checks.py` (the shared check evaluator), `grade.py` (offline grading), `config.py`, `creds.py`, `providers.py`, `sandbox/` (Docker image) |
-| `config/run.yaml` | models, prices, judges and weights, the simulated worker, run settings |
-| `scripts/` | `run.py` (run models x professions over a window), `smoke_models.py` (one tool call per route), `probe_reasoning.py`, `speed.py` (OpenRouter speed snapshot for offline timing), `timeline.py` (release timeline and model set), `screen_occupations.py` |
+| `workweek/` | `schema.py` (Pydantic models), `compile.py` (forms to episodes, the audit), `apps.py` (the world as files), `world.py` (events, feed, ticks), `engine.py` (the Inspect AI task), `compaction.py` (conversation compaction), `prompts.py`, `checks.py` (the shared check evaluator), `grade.py` (offline grading), `config.py`, `creds.py`, `providers.py` (provider patches), `sandbox/` (Docker image) |
+| `config/run.yaml` | models, routes, prices, context windows, judges and weights, the simulated worker, run settings |
+| `scripts/` | `run.py` (run models x professions over a window), `smoke_models.py` (one tool call per route), `probe_reasoning.py`, `speed.py` (OpenRouter speed snapshot), `timeline.py` (release timeline and model set), `screen_occupations.py` |
 | `data/` | O*NET 31.0, Economic Index tables, BLS wages via O*NET OnLine, ECEC June 2026 multipliers, the ECI factor, release timelines, probe outputs (`data/README.md`) |
 | `logs/`, `results/` | run output (git-ignored) |
 
@@ -52,26 +51,17 @@ benchmark can find is bounded by that share; value per worker-week is reported a
 press-enter rate is over the planned work. Need counts differ more than workload: call-heavy jobs have many one-line
 needs (a spoken answer is 0.3 minutes), analyst jobs fewer, larger ones.
 
-### How the weeks were built
+### How the weeks are built and checked
 
-The first version of each week (10-26 to 10-27) was written by hand from primary sources. On 10-27 each was brought to
-realistic volume (owner: "volume 100% needs fixing", hours to fill the day) by a subagent per profession (two for
-customer service) working from one spec: daily email, chat and call targets from the volume research (section 10),
-the time budget at 80-110% every day, about one new trap per eight needs, verified sources for every rule a need
-turns on, every number computed and written in the day file's header, intents without hindsight. The new material is
-in `day1b.yaml`..`day5b.yaml`; the first version is unchanged except for corrections. Each week was then reviewed
-before commit: the audit (compile, time budget, volume, intents, placeholders, findability, source links), every
-header figure recomputed, the rules a need turns on checked against the statute or regulation text, the code in the
-developer week run (19 tests pass on Friday's repository), and checks that only accepted the worker's own wording
-widened. The review found no arithmetic error in the new material except one deadline count (claims payments due
-11/16, not 11/13); the builds and the review found errors in the first versions, now fixed: an indirect-cost base on
-the pre-2024 2 CFR 200.1 rule, a fiscal note missing 2031-33, a UTC conversion after the DST change, PR numbers out of
-order, a battery-backup reply that contradicted 47 CFR 9.20, a wrong Ins. Code subsection, unquoted "#" that cut
-YAML values short, and several stale links.
-
-Each week then got its `overview.md` (10-27), written from the reviewed forms: every count and claim checked against
-the day files and policies, every link fetched (bls.gov, ftc.gov, pcma.org and FindLaw refuse scripted requests; those links are the pages' own
-published addresses).
+Each week is written from primary sources. The day files carry the week's main cases (`dayN.yaml`) and its realistic
+volume (`dayNb.yaml`: the rest of the day's mail, chat, calls, meetings and smaller needs), built to one spec: daily
+email, chat and call targets from the volume research, the time budget at 80-110% of every day, about one trap per
+eight needs, a verified source for every rule a need turns on, every number computed and written in the day file's
+header, intents without hindsight. Every week passes the audit (below) and was reviewed: header figures recomputed,
+the rules a need turns on checked against the statute or regulation text, the developer week's code run (19 tests
+pass on Friday's repository), checks widened where they accepted only the worker's own wording. Each `overview.md`
+is written from the forms, with every count and claim checked against the day files and policies and every link
+opened.
 
 Known simplifications: HB 1214 has a bill number on 11/2, before Washington's pre-filing would give it one; market
 research and software development have no phone app, so their calls are timed activity only; traffic is about half of
@@ -98,8 +88,7 @@ continue an earlier thread (same id, new exchanges, optional state change) or ad
   line, or `ref_text` when the worker never does it), the code check, the rubric (`must`, `must_not`), minutes to do it
   unaided with their basis, and the worker's private intent (used only by the simulated worker). An intent is what
   the worker thinks when the need appears: no hindsight about later days, and the method rather than a computed
-  answer (a 10-27 review removed five hindsight intents, one of which gave away a need's answer, and five computed
-  credit amounts; 10 of 567 intents still contain a number a check needs, all facts the worker was told).
+  answer; a number a check needs appears in an intent only when the worker was told it.
 - **Traffic**: recurring low-information items (system notifications, digests, channel chatter) as templates
   (`traffic:`: app, path, sender, `per_day`, varied `items`), expanded deterministically over the worker's hours;
   real systems send templated mail, and machine-generated mail is over 60% of email traffic (Ailon et al. 2013).
@@ -109,7 +98,7 @@ continue an earlier thread (same id, new exchanges, optional state change) or ad
   its source, and `worker_mistakes` (the worker's own actions the trap is allowed to match).
 
 No rule is planted to make a case decidable by lookup alone: the policies are the employer's ordinary ones, and the
-cases turn on reading the facts against them (owner, 10-26).
+cases turn on reading the facts against them.
 
 ### Compiler and audit (`python -m workweek.compile professions/<name>`)
 
@@ -130,9 +119,8 @@ audit fails the build on:
 The build report lists counts per day and app, the time budget per day (the needs the worker does, other timed work,
 lunch and 20 s to skim each inbound item, against the minutes present; a warning outside 80-110%), the task mix
 against O*NET frequency and importance, and warnings.
-A separate findability check (run during the build-out) looked for identifiers and numbers a need's check expects that
-appear nowhere the model could see before the deadline; it found one real gap (a deductible known only from the
-worker's call), now fixed, and otherwise only derived figures.
+Every identifier and number a need's check expects appears somewhere the model can see before the deadline, except
+figures the work itself derives (checked by script across all weeks).
 
 ### Where the facts come from
 
@@ -168,41 +156,44 @@ version of each document; a call's turns, then the worker's case note), plus `/w
 
 ## 5. The engine (`workweek/engine.py`, an Inspect AI task)
 
-- **Clock:** simulated, around the clock from Monday 00:00 to Friday 23:55, a tick every `cadence_minutes` (default 5;
-  owner, 10-27: "an agent never sleeps"). Each tick says whether the worker is at work (`worker.hours` per day) and
-  when they are next in; mail and traffic that arrive overnight reach the assistant when they arrive, and what it
-  proposes while the worker is away waits for them. The worker's departure tick is an end-of-day turn. A question
-  asked while the worker is away is not answered (it costs the worker only its reading). Before each tick the engine
-  writes the world as of that moment. Nothing waits on a model: the clock stops while it works, and every timing
-  question (did a call line arrive in time?) is answered offline in grading from the tokens it used.
+- **Clock:** simulated, around the clock from Monday 00:00 to Friday 23:55, a tick every `cadence_minutes` (5), since
+  an assistant does not sleep. Each tick says whether the worker is at work (`worker.hours` per day) and when they
+  are next in; mail and traffic that arrive overnight reach the assistant when they arrive, and what it proposes
+  while the worker is away waits for them. The worker's departure tick is an end-of-day turn. A question asked while
+  the worker is away is not answered (it costs the worker only its reading). Before each tick the engine writes the
+  world as of that moment. Nothing waits on a model: the clock stops while it works, and every timing question (did
+  a call line arrive in time?) is answered offline in grading from the tokens it used.
 - **Agent:** one conversation for the week; each tick is a multi-turn tool loop ending at `wait` or after
-  `max_tool_calls_per_tick` (25). Nothing in it is trimmed (owner, 10-27): each model runs at the largest context
-  window its route offers (`context_window` in `config/run.yaml`). The conversation is compacted when its input
-  reaches `compact_at` (80%) of that window, and between days as `overnight` says: `compact` (the default, a
-  checkpoint at midnight), `clear` (a fresh conversation each morning, as before 10-27) or `custom` (a function named
-  in `overnight_function`). Compaction follows OpenCode's default (`workweek/compaction.py`; anomalyco/opencode,
-  `packages/core/src/session/compaction.ts`): the model writes its own summary in a fixed template (the worker's
-  week, open work, proposals and promises, decisions and rules, facts and figures, done, next, relevant files) under
-  OpenCode's rules (terse bullets, exact identifiers, only what is still open, no mention of compaction); the newest
-  15,000 tokens (at most a quarter of the compaction threshold, sized with the model's own characters per token,
-  measured on its last call) are kept word for word beside it in one `<conversation-checkpoint>` message; the
-  summary request is
-  the conversation unchanged plus the prompt, so it reads the prompt cache; a later compaction updates the
-  checkpoint; a reply that skips the template gets one reminder; a request the provider rejects as too long is
-  resent as a transcript with tool outputs cut. The same procedure runs for every model: OpenAI's native compaction
-  returns an encrypted item only OpenAI models can read ("opaque and not intended to be human-interpretable"), and
-  OpenCode itself uses native compaction only where a user opts in. Compaction is the harness's: its tokens are
-  recorded in the sample (`compaction_usage`) and not charged to the model. Earlier runs shortened every tool output
-  older than six ticks, which broke the prompt cache on every call: in the volume pilot, cache writes were $58 of
-  Opus 4.8's $94.50 for two days. A call a provider's content filter blocks is tried three times, then recorded
-  (`filtered_calls`) and the turn ends; the sample goes on. Tools: `bash` (Docker, no network,
+  `max_tool_calls_per_tick` (25). Each model runs at the largest context window its route serves (`context_window`),
+  and nothing in the conversation is trimmed: editing earlier turns would break the prompt cache and make every call
+  rewrite it (on a pilot day with per-tick trimming, cache writes were 61% of Opus 4.8's cost).
+- **Compaction** (`workweek/compaction.py`): when the input reaches `compact_at` (0.8) of the window, and between
+  days as `overnight` says: `compact` (a checkpoint at midnight; the default), `clear` (a fresh conversation each
+  morning) or `custom` (a function named in `overnight_function`, `"module:function"`, with the signature of
+  `compaction.compact`). The procedure is OpenCode's default (anomalyco/opencode,
+  `packages/core/src/session/compaction.ts`), the same for every model:
+  - the model writes its own summary in a fixed template (the worker's week, open work, proposals and promises,
+    decisions and rules, facts and figures, done, next, relevant files) under OpenCode's rules (terse bullets, exact
+    identifiers, only what is still open, no mention of compaction);
+  - the newest 15,000 tokens (at most a quarter of the compaction threshold, sized with the model's own characters
+    per token from its last call) are kept word for word beside it; later requests open with one
+    `<conversation-checkpoint>` message holding both;
+  - the summary request is the conversation unchanged plus the prompt, so it reads the prompt cache; a later
+    compaction updates the checkpoint; a reply that skips the template gets one reminder; a request the provider
+    rejects as too long is resent as a transcript with tool outputs cut.
+
+  Native compaction is not used: OpenAI's returns an encrypted item only OpenAI models can read ("opaque and not
+  intended to be human-interpretable"), and OpenCode uses native compaction only where a user opts in. Compaction is
+  the harness's: its tokens are recorded in the sample (`compaction_usage`) and not charged to the model.
+- **Content filters:** a call a provider's filter blocks is tried three times, then recorded (`filtered_calls`) and
+  the turn ends; the sample goes on. Tools: `bash` (Docker, no network,
   non-root), `propose(target, action, drafts[1-3], note)` with actions reply, new, forward, edit, schedule, update,
   say and flag (a new or forwarded message must name its recipients); `ask_worker(question)`; `join_call(path)` /
   `leave_call()` (a turn after every caller line while joined; a model that joins before the worker answers the
   caller's last line gets that line first); `wait()`. A call ends at its last spoken turn; a case note written
   afterwards does not keep it live.
 - **System prompt:** fixed harness instructions plus the profession's `profession_prompt` (`workweek/prompts.py`).
-- **Simulated worker** (`user_model`, Gemini 4 Argon, owner 10-26): answers `ask_worker` in at most three sentences.
+- **Simulated worker** (`user_model`, Gemini 4 Argon): answers `ask_worker` in at most three sentences.
   A fixed system prompt (`WORKER_SYSTEM`: stay in character, answer only what was asked, use only what the case says,
   claim an action only if the activity shows it) and a case (`WORKER_CASE`: `<you>` the worker, employer, moment and
   profession prompt; `<your_views>` the intents of the needs discoverable by then; `<what_has_happened>` the last 25
@@ -247,8 +238,8 @@ version of each document; a call's turns, then the worker's case note), plus `/w
 6. **Call timing (offline):** a line proposed on a call counts only if it would have reached the worker in time. The
    engine records, with each proposal, the output tokens of every model call since the caller's line and the time
    its tools took; the grader converts tokens to seconds with the model's p50 time to first token and throughput:
-   OpenRouter's week averages for 2026-10-20 to 2026-10-27, best provider, at the run's reasoning levels, read by the
-   owner from the model pages (`run.speed_file`, `data/openrouter/speed-week-2026-10-20.csv`; `scripts/speed.py`
+   OpenRouter's week averages for 2026-10-20 to 2026-10-27, best provider, at the run's reasoning levels, read from
+   the model pages (`run.speed_file`, `data/openrouter/speed-week-2026-10-20.csv`; `scripts/speed.py`
    snapshots the last 30 minutes per route as a cross-check, `speed-snapshot-2026-10-27.csv`), adds the worker
    reading the line's first 10 words, and compares with the caller's patience (strict) or the caller's line plus
    patience (streaming, as if the assistant heard the line as it was spoken: an upper bound). A late line is dropped
@@ -266,7 +257,7 @@ version of each document; a call's turns, then the worker's case note), plus `/w
    refocus" is in neither of Mark's papers; Mark, Gonzalez and Harris 2005 measured 25 minutes until people returned to
    an interrupted task, doing other work meanwhile.
 
-### Making judging easy, and what it bought
+### Making judging easy, and what it buys
 
 Judges do not see the episode's history or the model's notes, and should not have to: a draft is right or wrong
 against the world, whatever the model's process. So the packet hands them what checking needs.
@@ -274,24 +265,25 @@ against the world, whatever the model's process. So the packet hands them what c
 - **Draft facts:** every identifier (claim and account numbers, emails, dates, times), amount and person in the drafts,
   located deterministically in the world as of the proposal (file and line), or marked as in the worker's own version
   (computed), or as found nowhere (computed from other figures, or invented). Where a fact came from (a file read days
-  earlier, the model's notes) no longer matters.
+  earlier, the model's notes) does not matter.
 - **Open work and history:** the planned work open at that moment with whether the worker had done it, and what the
   worker and the assistant had already done on the matter, so "already done" and "duplicate" can be judged at all.
 - **Checklist before the score**, with the score bounded by it (not needed: 0-9; wrong place, facts or authority: at
   most 49 unless the fix is a few words).
 
-Measured on the same proposals graded with the old and the new prompt (63 from the claims sample, 40 from six models
-in the customer-service sample): agreement on accept (score at least 50) stayed at Fleiss kappa 0.34-0.44 and the
-typical spread across judges barely moved, while judges became 4-8 points stricter. Where old and new grades differed
-most, the new ones were right: a draft naming a caller with an email the draft-facts lookup located on another
-customer's account fell from 60 to 2; a QA dispute that was Marisol's planned work rose from 27 to 69. So the packet
-buys validity, not agreement, at about 60% more judge cost ($0.16 a proposal against $0.10).
+Measured against a bare packet (the proposal and the files only) on the same proposals (63 from the claims sample,
+40 from six models in the customer-service sample): agreement on accept (score at least 50) is Fleiss kappa
+0.34-0.44 with either, and the typical spread across judges is about the same, while judges are 4-8 points
+stricter with the full packet. Where the two grades differ most, the full packet's are right: a draft naming a
+caller with an email the draft-facts lookup locates on another customer's account scores 2 rather than 60; a QA
+dispute that was Marisol's planned work scores 69 rather than 27. So the packet buys validity, not agreement, at
+about 60% more judge cost ($0.16 a proposal against $0.10).
 
 The disagreement that remains is mostly in level, not ranking: each judge correlates 0.72-0.94 with the mean of the
 other six, and with judges' offsets removed the seven-judge panel's reliability is ICC(3,k) 0.90-0.94. The offsets
-are large (Claude Opus 5.5 about -12 points, Kimi K3 +8, GLM-5.3 +6), which made leaving out the tested family shift
-scores by family: Claude models +1.8 points, Kimi -1.4, GLM -1.0. Calibrating offsets over the run removes it
-(-0.2, -0.1, 0.0). Remaining checks: hand grades for accuracy, and agreement on the full run.
+are large (Claude Opus 5.5 about -12 points, Kimi K3 +8, GLM-5.3 +6); without calibration, leaving out the tested
+family would shift scores by family (Claude models +1.8 points, Kimi -1.4, GLM -1.0), and with offsets calibrated
+over the run the shift is -0.2, -0.1 and 0.0.
 
 ### Crediting work, and why
 
@@ -333,34 +325,51 @@ and profession: ticks, proposals, questions, needs caught, traps fired, press-en
 
 ## 7. Models, routes and reasoning (`config/run.yaml`)
 
-27 models: each lab's main line, the model in force on 2026-01-01 and every release since (OpenAI GPT-5.2 to 6.1 Sol;
-Claude Opus 4.5 to 5.5; Kimi K2 Thinking to K3.1 Pro; DeepSeek V3.2 to V4.1 Flash 1017; GLM-4.7 to 5.3), from
-`scripts/timeline.py`. Routes: OpenAI's API for GPT; Bedrock for Claude, Kimi K3 and GLM-4.7/5; Azure Foundry for DeepSeek
-and Kimi where offered; OpenRouter with a pinned provider and no fallback otherwise. Credits come first (owner, 10-27):
-the 10-27 catalogs have no Kimi K2 Thinking, K3, K3.1 Pro, DeepSeek V4.1 Flash 1017 or any GLM on Azure; Bedrock has
-Kimi K2 Thinking, K3 and GLM-5.3 but not K3.1 Pro, GLM-5.1, 5.2 or DeepSeek V4.1 Flash 1017. Kimi K2 Thinking stays on
-OpenRouter: on Bedrock, every answer after a tool result (8 of 8 tries) came back with its reasoning as text, usually
-an unclosed `<think>`, which cannot be separated from the answer. GLM-5.3 on Bedrock has a 0 quota and is refused
-("not available for this account"). Kimi K3 moved to Bedrock after a tool-call test, the same prompt caching as
-Moonshot's API (18,081 of 18,117 input tokens read from cache) and the reasoning setting passed through.
+The config holds each lab's main line from the model in force on 2026-01-01 through every release since (27 models,
+from `scripts/timeline.py`). The run uses 20 of them (`run.snapshots`, `config.run_models()`, the default of
+`scripts/run.py --models`): for each lab, its newest model released on or before 1 January, 30 April and 31 July
+2026, and its latest model as of the run.
 
-Context windows are the largest each route serves, checked on 10-27 with long prompts where no catalog gives the
-route's own limit: Opus 4.6 to 5.5 1M on Bedrock with no beta setting (Opus 4.6 answered a 505,023-token prompt),
-Opus 4.5 200k; GPT-5.4 and later 1.05M, GPT-5.2 400k (OpenAI prices prompts over 272k at twice the input rate);
-Kimi K3 and K3.1 Pro, DeepSeek V4 and V4.1, GLM-5.2 and 5.3 about 1M (K3 on Bedrock and DeepSeek V4 and V4.1 on
-Azure each answered a 398,000-token prompt); Kimi K2 Thinking, K2.5 and K2.6 262,144 (K2.5 on Azure took 251,722);
-GLM-4.7, GLM-5 and GLM-5.1 202,752 (Bedrock refused 200,753 input tokens plus 2,000 output); DeepSeek V3.2 on Azure
-131,072 (it refused 156,721).
+| In force on | OpenAI | Anthropic | Moonshot | DeepSeek | Z.ai |
+| --- | --- | --- | --- | --- | --- |
+| 2026-01-01 | GPT-5.2 | Claude Opus 4.5 | Kimi K2 Thinking | DeepSeek V3.2 | GLM-4.7 |
+| 2026-04-30 | GPT-5.5 | Claude Opus 4.7 | Kimi K2.6 | DeepSeek V4 Flash | GLM-5.1 |
+| 2026-07-31 | GPT-5.6 Sol | Claude Opus 5 | Kimi K3 | DeepSeek V4 Flash 0731 | GLM-5.2 |
+| Latest | GPT-6.1 Sol | Claude Opus 5.5 | Kimi K3.1 Pro | DeepSeek V4.1 Flash 1017 | GLM-5.3 |
 
-Content filters are off wherever we can turn them off (owner, 10-27). Azure's default (`Microsoft.DefaultV2`)
-blocked ordinary DeepSeek turns on the budget-analyst week as jailbreaks (a tick at 08:30, then a compaction
-summary), because the weeks carry phishing and social-engineering messages by design. The six Azure deployments use
+The rule is fixed in advance and the same for every lab: the best model a customer of each lab could use on each
+date. A slope against release date is set mostly by the spread of dates, so releases weeks apart add little; four
+points a lab span the period and show its shape. The analysis places each model at its own release date, so the
+uneven gaps between snapshot dates (four months, then three and three) do not matter. The other seven configured
+models (GPT-5.4, GPT-6 Sol, Claude Opus 4.6 and 4.8, Kimi K2.5, DeepSeek V4.1 Flash, GLM-5) can be run as a side
+check with `--models` naming them.
+
+Routes: OpenAI's API for GPT; Bedrock for Claude, Kimi K3 and GLM-4.7/5; Azure Foundry for DeepSeek V3.2 to V4.1
+Flash and Kimi K2.5/K2.6; OpenRouter with a pinned provider and no fallback for the rest. Credits are used wherever a
+route offers the model: Azure's catalog has no Kimi K2 Thinking, K3 or K3.1 Pro, no DeepSeek V4.1 Flash 1017 and no
+GLM; Bedrock has no Kimi K3.1 Pro, GLM-5.1, GLM-5.2 or DeepSeek V4.1 Flash 1017. Kimi K2 Thinking runs on
+OpenRouter because on Bedrock its answers after a tool result carry its reasoning as text, usually an unclosed
+`<think>` (8 of 8 tries), which cannot be separated from the answer. GLM-5.3 runs on OpenRouter because Bedrock lists
+it but refuses calls for this account. Kimi K3 on Bedrock makes structured tool calls, caches prompts as Moonshot's
+API does (18,081 of 18,117 input tokens read from cache on a repeat) and takes the reasoning setting.
+
+Context windows are the largest each route serves, checked with long prompts where no catalog gives the route's own
+limit: Opus 4.6 to 5.5 1M on Bedrock with no beta setting (Opus 4.6 answers a 505,023-token prompt), Opus 4.5 200k;
+GPT-5.4 and later 1.05M, GPT-5.2 400k (OpenAI prices prompts over 272k at twice the input rate and 1.5 times the
+output rate; calls over that are recorded in `long_context_usage` and priced so); Kimi K3 and K3.1 Pro, DeepSeek V4
+and V4.1, GLM-5.2 and 5.3 about 1M (K3 on Bedrock and DeepSeek V4 and V4.1 on Azure each answer a 398,000-token
+prompt); Kimi K2 Thinking, K2.5 and K2.6 262,144 (K2.5 on Azure takes 251,722); GLM-4.7, GLM-5 and GLM-5.1 202,752
+(Bedrock refuses 200,753 input tokens plus 2,000 output); DeepSeek V3.2 on Azure 131,072 (it refuses 156,721).
+
+Content filters are off wherever they can be turned off. The weeks carry phishing and social-engineering messages by
+design, which Azure's default filter (`Microsoft.DefaultV2`) blocks as jailbreaks. The six Azure deployments use
 `benchmark-minimal-filters`: jailbreak, indirect-attack and protected-material checks off, and the four harm
 categories at their most permissive setting, blocking only high severity; turning those off needs Microsoft's
-approval for modified content filtering (aka.ms/oai/rai/exceptions), which Azure refused without. Bedrock applies no
-guardrail unless a request names one, and none does; OpenAI's API and OpenRouter have no filter to configure. Every model runs at its lab's
-medium reasoning setting, set on every call (owner, 10-26), except DeepSeek, which has no medium and runs at high
-(owner, 10-27):
+approval for modified content filtering (aka.ms/oai/rai/exceptions). Bedrock applies no guardrail unless a request
+names one, and none does; OpenAI's API and OpenRouter have no filter to configure.
+
+Every model runs at its lab's medium reasoning setting, set on every call, except DeepSeek, which has no medium and
+runs at high:
 
 | Model (route) | Default, observed | Medium is sent as |
 | --- | --- | --- |
@@ -394,25 +403,26 @@ it does not measure how much a model thinks on real work. Caveats:
 - GLM-4.7 and GLM-5 on Bedrock sometimes write a tool call as text in GLM's own syntax instead of a structured call;
   `workweek/providers.py` recovers those, and each run records how many (`recovered_tool_calls`).
 
-The judges are each provider's best model at medium (owner, 10-27): Claude Opus 5.5 (Bedrock), GPT-6 Astra (OpenAI,
-through the Batch API), Gemini 4 Argon (OpenRouter, Google Vertex), Kimi K3.1 Pro (OpenRouter, Moonshot), DeepSeek
-V4.1 Flash 1017 at high (OpenRouter, DeepInfra), Qwen3.8 Max Prime (OpenRouter, Alibaba) and GLM-5.3 (OpenRouter,
-Z.ai). The simulated worker is Gemini 4 Argon at medium. A smoke test on 10-27 (`data/smoke-models.csv`) had every
-tested model, judge and the simulated worker make its tool call on its route at these settings.
+The judges are each provider's best model at medium: Claude Opus 5.5 (Bedrock), GPT-6 Astra (OpenAI, through
+the Batch API), Gemini 4 Argon (OpenRouter, Google Vertex), Kimi K3.1 Pro (OpenRouter, Moonshot), DeepSeek V4.1
+Flash 1017 at high (OpenRouter, DeepInfra), Qwen3.8 Max Prime (OpenRouter, Alibaba) and GLM-5.3 (OpenRouter, Z.ai).
+The simulated worker is Gemini 4 Argon at medium. The smoke test (`data/smoke-models.csv`) has every model, judge and
+the simulated worker make its tool call on its route at these settings.
 
 Who pays follows from the route (`workweek.config.billing`), and `scripts/run.py` and `workweek.grade` print each
 run's cost split the same way:
 
-| Billing | Tested models | Judges and the simulated worker |
+| Billing | Run models | Judges and the simulated worker |
 | --- | --- | --- |
-| Bedrock credits | Claude Opus 4.5, 4.6, 4.7, 4.8, 5, 5.5; Kimi K3; GLM-4.7, GLM-5 (9) | judge Claude Opus 5.5 |
-| Azure credits | Kimi K2.5, K2.6; DeepSeek V3.2, V4 Flash, V4 Flash 0731, V4.1 Flash (6) | none |
-| OpenAI credits | GPT-5.2, 5.4, 5.5, 5.6 Sol, 6 Sol, 6.1 Sol (6) | judge GPT-6 Astra (Batch API) |
+| Bedrock credits | Claude Opus 4.5, 4.7, 5, 5.5; Kimi K3; GLM-4.7 (6) | judge Claude Opus 5.5 |
+| Azure credits | Kimi K2.6; DeepSeek V3.2, V4 Flash, V4 Flash 0731 (4) | none |
+| OpenAI credits | GPT-5.2, 5.5, 5.6 Sol, 6.1 Sol (4) | judge GPT-6 Astra (Batch API) |
 | OpenRouter (paid) | Kimi K2 Thinking, K3.1 Pro; DeepSeek V4.1 Flash 1017; GLM-5.1, 5.2, 5.3 (6) | judges Gemini 4 Argon, Kimi K3.1 Pro, DeepSeek V4.1 Flash 1017, Qwen3.8 Max Prime, GLM-5.3; the simulated worker (Gemini 4 Argon) |
 
 `workweek.config.load()` refuses duplicate names, unknown families, a model string without a provider prefix, a
-missing price, judge weights that do not sum to 1, two judges from one family, a dropout that leaves no weight, and a
-non-positive cadence; `missing_credentials()` lists routes without keys.
+model without a release date, price or context window, judge weights that do not sum to 1, two judges from one
+family, a dropout that leaves no weight, a non-positive cadence, a `compact_at` outside (0, 1], and an `overnight`
+of `custom` without `overnight_function` (or the reverse); `missing_credentials()` lists routes without keys.
 
 ## 8. Economics
 
@@ -423,35 +433,27 @@ Ageing to the run quarter: the ECI factor in `data/eci.yaml`, a placeholder of 1
 reading 238 (Brysbaert 2019). Each need's minutes are estimates with their basis stated; no time-use study exists for
 most of these tasks.
 
-## 9. Status (2026-10-27)
+## 9. Status
 
-- All 11 weeks compile with 0 audit errors; all 27 routes pass a tool-call smoke test (`data/smoke-models.csv`).
-- Three samples of 10 simulated minutes on all 27 models: customer service D1 13:15-13:25 and 09:15-09:25 (with a
-  live call), claims D1 11:00-11:10 (a live call, then the written offer). Every model completed every sample.
-- Questions: in the first sample four models asked six (GPT-6.1 Sol, Claude Opus 5, DeepSeek V3.2 three, GLM-5); the
-  simulated worker (Gemini 4 Argon) answered each from the worker's intents, once claiming an action the worker had
-  not taken, which its prompt now forbids.
+- All 11 weeks compile with 0 audit errors; every route passes the tool-call smoke test (`data/smoke-models.csv`).
+- Three samples of 10 simulated minutes on all 27 models (customer service Monday 13:15-13:25 and 09:15-09:25, with a
+  live call; claims Monday 11:00-11:10, a live call and then the written offer): every model completed every sample.
+  In the first, four models asked six questions (GPT-6.1 Sol, Claude Opus 5, DeepSeek V3.2 three, GLM-5); the
+  simulated worker answered each from the worker's intents.
 - The claims sample, graded with all seven judges: 497 judge calls, no errors; 15 models caught each of the three
   needs in the window (both call lines and the written offer); mean panel score 0.43 to 0.92 by model; token cost
   $0.003 to $0.50 a model for the 10 minutes.
-- The samples found and fixed: calls kept live by their case notes; a joined model missing the caller's opening
-  line; 65 call-line windows that disagreed with the compiled turn times (now derived); GLM tool calls written as
-  text on Bedrock (recovered); judges given too little context (median spread across judges fell from over 80 points
-  to 29 with the files the model opened); token cost charging the simulated worker and double-counting cache reads;
-  phishing traps firing on correct reports; new messages without recipients (now refused).
+- Compaction runs end to end: with the window set to 30,000 tokens, budget analysts Monday 16:00 to Tuesday 08:30,
+  GPT-6.1 Sol compacts at midnight and at 04:55 and Claude Opus 4.8 at 19:35, midnight and 08:30; each summary
+  request reads 95-98% of its input from the cache, and each checkpoint is about 10,000 tokens.
+- Running: the cost of a full day in the current harness (Claude Opus 4.8 and GPT-6.1 Sol, operations managers,
+  Monday 00:00-23:55, full windows; `logs/cost-check-ops-d1`).
 
 ### Cost
 
-Spent on 2026-10-27: about $17 on tested models for the three samples, under $0.05 on the simulated worker, and about
-$7 to $11 per full grading of the claims sample (several gradings while fixing the grader); about $60 in all.
-
-The pilot below ran with the old trimming, which rewrote the prompt cache on every call; with no trimming and
-compaction at 80% the cost has to be measured again, and these figures are an upper bound for cache writes and a
-lower bound for context length.
-
-The full run is sized from the volume pilot (`logs/pilot-volume-d1`, 10-27): Claude Opus 4.8, GPT-6.1 Sol and
-DeepSeek V4.1 Flash on the expanded budget-analyst and operations-manager weeks, Monday 00:00-23:55, the 24-hour clock.
-Budget analysts are the lightest week (79 inbound items a day), operations managers the heaviest (272).
+A full day was measured with per-tick trimming of tool outputs older than six ticks (`logs/pilot-volume-d1`):
+Claude Opus 4.8, GPT-6.1 Sol and DeepSeek V4.1 Flash on budget analysts (the lightest week, 79 inbound items a day)
+and operations managers (the heaviest, 272), Monday 00:00-23:55.
 
 | Model | Profession | Calls | Input (cache share) | Output | Proposals | Cost | Wall clock |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -461,27 +463,24 @@ Budget analysts are the lightest week (79 inbound items a day), operations manag
 | GPT-6.1 Sol | operations managers | 597 | 23.8M (84%) | 33k | 68 | $9.74 | 43 min |
 | DeepSeek V4.1 Flash | budget analysts | 501 | 28.9M (96%) | 91k | 17 | $1.30 | 53 min |
 
-- Tested models, one seed (27 models x 55 profession-days): about $29,000. Each model is priced on its family's
-  pilot tokens (Claude on Opus 4.8's, GPT on GPT-6.1 Sol's, the rest on DeepSeek's budget day scaled by the 1.87
-  budget-to-operations ratio the other two show), at its own prices, with full input price on the routes that do not
-  cache (DeepSeek V3.2 on Azure, GLM-4.7 and GLM-5 on Bedrock). The six Claude models are $14,700 of it; GLM-5 and
-  GLM-4.7 on Bedrock $3,700, because they do not cache.
-- Judges: 38.6 proposals a profession-day, so about 57,000 a seed; at $0.16 a proposal about $9,200.
-- Per seed in all: about $38,000, on the mean of the lightest and heaviest week; three seeds about $115,000. A
-  batch of three professions is 3/11 of a seed, about $10,400.
-- By billing, per seed: Bedrock credits about $23,000 (Claude, Kimi K3, GLM-4.7/5, the Opus judge), OpenAI credits
-  $4,400, Azure credits $2,400, OpenRouter $8,300 (the only cash; $5,000 of it judging). Judge shares are from the
-  claims grading (Opus 5.5 about 38%, GPT-6 Astra at its batch price about 8%, the five OpenRouter judges about 55%).
+On those token profiles (Claude on Opus 4.8's, each Claude model scaled by its cost relative to Opus 4.8 on the
+27-model samples; GPT on GPT-6.1 Sol's; the rest on DeepSeek's), at each model's own prices, with full input price on
+the routes that do not cache (DeepSeek V3.2 on Azure, GLM-4.7 on Bedrock), one seed of the 20-model run (20 models x
+55 profession-days) is about $30,000: tested models $23,400 (Claude $13,000, Opus 5 alone $5,900), judges $6,800
+(38.6 proposals a profession-day at $0.16). By billing: Bedrock credits about $18,000, OpenAI credits $3,200, Azure
+credits $2,000, OpenRouter $7,100 (the only cash; $3,700 of it judging). A batch of three professions is 3/11 of a
+seed. The current harness rewrites the cache only after a compaction, so its cost is expected to be lower; the
+running measurement replaces these figures.
+
 - The clock: 24-34% of a day's input tokens go to ticks before 7:00 and after 18:00, when the worker is away and a
-  model mostly waits; each such tick is one call over the whole context, which is longest late in the day.
-- Caveats: one day (Monday) of two professions; customer service, with 30-40 live calls a day, is not in the pilot;
-  the judge cost per proposal is from the claims grading.
-- Wall clock: a profession-day took 24-60 minutes; the batch's slowest model sets its pace.
+  model mostly waits.
+- Wall clock: a profession-day takes 24-97 minutes; the batch's slowest model sets its pace.
 
 ## 10. Open
 
 - Coverage: needs are 26-59% of the hours present (section 3); value is per benchmark week and the press-enter rate
   is over that work, not the whole job, unless scaled by task time shares.
 - ECI factor on 2026-10-30.
-- Hand grades (about 100 proposals) and judge agreement; the friction (1.5) and rewrite threshold (0.5) sensitivity.
-- How many seeds: at about $38,000 a seed (section 9), the owner's decision.
+- Hand grades (about 100 proposals) for judge accuracy; judge agreement on the full run; the friction (1.5) and
+  rewrite threshold (0.5) sensitivity.
+- How many seeds.

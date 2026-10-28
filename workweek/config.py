@@ -81,6 +81,7 @@ class RunSettings(BaseModel):
     compact_at: float = 0.8             # share of a model's context window at which its conversation is compacted
     overnight: Literal["compact", "clear", "custom"] = "compact"   # what happens to the conversation between days
     overnight_function: str = ""        # "module:function" for overnight: custom; see workweek/compaction.py
+    snapshots: list[dt.date] = []       # the run takes each lab's newest model on or before each date, and its latest
     send_arm: bool = False
     professions: list[str] | str = "all"
     eci_factor: dict[str, Any] = {"value": 1.0, "source": ""}
@@ -105,6 +106,8 @@ class RunConfig(BaseModel):
             if m.family not in KNOWN_FAMILIES:
                 errs.append(f"{m.name}: unknown family {m.family!r}")
         for m in self.models:
+            if m.released is None:
+                errs.append(f"{m.name}: released missing")
             if m.price is None:
                 errs.append(f"{m.name}: price missing")
             if not m.context_window:
@@ -131,6 +134,18 @@ class RunConfig(BaseModel):
         if errs:
             raise ValueError("config errors:\n  " + "\n  ".join(errs))
         return self
+
+    def run_models(self) -> list[ModelSpec]:
+        """For each lab: its newest model released on or before each snapshot date, and its latest; oldest first."""
+        out: dict[str, ModelSpec] = {}
+        for fam in sorted({m.family for m in self.models}):
+            line = sorted((m for m in self.models if m.family == fam), key=lambda m: m.released)
+            for d in self.run.snapshots:
+                before = [m for m in line if m.released <= d]
+                if before:
+                    out[before[-1].name] = before[-1]
+            out[line[-1].name] = line[-1]
+        return sorted(out.values(), key=lambda m: (m.released, m.name))
 
     def spec(self, model: str) -> ModelSpec:
         return next(m for m in self.models if m.model == model)

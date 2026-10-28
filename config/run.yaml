@@ -13,6 +13,7 @@ run:
   overnight_function: ""   # with custom: "module:function", called as compaction.compact is
   send_arm: false
   professions: all
+  snapshots: [2026-01-01, 2026-04-30, 2026-07-31]   # run: each lab's newest model on or before each date, and its latest
   eci_factor: {value: 1.0, source: "ECI wages and salaries, May 2025 to the run quarter; set on 2026-10-30 release"}
 
 user_model:
@@ -47,7 +48,7 @@ models:
   - {name: Kimi K2.6, model: openai-api/azure/kimi-k2.6, family: moonshot, context_window: 262144, released: 2026-04-20, price: {input: 0.95, output: 4, cache_read: 0.16}}
   - {name: Kimi K3, model: bedrock/global.moonshotai.kimi-k3, family: moonshot, context_window: 1048576, released: 2026-07-16, price: {input: 3, output: 15, cache_read: 0.3, cache_write: 3.75}}
   - {name: Kimi K3.1 Pro, model: openrouter/moonshotai/kimi-k3.1-pro, family: moonshot, context_window: 1048576, released: 2026-10-23, price: {input: 2, output: 10, cache_read: 0.2}, model_args: {provider: {order: [moonshotai], allow_fallbacks: false}}}
-  # DeepSeek: Azure Foundry where offered, else OpenRouter (DeepInfra fp8). DeepSeek has no medium: high (owner, 10-27)
+  # DeepSeek: Azure Foundry where offered, else OpenRouter (DeepInfra fp8). DeepSeek has no medium: high
   - {name: DeepSeek V3.2, model: openai-api/azure/deepseek-v3.2, family: deepseek, context_window: 131072, released: 2025-12-01, price: {input: 0.58, output: 1.68, cache_read: 0.058}, generate: {reasoning_effort: high}}
   - {name: DeepSeek V4 Flash, model: openai-api/azure/deepseek-v4-flash, family: deepseek, context_window: 1048576, released: 2026-04-24, price: {input: 0.21, output: 0.56, cache_read: 0.031}, generate: {reasoning_effort: high}}
   - {name: DeepSeek V4 Flash 0731, model: openai-api/azure/deepseek-v4-flash-0731, family: deepseek, context_window: 1048576, released: 2026-07-31, price: {input: 0.21, output: 0.56, cache_read: 0.031}, generate: {reasoning_effort: high}}
