@@ -13,6 +13,7 @@ import csv
 import difflib
 import json
 import re
+import time
 from pathlib import Path
 
 from inspect_ai.log import list_eval_logs, read_eval_log
@@ -23,7 +24,8 @@ from .apps import document_file, render_world, thread_file
 from .engine import ROOT, load_episode
 from .schema import Episode, seconds, show
 
-PROPOSALS_IN_FLIGHT = 16    # proposals judged at once across all logs (each by the whole panel)
+PROPOSALS_IN_FLIGHT = 100   # proposals judged at once across all logs (each by the whole panel); <out>/control.json
+                            # {"judging": N} changes it live
 
 # ---------- matching proposals to the world ----------
 
@@ -462,7 +464,35 @@ def value(ep: Episode, p: dict, j: dict | None, earned: list, price, usage: dict
 # ---------- driver ----------
 
 
-async def grade_log(log, run: cfgmod.RunConfig, judges, gate: asyncio.Semaphore) -> list[dict]:
+class LiveGate:
+    """A concurrency limit read live from <out>/control.json ({"judging": N}); changing it changes no prompt."""
+
+    def __init__(self, control: Path | None, default: int):
+        self.control, self.default, self.active, self.checked, self.limit = control, default, 0, 0.0, default
+
+    def current(self) -> int:
+        if self.control and time.time() - self.checked > 5:
+            self.checked = time.time()
+            try:
+                self.limit = int(json.loads(self.control.read_text()).get("judging", self.default))
+            except (OSError, ValueError):
+                pass
+        return self.limit
+
+    async def __aenter__(self):
+        while self.active >= self.current():
+            await asyncio.sleep(0.5)
+        self.active += 1
+
+    async def __aexit__(self, *exc):
+        self.active -= 1
+
+
+JUDGED: dict[str, dict] = {}    # saved judgements by proposal key (<out>/judgements.jsonl), so a restart pays nothing twice
+JUDGED_FILE = None
+
+
+async def grade_log(log, run: cfgmod.RunConfig, judges, gate) -> list[dict]:
     speed = speeds(run)
     model_name = log.eval.model
     spec = next((m for m in run.models if m.model == model_name or model_name.endswith(m.model.split("/", 1)[-1])), None)
@@ -491,8 +521,16 @@ async def grade_log(log, run: cfgmod.RunConfig, judges, gate: asyncio.Semaphore)
                 for d in p["drafts"])
             earlier = [props_raw[k] for k in range(i) if props_raw[k]["target"] == p["target"] and p["target"] != "new"
                        or set(matched.get(k, [])) & set(matched.get(i, []))]
-            async with gate:
-                js = await judge_all(run, judges, judge_prompt(ep, p, relevant, earlier)) if judges else {}
+            key = f"{model_name}|{s.id}|{s.epoch}|{p['id']}"
+            if key in JUDGED:
+                js = JUDGED[key]
+            else:
+                async with gate:
+                    js = await judge_all(run, judges, judge_prompt(ep, p, relevant, earlier)) if judges else {}
+                if JUDGED_FILE and js and all("error" not in v for v in js.values()):
+                    JUDGED[key] = js
+                    JUDGED_FILE.write(json.dumps({"key": key, "judges": js}) + "\n")
+                    JUDGED_FILE.flush()
             return {"model": spec.name if spec else model_name, "profession": s.id, "epoch": s.epoch,
                     "proposal": p, "needs": [n.id for n in gets], "matches": [n.id for n in relevant],
                     "revises": props_raw[prev]["id"] if prev is not None else None, "timing": timing[i],
@@ -538,23 +576,60 @@ def main():
     ap.add_argument("--judges", default="all")
     ap.add_argument("--out", default=None)
     ap.add_argument("--no-batch", action="store_true", help="call batch-enabled judges directly (quick checks)")
+    ap.add_argument("--watch", action="store_true",
+                    help="grade each log as it finishes, until the batch's DONE file appears (scripts/batch.py)")
     a = ap.parse_args()
-    global NO_BATCH
+    global NO_BATCH, JUDGED_FILE
     NO_BATCH = a.no_batch
     creds.load()
     run = cfgmod.load(ROOT / "config/run.yaml")
     judges = [] if a.judges == "none" else [j for j in run.judges if a.judges == "all" or j.name in a.judges.split(",")]
     out = Path(a.out or ROOT / "results" / Path(a.logs).name)
-    logs = [read_eval_log(l.name) for l in list_eval_logs(a.logs)]   # read before the event loop starts
+    out.mkdir(parents=True, exist_ok=True)
+    saved = out / "judgements.jsonl"
+    if saved.exists():
+        for line in saved.read_text().splitlines():
+            r = json.loads(line)
+            JUDGED[r["key"]] = r["judges"]
+    JUDGED_FILE = open(saved, "a")
+    control = out / "control.json"
+    if not control.exists():
+        control.write_text(json.dumps({"judging": PROPOSALS_IN_FLIGHT}) + "\n")
+    gate = LiveGate(control, PROPOSALS_IN_FLIGHT)
 
-    async def grade_all():
-        gate = asyncio.Semaphore(PROPOSALS_IN_FLIGHT)
+    async def grade_all(logs):
         return [r for rows in await asyncio.gather(*(grade_log(lg, run, judges, gate) for lg in logs)) for r in rows]
 
-    rows = sorted(asyncio.run(grade_all()), key=lambda r: (r["model"], r["profession"], r["epoch"]))
+    async def watch():
+        seen, tasks = set(), []
+        while True:
+            finished = (Path(a.logs) / "DONE").exists()
+            for info in await asyncio.to_thread(list_eval_logs, a.logs):
+                if info.name in seen:
+                    continue
+                head = await asyncio.to_thread(read_eval_log, info.name, header_only=True)
+                if head.status == "started":
+                    continue
+                seen.add(info.name)
+                tasks.append(asyncio.create_task(grade_log(await asyncio.to_thread(read_eval_log, info.name), run,
+                                                           judges, gate)))
+            (out / "status.json").write_text(json.dumps({
+                "logs_graded_or_grading": len(seen), "proposals_judged": len(JUDGED), "judging_limit": gate.current(),
+                "judging_now": gate.active, "batch_done": finished,
+                "at": time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())}, indent=1) + "\n")
+            if finished:
+                break
+            await asyncio.sleep(60)
+        return [r for t in tasks for r in await t]
+
+    if a.watch:
+        rows = asyncio.run(watch())
+    else:
+        logs = [read_eval_log(l.name) for l in list_eval_logs(a.logs)]   # read before the event loop starts
+        rows = asyncio.run(grade_all(logs))
+    rows = sorted(rows, key=lambda r: (r["model"], r["profession"], r["epoch"]))
     offsets = judge_offsets([g for r in rows for g in r["graded"]])
     finish(run, rows, offsets)
-    out.mkdir(parents=True, exist_ok=True)
     (out / "judge_offsets.json").write_text(json.dumps(offsets, indent=1) + "\n")
     with open(out / "graded.jsonl", "w") as f:
         for r in rows:

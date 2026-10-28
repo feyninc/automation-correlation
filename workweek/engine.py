@@ -11,7 +11,9 @@ to the model.
 """
 from __future__ import annotations
 
+import asyncio
 import json
+import os
 import time
 from pathlib import Path
 
@@ -222,6 +224,15 @@ async def run_tool(sim: Sim, call, t: int) -> tuple[str, bool]:
     return f"Unknown tool {name}.", False
 
 
+async def pause_point() -> None:
+    """Wait while the batch's PAUSE file exists (scripts/batch.py sets WORKWEEK_CONTROL to the batch's log directory).
+    The simulated clock stops with it, so a pause changes nothing in the week; one over a provider's cache lifetime
+    (about five minutes on Bedrock) costs one cache rewrite of the conversation when it resumes."""
+    control = os.environ.get("WORKWEEK_CONTROL")
+    while control and (Path(control) / "PAUSE").exists():
+        await asyncio.sleep(15)
+
+
 async def compact_if_due(sim: Sim, model: Model, messages: list, force: bool = False) -> None:
     """Compact the conversation once its input reaches compact_at of the window, or now (midnight)."""
     if len(messages) <= 2:
@@ -373,6 +384,7 @@ def workweek_agent(run_path: str = "config/run.yaml", start: str = "D1 00:00", e
             for t in day_ticks:
                 if t < resume:
                     continue
+                await pause_point()
                 new = events(ep, sim.last, t)
                 await sim.sync(t, new)
                 sim.last = t
