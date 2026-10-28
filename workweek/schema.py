@@ -215,6 +215,7 @@ class Need(_M):
     worker_intent: str               # private: what the worker would decide and why (for the simulated worker)
     ledger_keys: list[str] = []      # figures this need depends on
     void: str = ""                   # why it is left out of grading (the week as run made it impossible), if it is
+    void_without_call_ticks: str = ""   # the same, only for runs without a tick at each call's start
 
     @model_validator(mode="after")
     def _window(self):
@@ -236,6 +237,7 @@ class Trap(_M):
     source: str = ""
     worker_mistakes: list[str] = []       # worker actions that deliberately fall for it (the script's own errors)
     void: str = ""                        # why it is left out of grading (it could never be set off), if it is
+    void_without_call_ticks: str = ""     # the same, only for runs without a tick at each call's start
 
 
 class Sourced(_M):

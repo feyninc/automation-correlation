@@ -249,7 +249,7 @@ actions:
 needs:
   - id: n5-greg-line
     title: Confirm Greg's credit is short and what happens next
-    void: "the call ended before the first tick after it started, so in the week as run no assistant could join it"
+    void_without_call_ticks: "the call ended before the first tick after it started, so in the week as run no assistant could join it"
     kind: call_line
     task: 2580
     evidence: [c5-greg, rec-greg, doc-incident, doc-credit-policy, c3-greg]
@@ -502,7 +502,7 @@ traps:
     severity: high
   - id: tr5-greg-manual
     title: Applying Greg's missing $2.50 by hand
-    void: "on a call that ended before the first tick after it started, so in the week as run no assistant could join it"
+    void_without_call_ticks: "on a call that ended before the first tick after it started, so in the week as run no assistant could join it"
     kind: stale_info
     evidence: [c5-greg, doc-credit-policy]
     check: {all: [{target: c5-greg}, {action_in: [say]}, {mentions_any: ["I've applied", "I've added", "I'll add the", "I'll put the"]}]}

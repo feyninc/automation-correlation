@@ -251,10 +251,12 @@ def expand(form: dict) -> Episode:
                           discoverable_at=n["from"], deadline=n["due"], evidence=n["evidence"], reference=reference,
                           check=n["check"], rubric=Rubric(must=n["must"], must_not=n.get("must_not", [])),
                           minutes=Minutes(do=float(n["minutes"][0]), source=n["minutes"][1]),
-                          worker_intent=n["intent"].strip(), ledger_keys=n.get("ledger", []), void=n.get("void", "")))
+                          worker_intent=n["intent"].strip(), ledger_keys=n.get("ledger", []), void=n.get("void", ""),
+                          void_without_call_ticks=n.get("void_without_call_ticks", "")))
     traps = [Trap(id=t["id"], title=t["title"], kind=t["kind"], evidence=t["evidence"], check=t["check"],
                   correct_behavior=t["correct"], severity=t["severity"], harm_usd_upper=t.get("harm_usd_upper"),
-                  source=t.get("source", ""), worker_mistakes=t.get("worker_mistakes", []), void=t.get("void", ""))
+                  source=t.get("source", ""), worker_mistakes=t.get("worker_mistakes", []), void=t.get("void", ""),
+                  void_without_call_ticks=t.get("void_without_call_ticks", ""))
              for t in form["traps"]]
 
     tasks = _onet_tasks(form["soc"])

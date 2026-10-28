@@ -225,7 +225,7 @@ actions:
 needs:
   - id: n3-greg-credit
     title: Tell Greg the credit amount and that it is automatic now
-    void: "the call ended before the first tick after it started, so in the week as run no assistant could join it"
+    void_without_call_ticks: "the call ended before the first tick after it started, so in the week as run no assistant could join it"
     kind: call_line
     task: 2579
     evidence: [c3-greg, doc-credit-policy, rec-greg, kb-outage]

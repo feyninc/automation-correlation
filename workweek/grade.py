@@ -148,7 +148,7 @@ def outcomes(ep: Episode, props: list[checks.Prop], late: set[int] = frozenset()
     matched: dict[int, list[str]] = {}
     needs = []
     for n in ep.needs:
-        if n.void:                       # left out: the week as run made it impossible (docs/design.md, section 6)
+        if n.void or grace_s and n.void_without_call_ticks:     # left out: the week as run made it impossible
             continue
         a, b = seconds(n.discoverable_at), seconds(n.deadline)
         if grace_s and n.kind == "call_line":
@@ -169,7 +169,7 @@ def outcomes(ep: Episode, props: list[checks.Prop], late: set[int] = frozenset()
                       "worker_does_it": ref_t is not None})
     traps = []
     for tr in ep.traps:
-        if tr.void:
+        if tr.void or grace_s and tr.void_without_call_ticks:
             continue
         fired = [i for i, p in enumerate(props) if checks.matches(tr.check, p) is not None]
         traps.append({"trap": tr.id, "fired": bool(fired), "proposals": fired})
