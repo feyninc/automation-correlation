@@ -185,8 +185,11 @@ version of each document; a call's turns, then the worker's case note), plus `/w
   Native compaction is not used: OpenAI's returns an encrypted item only OpenAI models can read ("opaque and not
   intended to be human-interpretable"), and OpenCode uses native compaction only where a user opts in. Compaction is
   the harness's: its tokens are recorded in the sample (`compaction_usage`) and not charged to the model.
-- **Content filters:** a call a provider's filter blocks is tried three times, then recorded (`filtered_calls`) and
-  the turn ends; the sample goes on. Tools: `bash` (Docker, no network,
+- **Failed calls:** a call a provider's filter blocks is tried three times, then recorded (`filtered_calls`) and the
+  turn ends; the sample goes on. A call that fails otherwise (an outage, throttling) is retried within the turn, up
+  to seven tries with waits of 5 s doubling to 160 s (`call_retries`), so a brief outage does not restart the week;
+  Bedrock's client gets 10 attempts (`AWS_MAX_ATTEMPTS`). GPT models from GPT-5.4 on compact at 270k tokens
+  (`compact_tokens`), below the 272k at which OpenAI doubles the input price. Tools: `bash` (Docker, no network,
   non-root), `propose(target, action, drafts[1-3], note)` with actions reply, new, forward, edit, schedule, update,
   say and flag (a new or forwarded message must name its recipients); `ask_worker(question)`; `join_call(path)` /
   `leave_call()` (a turn after every caller line while joined; a model that joins before the worker answers the

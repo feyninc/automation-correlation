@@ -34,6 +34,8 @@ ROOT = Path(__file__).resolve().parents[1]
 SANDBOX = ("docker", str(ROOT / "workweek/sandbox/compose.yaml"))
 MAX_TOOL_OUTPUT = 12000
 FILTER_ATTEMPTS = 3           # tries of a call a content filter blocks before the turn is given up
+CALL_ATTEMPTS = 7             # tries of a call that fails otherwise (outages, throttling), waiting 5 s, 10 s, ... 160 s;
+                              # only then does the error end the week (and the runner restart it)
 READ_KEPT = 12                 # most recent world files read, kept with each proposal for the judges
 
 TOOLS = [
@@ -89,10 +91,12 @@ class Sim:
         self.ticks_run = 0
         self.recovered = 0          # tool calls recovered from GLM-syntax text
         self.window = 0             # the tested model's context window (tokens)
+        self.compact_tokens = None  # the model's own compaction threshold, when lower than compact_at x window
         self.measured: tuple[int, int] | None = None   # input tokens of the last call, and len(messages) it covered
         self.compactions = 0
         self.compaction_usage: dict[str, dict] = {}   # per model string: tokens spent compacting (not charged)
         self.filtered: list[dict] = []    # calls a provider's content filter blocked, after retries
+        self.call_retries = 0             # calls retried within the turn after an outage or throttling
         self.price = None                 # the tested model's Price
         self.long_usage: dict = {}        # usage of calls over price.long_above (priced at the long-context rate)
         self.tick_index = 0
@@ -237,7 +241,7 @@ async def compact_if_due(sim: Sim, model: Model, messages: list, force: bool = F
     """Compact the conversation once its input reaches compact_at of the window, or now (midnight)."""
     if len(messages) <= 2:
         return
-    threshold = sim.run.run.compact_at * sim.window
+    threshold = min(sim.run.run.compact_at * sim.window, sim.compact_tokens or float("inf"))
     # the model's own characters per token, from its last measured call (tool definitions make it conservative)
     cpt = (max(1.0, compaction.chars(messages[:sim.measured[1]]) / sim.measured[0]) if sim.measured
            else compaction.CHARS_PER_TOKEN)
@@ -287,17 +291,24 @@ async def replace(sim: Sim, model: Model, messages: list, fn) -> None:
 async def agent_turn(sim: Sim, model: Model, messages: list, t: int, budget: int) -> None:
     for _ in range(budget):
         await compact_if_due(sim, model, messages)
-        out = None
-        for attempt in range(FILTER_ATTEMPTS):
+        out, filtered, failed = None, 0, 0
+        while out is None:
             try:
                 out = await model.generate(messages, tools=TOOLS)
-                break
             except Exception as e:     # a content-filter block ends this turn, not the sample
-                if not providers.content_filtered(e):
+                if providers.content_filtered(e):
+                    filtered += 1
+                    if filtered == FILTER_ATTEMPTS:
+                        sim.filtered.append({"at": fmt(t), "error": str(e)[-300:]})
+                        return
+                elif compaction.too_long(e):
                     raise
-                if attempt == FILTER_ATTEMPTS - 1:
-                    sim.filtered.append({"at": fmt(t), "error": str(e)[-300:]})
-                    return
+                else:                  # an outage or throttling: wait and retry within the turn, not from Monday
+                    failed += 1
+                    if failed == CALL_ATTEMPTS:
+                        raise
+                    sim.call_retries += 1
+                    await asyncio.sleep(5 * 2 ** (failed - 1))
         u = out.usage
         prompt_tokens = u.input_tokens + (u.input_tokens_cache_read or 0) + (u.input_tokens_cache_write or 0) if u else 0
         if u:
@@ -364,6 +375,7 @@ def workweek_agent(run_path: str = "config/run.yaml", start: str = "D1 00:00", e
         sim = Sim(ep, run, s0, s1)
         model = get_model()
         sim.window = run.spec(str(model)).context_window
+        sim.compact_tokens = run.spec(str(model)).compact_tokens
         sim.price = run.spec(str(model)).price
         cadence = int(run.run.cadence_minutes * 60)
         budget = run.run.max_tool_calls_per_tick
@@ -413,6 +425,7 @@ def workweek_agent(run_path: str = "config/run.yaml", start: str = "D1 00:00", e
         state.metadata["recovered_tool_calls"] = sim.recovered
         state.metadata["compactions"] = sim.compactions
         state.metadata["filtered_calls"] = sim.filtered
+        state.metadata["call_retries"] = sim.call_retries
         state.metadata["long_context_usage"] = sim.long_usage
         state.metadata["compaction_usage"] = sim.compaction_usage
         state.completed = True

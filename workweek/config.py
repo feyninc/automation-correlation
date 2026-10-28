@@ -65,6 +65,7 @@ class ModelSpec(BaseModel):
     model_args: dict[str, Any] = {}     # provider routing etc.
     price: Price | None = None
     context_window: int | None = None  # tokens, the largest variant on this route; compaction starts at run.compact_at of it
+    compact_tokens: int | None = None  # compact at this many tokens instead, when lower (below a long-context price break)
 
 
 class JudgeSpec(ModelSpec):

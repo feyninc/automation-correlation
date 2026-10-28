@@ -18,3 +18,5 @@ def load() -> None:
     put("AWS_BEARER_TOKEN_BEDROCK", CONF / "bedrock-token")   # or from the environment, if set there
     os.environ.setdefault("AWS_REGION", "us-east-1")
     os.environ.setdefault("AWS_DEFAULT_REGION", os.environ["AWS_REGION"])   # the one botocore reads
+    os.environ.setdefault("AWS_MAX_ATTEMPTS", "10")      # botocore's default of 3 attempts turns a brief Bedrock
+    os.environ.setdefault("AWS_RETRY_MODE", "standard")  # "unable to process your request" into a failed week
