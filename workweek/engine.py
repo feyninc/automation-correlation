@@ -181,8 +181,14 @@ async def run_tool(sim: Sim, call, t: int) -> tuple[str, bool]:
     if name == "bash":
         sim.note_reads(str(a.get("command", "")))
         t0 = time.monotonic()
-        r = await sandbox().exec(["bash", "-lc", str(a.get("command", ""))], user="assistant",
-                                 cwd="/home/assistant", timeout=60)
+        try:
+            r = await sandbox().exec(["bash", "-lc", str(a.get("command", ""))], user="assistant",
+                                     cwd="/home/assistant", timeout=60)
+        except (TimeoutError, RuntimeError) as e:     # the model's own command: tell it, as a shell would
+            sim.work["tool_s"] += time.monotonic() - t0
+            if "timed out" not in str(e).lower():
+                raise
+            return "Command timed out after 60 seconds and was stopped. Try a narrower command.", False
         sim.work["tool_s"] += time.monotonic() - t0
         out = (r.stdout or "") + (("\n[stderr]\n" + r.stderr) if r.stderr else "")
         if len(out) > MAX_TOOL_OUTPUT:
