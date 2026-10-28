@@ -121,8 +121,14 @@ using only what was knowable at the moment of the proposal. Judge the drafts, no
 The work week runs from Monday 2026-11-02, the first day, to Friday 2026-11-06, the last day; times are given as the
 weekday and the clock time.
 
-The case has these parts:
-- <job>: the person, the moment, and what good help in this job means.
+After these instructions come the job and the employer's policies, the same for every case in this job:
+- <job>: the person and what good help in this job means.
+- <policies>: the employer's policies as they stood on Monday morning.
+
+Each case has these parts:
+- <moment>: when the proposal was made.
+- <policy_changes>: present when a policy was added or changed between Monday morning and the moment; the changed
+  version applies.
 - <proposal>: what you grade: its target, its action and up to three alternative drafts.
 - <planned_work>: present when the proposal does a known piece of the person's work: what that work must and must
   not include, and what the person actually did (one good version among others).
@@ -158,17 +164,27 @@ Reply with only this JSON object:
  "reasons": ["at most two, each at most 25 words"], "minimal_fix": ""}
 """
 
-JUDGE_CASE = """\
+JUDGE_PROFESSION = """\
+
 <job>
 Person: {worker_name}
 Job: {worker_title}
 Employer: {employer}
-Moment of the proposal: {when}
 
 {profession_prompt}
 </job>
 
-<proposal>
+<policies>
+{policies}
+</policies>
+"""
+
+JUDGE_CASE = """\
+<moment>
+{when}
+</moment>
+
+{policy_changes}<proposal>
 Target: {target}
 Action: {action}
 

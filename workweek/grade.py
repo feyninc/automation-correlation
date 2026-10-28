@@ -261,8 +261,30 @@ def _draft(i: int, d: dict) -> str:
         f"{d.get('text', '')}\n</draft>"
 
 
+def judge_system(ep: Episode) -> str:
+    """The judge's system prompt: the instructions, the job and Monday morning's policies. It is the same for every
+    proposal in a profession, so it is the cached prefix of every judge request."""
+    policies = "\n\n".join(f"## {d.title}\n{d.versions[0].content.strip()}" for d in ep.documents
+                            if d.app == "policies" and seconds(d.versions[0].at) < 0)
+    return prompts.JUDGE_SYSTEM + prompts.JUDGE_PROFESSION.format(
+        worker_name=ep.worker.name, worker_title=ep.worker.title, employer=ep.employer.name,
+        profession_prompt=ep.profession_prompt.strip(), policies=policies)
+
+
+def policy_changes(ep: Episode, t: int) -> str:
+    """Policies added or changed between Monday morning and t, in their version as of t."""
+    out = []
+    for d in ep.documents:
+        if d.app != "policies":
+            continue
+        now = [v for v in d.versions if seconds(v.at) <= t]
+        if now and seconds(now[-1].at) >= 0:
+            out.append(f"## {d.title} (as of {show(seconds(now[-1].at))})\n{now[-1].content.strip()}")
+    return f"<policy_changes>\n{chr(10).join(out)}\n</policy_changes>\n\n" if out else ""
+
+
 def judge_prompt(ep: Episode, p: dict, needs: list, earlier: list[dict] = ()) -> tuple[str, str]:
-    """The judge's system prompt (the same for every proposal) and the case for this proposal."""
+    """The judge's system prompt (the same for every proposal in a profession) and the case for this proposal."""
     t = seconds(p["t"])
     first = ep.worker.name.split()[0]
     files = render_world(ep, t)
@@ -277,12 +299,11 @@ def judge_prompt(ep: Episode, p: dict, needs: list, earlier: list[dict] = ()) ->
             first_name=first, reference=x.body if x else need.reference.text or "(none)",
             reference_label=f"What {first} actually did" if x else f"A good version ({first} did not do it)")
     case = prompts.JUDGE_CASE.format(
-        worker_name=ep.worker.name, worker_title=ep.worker.title, employer=ep.employer.name, when=show(t),
-        profession_prompt=ep.profession_prompt, target=p["target"], action=p["action"],
+        when=show(t), policy_changes=policy_changes(ep, t), target=p["target"], action=p["action"],
         drafts="\n\n".join(_draft(i, d) for i, d in enumerate(p["drafts"], 1)), planned_work=planned,
         open_work=open_work(ep, t, needs), history=history(ep, p, t, needs, list(earlier)),
         facts=draft_facts(ep, p, t, needs, files, order), context=_context(ep, p, t, needs, files, order))
-    return prompts.JUDGE_SYSTEM, case
+    return judge_system(ep), case
 
 
 def _context(ep: Episode, p: dict, t: int, needs: list, files: dict, order: list[str]) -> str:

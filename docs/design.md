@@ -211,8 +211,11 @@ version of each document; a call's turns, then the worker's case note), plus `/w
    work" below); a trap fires on any matching proposal.
 2. **Judges:** a panel of seven from seven families (weights in the config, summing to 1). Each judge gets a fixed
    system prompt (`JUDGE_SYSTEM`: what is graded and how, the parts of the case, the checklist, the score bands, the
-   reply format) and one case per proposal (`JUDGE_CASE`), in labeled parts so judging is reading, not searching (see
-   "Making judging easy" below): `<job>` the person, moment and profession prompt; `<proposal>` the target, action and
+   reply format; then `<job>`, the person and profession prompt, and `<policies>`, the employer's policies as of
+   Monday morning: the same for every proposal in a profession, so it is the cached prefix of every judge request)
+   and one case per proposal (`JUDGE_CASE`), in labeled parts so judging is reading, not searching (see "Making
+   judging easy" below): `<moment>`; `<policy_changes>` any policy added or changed since Monday, as of the moment;
+   `<proposal>` the target, action and
    drafts; `<planned_work>` for every need the proposal matches, its must and must-not and the worker's own version;
    `<open_work>` the planned work open then and whether the worker had done it; `<already_done>` what the worker and
    the assistant had done on the matter; `<draft_facts>` every number, identifier, date, email and named person in the
