@@ -11,6 +11,7 @@ import argparse
 import asyncio
 import csv
 import difflib
+import hashlib
 import json
 import re
 import time
@@ -52,11 +53,27 @@ def people(ep: Episode, text: str) -> list[str]:
     return out
 
 
+def reply_to(ep: Episode, tid: str, t: int) -> list[str]:
+    """Who a reply in a thread reaches when its draft names no one: in mail, the sender of the latest message from
+    someone else (an ordinary reply); in a chat, a call or a ticket, everyone else in it so far."""
+    th = next((x for x in ep.threads if x.id == tid), None)
+    if th is None:
+        return []
+    others = [x.author for x in sorted(th.exchanges, key=lambda x: seconds(x.at))
+              if seconds(x.at) <= t and x.author != "worker"]
+    if th.app == "mail":
+        return others[-1:]
+    return list(dict.fromkeys(others))
+
+
 def to_prop(ep: Episode, idx, p: dict) -> checks.Prop:
     app, path, tid = idx.get(p["target"], ("", "", ""))
-    drafts = [checks.Draft(text=str(d.get("text", "")), to=people(ep, d.get("to", "")), cc=people(ep, d.get("cc", "")),
-                           subject=str(d.get("subject", "") or "")) for d in p["drafts"]]
-    return checks.Prop(t=seconds(p["t"]), app=app, path=path, target=tid, action=checks.normalize_action(app, p["action"]),
+    t = seconds(p["t"])
+    # propose asks for recipients only on new and forwarded messages; a reply without them goes where replies go
+    implied = reply_to(ep, tid, t) if p["action"] in ("reply", "say") else []
+    drafts = [checks.Draft(text=str(d.get("text", "")), to=people(ep, d.get("to", "")) or implied,
+                           cc=people(ep, d.get("cc", "")), subject=str(d.get("subject", "") or "")) for d in p["drafts"]]
+    return checks.Prop(t=t, app=app, path=path, target=tid, action=checks.normalize_action(app, p["action"]),
                        drafts=drafts)
 
 
@@ -498,6 +515,14 @@ JUDGED: dict[str, dict] = {}    # saved judgements by proposal key (<out>/judgem
 JUDGED_FILE = None
 
 
+def judged_key(s, p: dict, needs: list, earlier: list[dict]) -> str:
+    """A saved judgement's key: the run of the week (a rerun's proposals reuse the same ids), the proposal, and what its
+    case shows the judge (the needs it is judged against, the earlier proposals in its history), so a change in
+    matching judges it again and nothing else does."""
+    shown = "|".join([",".join(n.id for n in needs), ",".join(e["id"] for e in earlier)])
+    return f"{s.uuid}|{p['id']}|{hashlib.sha1(shown.encode()).hexdigest()[:12]}"
+
+
 async def grade_log(log, run: cfgmod.RunConfig, judges, gate) -> list[dict]:
     speed = speeds(run)
     model_name = log.eval.model
@@ -532,7 +557,7 @@ async def grade_log(log, run: cfgmod.RunConfig, judges, gate) -> list[dict]:
                 for d in p["drafts"])
             earlier = [props_raw[k] for k in range(i) if props_raw[k]["target"] == p["target"] and p["target"] != "new"
                        or set(matched.get(k, [])) & set(matched.get(i, []))]
-            key = f"{model_name}|{s.id}|{s.epoch}|{p['id']}"
+            key = judged_key(s, p, relevant, earlier)
             if key in JUDGED:
                 js = JUDGED[key]
             else:
