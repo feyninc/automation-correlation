@@ -15,4 +15,5 @@ def load() -> None:
     put("OPENROUTER_API_KEY", CONF / "openrouter-key")
     put("AZURE_API_KEY", AZURE_KEY)                 # Inspect "openai-api/azure/<deployment>"
     put("AZURE_BASE_URL", CONF / "azure-endpoint")
-    os.environ.setdefault("AWS_REGION", "us-east-1")  # Bedrock reads AWS_BEARER_TOKEN_BEDROCK from the environment
+    put("AWS_BEARER_TOKEN_BEDROCK", CONF / "bedrock-token")   # or from the environment, if set there
+    os.environ.setdefault("AWS_REGION", "us-east-1")
