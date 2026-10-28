@@ -175,16 +175,27 @@ version of each document; a call's turns, then the worker's case note), plus `/w
   asked while the worker is away is not answered (it costs the worker only its reading). Before each tick the engine
   writes the world as of that moment. Nothing waits on a model: the clock stops while it works, and every timing
   question (did a call line arrive in time?) is answered offline in grading from the tokens it used.
-- **Agent:** one conversation per day; each tick is a multi-turn tool loop ending at `wait` or after
-  `max_tool_calls_per_tick` (25). Nothing in the day's conversation is trimmed (owner, 10-27): each model runs at
-  the largest context window its route offers (`context_window` in `config/run.yaml`), and when the input reaches `compact_at` (80%)
-  of it, Inspect compacts the conversation, natively where the provider offers it (OpenAI's `responses.compact`,
-  which keeps the user turns and replaces the rest with an encrypted item only OpenAI models can read) and otherwise
-  by the model summarizing its own history. Compaction is the harness's: its tokens are recorded in the sample
-  (`compaction_usage`) and not charged to the model. Earlier runs shortened every tool output older than six ticks,
-  which broke the prompt cache on every call: in the volume pilot, cache writes were $58 of Opus 4.8's $94.50 for
-  two days. A call a provider's content filter blocks is tried three times, then recorded (`filtered_calls`) and
-  the turn ends; the sample goes on. Tools: `bash` (Docker, no network,
+- **Agent:** one conversation for the week; each tick is a multi-turn tool loop ending at `wait` or after
+  `max_tool_calls_per_tick` (25). Nothing in it is trimmed (owner, 10-27): each model runs at the largest context
+  window its route offers (`context_window` in `config/run.yaml`). The conversation is compacted when its input
+  reaches `compact_at` (80%) of that window, and between days as `overnight` says: `compact` (the default, a
+  checkpoint at midnight), `clear` (a fresh conversation each morning, as before 10-27) or `custom` (a function named
+  in `overnight_function`). Compaction follows OpenCode's default (`workweek/compaction.py`; anomalyco/opencode,
+  `packages/core/src/session/compaction.ts`): the model writes its own summary in a fixed template (the worker's
+  week, open work, proposals and promises, decisions and rules, facts and figures, done, next, relevant files) under
+  OpenCode's rules (terse bullets, exact identifiers, only what is still open, no mention of compaction); the newest
+  15,000 tokens (at most a quarter of the compaction threshold, sized with the model's own characters per token,
+  measured on its last call) are kept word for word beside it in one `<conversation-checkpoint>` message; the
+  summary request is
+  the conversation unchanged plus the prompt, so it reads the prompt cache; a later compaction updates the
+  checkpoint; a reply that skips the template gets one reminder; a request the provider rejects as too long is
+  resent as a transcript with tool outputs cut. The same procedure runs for every model: OpenAI's native compaction
+  returns an encrypted item only OpenAI models can read ("opaque and not intended to be human-interpretable"), and
+  OpenCode itself uses native compaction only where a user opts in. Compaction is the harness's: its tokens are
+  recorded in the sample (`compaction_usage`) and not charged to the model. Earlier runs shortened every tool output
+  older than six ticks, which broke the prompt cache on every call: in the volume pilot, cache writes were $58 of
+  Opus 4.8's $94.50 for two days. A call a provider's content filter blocks is tried three times, then recorded
+  (`filtered_calls`) and the turn ends; the sample goes on. Tools: `bash` (Docker, no network,
   non-root), `propose(target, action, drafts[1-3], note)` with actions reply, new, forward, edit, schedule, update,
   say and flag (a new or forwarded message must name its recipients); `ask_worker(question)`; `join_call(path)` /
   `leave_call()` (a turn after every caller line while joined; a model that joins before the worker answers the

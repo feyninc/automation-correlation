@@ -19,8 +19,8 @@ How your workspace works:
   changed since your last check, including what {first_name} did; /world/inbox/feed.md is the whole day so far.
 - Use the bash tool to explore with ordinary commands (ls, cat, grep, find, head, python3, ...). python3 has openpyxl
   for spreadsheets. There is no network.
-- /home/assistant is yours and is kept for the whole week. Keep notes, working memory and scratch files there; each
-  morning you start a fresh conversation, so write down anything you will want later.
+- /home/assistant is yours and is kept for the whole week. Keep notes, working memory and scratch files there.
+  {overnight}
 - {first_name} only sees what you send with the propose tool. Nothing you propose is sent or changed until
   {first_name} approves it. A proposal targets the file it concerns (a thread to reply in, a document to edit, a call
   you have joined) or a new item. You may include up to three alternative drafts, best first, when the right choice
@@ -37,9 +37,18 @@ About this job:
 {profession_prompt}
 """
 
+OVERNIGHT = {      # how HARNESS describes config run.overnight
+    "compact": "Your conversation runs through the whole week; when it grows long, and every night at midnight, its "
+               "earlier part is\n  replaced by a summary checkpoint, so keep anything you will need word for word in "
+               "your files.",
+    "clear": "When it grows long, the earlier part of your conversation is replaced by a summary checkpoint, and each "
+             "morning you\n  start a fresh conversation, so write down anything you will want later.",
+    "custom": "When it grows long, and between days, the earlier part of your conversation may be shortened, so keep "
+              "anything you\n  will need word for word in your files.",
+}
+
 DAY_START = """\
-It is {date}, {time}. You start the day fresh; your files in /home/assistant are as you left them. {first_name} works
-{arrive}-{leave} today.
+It is {date}, {time}. {first_name} works {arrive}-{leave} today.
 """
 
 TICK = """\

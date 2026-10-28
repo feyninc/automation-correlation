@@ -8,7 +8,9 @@ run:
   seeds: 3
   max_tool_calls_per_tick: 25
   max_output_tokens_per_call: 16000
-  compact_at: 0.8          # compact a day's conversation at this share of the model's context_window
+  compact_at: 0.8          # compact the conversation at this share of the model's context_window
+  overnight: compact       # between days: compact (a checkpoint), clear (a fresh conversation), or custom
+  overnight_function: ""   # with custom: "module:function", called as compaction.compact is
   send_arm: false
   professions: all
   eci_factor: {value: 1.0, source: "ECI wages and salaries, May 2025 to the run quarter; set on 2026-10-30 release"}

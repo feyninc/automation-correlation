@@ -4,7 +4,7 @@ from __future__ import annotations
 import datetime as dt
 import os
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 import yaml
 from pydantic import BaseModel, Field, model_validator
@@ -78,7 +78,9 @@ class RunSettings(BaseModel):
     seeds: int = 3
     max_tool_calls_per_tick: int = 25
     max_output_tokens_per_call: int = 16000
-    compact_at: float = 0.8             # share of a model's context window at which its day is compacted
+    compact_at: float = 0.8             # share of a model's context window at which its conversation is compacted
+    overnight: Literal["compact", "clear", "custom"] = "compact"   # what happens to the conversation between days
+    overnight_function: str = ""        # "module:function" for overnight: custom; see workweek/compaction.py
     send_arm: bool = False
     professions: list[str] | str = "all"
     eci_factor: dict[str, Any] = {"value": 1.0, "source": ""}
@@ -118,6 +120,10 @@ class RunConfig(BaseModel):
             left = sum(j.weight for j in self.judges if not (j.report_with_dropout and j.family == fam))
             if left <= 0:
                 errs.append(f"dropping family {fam} leaves no judge weight")
+        if self.run.overnight == "custom" and ":" not in self.run.overnight_function:
+            errs.append("overnight: custom needs overnight_function as 'module:function'")
+        if self.run.overnight != "custom" and self.run.overnight_function:
+            errs.append("overnight_function is set but overnight is not custom")
         if not 0 < self.run.compact_at <= 1:
             errs.append("compact_at must be a share of the context window, in (0, 1]")
         if self.run.cadence_minutes <= 0:

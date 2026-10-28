@@ -4,10 +4,10 @@ The clock is simulated. At every tick (config cadence) the world up to that mome
 model runs as a multi-turn tool-using agent until it calls wait. Live calls the model joins are followed turn by turn.
 Nothing the model proposes reaches the world; proposals and questions are recorded in the sample's store.
 
-Each day starts a new conversation (notes in /home/assistant carry over). Nothing in it is trimmed: when the input
-reaches `compact_at` (config) of the model's context window (config `context_window`, the largest variant on its route), Inspect
-compacts it, natively where the provider offers it (OpenAI's responses.compact) and otherwise by the model summarizing
-its own history. Compaction's tokens are recorded apart and not charged to the model (owner, 10-27).
+The model keeps one conversation for the whole week. Nothing in it is trimmed; it is compacted (workweek/compaction.py,
+after OpenCode) when the input reaches `compact_at` of the model's context window (config `context_window`, the
+largest variant on its route) and at midnight after each day. Compaction's tokens are recorded apart and not charged
+to the model (owner, 10-27).
 """
 from __future__ import annotations
 
@@ -17,15 +17,13 @@ from pathlib import Path
 
 from inspect_ai import Task, task
 from inspect_ai.dataset import Sample
-from inspect_ai.model import (ChatMessageSystem, ChatMessageTool, ChatMessageUser, CompactionAuto, GenerateConfig, Model,
-                              ModelInfo, compaction, get_model, set_model_info)
-from inspect_ai.model._model import sample_model_usage
+from inspect_ai.model import ChatMessageSystem, ChatMessageTool, ChatMessageUser, GenerateConfig, Model, get_model
 from inspect_ai.solver import Generate, TaskState, solver
 from inspect_ai.tool import ToolInfo, ToolParam, ToolParams
 from inspect_ai.util import sandbox, store
 
 from . import config as cfgmod
-from . import prompts, providers  # importing providers also patches Inspect
+from . import compaction, prompts, providers  # importing providers also patches Inspect
 from .apps import FileOut, render_world, thread_file
 from .schema import WEEKDAYS, Episode, fmt, seconds, show
 from .world import DAYS, Event, events, feed_lines, ticks
@@ -88,7 +86,8 @@ class Sim:
         self.call_done: set[str] = set()
         self.ticks_run = 0
         self.recovered = 0          # tool calls recovered from GLM-syntax text
-        self.compact = None         # the day's Inspect compaction handler
+        self.window = 0             # the tested model's context window (tokens)
+        self.measured: tuple[int, int] | None = None   # input tokens of the last call, and len(messages) it covered
         self.compactions = 0
         self.compaction_usage: dict[str, dict] = {}   # per model string: tokens spent compacting (not charged)
         self.filtered: list[dict] = []    # calls a provider's content filter blocked, after retries
@@ -223,36 +222,64 @@ async def run_tool(sim: Sim, call, t: int) -> tuple[str, bool]:
     return f"Unknown tool {name}.", False
 
 
-async def compacted(sim: Sim, messages: list) -> list:
-    """The input to send: the day's history, compacted once it passes run.compact_at; compaction's tokens kept apart."""
-    before = {k: u.model_dump() for k, u in sample_model_usage().items()}
+async def compact_if_due(sim: Sim, model: Model, messages: list, force: bool = False) -> None:
+    """Compact the conversation once its input reaches compact_at of the window, or now (midnight)."""
+    if len(messages) <= 2:
+        return
+    threshold = sim.run.run.compact_at * sim.window
+    # the model's own characters per token, from its last measured call (tool definitions make it conservative)
+    cpt = (max(1.0, compaction.chars(messages[:sim.measured[1]]) / sim.measured[0]) if sim.measured
+           else compaction.CHARS_PER_TOKEN)
+    if not force:
+        tokens = (sim.measured[0] + compaction.estimate(messages[sim.measured[1]:], cpt) if sim.measured
+                  else compaction.estimate(messages, cpt))
+        if tokens < threshold:
+            return
+    keep = min(compaction.KEEP_TOKENS, int(compaction.TAIL_SHARE * threshold))
+
+    async def fn(model, messages, tools, usage):
+        return await compaction.compact(model, messages, tools, usage, keep=keep, chars_per_token=cpt)
+    await replace(sim, model, messages, fn)
+
+
+async def overnight(sim: Sim, model: Model, messages: list) -> None:
+    """Between days, as config `overnight` says: compact, clear, or the custom function."""
+    how = sim.run.run.overnight
+    if how == "clear":
+        messages[:] = compaction.clear(messages)
+        sim.measured = None
+    elif how == "compact":
+        await compact_if_due(sim, model, messages, force=True)
+    else:
+        await replace(sim, model, messages, compaction.load(sim.run.run.overnight_function))
+
+
+async def replace(sim: Sim, model: Model, messages: list, fn) -> None:
+    """Replace the conversation with fn's; its calls' tokens are tallied apart and not charged."""
+    usage: list[dict] = []
     for attempt in range(FILTER_ATTEMPTS):      # a summary call can meet a content filter too
         try:
-            inp, summary = await sim.compact.compact_input(messages)
+            messages[:] = await fn(model, messages, TOOLS, usage)
             break
         except Exception as e:
             if not providers.content_filtered(e) or attempt == FILTER_ATTEMPTS - 1:
                 raise
-    if summary is not None:
-        messages.append(summary)
-    spent = {k: cfgmod.net_usage(u.model_dump(), before.get(k)) for k, u in sample_model_usage().items()}
-    spent = {k: u for k, u in spent.items() if any(isinstance(v, (int, float)) and v for v in u.values())}
-    for k, u in spent.items():
-        tally = sim.compaction_usage.setdefault(k, {})
+    sim.measured = None
+    sim.compactions += 1
+    tally = sim.compaction_usage.setdefault(str(model), {})
+    for u in usage:
         for f, v in u.items():
             if isinstance(v, (int, float)):
                 tally[f] = tally.get(f, 0) + v
-    sim.compactions += bool(spent or summary is not None)
-    return inp
 
 
 async def agent_turn(sim: Sim, model: Model, messages: list, t: int, budget: int) -> None:
     for _ in range(budget):
-        inp = await compacted(sim, messages)
+        await compact_if_due(sim, model, messages)
         out = None
         for attempt in range(FILTER_ATTEMPTS):
             try:
-                out = await model.generate(inp, tools=TOOLS)
+                out = await model.generate(messages, tools=TOOLS)
                 break
             except Exception as e:     # a content-filter block ends this turn, not the sample
                 if not providers.content_filtered(e):
@@ -260,10 +287,11 @@ async def agent_turn(sim: Sim, model: Model, messages: list, t: int, budget: int
                 if attempt == FILTER_ATTEMPTS - 1:
                     sim.filtered.append({"at": fmt(t), "error": str(e)[-300:]})
                     return
-        await sim.compact.record_output(inp, out)
         u = out.usage
-        if u and sim.price and sim.price.long_above and \
-                u.input_tokens + (u.input_tokens_cache_read or 0) + (u.input_tokens_cache_write or 0) > sim.price.long_above:
+        prompt_tokens = u.input_tokens + (u.input_tokens_cache_read or 0) + (u.input_tokens_cache_write or 0) if u else 0
+        if u:
+            sim.measured = (prompt_tokens, len(messages))
+        if u and sim.price and sim.price.long_above and prompt_tokens > sim.price.long_above:
             for f, v in u.model_dump().items():
                 if isinstance(v, (int, float)):
                     sim.long_usage[f] = sim.long_usage.get(f, 0) + v
@@ -324,25 +352,23 @@ def workweek_agent(run_path: str = "config/run.yaml", start: str = "D1 00:00", e
         s0, s1 = seconds(start), seconds(end)
         sim = Sim(ep, run, s0, s1)
         model = get_model()
-        set_model_info(str(model), ModelInfo(context_length=run.spec(str(model)).context_window))
+        sim.window = run.spec(str(model)).context_window
         sim.price = run.spec(str(model)).price
         cadence = int(run.run.cadence_minutes * 60)
         budget = run.run.max_tool_calls_per_tick
         system = prompts.HARNESS.format(worker_name=ep.worker.name, worker_title=ep.worker.title,
+                                        overnight=prompts.OVERNIGHT[run.run.overnight],
                                         employer=ep.employer.name, first_name=sim.first,
                                         profession_prompt=ep.profession_prompt.strip())
-        for day in range(1, 6):
+        days = [d for d in range(1, 6) if any(s0 <= x <= s1 for x in ticks(d, cadence, 0, 86400 - cadence))]
+        messages: list = [ChatMessageSystem(content=system)]     # one conversation for the week
+        for day in days:
             day_start, day_end = ep.worker.day_hours(day)
             day_ticks = [x for x in ticks(day, cadence, 0, 86400 - cadence) if s0 <= x <= s1]   # around the clock
-            if not day_ticks:
-                continue
-            messages: list = [ChatMessageSystem(content=system),
-                              ChatMessageUser(content=prompts.DAY_START.format(
-                                  date=DAYS[day - 1], time=show(day_ticks[0]).split()[1], first_name=sim.first,
-                                  arrive=f"{day_start // 3600:02d}:{day_start % 3600 // 60:02d}",
-                                  leave=f"{day_end // 3600:02d}:{day_end % 3600 // 60:02d}"))]
-            sim.compact = compaction(CompactionAuto(threshold=run.run.compact_at, memory=False), prefix=list(messages),
-                                     tools=TOOLS, model=model)
+            messages.append(ChatMessageUser(content=prompts.DAY_START.format(
+                date=DAYS[day - 1], time=show(day_ticks[0]).split()[1], first_name=sim.first,
+                arrive=f"{day_start // 3600:02d}:{day_start % 3600 // 60:02d}",
+                leave=f"{day_end // 3600:02d}:{day_end % 3600 // 60:02d}")))
             resume = -1
             for t in day_ticks:
                 if t < resume:
@@ -364,6 +390,8 @@ def workweek_agent(run_path: str = "config/run.yaml", start: str = "D1 00:00", e
                 await agent_turn(sim, model, messages, t, budget)
                 if sim.call:
                     resume = await follow_call(sim, model, messages, t)
+            if day != days[-1]:
+                await overnight(sim, model, messages)
         store().set("proposals", sim.proposals)
         store().set("questions", sim.questions)
         store().set("ticks", sim.ticks_run)
