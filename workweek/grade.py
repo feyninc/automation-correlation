@@ -509,7 +509,8 @@ async def grade_log(log, run: cfgmod.RunConfig, judges, gate) -> list[dict]:
         by_id = {n.id: n for n in ep.needs}
         u = (s.model_usage or {}).get(model_name)     # the tested model only, not the simulated worker
         # compaction is the harness's, not the model's: its tokens are not charged
-        usage = cfgmod.net_usage(u.model_dump(), s.metadata.get("compaction_usage", {}).get(model_name)) if u else None
+        total = cfgmod.add_usage(u.model_dump() if u else None, s.metadata.get("prior_usage", {}).get(model_name))
+        usage = cfgmod.net_usage(total, s.metadata.get("compaction_usage", {}).get(model_name)) if total else None
         n_props = max(len(props_raw), 1)
         share = {k: (v / n_props if isinstance(v, (int, float)) else v) for k, v in (usage or {}).items()}
         async def grade_one(i, p):

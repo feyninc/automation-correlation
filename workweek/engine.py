@@ -20,12 +20,13 @@ from pathlib import Path
 from inspect_ai import Task, task
 from inspect_ai.dataset import Sample
 from inspect_ai.model import ChatMessageSystem, ChatMessageTool, ChatMessageUser, GenerateConfig, Model, get_model
+from inspect_ai.model._model import sample_model_usage
 from inspect_ai.solver import Generate, TaskState, solver
 from inspect_ai.tool import ToolInfo, ToolParam, ToolParams
 from inspect_ai.util import sandbox, store
 
 from . import config as cfgmod
-from . import compaction, prompts, providers  # importing providers also patches Inspect
+from . import checkpoint, compaction, prompts, providers  # importing providers also patches Inspect
 from .apps import FileOut, render_world, thread_file
 from .schema import WEEKDAYS, Episode, fmt, seconds, show
 from .world import DAYS, Event, events, feed_lines, ticks
@@ -384,17 +385,33 @@ def workweek_agent(run_path: str = "config/run.yaml", start: str = "D1 00:00", e
                                         employer=ep.employer.name, first_name=sim.first,
                                         profession_prompt=ep.profession_prompt.strip())
         days = [d for d in range(1, 6) if any(s0 <= x <= s1 for x in ticks(d, cadence, 0, 86400 - cadence))]
-        messages: list = [ChatMessageSystem(content=system)]     # one conversation for the week
+        where, window = checkpoint.path(str(model), str(state.sample_id)), (s0, s1)
+        ck = await checkpoint.load(where, sim, window)            # a restarted week continues from its last tick
+        prior = ck["usage"] if ck else {}
+
+        def usage_so_far() -> dict:
+            out = {k: dict(v) for k, v in prior.items()}
+            for k, u in sample_model_usage().items():
+                for f, v in u.model_dump().items():
+                    if isinstance(v, (int, float)):
+                        out.setdefault(k, {})[f] = out.setdefault(k, {}).get(f, 0) + v
+            return out
+
+        messages: list = ck["messages"] if ck else [ChatMessageSystem(content=system)]   # one conversation for the week
         for day in days:
+            if ck and (day < ck["day"] or (day == ck["day"] and ck["phase"] == "night")):
+                continue
+            mid = bool(ck) and day == ck["day"] and ck["phase"] == "tick"
             day_start, day_end = ep.worker.day_hours(day)
             day_ticks = [x for x in ticks(day, cadence, 0, 86400 - cadence) if s0 <= x <= s1]   # around the clock
-            messages.append(ChatMessageUser(content=prompts.DAY_START.format(
-                date=DAYS[day - 1], time=show(day_ticks[0]).split()[1], first_name=sim.first,
-                arrive=f"{day_start // 3600:02d}:{day_start % 3600 // 60:02d}",
-                leave=f"{day_end // 3600:02d}:{day_end % 3600 // 60:02d}")))
-            resume = -1
+            if not mid:
+                messages.append(ChatMessageUser(content=prompts.DAY_START.format(
+                    date=DAYS[day - 1], time=show(day_ticks[0]).split()[1], first_name=sim.first,
+                    arrive=f"{day_start // 3600:02d}:{day_start % 3600 // 60:02d}",
+                    leave=f"{day_end // 3600:02d}:{day_end % 3600 // 60:02d}")))
+            resume = ck["resume"] if mid else -1
             for t in day_ticks:
-                if t < resume:
+                if (mid and t <= ck["t"]) or t < resume:
                     continue
                 await pause_point()
                 new = events(ep, sim.last, t)
@@ -414,8 +431,12 @@ def workweek_agent(run_path: str = "config/run.yaml", start: str = "D1 00:00", e
                 await agent_turn(sim, model, messages, t, budget)
                 if sim.call:
                     resume = await follow_call(sim, model, messages, t)
+                await checkpoint.save(where, sim, messages, day=day, t=t, resume=resume, phase="tick",
+                                      usage=usage_so_far(), window=window)
             if day != days[-1]:
                 await overnight(sim, model, messages)
+                await checkpoint.save(where, sim, messages, day=day, t=day_ticks[-1], resume=-1, phase="night",
+                                      usage=usage_so_far(), window=window)
         store().set("proposals", sim.proposals)
         store().set("questions", sim.questions)
         store().set("ticks", sim.ticks_run)
@@ -426,6 +447,8 @@ def workweek_agent(run_path: str = "config/run.yaml", start: str = "D1 00:00", e
         state.metadata["compactions"] = sim.compactions
         state.metadata["filtered_calls"] = sim.filtered
         state.metadata["call_retries"] = sim.call_retries
+        state.metadata["prior_usage"] = prior                     # tokens spent before a resume (added to the cost)
+        state.metadata["resumed_after"] = show(ck["t"]) if ck else None
         state.metadata["long_context_usage"] = sim.long_usage
         state.metadata["compaction_usage"] = sim.compaction_usage
         state.completed = True

@@ -29,6 +29,15 @@ def net_usage(usage: dict, less: dict | None) -> dict:
     return {k: v - (less or {}).get(k, 0) if isinstance(v, (int, float)) else v for k, v in usage.items()}
 
 
+def add_usage(a: dict | None, b: dict | None) -> dict:
+    """Two Inspect ModelUsage dumps added (a week's tokens before and after a resume)."""
+    out = dict(a or {})
+    for k, v in (b or {}).items():
+        if isinstance(v, (int, float)):
+            out[k] = (out.get(k) or 0) + v
+    return out
+
+
 def billing(model: str) -> str:
     return next((b for p, b in BILLING.items() if model.startswith(p + "/")), "OpenRouter")
 

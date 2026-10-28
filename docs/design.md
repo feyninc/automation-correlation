@@ -18,7 +18,7 @@ how fast is it changing across model releases?
 | Path | What it is |
 | --- | --- |
 | `professions/<name>/` | one profession: `overview.md` (the week in plain English, with citations, and what an ideal assistant does), `week.yaml` (job, people, policies, standing documents), `day1.yaml`..`day5.yaml` and `day1b.yaml`..`day5b.yaml` (what happens each day); `episode/` (compiled: `profession.json` plus one JSON per date) and `report.md` (build report), generated |
-| `workweek/` | `schema.py` (Pydantic models), `compile.py` (forms to episodes, the audit), `apps.py` (the world as files), `world.py` (events, feed, ticks), `engine.py` (the Inspect AI task), `compaction.py` (conversation compaction), `prompts.py`, `checks.py` (the shared check evaluator), `grade.py` (offline grading), `config.py`, `creds.py`, `providers.py` (provider patches), `sandbox/` (Docker image) |
+| `workweek/` | `schema.py` (Pydantic models), `compile.py` (forms to episodes, the audit), `apps.py` (the world as files), `world.py` (events, feed, ticks), `engine.py` (the Inspect AI task), `compaction.py` (conversation compaction), `checkpoint.py` (resume a week from its last tick), `prompts.py`, `checks.py` (the shared check evaluator), `grade.py` (offline grading), `config.py`, `creds.py`, `providers.py` (provider patches), `sandbox/` (Docker image) |
 | `config/run.yaml` | models, routes, prices, context windows, judges and weights, the simulated worker, run settings |
 | `scripts/` | `run.py` (run models x professions over a window), `smoke_models.py` (one tool call per route), `probe_reasoning.py`, `speed.py` (OpenRouter speed snapshot), `timeline.py` (release timeline and model set), `screen_occupations.py` |
 | `data/` | O*NET 31.0, Economic Index tables, BLS wages via O*NET OnLine, ECEC June 2026 multipliers, the ECI factor, release timelines, probe outputs (`data/README.md`) |
@@ -188,7 +188,11 @@ version of each document; a call's turns, then the worker's case note), plus `/w
 - **Failed calls:** a call a provider's filter blocks is tried three times, then recorded (`filtered_calls`) and the
   turn ends; the sample goes on. A call that fails otherwise (an outage, throttling) is retried within the turn, up
   to seven tries with waits of 5 s doubling to 160 s (`call_retries`), so a brief outage does not restart the week;
-  Bedrock's client gets 10 attempts (`AWS_MAX_ATTEMPTS`). GPT models from GPT-5.4 on compact at 270k tokens
+  Bedrock's client gets 10 attempts (`AWS_MAX_ATTEMPTS`). A week that still fails, or a batch that stops, resumes
+  from its last tick (`workweek/checkpoint.py`): after every tick the engine saves the conversation, the records,
+  the clock position, the model's home folder and the tokens spent so far under the batch's `checkpoints/`; a
+  restart restores them in a new sandbox and continues, and the tokens spent before it (`prior_usage`) are added to
+  the week's cost. The restored conversation is identical, so the provider's cache still matches. GPT models from GPT-5.4 on compact at 270k tokens
   (`compact_tokens`), below the 272k at which OpenAI doubles the input price. Tools: `bash` (Docker, no network,
   non-root), `propose(target, action, drafts[1-3], note)` with actions reply, new, forward, edit, schedule, update,
   say and flag (a new or forwarded message must name its recipients); `ask_worker(question)`; `join_call(path)` /

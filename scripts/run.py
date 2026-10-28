@@ -48,7 +48,7 @@ def main():
         print(f"{spec.name}: {log.status}" + (f" ({log.error.message[:200]})" if log.error else ""))
         for s in log.samples or []:
             md = s.metadata
-            usage = {k: u.model_dump() for k, u in (s.model_usage or {}).items()}
+            usage = {k: config.add_usage(u.model_dump(), md.get("prior_usage", {}).get(k)) for k, u in (s.model_usage or {}).items()}
             compacting = md.get("compaction_usage", {}).get(spec.model)       # the harness's, not charged
             cost = (spec.price.cost(config.net_usage(usage[spec.model], compacting), md.get("long_context_usage"))
                     if spec.model in usage else 0.0)
