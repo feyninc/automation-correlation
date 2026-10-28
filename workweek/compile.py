@@ -159,7 +159,8 @@ def call_line_window(th: Thread, xid: str) -> tuple[str, str]:
 
 def expand(form: dict) -> Episode:
     contacts = [Contact(id=c[0], name=c[1], role=c[2], org=c[3], email=c[4] or None, phone=(c[5] if len(c) > 5 else None) or None,
-                        relation=c[6] if len(c) > 6 else "", notes=c[7] if len(c) > 7 else "")
+                        relation=c[6] if len(c) > 6 else "", notes=c[7] if len(c) > 7 else "",
+                        aliases=[a.strip() for a in c[8].split(",") if a.strip()] if len(c) > 8 else [])
                 for c in form["contacts"]]
     docs: dict[str, Document] = {}
     for d in form.get("documents", []):

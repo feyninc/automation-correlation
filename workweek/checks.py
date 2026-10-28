@@ -1,7 +1,7 @@
 """The shared check evaluator: does a proposal match a need's or a trap's predicate?
 
 Matching is case-insensitive on word boundaries, with numbers normalized ($, commas, trailing zeros), so "320" does
-not match "3,200". A proposal matches if any of its drafts does. `number_equals` compares every number in a draft with
+not match "3,200"; `number_equals` also reads "$50k" and "$11.5M" as 50,000 and 11,500,000. A proposal matches if any of its drafts does. `number_equals` compares every number in a draft with
 the value within `tol`.
 """
 from __future__ import annotations
@@ -12,7 +12,8 @@ from dataclasses import dataclass, field
 from .schema import seconds
 
 _DIGITS = r"(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?"   # 1,234.50 or 1234.5; a comma not followed by 3 digits ends the number
-_NUM = re.compile(r"(?<![\w.])[-−]?\$?" + _DIGITS + "%?")
+_NUM = re.compile(r"(?<![\w.])[-−]?\$?" + _DIGITS + r"(?:%|\s?(?:[kKM]|thousand|million)\b)?")
+_SCALE = {"k": 1e3, "K": 1e3, "thousand": 1e3, "M": 1e6, "million": 1e6}
 
 
 @dataclass
@@ -37,8 +38,10 @@ def numbers(text: str) -> list[float]:
     out = []
     for m in _NUM.findall(text):
         s = m.replace("$", "").replace(",", "").replace("−", "-").rstrip("%")
+        unit = re.search(r"\s?([kKM]|thousand|million)$", s)
+        scale = _SCALE[unit.group(1)] if unit else 1.0
         try:
-            out.append(float(s))
+            out.append(round(float(s[:unit.start()] if unit else s) * scale, 6))
         except ValueError:
             pass
     return out

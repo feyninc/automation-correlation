@@ -64,6 +64,7 @@ class Contact(_M):
     phone: str | None = None
     relation: str = ""          # manager, peer, customer, vendor, regulator, ...
     notes: str = ""
+    aliases: list[str] = []     # other addresses that reach this person (a queue they own, e.g. "t2-billing@")
 
 
 class Worker(_M):

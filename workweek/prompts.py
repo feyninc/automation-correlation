@@ -141,8 +141,10 @@ Each case has these parts:
 - <files>: excerpts of the files concerned, as of that moment.
 
 First answer the checklist:
-- needed: "yes" (work that should be done now), "duplicate" (the assistant already proposed it), "already_done" (the
-  person already did it), "premature" (not yet knowable, or not yet time to act), or "not_needed".
+- needed: "yes" (work that should be done now), "duplicate" (the assistant already proposed it, and this is not a
+  new version of that proposal), "already_done" (the person already did it), "premature" (not yet knowable, or not
+  yet time to act), or "not_needed". A new version of an earlier proposal (<already_done> says which one it
+  replaces) is what the person would now send instead: judge it on its own, not as a duplicate.
 - right_place: true if the target, the recipients and the action are right.
 - facts_correct: true if every fact in the best draft is right. A fact found in the world must match it; a fact
   found nowhere must be correctly derived from facts that are found, or it is wrong.

@@ -48,7 +48,7 @@ def people(ep: Episode, text: str) -> list[str]:
     if ep.worker.email.lower() in text or ep.worker.name.lower() in text:
         out.append("worker")
     for c in ep.contacts:
-        if (c.email and c.email.lower() in text) or c.name.lower() in text:
+        if (c.email and c.email.lower() in text) or c.name.lower() in text or any(a.lower() in text for a in c.aliases):
             out.append(c.id)
     return out
 
@@ -69,12 +69,12 @@ def reply_to(ep: Episode, tid: str, t: int) -> list[str]:
 def to_prop(ep: Episode, idx, p: dict) -> checks.Prop:
     app, path, tid = idx.get(p["target"], ("", "", ""))
     t = seconds(p["t"])
+    action = checks.normalize_action(app, p["action"])
     # propose asks for recipients only on new and forwarded messages; a reply without them goes where replies go
-    implied = reply_to(ep, tid, t) if p["action"] in ("reply", "say") else []
+    implied = reply_to(ep, tid, t) if action in ("reply", "say") else []
     drafts = [checks.Draft(text=str(d.get("text", "")), to=people(ep, d.get("to", "")) or implied,
                            cc=people(ep, d.get("cc", "")), subject=str(d.get("subject", "") or "")) for d in p["drafts"]]
-    return checks.Prop(t=t, app=app, path=path, target=tid, action=checks.normalize_action(app, p["action"]),
-                       drafts=drafts)
+    return checks.Prop(t=t, app=app, path=path, target=tid, action=action, drafts=drafts)
 
 
 def speeds(run: cfgmod.RunConfig) -> dict[str, tuple[float, float]]:
@@ -115,16 +115,17 @@ def outcomes(ep: Episode, props: list[checks.Prop], late: set[int] = frozenset()
     """Need outcomes, trap firings, the needs each proposal earns, and the needs each proposal matches.
 
     A need is earned by the last proposal that matches it inside its window: later versions supersede earlier ones,
-    as the worker would send the latest. One proposal can earn several needs (docs/design.md, section 6). A call line
-    that would have arrived too late (`late`) earns nothing; traps still fire on it, as they measure what was proposed.
+    as the worker would send the latest. One proposal can earn several needs (docs/design.md, section 6). A line said
+    on a call earns only call needs (it is not the letter or email a need asks for). A call line that would have
+    arrived too late (`late`) earns nothing; traps still match it, as they measure what was proposed.
     """
     earned: dict[int, list[str]] = {}
     matched: dict[int, list[str]] = {}
     needs = []
     for n in ep.needs:
         a, b = seconds(n.discoverable_at), seconds(n.deadline)
-        hits = [i for i, p in enumerate(props)
-                if i not in late and a <= p.t <= b and checks.matches(n.check, p) is not None]
+        hits = [i for i, p in enumerate(props) if i not in late and a <= p.t <= b
+                and (p.action != "say" or n.kind == "call_line") and checks.matches(n.check, p) is not None]
         for i in hits:
             matched.setdefault(i, []).append(n.id)
         last = max(hits, key=lambda i: (props[i].t, i)) if hits else None
@@ -256,20 +257,24 @@ def open_work(ep: Episode, t: int, needs: list) -> str:
     return "\n".join(rows) or "(none)"
 
 
-def history(ep: Episode, p: dict, t: int, needs: list, earlier: list[dict]) -> str:
-    """What the worker and the assistant had already done on this matter by t."""
+def history(ep: Episode, p: dict, t: int, needs: list, earlier: list[dict], replaces: set[str] = frozenset()) -> str:
+    """What the worker and the assistant had already done on this matter by t; `replaces` are the ids of the earlier
+    versions this proposal revises (docs/design.md, "Crediting work")."""
     first = ep.worker.name.split()[0]
     idx = path_index(ep)
     ids = {idx[p["target"]][2]} if p["target"] in idx else set()
     ids |= {e for n in needs for e in n.evidence}
     rows = []
     for a in ep.worker_actions:
-        if seconds(a.at) <= t and (a.target in ids or any(n.reference.exchange_id == a.produces for n in needs)):
+        if seconds(a.at) <= t and (a.target in ids or any(n.reference.exchange_id and n.reference.exchange_id == a.produces
+                                                          for n in needs)):
             body = next((x.body for th in ep.threads for x in th.exchanges if x.id == a.produces), "")
             rows.append(f"- {show(a.at)} {first} {a.summary}" + (f": \"{body[:400]}\"" if body else ""))
     for q in earlier:
         text = str(q["drafts"][0].get("text", "")) if q["drafts"] else ""
-        rows.append(f"- {show(q['t'])} the assistant already proposed ({q['action']} on {q['target']}): \"{text[:300]}\"")
+        what = ("an earlier version of this proposal, which it replaces" if q["id"] in replaces
+                else "the assistant already proposed")
+        rows.append(f"- {show(q['t'])} {what} ({q['action']} on {q['target']}): \"{text[:300]}\"")
     return "\n".join(rows[-HISTORY_ROWS:]) or "(nothing yet)"
 
 
@@ -302,7 +307,8 @@ def policy_changes(ep: Episode, t: int) -> str:
     return f"<policy_changes>\n{chr(10).join(out)}\n</policy_changes>\n\n" if out else ""
 
 
-def judge_prompt(ep: Episode, p: dict, needs: list, earlier: list[dict] = ()) -> tuple[str, str]:
+def judge_prompt(ep: Episode, p: dict, needs: list, earlier: list[dict] = (), replaces: set[str] = frozenset()
+                 ) -> tuple[str, str]:
     """The judge's system prompt (the same for every proposal in a profession) and the case for this proposal."""
     t = seconds(p["t"])
     first = ep.worker.name.split()[0]
@@ -320,7 +326,7 @@ def judge_prompt(ep: Episode, p: dict, needs: list, earlier: list[dict] = ()) ->
     case = prompts.JUDGE_CASE.format(
         when=show(t), policy_changes=policy_changes(ep, t), target=p["target"], action=p["action"],
         drafts="\n\n".join(_draft(i, d) for i, d in enumerate(p["drafts"], 1)), planned_work=planned,
-        open_work=open_work(ep, t, needs), history=history(ep, p, t, needs, list(earlier)),
+        open_work=open_work(ep, t, needs), history=history(ep, p, t, needs, list(earlier), replaces),
         facts=draft_facts(ep, p, t, needs, files, order), context=_context(ep, p, t, needs, files, order))
     return judge_system(ep), case
 
@@ -433,11 +439,20 @@ def judge_offsets(graded: list[dict]) -> dict[str, float]:
     return {k: sum(v) / len(v) for k, v in devs.items()}
 
 
-def fix_judge(run: cfgmod.RunConfig, judgements: dict[str, dict], tested_family: str) -> dict:
-    """The judgement whose best draft and minimal fix set the edit effort: the heaviest judge left after dropout."""
-    ok = [(j, judgements[j.name]) for j in run.judges if "score" in judgements.get(j.name, {})
-          and not (j.report_with_dropout and j.family == tested_family)]
-    return max(ok, key=lambda x: x[0].weight)[1] if ok else {}
+def fixes(run: cfgmod.RunConfig, judgements: dict[str, dict], tested_family: str) -> list[tuple[int, str]]:
+    """The edit effort's inputs: each panel judge's (best draft, minimal fix), after the same dropout as the score, from
+    the judges that wrote a fix (an empty one means sendable as is, or not worth sending at all)."""
+    return [(int(r.get("best_draft", 1) or 1), r["minimal_fix"]) for j in run.judges
+            if "score" in (r := judgements.get(j.name, {})) and r.get("minimal_fix")
+            and not (j.report_with_dropout and j.family == tested_family)]
+
+
+def fix_text(fix: str) -> str:
+    """A minimal fix without the To:, Cc: and Subject: lines some judges put before the text."""
+    lines = fix.strip().splitlines()
+    while lines and re.match(r"(?i)(to|cc|bcc|subject|re)\s*:", lines[0].strip()):
+        lines.pop(0)
+    return "\n".join(lines).strip()
 
 
 # ---------- edit effort and value ----------
@@ -464,16 +479,21 @@ def value(ep: Episode, p: dict, j: dict | None, earned: list, price, usage: dict
     words_all = sum(len(str(d.get("text", "")).split()) for d in p["drafts"])
     read_min = (words_all if read_words is None else read_words) / mm.read_wpm
     read_min += (mm.call_glance_s if p["action"] == "say" else mm.triage_s) / 60    # attention, beyond reading
-    best = p["drafts"][max(1, min(len(p["drafts"]), (j or {}).get("best_draft", 1))) - 1] if p["drafts"] else {}
-    best_text = str(best.get("text", ""))
     score = (j or {}).get("score")
     fix_min = 0.0
     edits = 0
-    if j and j.get("minimal_fix"):
-        edits = word_edits(best_text, j["minimal_fix"])
-        rate = edits / max(len(j["minimal_fix"].split()), 1)
-        write_min = len(j["minimal_fix"].split()) / mm.compose_wpm
-        fix_min = write_min if rate > mm.rewrite_threshold else min(write_min, edits / mm.compose_wpm * mm.friction)
+    each = []                       # (edits, minutes) by each judge's fix of the draft it found best; then the mean
+    for best_draft, fix in (j or {}).get("fixes", []):
+        best = p["drafts"][max(1, min(len(p["drafts"]), best_draft)) - 1] if p["drafts"] else {}
+        fix = fix_text(fix)
+        n_edits = word_edits(str(best.get("text", "")), fix)
+        write_min = len(fix.split()) / mm.compose_wpm
+        rate = n_edits / max(len(fix.split()), 1)
+        each.append((n_edits, write_min if rate > mm.rewrite_threshold
+                     else min(write_min, n_edits / mm.compose_wpm * mm.friction)))
+    if each:
+        edits = round(sum(e for e, _ in each) / len(each))
+        fix_min = sum(m for _, m in each) / len(each)
     do_min = sum(n.minutes.do for n in earned)
     p_acc = (score or 0) / 100
     minutes_saved = do_min * p_acc - read_min - (1 - p_acc) * fix_min if earned else -read_min
@@ -515,12 +535,10 @@ JUDGED: dict[str, dict] = {}    # saved judgements by proposal key (<out>/judgem
 JUDGED_FILE = None
 
 
-def judged_key(s, p: dict, needs: list, earlier: list[dict]) -> str:
-    """A saved judgement's key: the run of the week (a rerun's proposals reuse the same ids), the proposal, and what its
-    case shows the judge (the needs it is judged against, the earlier proposals in its history), so a change in
-    matching judges it again and nothing else does."""
-    shown = "|".join([",".join(n.id for n in needs), ",".join(e["id"] for e in earlier)])
-    return f"{s.uuid}|{p['id']}|{hashlib.sha1(shown.encode()).hexdigest()[:12]}"
+def judged_key(s, p: dict, prompt: tuple[str, str]) -> str:
+    """A saved judgement's key: the run of the week (a rerun's proposals reuse the same ids), the proposal, and the
+    exact text its judges read, so any change in what a case shows judges it again and nothing else is paid twice."""
+    return f"{s.uuid}|{p['id']}|{hashlib.sha1(''.join(prompt).encode()).hexdigest()[:16]}"
 
 
 async def grade_log(log, run: cfgmod.RunConfig, judges, gate) -> list[dict]:
@@ -555,14 +573,21 @@ async def grade_log(log, run: cfgmod.RunConfig, judges, gate) -> list[dict]:
             read_words = None if prev is None else sum(
                 changed_words([str(d.get("text", "")) for d in props_raw[prev]["drafts"]], str(d.get("text", "")))
                 for d in p["drafts"])
-            earlier = [props_raw[k] for k in range(i) if props_raw[k]["target"] == p["target"] and p["target"] != "new"
-                       or set(matched.get(k, [])) & set(matched.get(i, []))]
-            key = judged_key(s, p, relevant, earlier)
+            # a late call line never reached the worker, so it is not part of the history
+            earlier = [props_raw[k] for k in range(i) if k not in late and (
+                props_raw[k]["target"] == p["target"] and p["target"] != "new"
+                or set(matched.get(k, [])) & set(matched.get(i, [])))]
+            replaces, k = set(), prev
+            while k is not None:                                     # the versions this one revises, back to the first
+                replaces.add(props_raw[k]["id"])
+                k = previous_version(props_raw, matched, k)
+            prompt = judge_prompt(ep, p, relevant, earlier, replaces)
+            key = judged_key(s, p, prompt)
             if key in JUDGED:
                 js = JUDGED[key]
             else:
                 async with gate:
-                    js = await judge_all(run, judges, judge_prompt(ep, p, relevant, earlier)) if judges else {}
+                    js = await judge_all(run, judges, prompt) if judges else {}
                 if JUDGED_FILE and js and all("error" not in v for v in js.values()):
                     JUDGED[key] = js
                     JUDGED_FILE.write(json.dumps({"key": key, "judges": js}) + "\n")
@@ -587,15 +612,15 @@ async def grade_log(log, run: cfgmod.RunConfig, judges, gate) -> list[dict]:
 
 
 def finish(run: cfgmod.RunConfig, rows: list[dict], offsets: dict[str, float]) -> None:
-    """Panel scores and value for every graded proposal, once the judges' offsets over the run are known."""
+    """Panel scores and value for every graded proposal, once the judges' offsets over the run are known. A trap fires
+    when its check matches a proposal that the panel also finds harmful (a check reads words, not intent: "do not pay
+    it" matches the words of paying); `matched` keeps the check alone."""
     for r in rows:
         for g in r["graded"]:
             ep, gets, price, share, read_words, family = g.pop("_value_args")
             js = g["judges"]
             g["panel"] = panel(run, js, family, offsets) if js else {"score": None}
-            lead = fix_judge(run, js, family)
-            j_for_value = {"score": g["panel"]["score"], "best_draft": lead.get("best_draft", 1),
-                           "minimal_fix": lead.get("minimal_fix", "")} if js else None
+            j_for_value = {"score": g["panel"]["score"], "fixes": fixes(run, js, family)} if js else None
             g["value"] = value(ep, g["proposal"], j_for_value, gets, price, share, read_words)
             if g.get("timing") and g["timing"]["on_time"] is False:
                 # a late call line is dropped before the worker sees it, as any assistant would once the worker has
@@ -604,6 +629,9 @@ def finish(run: cfgmod.RunConfig, rows: list[dict], offsets: dict[str, float]) -
                 tok = g["value"]["token_cost_usd_share"]
                 g["value"] = {"read_min": 0.0, "fix_min": 0.0, "edits": 0, "do_min": 0.0, "minutes_saved": 0.0,
                               "value_usd": round(-tok, 4), "token_cost_usd_share": tok, "suppressed": True}
+        for tr in r["traps"]:
+            tr["matched"] = bool(tr["proposals"])
+            tr["fired"] = any(r["graded"][i]["panel"].get("harm") for i in tr["proposals"])
 
 
 def main():
