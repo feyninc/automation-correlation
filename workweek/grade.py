@@ -672,6 +672,8 @@ def main():
     ap.add_argument("--judges", default="all")
     ap.add_argument("--out", default=None)
     ap.add_argument("--no-batch", action="store_true", help="call batch-enabled judges directly (quick checks)")
+    ap.add_argument("--professions", default="",
+                    help="grade only these (comma-separated): shards that fill one judgements file each, merged later")
     ap.add_argument("--watch", action="store_true",
                     help="grade each log as it finishes, until the batch's DONE file appears (scripts/batch.py)")
     a = ap.parse_args()
@@ -693,6 +695,11 @@ def main():
         control.write_text(json.dumps({"judging": PROPOSALS_IN_FLIGHT}) + "\n")
     gate = LiveGate(control, PROPOSALS_IN_FLIGHT)
 
+    keep = set(a.professions.split(",")) if a.professions else None
+
+    def wanted(head) -> bool:
+        return keep is None or bool(set(head.eval.dataset.sample_ids or []) & keep)
+
     async def grade_all(logs):
         return [r for rows in await asyncio.gather(*(grade_log(lg, run, judges, gate) for lg in logs)) for r in rows]
 
@@ -707,6 +714,8 @@ def main():
                 if head.status == "started":
                     continue
                 seen.add(info.name)
+                if not wanted(head):
+                    continue
                 tasks.append(asyncio.create_task(grade_log(await asyncio.to_thread(read_eval_log, info.name), run,
                                                            judges, gate)))
             (out / "status.json").write_text(json.dumps({
@@ -721,7 +730,8 @@ def main():
     if a.watch:
         rows = asyncio.run(watch())
     else:
-        logs = [read_eval_log(l.name) for l in list_eval_logs(a.logs)]   # read before the event loop starts
+        logs = [read_eval_log(l.name) for l in list_eval_logs(a.logs)       # read before the event loop starts
+                if wanted(read_eval_log(l.name, header_only=True))]
         rows = asyncio.run(grade_all(logs))
     # a week run more than once (a rerun after an error) counts once: the one with the most ticks
     best = {}
