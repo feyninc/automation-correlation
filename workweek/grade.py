@@ -42,13 +42,19 @@ def path_index(ep: Episode) -> dict[str, tuple[str, str, str]]:
 
 
 def people(ep: Episode, text: str) -> list[str]:
-    """Contact ids named in a free-text recipient field (by email, or by full name)."""
+    """Contact ids named in a free-text recipient field: by email, full name, an alias (another address or name that
+    reaches them) or the id itself (the contact list shows ids), each as a whole word."""
     text = (text or "").lower()
+
+    def named(term: str) -> bool:
+        term = term.lower().strip()
+        return bool(term) and re.search(r"(?<![\w.@-])" + re.escape(term) + (r"(?![\w-])" if term[-1] != "@" else ""),
+                                        text) is not None
     out = []
-    if ep.worker.email.lower() in text or ep.worker.name.lower() in text:
+    if named(ep.worker.email) or named(ep.worker.name):
         out.append("worker")
     for c in ep.contacts:
-        if (c.email and c.email.lower() in text) or c.name.lower() in text or any(a.lower() in text for a in c.aliases):
+        if any(named(x) for x in [c.email or "", c.name, c.id, *c.aliases]):
             out.append(c.id)
     return out
 
@@ -70,6 +76,9 @@ def to_prop(ep: Episode, idx, p: dict) -> checks.Prop:
     app, path, tid = idx.get(p["target"], ("", "", ""))
     t = seconds(p["t"])
     action = checks.normalize_action(app, p["action"])
+    th = next((x for x in ep.threads if x.id == tid), None) if app == "phone" else None
+    if action == "say" and p["action"] != "say" and th and t > th.call_end():
+        action = "update"               # a reply on a call's file after the call has ended is a note, not a line
     # propose asks for recipients only on new and forwarded messages; a reply without them goes where replies go
     implied = reply_to(ep, tid, t) if action in ("reply", "say") else []
     drafts = [checks.Draft(text=str(d.get("text", "")), to=people(ep, d.get("to", "")) or implied,

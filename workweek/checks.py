@@ -1,7 +1,7 @@
 """The shared check evaluator: does a proposal match a need's or a trap's predicate?
 
 Matching is case-insensitive on word boundaries, with numbers normalized ($, commas, trailing zeros), so "320" does
-not match "3,200"; `number_equals` also reads "$50k" and "$11.5M" as 50,000 and 11,500,000. A proposal matches if any of its drafts does. `number_equals` compares every number in a draft with
+not match "3,200"; `number_equals` also reads "$50k" and "$11.5M" as 50,000 and 11,500,000 (as well as 50 and 11.5). A proposal matches if any of its drafts does. `number_equals` compares every number in a draft with
 the value within `tol`.
 """
 from __future__ import annotations
@@ -39,11 +39,13 @@ def numbers(text: str) -> list[float]:
     for m in _NUM.findall(text):
         s = m.replace("$", "").replace(",", "").replace("−", "-").rstrip("%")
         unit = re.search(r"\s?([kKM]|thousand|million)$", s)
-        scale = _SCALE[unit.group(1)] if unit else 1.0
         try:
-            out.append(round(float(s[:unit.start()] if unit else s) * scale, 6))
+            x = float(s[:unit.start()] if unit else s)
         except ValueError:
-            pass
+            continue
+        out.append(x)                                   # "$4.82M" is 4.82 (as a figure in millions) and 4,820,000
+        if unit:
+            out.append(round(x * _SCALE[unit.group(1)], 6))
     return out
 
 
@@ -56,8 +58,17 @@ def _norm(text: str, strip_commas: bool = True) -> str:
     return re.sub(_DIGITS if strip_commas else r"\d+(?:\.\d+)?", fix, text.lower())
 
 
+def _plain(text: str) -> str:
+    """Curly quotes as straight ones, every dash as a hyphen, and a hyphen between words as a space ("can’t" is "can't",
+    "0–10" is "0-10", "vendor-master" is "vendor master")."""
+    text = text.replace("\u2019", "'").replace("\u2018", "'").replace("\u201c", '"').replace("\u201d", '"')
+    text = re.sub("[\u2010\u2011\u2013\u2014]", "-", text)
+    return re.sub(r"(?<=[^\W\d_])-(?=[^\W\d_])", " ", text)
+
+
 def mentions(text: str, term: str) -> bool:
     """Whole-word, case-insensitive; numbers match with or without thousands commas and trailing zeros."""
+    text, term = _plain(text), _plain(term)
     for strip in (True, False):
         t, q = _norm(text, strip), _norm(term, strip).strip()
         if q and re.search(r"(?<![\w])" + re.escape(q) + r"(?![\w])", t):
