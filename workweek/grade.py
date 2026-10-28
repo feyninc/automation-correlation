@@ -348,13 +348,17 @@ def parse_judgement(text: str) -> dict | None:
 
 
 NO_BATCH = False            # --no-batch: skip batch APIs (quick checks)
+JUDGE_CONNECTIONS = 48      # concurrent calls per judge model (600 at once drew Bedrock 503s from Opus 5.5)
 JUDGE_ATTEMPTS = 7          # per judge and proposal: API errors and unparseable replies are retried, waiting 5 s
                             # doubling to 160 s (as the engine retries a tested model's calls)
 
 
 async def judge_all(run: cfgmod.RunConfig, judges, prompt: tuple[str, str]) -> dict[str, dict]:
     async def one(j):
-        gen = {**run.generate_for(j), "max_tokens": 16000}
+        # Inspect's own retries back off for up to half an hour on a 503, which stalls every proposal waiting on
+        # the panel; keep them short and let JUDGE_ATTEMPTS retry. Each judge gets at most JUDGE_CONNECTIONS calls.
+        gen = {**run.generate_for(j), "max_tokens": 16000, "max_retries": 2, "timeout": 300,
+               "max_connections": JUDGE_CONNECTIONS}
         if NO_BATCH:
             gen.pop("batch", None)
         model = get_model(j.model, config=GenerateConfig(**gen), **j.model_args)
