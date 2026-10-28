@@ -54,11 +54,13 @@ async def save(where: Path | None, sim, messages: list, *, day: int, t: int, res
 
 
 async def load(where: Path | None, sim, window: tuple[int, int]) -> dict | None:
-    """Restore sim and the home folder from a checkpoint for this window; returns the position and messages."""
+    """Restore sim and the home folder from a checkpoint for this window, or for one that starts at the same time and
+    ends earlier (a run extended, e.g. Monday to Monday-Tuesday); returns the position and messages."""
     if where is None or not where.exists():
         return None
     data = json.loads(where.read_text())
-    if data.get("version") != VERSION or tuple(data["window"]) != tuple(window):
+    (a, b), (a2, b2) = data["window"], window
+    if data.get("version") != VERSION or a != a2 or b > b2:
         return None
     for k, v in data["sim"].items():
         setattr(sim, k, tuple(v) if k == "measured" and v else v)
