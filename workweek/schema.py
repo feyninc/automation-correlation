@@ -214,6 +214,7 @@ class Need(_M):
     minutes: Minutes
     worker_intent: str               # private: what the worker would decide and why (for the simulated worker)
     ledger_keys: list[str] = []      # figures this need depends on
+    void: str = ""                   # why it is left out of grading (the week as run made it impossible), if it is
 
     @model_validator(mode="after")
     def _window(self):
@@ -234,6 +235,7 @@ class Trap(_M):
     harm_usd_upper: float | None = None   # sourced upper bound for the sensitivity table
     source: str = ""
     worker_mistakes: list[str] = []       # worker actions that deliberately fall for it (the script's own errors)
+    void: str = ""                        # why it is left out of grading (it could never be set off), if it is
 
 
 class Sourced(_M):

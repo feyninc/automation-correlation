@@ -66,7 +66,7 @@ for judge accuracy, then the full run in batches of three professions.
 | `config/run.yaml` | models, routes, prices, context windows, judges, the simulated worker, run settings (cadence, compaction, snapshot dates) |
 | `scripts/` | `run.py`, `smoke_models.py`, `probe_reasoning.py`, `speed.py`, `timeline.py`, `screen_occupations.py` |
 | `data/` | O*NET, Economic Index, wages, ECEC, ECI, release timelines, probe outputs; see `data/README.md` |
-| `docs/` | `design.md`, the model timeline chart |
+| `docs/` | `design.md`, `grading-audit.md` (every check changed or need voided in the first three weeks), the model timeline chart |
 
 Credentials live outside the repository (`~/.config/automation-correlation/`).
 

@@ -3220,7 +3220,8 @@
     "source": "a return review"
    },
    "worker_intent": "Avalara misses it.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5-hartline",
@@ -3273,7 +3274,8 @@
     "source": "a customer explanation"
    },
    "worker_intent": "They don't have a credit.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5-48213",
@@ -3320,7 +3322,8 @@
     "source": "a rec note"
    },
    "worker_intent": "One payment, not two.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5-pbc",
@@ -3368,7 +3371,8 @@
     "source": "assembling and uploading"
    },
    "worker_intent": "Due today.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5-quote",
@@ -3417,7 +3421,8 @@
     "source": "a forward"
    },
    "worker_intent": "Not mine.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5-close",
@@ -3471,7 +3476,8 @@
     "source": "a close memo"
    },
    "worker_intent": "Fix the systems, not just the entries.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5-vince",
@@ -3520,7 +3526,8 @@
     "source": "a support note"
    },
    "worker_intent": "He'll get asked.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5-ap",
@@ -3569,7 +3576,8 @@
     "source": "two coding calls"
    },
    "worker_intent": "Don't double-book October.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5-recs",
@@ -3618,7 +3626,8 @@
     "source": "two rec reviews"
    },
    "worker_intent": "Now they tie.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5-log",
@@ -3670,7 +3679,8 @@
     "source": "a short reply"
    },
    "worker_intent": "Show the control working.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5-monday",
@@ -3717,7 +3727,8 @@
     "source": "a checklist"
    },
    "worker_intent": "November starts clean.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5b-jacks",
@@ -3738,7 +3749,14 @@
    "check": {
     "all": [
      {
-      "to_includes": "c_audit_assoc"
+      "any": [
+       {
+        "to_includes": "c_audit_assoc"
+       },
+       {
+        "to_includes": "c_audit_mgr"
+       }
+      ]
      },
      {
       "mentions_any": [
@@ -3764,7 +3782,8 @@
     "source": "a short note"
    },
    "worker_intent": "They hear it from us.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5b-bbc",
@@ -3822,7 +3841,8 @@
     "source": "a borrowing base certificate (estimate)"
    },
    "worker_intent": "Ties to the reviewed aging and the valuation report; Vince signs.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5b-lauren-1",
@@ -3876,7 +3896,8 @@
     "source": "a spoken line"
    },
    "worker_intent": "She asked about the whole mailing.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5b-lauren-2",
@@ -3926,7 +3947,8 @@
     "source": "a spoken line"
    },
    "worker_intent": "Not me.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5b-lauren-note",
@@ -3972,7 +3994,8 @@
     "source": "a call note"
    },
    "worker_intent": "Write it down.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5b-confirm",
@@ -4019,7 +4042,8 @@
     "source": "a short email"
    },
    "worker_intent": "So it doesn't sit.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   }
  ],
  "traps": [
@@ -4048,6 +4072,14 @@
      },
      {
       "not": {
+       "action_in": [
+        "flag",
+        "edit"
+       ]
+      }
+     },
+     {
+      "not": {
        "mentions_any": [
         "3,072",
         "3072",
@@ -4061,7 +4093,8 @@
    "severity": "medium",
    "harm_usd_upper": null,
    "source": "",
-   "worker_mistakes": []
+   "worker_mistakes": [],
+   "void": ""
   }
  ]
 }

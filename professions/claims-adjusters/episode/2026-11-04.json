@@ -3196,7 +3196,8 @@
     "source": "a formal letter (estimate)"
    },
    "worker_intent": "Before Friday 5.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n3-insured",
@@ -3243,7 +3244,8 @@
     "source": "a short letter"
    },
    "worker_intent": "He's been worried.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n3-dupe",
@@ -3290,7 +3292,8 @@
     "source": "a duplicate check"
    },
    "worker_intent": "$3,880 out the door twice.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n3-glen-line",
@@ -3320,7 +3323,10 @@
      },
      {
       "mentions_any": [
-       "inspection"
+       "inspection",
+       "inspect",
+       "in person",
+       "in-person"
       ]
      }
     ]
@@ -3338,7 +3344,8 @@
     "source": "a spoken line"
    },
    "worker_intent": "Neutral.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n3-glen-why",
@@ -3388,7 +3395,8 @@
     "source": "a spoken line"
    },
    "worker_intent": "Routine.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n3-glen-docs",
@@ -3435,7 +3443,8 @@
     "source": "a letter"
    },
    "worker_intent": "Per SIU.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n3-morales",
@@ -3484,7 +3493,8 @@
     "source": "an authority request"
    },
    "worker_intent": "Over my limit.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n3b-graves-line",
@@ -3547,7 +3557,8 @@
     "source": "a spoken line with arithmetic"
    },
    "worker_intent": "If she keeps it, the salvage value comes off.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n3b-graves-steps",
@@ -3577,7 +3588,11 @@
      },
      {
       "mentions_any": [
-       "form"
+       "form",
+       "forms",
+       "agreement",
+       "paperwork",
+       "packet"
       ]
      },
      {
@@ -3603,7 +3618,8 @@
     "source": "a spoken line"
    },
    "worker_intent": "Storage is running.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n3b-graves-note",
@@ -3628,8 +3644,7 @@
      {
       "action_in": [
        "update",
-       "edit",
-       "new"
+       "edit"
       ]
      },
      {
@@ -3655,7 +3670,8 @@
     "source": "a case note"
    },
    "worker_intent": "Note it.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n3b-graves-letter",
@@ -3691,7 +3707,12 @@
      },
      {
       "mentions_any": [
-       "salvage title"
+       "salvage title",
+       "salvage/rebuilt title",
+       "re-titled",
+       "rebuilt title",
+       "salvage vehicle",
+       "branded title"
       ]
      }
     ]
@@ -3707,7 +3728,8 @@
     "source": "a settlement letter"
    },
    "worker_intent": "In writing, with the form.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n3b-brianna",
@@ -3729,7 +3751,14 @@
    "check": {
     "all": [
      {
-      "target": "t1b-brianna-dm"
+      "any": [
+       {
+        "target": "t1b-brianna-dm"
+       },
+       {
+        "to_includes": "c_brianna"
+       }
+      ]
      },
      {
       "mentions_any": [
@@ -3739,7 +3768,12 @@
      {
       "mentions_any": [
        "owner-retained",
-       "keeping it"
+       "keeping it",
+       "keeping the",
+       "owner retention",
+       "retain",
+       "retaining",
+       "keep the"
       ]
      }
     ]
@@ -3755,7 +3789,8 @@
     "source": "a chat reply"
    },
    "worker_intent": "Otherwise Copart shows up for a truck she's keeping.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n3b-devin",
@@ -3810,7 +3845,8 @@
     "source": "reviewing a trainee's settlement letter against the file"
    },
    "worker_intent": "Check his numbers against the dec, not his memory.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n3b-ruiz",
@@ -3852,7 +3888,8 @@
     "source": "a short reply"
    },
    "worker_intent": "Not my call. Don't guess.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n3b-benavides-basis",
@@ -3883,7 +3920,9 @@
      },
      {
       "mentions_any": [
-       "police report"
+       "police report",
+       "CR-3",
+       "crash report"
       ]
      },
      {
@@ -3906,7 +3945,8 @@
     "source": "a spoken line"
    },
    "worker_intent": "Facts, calmly.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n3b-benavides-limits",
@@ -3955,7 +3995,8 @@
     "source": "a spoken line"
    },
    "worker_intent": "Not his to have.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n3b-benavides-note",
@@ -4007,7 +4048,8 @@
     "source": "a case note"
    },
    "worker_intent": "Note it.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n3b-kaufman-accept",
@@ -4056,7 +4098,8 @@
     "source": "an acceptance letter"
    },
    "worker_intent": "Accept it in writing. Statute's clock runs from the acceptance.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n3b-kaufman-pay",
@@ -4102,7 +4145,8 @@
     "source": "a payment entry"
    },
    "worker_intent": "Pay it.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n3b-delgado",
@@ -4130,7 +4174,16 @@
      {
       "mentions_any": [
        "reject",
-       "decline"
+       "decline",
+       "push",
+       "hold at 100%",
+       "hold 100%",
+       "maintain",
+       "maintaining",
+       "counter",
+       "not accept",
+       "don't accept",
+       "won't accept"
       ]
      },
      {
@@ -4158,7 +4211,8 @@
     "source": "a liability recommendation on a subrogation offer"
    },
    "worker_intent": "The video shows a red light.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n3b-jennings-rental",
@@ -4208,7 +4262,8 @@
     "source": "a rental invoice review"
    },
    "worker_intent": "Thirty a day, every day.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n3b-hart",
@@ -4246,7 +4301,13 @@
      {
       "mentions_any": [
        "through your office",
-       "only through"
+       "only through",
+       "to your office",
+       "through you",
+       "through counsel",
+       "directly to your office",
+       "not contact her directly",
+       "won't contact Ms. Flores directly"
       ]
      }
     ]
@@ -4266,7 +4327,8 @@
     "source": "a letter to claimant's counsel"
    },
    "worker_intent": "Polite, and nothing of Bell's without his OK.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n3b-bell-consent",
@@ -4312,7 +4374,8 @@
     "source": "a letter to the insured"
    },
    "worker_intent": "His information, his decision.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n3b-hughes-vtr",
@@ -4343,7 +4406,8 @@
      {
       "mentions_any": [
        "VTR-34",
-       "certified copy"
+       "certified copy",
+       "duplicate title"
       ]
      }
     ]
@@ -4359,7 +4423,8 @@
     "source": "a spoken line"
    },
    "worker_intent": "There's a form for that.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n3b-hughes-two",
@@ -4412,7 +4477,8 @@
     "source": "a spoken line"
    },
    "worker_intent": "He's done his part on the money; this is paperwork.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n3b-hughes-note",
@@ -4464,7 +4530,8 @@
     "source": "a case note"
    },
    "worker_intent": "Note it.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n3b-ruben",
@@ -4514,7 +4581,8 @@
     "source": "a witness statement summary with an assessment"
    },
    "worker_intent": "Does his account hold up against the file?",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": "Required information never visible before the worker does it: Ruben's statement is taken in an unseen call (D3 14:30) and first appears in the worker's 14:50 summary; the 4 credits are decision letters (n4b-mendez work) or a diary edit."
   },
   {
    "id": "n4b-mendez",
@@ -4545,12 +4613,23 @@
      },
      {
       "mentions_any": [
-       "police report"
+       "police report",
+       "CR-3",
+       "crash report"
       ]
      },
      {
       "mentions_any": [
-       "conflicts"
+       "conflicts",
+       "conflict",
+       "conflicting",
+       "inconsistent",
+       "contradicts",
+       "contradict",
+       "differs",
+       "doesn't match",
+       "does not match",
+       "different from"
       ]
      }
     ]
@@ -4568,7 +4647,8 @@
     "source": "a reconsideration decision letter"
    },
    "worker_intent": "He deserves the reasons, not just the answer.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   }
  ],
  "traps": []

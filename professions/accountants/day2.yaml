@@ -163,7 +163,7 @@ needs:
     due: "D2 17:00"
     evidence: [doc-adp, pol-payroll-accrual]
     ref: a2-payroll
-    check: {all: [{number_equals: {value: 602107.98, tol: 0.01}}]}
+    check: {"all": [{"number_equals": {"value": 602107.98, "tol": 0.01}}, {"any": [{"number_equals": {"value": 559320}}, {"number_equals": {"value": 1118640}}, {"number_equals": {"value": 42787.98, "tol": 0.01}}]}]}
     must: ["$1,118,640.00 x 5/10 = $559,320.00 + FICA $42,787.98 = $602,107.98, reversing 11/1", "Benefits excluded"]
     must_not: ["Uses 7 calendar days or includes benefits"]
     minutes: [15, "a formula accrual with new inputs (estimate)"]
@@ -176,7 +176,7 @@ needs:
     due: "D2 17:00"
     evidence: [doc-northfield, t1-darnell, pol-je]
     ref: a2-payroll
-    check: {all: [{number_equals: {value: 27300}}, {mentions_any: [Northfield]}]}
+    check: {"all": [{"number_equals": {"value": 27300}}, {"mentions_any": ["Northfield"]}, {"not": {"target": "t1b-hector"}}]}
     must: ["$27,300.00 to freight out in October, supported by the carrier report; invoice arrives in November"]
     minutes: [10, "an accrual from a carrier report"]
     intent: "October expense, November invoice."
@@ -188,7 +188,7 @@ needs:
     due: "D5 17:00"
     evidence: [doc-avalara-use, doc-ap-questions, pol-capex]
     ref: a2-use-tax
-    check: {all: [{number_equals: {value: 3072}}, {mentions_any: [use tax]}]}
+    check: {"all": [{"number_equals": {"value": 3072}}, {"mentions_any": ["use tax"]}, {"any": [{"target": ["doc-avalara-use", "doc-je-accrued"]}, {"to_includes": "c_jade"}, {"to_includes": "c_tom"}, {"all": [{"to_includes": "c_rachel"}, {"mentions_any": ["JE-10310"]}, {"mentions_any": ["approve", "approval"]}, {"before": "D3 17:00"}]}]}]}
     must: ["$38,400 x 8.0% = $3,072.00, capitalized with the fixture; added to the October return due 11/23", "Why Avalara missed it"]
     minutes: [15, "a use tax catch and entry"]
     intent: "Avalara won't see it."
@@ -200,7 +200,7 @@ needs:
     due: "D3 12:00"
     evidence: [doc-ar-aging, doc-gl-1010, doc-bank-oct]
     ref: a3-monique
-    check: {all: [{to_includes: c_monique}, {mentions_any: [CR-55102]}, {number_equals: {value: 18430}}]}
+    check: {"all": [{"to_includes": "c_monique"}, {"mentions_any": ["CR-55102"]}, {"any": [{"number_equals": {"value": 18430}}, {"mentions_any": ["reverse", "reversal", "void", "delete", "duplicate"]}]}]}
     must: ["The unapplied -18,430.00 is CR-55102, the bank import duplicating JE-10288; reverse CR-55102 (cash and AR both fixed)"]
     must_not: ["Refunds or writes off the credit"]
     minutes: [25, "tracing one receipt across GL, bank and aging (estimate)"]
@@ -237,7 +237,7 @@ needs:
     due: "D2 14:00"
     evidence: [t2-bank, doc-outstanding, pol-treasury]
     ref: a2-pospay
-    check: {all: [{to_includes: c_bank}, {mentions_any: ["48209"]}, {mentions_any: [pay]}]}
+    check: {"all": [{"to_includes": "c_bank"}, {"mentions_any": ["48209"]}, {"mentions_any": ["pay", "payment", "paid", "honor", "approve", "approved"]}]}
     must: ["Pay: same amount, the vendor's own legal name and account; decision before the 2 p.m. default"]
     minutes: [5, "checking an exception against the issue file"]
     intent: "This one's fine."
@@ -249,7 +249,7 @@ needs:
     due: "D3 17:00"
     evidence: [doc-close-calendar, doc-outstanding, pol-je]
     ref_text: "Utilities: City of Grove City bills mid-month in arrears, so October usage needs an accrual: estimate 12,604.33 (September's bill, check 48190), Dr 6720 utilities / Cr 2200 accrued liabilities, reversing 11/1."
-    check: {all: [{mentions_any: [utilities, Grove City]}, {mentions_any: [accrual, accrue, accrued]}]}
+    check: {"all": [{"mentions_any": ["utilities", "Grove City"]}, {"mentions_any": ["accrual", "accrue", "accrued"]}, {"any": [{"number_equals": {"value": 12604.33, "tol": 0.01}}, {"mentions_any": ["September's bill", "September bill", "48190", "in arrears"]}]}]}
     must: ["October usage accrued on a reasonable basis (September's bill)"]
     minutes: [5, "a small accrual"]
     intent: "On the calendar for WD2."
@@ -274,7 +274,7 @@ needs:
     due: "D2 17:00"
     evidence: [t2-priscilla2, pol-payroll-accrual]
     ref: a2-401k
-    check: {all: [{to_includes: c_priscilla}, {mentions_any: ["3.2", policy]}, {mentions_any: [double-count, "booked monthly", invoices]}]}
+    check: {"all": [{"to_includes": "c_priscilla"}, {"mentions_any": ["3.2", "policy", "ACCT-320"]}, {"mentions_any": ["double-count", "booked monthly", "invoices", "invoice"]}]}
     must: ["Wages plus FICA only; benefits are booked monthly from invoices"]
     minutes: [2, "a short answer"]
     intent: "Policy 3.2."

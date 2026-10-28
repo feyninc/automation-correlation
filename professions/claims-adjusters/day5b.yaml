@@ -562,7 +562,7 @@ needs:
     task: 21426
     evidence: [c5b-benavides, m2b-benavides]
     ref: c5b-benavides.2
-    check: {all: [{target: c5b-benavides}, {action_in: [say]}, {mentions_any: [six thousand five hundred twenty-two]}, {mentions_any: [release]}]}
+    check: {"all": [{"target": "c5b-benavides"}, {"action_in": ["say"]}, {"any": [{"mentions_any": ["six thousand five hundred twenty-two"]}, {"number_equals": {"value": 6522.6}}]}, {"mentions_any": ["release"]}]}
     must: ["The exact amount ($6,522.60); a property damage release before payment"]
     minutes: [0.3, "a spoken line"]
     intent: "Exact figure, then the release."
@@ -574,7 +574,7 @@ needs:
     due: "D5 09:30"
     evidence: [c5b-benavides]
     ref: a5b-benavides-note
-    check: {all: [{target: c5b-benavides}, {action_in: [update, edit, new]}, {number_equals: {value: 6522.60}}, {mentions_any: [release]}]}
+    check: {"all": [{"target": "c5b-benavides"}, {"action_in": ["update", "edit"]}, {"number_equals": {"value": 6522.6}}, {"mentions_any": ["release"]}]}
     must: ["Accepted; amount; no lien; release sent; payee"]
     minutes: [3, "a case note"]
     intent: "Note it."
@@ -623,7 +623,7 @@ needs:
     due: "D5 12:00"
     evidence: [t1b-brianna-dm, t5b-graves]
     ref: a5b-brianna
-    check: {all: [{target: t1b-brianna-dm}, {mentions_any: [salvage title]}, {mentions_any: [form]}]}
+    check: {"all": [{"any": [{"target": "t1b-brianna-dm"}, {"to_includes": "c_brianna"}]}, {"mentions_any": ["salvage title", "owner-retained salvage", "TxDMV", "salvage reporting", "salvage retention"]}, {"mentions_any": ["form"]}]}
     must: ["Form and title received; report for the salvage title"]
     minutes: [3, "a chat reply"]
     intent: "Brianna needs the paper."
@@ -657,7 +657,7 @@ needs:
     due: "D5 17:15"
     evidence: [t5b-sandra, doc-delgado-subro, pol-guidelines-2]
     ref: a5b-delgado-pay
-    check: {all: [{to_includes: c_finance}, {number_equals: {value: 500}}, {mentions_any: [Delgado]}, {mentions_any: ["100%"]}]}
+    check: {"all": [{"to_includes": "c_finance"}, {"number_equals": {"value": 500}}, {"mentions_any": ["Delgado"]}, {"mentions_any": ["100%", "full recovery", "in full", "recovered our full", "recovered the full", "full amount"]}]}
     must: ["$500 to Rosa Delgado: 100% recovery x $500 deductible"]
     minutes: [4, "a payment entry"]
     intent: "Her share of the recovery."
@@ -669,7 +669,7 @@ needs:
     due: "D5 17:15"
     evidence: [t5b-wade-lyle, doc-lyle-demand, doc-lyle-eval]
     ref: a5b-ortiz
-    check: {all: [{to_includes: c_ortiz}, {mentions_any: [Explanation of Benefits, actually paid]}, {mentions_any: [December 5]}]}
+    check: {"all": [{"to_includes": "c_ortiz"}, {"mentions_any": ["Explanation of Benefits", "actually paid"]}, {"mentions_any": ["December 5", "December 5th", "12/5", "December 4", "12/4", "30-day", "thirty-day", "30 days", "thirty days"]}]}
     must: ["Receipt and deadline confirmed; EOBs requested; response before 12/5"]
     must_not: ["Puts out a number before Wade sets authority"]
     minutes: [6, "a letter to claimant's counsel"]
@@ -747,6 +747,7 @@ needs:
     intent: "Note it."
   - id: n5b-danner-rs
     title: Summarize the theft statement for SIU
+    void: "Required information never visible before the worker does it: Danner's recorded statement is an unseen call (D5 12:40); its content (key inconsistency) appears only in the worker's 13:12 summary; credits are post-13:12."
     kind: doc
     task: 21422
     from: "D5 10:15"
@@ -766,7 +767,7 @@ needs:
     due: "D5 17:15"
     evidence: [t5b-paul, doc-garza-medstmt, doc-garza-file, t1b-garza]
     ref: a5b-garza-stmt
-    check: {all: [{to_includes: c_defense}, {mentions_any: [glare]}, {number_equals: {value: 19870}}, {mentions_any: [authority]}]}
+    check: {"all": [{"to_includes": "c_defense"}, {"mentions_any": ["glare", "sun"]}, {"number_equals": {"value": 19870}}, {"mentions_any": ["authority"]}]}
     must: ["No texting admission (sun glare per his statement)", "Surgery 11/12/2025", "Paid or incurred $19,870", "Remove the authority figure"]
     must_not: ["Approves the draft as written"]
     minutes: [30, "checking a mediation statement against the claim file"]
@@ -779,7 +780,7 @@ needs:
     due: "D5 17:15"
     evidence: [t1b-audit, doc-pending, doc-reserve-review]
     ref: a5b-q4-audit
-    check: {all: [{mentions_any: [LR-26-117463]}, {mentions_any: [LR-26-117922]}, {mentions_any: [LR-26-117966]}, {mentions_any: [reserve]}]}
+    check: {"all": [{"mentions_any": ["LR-26-117259", "117259"]}, {"mentions_any": ["LR-26-117463", "117463"]}, {"mentions_any": ["LR-26-117922", "117922"]}, {"mentions_any": ["LR-26-117966", "117966"]}, {"mentions_any": ["LR-26-118102", "118102"]}, {"mentions_any": ["reserve"]}, {"mentions_any": ["final invoice"]}, {"mentions_any": ["salvage", "Copart", "2,905"]}]}
     must: ["Each of the five files against the audit's four checks, with what to fix before 11/16"]
     minutes: [40, "a self-audit of five files (8 minutes each)"]
     intent: "Find my own misses before Theresa does."
@@ -789,7 +790,7 @@ needs:
     task: 21417
     evidence: [c5b-biggs, doc-biggs-fnol]
     ref: c5b-biggs.2
-    check: {all: [{target: c5b-biggs}, {action_in: [say]}, {mentions_any: [comprehensive]}, {mentions_any: [five-hundred-dollar, "500"]}]}
+    check: {"all": [{"target": "c5b-biggs"}, {"action_in": ["say"]}, {"mentions_any": ["comprehensive"]}, {"mentions_any": ["five-hundred-dollar", "five hundred", "500"]}]}
     must: ["Comprehensive, $500 deductible, not collision's $1,000"]
     must_not: ["Applies the collision deductible"]
     minutes: [0.3, "a spoken line"]
@@ -800,7 +801,7 @@ needs:
     task: 21422
     evidence: [c5b-biggs, doc-biggs-fnol, pol-guidelines-2]
     ref: c5b-biggs.4
-    check: {all: [{target: c5b-biggs}, {action_in: [say]}, {mentions_any: [any shop, choose]}, {mentions_any: [thirty dollars]}]}
+    check: {"all": [{"target": "c5b-biggs"}, {"action_in": ["say"]}, {"mentions_any": ["any shop", "choose"]}, {"mentions_any": ["thirty dollars", "$30", "30 a day", "30 dollars"]}]}
     must: ["His choice of shop; DRP as an option; $30/$900 transportation from 24 hours after the loss"]
     minutes: [0.3, "a spoken line"]
     intent: "He has rental coverage; tell him."
@@ -836,7 +837,7 @@ needs:
     due: "D5 17:15"
     evidence: [doc-biggs-fnol]
     ref: a5b-biggs-reserve
-    check: {all: [{mentions_any: [LR-26-118344]}, {mentions_any: [reserve]}]}
+    check: {"all": [{"mentions_any": ["LR-26-118344", "Biggs"]}, {"mentions_any": ["reserve"]}, {"mentions_any": ["comprehensive"]}, {"mentions_any": ["rental", "transportation"]}]}
     must: ["Reasoned reserves on the comprehensive and rental features"]
     minutes: [3, "an initial reserve"]
     intent: "Day-one reserve."

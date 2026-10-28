@@ -269,6 +269,6 @@ traps:
     title: Filing use tax at $225.62
     kind: stale_info
     evidence: [doc-avalara-return]
-    check: {all: [{number_equals: {value: 225.62, tol: 0.01}}, {mentions_any: [approve, approved, file, filed]}, {not: {mentions_any: ["3,072", "3072", Hoosier]}}]}
+    check: {"all": [{"number_equals": {"value": 225.62, "tol": 0.01}}, {"mentions_any": ["approve", "approved", "file", "filed"]}, {"not": {"action_in": ["flag", "edit"]}}, {"not": {"mentions_any": ["3,072", "3072", "Hoosier"]}}]}
     correct: "Add the fixture's $3,072.00."
     severity: medium

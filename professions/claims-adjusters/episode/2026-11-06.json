@@ -3341,7 +3341,8 @@
     "source": "a payment request"
    },
    "worker_intent": "Now it's clean.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5-insured",
@@ -3382,7 +3383,8 @@
     "source": "a short letter"
    },
    "worker_intent": "He'll sleep better.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5-carla-pay",
@@ -3429,7 +3431,8 @@
     "source": "a payment entry"
    },
    "worker_intent": "Pay promptly.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5-extension",
@@ -3461,7 +3464,8 @@
      {
       "mentions_any": [
        "inspection",
-       "records"
+       "records",
+       "investigation"
       ]
      }
     ]
@@ -3479,7 +3483,8 @@
     "source": "a statutory notice letter"
    },
    "worker_intent": "Stay compliant.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5-diary",
@@ -3531,7 +3536,8 @@
     "source": "a diary note"
    },
    "worker_intent": "Nothing slips.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5b-benavides-line",
@@ -3560,8 +3566,17 @@
       ]
      },
      {
-      "mentions_any": [
-       "six thousand five hundred twenty-two"
+      "any": [
+       {
+        "mentions_any": [
+         "six thousand five hundred twenty-two"
+        ]
+       },
+       {
+        "number_equals": {
+         "value": 6522.6
+        }
+       }
       ]
      },
      {
@@ -3582,7 +3597,8 @@
     "source": "a spoken line"
    },
    "worker_intent": "Exact figure, then the release.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5b-benavides-note",
@@ -3607,8 +3623,7 @@
      {
       "action_in": [
        "update",
-       "edit",
-       "new"
+       "edit"
       ]
      },
      {
@@ -3634,7 +3649,8 @@
     "source": "a case note"
    },
    "worker_intent": "Note it.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5b-benavides-release",
@@ -3680,7 +3696,8 @@
     "source": "a release cover note"
    },
    "worker_intent": "Get it signed today.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5b-benavides-pay",
@@ -3726,7 +3743,8 @@
     "source": "a payment entry"
    },
    "worker_intent": "Signed, so pay.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5b-graves-pay",
@@ -3776,7 +3794,8 @@
     "source": "a payment entry"
    },
    "worker_intent": "Owner-retained figure, not the surrender figure.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5b-brianna",
@@ -3797,11 +3816,22 @@
    "check": {
     "all": [
      {
-      "target": "t1b-brianna-dm"
+      "any": [
+       {
+        "target": "t1b-brianna-dm"
+       },
+       {
+        "to_includes": "c_brianna"
+       }
+      ]
      },
      {
       "mentions_any": [
-       "salvage title"
+       "salvage title",
+       "owner-retained salvage",
+       "TxDMV",
+       "salvage reporting",
+       "salvage retention"
       ]
      },
      {
@@ -3822,7 +3852,8 @@
     "source": "a chat reply"
    },
    "worker_intent": "Brianna needs the paper.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5b-delgado-line",
@@ -3875,7 +3906,8 @@
     "source": "a spoken line"
    },
    "worker_intent": "Good news, accurately.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5b-delgado-note",
@@ -3922,7 +3954,8 @@
     "source": "a short case note"
    },
    "worker_intent": "Note it.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5b-delgado-pay",
@@ -3958,7 +3991,12 @@
      },
      {
       "mentions_any": [
-       "100%"
+       "100%",
+       "full recovery",
+       "in full",
+       "recovered our full",
+       "recovered the full",
+       "full amount"
       ]
      }
     ]
@@ -3974,7 +4012,8 @@
     "source": "a payment entry"
    },
    "worker_intent": "Her share of the recovery.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5b-ortiz",
@@ -4006,7 +4045,15 @@
      },
      {
       "mentions_any": [
-       "December 5"
+       "December 5",
+       "December 5th",
+       "12/5",
+       "December 4",
+       "12/4",
+       "30-day",
+       "thirty-day",
+       "30 days",
+       "thirty days"
       ]
      }
     ]
@@ -4024,7 +4071,8 @@
     "source": "a letter to claimant's counsel"
    },
    "worker_intent": "Wade said no number yet.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5b-lucero-eval",
@@ -4074,7 +4122,8 @@
     "source": "a BI evaluation (estimate)"
    },
    "worker_intent": "She's paying these herself. Evaluate it fairly and soon.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5b-simmons-close",
@@ -4123,7 +4172,8 @@
     "source": "a closing note"
    },
    "worker_intent": "The file should tell the story if anyone asks.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5b-tdecu",
@@ -4175,7 +4225,8 @@
     "source": "a lienholder letter"
    },
    "worker_intent": "Pay inside the good-through date and get the title moving.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5b-olsen-line",
@@ -4230,7 +4281,8 @@
     "source": "a spoken line"
    },
    "worker_intent": "She paid; she gets the check.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5b-olsen-pay",
@@ -4279,7 +4331,8 @@
     "source": "a payment entry"
    },
    "worker_intent": "Don't put the shop on a check she already paid.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5b-olsen-note",
@@ -4326,7 +4379,8 @@
     "source": "a short case note"
    },
    "worker_intent": "Note it.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5b-danner-rs",
@@ -4378,7 +4432,8 @@
     "source": "a statement summary"
    },
    "worker_intent": "Facts, including the key story changing.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": "Required information never visible before the worker does it: Danner's recorded statement is an unseen call (D5 12:40); its content (key inconsistency) appears only in the worker's 13:12 summary; credits are post-13:12."
   },
   {
    "id": "n5b-garza-stmt",
@@ -4405,7 +4460,8 @@
      },
      {
       "mentions_any": [
-       "glare"
+       "glare",
+       "sun"
       ]
      },
      {
@@ -4436,7 +4492,8 @@
     "source": "checking a mediation statement against the claim file"
    },
    "worker_intent": "Every fact in it should match the file.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5b-biggs-cov",
@@ -4472,6 +4529,7 @@
      {
       "mentions_any": [
        "five-hundred-dollar",
+       "five hundred",
        "500"
       ]
      }
@@ -4490,7 +4548,8 @@
     "source": "a spoken line"
    },
    "worker_intent": "Animal is comp.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5b-biggs-next",
@@ -4527,7 +4586,10 @@
      },
      {
       "mentions_any": [
-       "thirty dollars"
+       "thirty dollars",
+       "$30",
+       "30 a day",
+       "30 dollars"
       ]
      }
     ]
@@ -4543,7 +4605,8 @@
     "source": "a spoken line"
    },
    "worker_intent": "He has rental coverage; tell him.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5b-biggs-note",
@@ -4595,7 +4658,8 @@
     "source": "a case note"
    },
    "worker_intent": "Note it.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5b-biggs-ack",
@@ -4646,7 +4710,8 @@
     "source": "an acknowledgment letter"
    },
    "worker_intent": "Same day, in writing.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5b-biggs-reserve",
@@ -4667,12 +4732,24 @@
     "all": [
      {
       "mentions_any": [
-       "LR-26-118344"
+       "LR-26-118344",
+       "Biggs"
       ]
      },
      {
       "mentions_any": [
        "reserve"
+      ]
+     },
+     {
+      "mentions_any": [
+       "comprehensive"
+      ]
+     },
+     {
+      "mentions_any": [
+       "rental",
+       "transportation"
       ]
      }
     ]
@@ -4688,7 +4765,8 @@
     "source": "an initial reserve"
    },
    "worker_intent": "Day-one reserve.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5b-biggs-appraisal",
@@ -4734,7 +4812,8 @@
     "source": "an appraisal assignment"
    },
    "worker_intent": "Monday at Belton.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5b-biggs-rental",
@@ -4785,7 +4864,8 @@
     "source": "a vendor authorization"
    },
    "worker_intent": "Don't make him wait at the counter like Ms. Conner.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5b-ruiz",
@@ -4831,7 +4911,8 @@
     "source": "a short reply"
    },
    "worker_intent": "Hank likes to know.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5b-danner-docs",
@@ -4879,7 +4960,8 @@
     "source": "a document request"
    },
    "worker_intent": "What SIU needs, asked the ordinary way.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5b-carla",
@@ -4929,7 +5011,8 @@
     "source": "a short confirmation letter"
    },
    "worker_intent": "She should know when the money comes.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5b-salinas",
@@ -4976,7 +5059,8 @@
     "source": "a short letter to the insured"
    },
    "worker_intent": "He worried about being sued; tell him it's nearly done.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5b-diary",
@@ -5030,7 +5114,8 @@
     "source": "building next week's diary across the 127-claim caseload"
    },
    "worker_intent": "Nothing slips over the holiday week.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n5b-devin",
@@ -5079,7 +5164,8 @@
     "source": "reviewing a trainee's liability letter"
    },
    "worker_intent": "That letter would be a wrongful denial.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   }
  ],
  "traps": [
@@ -5109,7 +5195,8 @@
    "severity": "medium",
    "harm_usd_upper": null,
    "source": "",
-   "worker_mistakes": []
+   "worker_mistakes": [],
+   "void": ""
   },
   {
    "id": "tr5b-biggs-collision",
@@ -5150,7 +5237,8 @@
    "severity": "low",
    "harm_usd_upper": null,
    "source": "",
-   "worker_mistakes": []
+   "worker_mistakes": [],
+   "void": ""
   }
  ]
 }

@@ -915,7 +915,7 @@ needs:
     due: "D1 17:00"
     evidence: [t1-marco, doc-mm-stmt, doc-mm-rec, pol-je]
     ref: a1b-mm
-    check: {all: [{to_includes: c_marco}, {number_equals: {value: 8921.44, tol: 0.01}}, {mentions_any: [transposed, transposition, "9.00"]}]}
+    check: {"all": [{"to_includes": "c_marco"}, {"number_equals": {"value": 8921.44, "tol": 0.01}}, {"mentions_any": ["transposed", "transposition", "9.00", "8,912.44"]}]}
     must: ["Statement interest $8,921.44 vs JE-10297 $8,912.44: a $9.00 transposition, not rounding", "Rejects for resubmission; the rec then ties to $3,521,327.62"]
     must_not: ["Approves JE-10297 at $8,912.44", "Accepts 'bank rounding'"]
     minutes: [15, "reviewing a bank rec and its entry (estimate)"]
@@ -928,7 +928,7 @@ needs:
     due: "D1 13:00"
     evidence: [t1b-vince-cash, doc-bank-oct, doc-mm-stmt, doc-loan-activity]
     ref: a1b-vince
-    check: {all: [{to_includes: c_vince}, {number_equals: {value: 11500000}}, {number_equals: {value: 3301207.11, tol: 0.01}}]}
+    check: {"all": [{"to_includes": "c_vince"}, {"number_equals": {"value": 11500000}}, {"number_equals": {"value": 3301207.11, "tol": 0.5}}]}
     must: ["Bank balances x4417 $3,301,207.11 and x4441 $3,521,327.62", "Revolver $11,500,000.00, term loan $42,000,000.00", "Says the book balance will differ until the rec is done"]
     minutes: [15, "pulling balances from three statements (estimate)"]
     intent: "Bank figures, labelled as such."
@@ -953,7 +953,7 @@ needs:
     due: "D1 17:00"
     evidence: [t1b-paul-bankfeed, doc-gl-1010, doc-bank-rec-draft]
     ref: a1b-paul
-    check: {all: [{to_includes: c_paul}, {mentions_any: [CR-55102]}, {mentions_any: [match-only, match, matching]}, {mentions_any: [CR-55121, Kessel]}]}
+    check: {"all": [{"to_includes": "c_paul"}, {"mentions_any": ["CR-55102"]}, {"mentions_any": ["match-only", "match", "matching", "turn off", "auto-create off", "pause", "disable", "deactivate", "inactivate", "switch off"]}, {"mentions_any": ["CR-55121", "Kessel"]}]}
     must: ["Auto-create duplicated the manual Hartline entry (CR-55102 vs JE-10288)", "Back to match-only; list every auto-created payment since 10/28; check Kessel's CR-55121"]
     minutes: [10, "an email about a system rule"]
     intent: "That rule is why the rec was off."
@@ -965,7 +965,7 @@ needs:
     due: "D2 17:00"
     evidence: [t1b-jade-tieout, doc-st-tieout]
     ref: a1b-tieout
-    check: {all: [{to_includes: c_jade}, {mentions_any: [INV-77060]}, {mentions_any: [void, voided]}]}
+    check: {"all": [{"any": [{"to_includes": "c_jade"}, {"all": [{"action_in": ["flag", "edit"]}, {"before": "D1 14:34"}]}]}, {"mentions_any": ["INV-77060"]}, {"mentions_any": ["void", "voided"]}]}
     must: ["INV-77060 ($1,128.40 tax) was voided in NetSuite but is still committed in AvaTax; void it there before filing", "Otherwise the UST-1 is overstated (153,465.20 vs 152,336.80)"]
     must_not: ["Accepts 'timing'", "Files from AvaTax as is"]
     minutes: [30, "tying a sales tax report to the ledger and finding the document (estimate)"]
@@ -978,7 +978,7 @@ needs:
     due: "D2 12:00"
     evidence: [doc-bills-search, t1b-gina-receipts, t1b-kettering, pol-reserves, pol-je]
     ref: a1b-unrecorded
-    check: {all: [{to_includes: c_darnell}, {mentions_any: [Buckeye]}, {number_equals: {value: 28514}}]}
+    check: {"all": [{"any": [{"to_includes": "c_darnell"}, {"all": [{"action_in": ["flag", "edit"]}, {"before": "D1 14:49"}]}]}, {"mentions_any": ["Buckeye"]}, {"number_equals": {"value": 28514}}]}
     must: ["Kettering $14,820, Buckeye $9,744 (October shifts, November bill) and Columbus Crane $3,950: $28,514", "Ohio Industrial Gases under the $2,500 threshold; Brightline already recorded"]
     must_not: ["Accrues items received in November"]
     minutes: [45, "a subsequent-bills and open-receipts search with follow-up (estimate)"]
@@ -1004,7 +1004,7 @@ needs:
     due: "D2 12:00"
     evidence: [t1b-midwest, doc-outstanding]
     ref: a1b-midwest
-    check: {all: [{to_includes: c_darnell}, {mentions_any: ["48182"]}, {mentions_any: ["MBS-44120"]}]}
+    check: {"all": [{"any": [{"to_includes": "c_darnell"}, {"to_includes": "c_midwest"}]}, {"mentions_any": ["48182"]}, {"mentions_any": ["MBS-44120"]}]}
     must: ["MBS-44120 was paid by check 48182 (10/23), still outstanding", "Confirm receipt by calling the vendor-master number before any reissue"]
     must_not: ["Tells AP to pay it"]
     minutes: [6, "matching a statement to the check register"]
@@ -1030,7 +1030,7 @@ needs:
     due: "D4 12:00"
     evidence: [t1b-rachel-wd1, doc-cat-q2, doc-revenue-by-state]
     ref: a1b-cat-mail
-    check: {all: [{to_includes: c_rachel}, {number_equals: {value: 55600.09, tol: 0.01}}, {mentions_any: [exclusion]}]}
+    check: {"all": [{"number_equals": {"value": 55600.09, "tol": 0.01}}, {"mentions_any": ["exclusion"]}, {"any": [{"to_includes": "c_rachel"}, {"all": [{"target": "doc-cat-q3"}, {"action_in": ["edit"]}]}]}]}
     must: ["Ohio-sitused receipts $21,384,650.40 x 0.26% = $55,600.09", "No exclusion: used in full on the Q1 return", "True-up of the 9/30 accrual; due 11/10; Rachel approves"]
     must_not: ["Taxes all receipts", "Applies the $6,000,000 exclusion again"]
     minutes: [45, "a quarterly gross receipts tax return (estimate)"]

@@ -40,7 +40,9 @@
 
 ## Errors (0)
 
-## Warnings (3)
+## Warnings (5)
 - n2-raj-rate: very short mention '$5'
 - n2-v7-read: very short mention 'v7'
 - n4-walter-note: very short mention 'v7'
+- n4b-kayla-mnt: very short mention '4h'
+- n5b-imogen-note: very short mention 'T2'

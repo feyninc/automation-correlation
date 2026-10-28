@@ -56,4 +56,7 @@
 
 ## Errors (0)
 
-## Warnings (0)
+## Warnings (3)
+- n1b-initial-reserves: very short mention 'BI'
+- n2b-reserves: very short mention '$0'
+- n4b-kemp: very short mention 'ID'

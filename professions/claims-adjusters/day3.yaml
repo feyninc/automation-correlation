@@ -116,7 +116,7 @@ needs:
     task: 21422
     evidence: [c3-glen, t3-siu]
     ref: c3-glen.2
-    check: {all: [{target: c3-glen}, {action_in: [say]}, {mentions_any: [inspection]}]}
+    check: {"all": [{"target": "c3-glen"}, {"action_in": ["say"]}, {"mentions_any": ["inspection", "inspect", "in person", "in-person"]}]}
     must: ["Next step is an in-person inspection; neutral"]
     must_not: ["Mentions the photo dates or the 2025 claim"]
     minutes: [0.3, "a spoken line"]

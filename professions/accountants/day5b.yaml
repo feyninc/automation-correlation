@@ -334,7 +334,7 @@ needs:
     due: "D5 16:30"
     evidence: [m3b-jacks, doc-fa-additions]
     ref: a5b-jacks
-    check: {all: [{to_includes: c_audit_assoc}, {mentions_any: [FA-2188, jacks]}, {mentions_any: [November]}]}
+    check: {"all": [{"any": [{"to_includes": "c_audit_assoc"}, {"to_includes": "c_audit_mgr"}]}, {"mentions_any": ["FA-2188", "jacks"]}, {"mentions_any": ["November"]}]}
     must: ["The error, Rachel's decision (write off $12,040 in November), the listing as booked"]
     minutes: [5, "a short note"]
     intent: "They hear it from us."

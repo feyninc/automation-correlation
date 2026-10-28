@@ -96,7 +96,7 @@ needs:
     due: "D3 10:00"
     evidence: [t2-wade, doc-liability-file, doc-demand, doc-lien]
     ref: a2-llr
-    check: {all: [{mentions_any: [Stowers, "ordinarily prudent"]}, {number_equals: {value: 41850}}, {mentions_any: [lien]}]}
+    check: {"all": [{"mentions_any": ["Stowers", "ordinarily prudent"]}, {"number_equals": {"value": 41850}}, {"any": [{"mentions_any": ["lien"]}, {"before": "D2 09:59"}]}]}
     must: ["Coverage, liability, injuries, specials summed from the bills, venue, the demand and its deadline, recommendation", "The hospital lien"]
     minutes: [60, "a large-loss report (estimate)"]
     intent: "Committee-ready."
@@ -130,7 +130,7 @@ needs:
     task: 21421
     evidence: [c2-carla, pol-form]
     ref: c2-carla.2
-    check: {all: [{target: c2-carla}, {action_in: [say]}, {mentions_any: [thirty dollars, "$30"]}, {mentions_any: ["November 28", "nine hundred"]}]}
+    check: {"all": [{"target": "c2-carla"}, {"action_in": ["say"]}, {"mentions_any": ["thirty dollars", "$30"]}, {"any": [{"mentions_any": ["November 28", "November 28th", "11/28", "nine hundred", "$900"]}, {"number_equals": {"value": 900}}]}]}
     must: ["$30 a day up to $900: through 11/28 (from 10/30)"]
     minutes: [0.3, "a spoken line"]
     intent: "The policy limit."
@@ -154,7 +154,7 @@ needs:
     due: "D2 17:00"
     evidence: [t2-enterprise, pol-form, c2-carla]
     ref: a2-enterprise
-    check: {all: [{to_includes: c_rental}, {mentions_any: ["11/28"]}, {mentions_any: ["$30"]}]}
+    check: {"all": [{"to_includes": "c_rental"}, {"mentions_any": ["11/28", "November 28", "November 28th"]}, {"mentions_any": ["$30"]}]}
     must: ["$30 a day through 11/28 ($900 maximum); the rest is the insured's"]
     must_not: ["Authorizes through 12/5"]
     minutes: [3, "a vendor reply"]
@@ -165,6 +165,6 @@ traps:
     title: Promising rental until she buys a car
     kind: stale_info
     evidence: [c2-carla, pol-form]
-    check: {all: [{target: c2-carla}, {action_in: [say]}, {mentions_any: ["as long as you need", "until you find", "no limit"]}]}
+    check: {"all": [{"target": "c2-carla"}, {"action_in": ["say"]}, {"mentions_any": ["as long as you need", "until you find", "no limit"]}, {"not": {"mentions_any": ["isn't", "is not", "$900", "nine hundred", "maximum"]}}]}
     correct: "$30 a day, $900 maximum."
     severity: low

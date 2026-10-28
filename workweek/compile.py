@@ -251,10 +251,11 @@ def expand(form: dict) -> Episode:
                           discoverable_at=n["from"], deadline=n["due"], evidence=n["evidence"], reference=reference,
                           check=n["check"], rubric=Rubric(must=n["must"], must_not=n.get("must_not", [])),
                           minutes=Minutes(do=float(n["minutes"][0]), source=n["minutes"][1]),
-                          worker_intent=n["intent"].strip(), ledger_keys=n.get("ledger", [])))
+                          worker_intent=n["intent"].strip(), ledger_keys=n.get("ledger", []), void=n.get("void", "")))
     traps = [Trap(id=t["id"], title=t["title"], kind=t["kind"], evidence=t["evidence"], check=t["check"],
                   correct_behavior=t["correct"], severity=t["severity"], harm_usd_upper=t.get("harm_usd_upper"),
-                  source=t.get("source", ""), worker_mistakes=t.get("worker_mistakes", [])) for t in form["traps"]]
+                  source=t.get("source", ""), worker_mistakes=t.get("worker_mistakes", []), void=t.get("void", ""))
+             for t in form["traps"]]
 
     tasks = _onet_tasks(form["soc"])
     ep = Episode(
@@ -345,8 +346,10 @@ def audit(ep: Episode) -> tuple[list[str], list[str]]:
         if n.onet_task_id not in tasks:
             errs.append(f"{n.id}: task {n.onet_task_id} is not one of {ep.meta.soc}'s O*NET tasks")
         for k, v in checks.leaves(n.check):
-            if k == "target" and v not in ids:
-                errs.append(f"{n.id}: check target {v} does not exist")
+            if k == "target":                    # one id, or a list of them (any of which matches)
+                for x in v if isinstance(v, list) else [v]:
+                    if x not in ids:
+                        errs.append(f"{n.id}: check target {x} does not exist")
             if k == "to_includes" and v not in people:
                 errs.append(f"{n.id}: check contact {v} does not exist")
             if k in ("mentions_any", "mentions_all"):

@@ -100,7 +100,7 @@ needs:
     due: "D1 17:00"
     evidence: [t1-keel, doc-demand, doc-liability-file, pol-guidelines]
     ref: a1-escalate
-    check: {all: [{any: [{to_includes: c_wade}, {to_includes: c_rena}]}, {mentions_any: ["11/6", Friday]}, {number_equals: {value: 41850}}]}
+    check: {"all": [{"any": [{"to_includes": "c_wade"}, {"to_includes": "c_rena"}]}, {"mentions_any": ["11/6", "Friday"]}, {"any": [{"number_equals": {"value": 41850}}, {"number_equals": {"value": 46450}}, {"number_equals": {"value": 21850}}]}]}
     must: ["Demand for the $30,000 limit, expiring Fri 11/6 17:00; clear liability; specials $41,850 above the limit", "A recommendation; reserve increase above her authority"]
     must_not: ["Lets it sit", "Counter-offers without authority"]
     minutes: [15, "an escalation with facts and dates"]
@@ -113,7 +113,7 @@ needs:
     due: "D1 17:00"
     evidence: [doc-demand, pol-guidelines]
     ref: a1-excess
-    check: {all: [{to_includes: c_insured1}, {mentions_any: [exceed, above your]}, {mentions_any: [personal attorney, own attorney]}]}
+    check: {"all": [{"to_includes": "c_insured1"}, {"mentions_any": ["exceed", "exceeds", "exceeded", "exceeding", "above your", "more than your", "above the limit", "personally responsible", "personal exposure", "personally liable", "excess"]}, {"mentions_any": ["personal attorney", "own attorney", "attorney of your", "personal counsel", "own counsel", "counsel of your", "own lawyer", "lawyer of your", "private attorney", "consult an attorney", "consult a lawyer", "retain an attorney", "retain counsel", "independent counsel"]}]}
     must: ["The demand, the deadline, that damages exceed his limit and he could be personally exposed, his right to his own counsel"]
     minutes: [25, "a formal letter (estimate)"]
     intent: "He has to know."
@@ -125,7 +125,7 @@ needs:
     due: "D1 17:00"
     evidence: [doc-liability-file, doc-demand, pol-guidelines]
     ref: a1-escalate
-    check: {all: [{mentions_any: [reserve]}, {number_equals: {value: 30000}}]}
+    check: {"all": [{"mentions_any": ["reserve"]}, {"number_equals": {"value": 30000}}, {"any": [{"to_includes": "c_wade"}, {"to_includes": "c_rena"}]}]}
     must: ["From $12,000 to $30,000 (limits), which needs the supervisor"]
     minutes: [5, "a reserve request"]
     intent: "Reserve to limits."
@@ -182,7 +182,7 @@ needs:
     due: "D5 17:00"
     evidence: [doc-hail-queue, pol-guidelines]
     ref: a1-acks
-    check: {all: [{mentions_any: [LR-26-118211]}, {mentions_any: [LR-26-118290]}, {mentions_any: ["542.055", acknowledg]}]}
+    check: {"all": [{"mentions_any": ["LR-26-118211"]}, {"mentions_any": ["LR-26-118290"]}, {"mentions_any": ["542.055", "acknowledge", "acknowledged", "acknowledging", "acknowledgment", "acknowledgement", "acknowledges"]}]}
     must: ["Each new claim acknowledged with what's needed, inside 15 days of notice"]
     minutes: [30, "five acknowledgment letters"]
     intent: "Statutory clock."

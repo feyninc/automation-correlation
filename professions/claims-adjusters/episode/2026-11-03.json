@@ -3404,8 +3404,15 @@
       }
      },
      {
-      "mentions_any": [
-       "lien"
+      "any": [
+       {
+        "mentions_any": [
+         "lien"
+        ]
+       },
+       {
+        "before": "D2 09:59"
+       }
       ]
      }
     ]
@@ -3422,7 +3429,8 @@
     "source": "a large-loss report (estimate)"
    },
    "worker_intent": "Committee-ready.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n2-lien",
@@ -3471,7 +3479,8 @@
     "source": "flagging a lien"
    },
    "worker_intent": "Or we pay twice.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n2-dunham",
@@ -3520,7 +3529,8 @@
     "source": "a payment entry"
    },
    "worker_intent": "Pay it.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n2-carla-rental",
@@ -3555,9 +3565,21 @@
       ]
      },
      {
-      "mentions_any": [
-       "November 28",
-       "nine hundred"
+      "any": [
+       {
+        "mentions_any": [
+         "November 28",
+         "November 28th",
+         "11/28",
+         "nine hundred",
+         "$900"
+        ]
+       },
+       {
+        "number_equals": {
+         "value": 900
+        }
+       }
       ]
      }
     ]
@@ -3573,7 +3595,8 @@
     "source": "a spoken line"
    },
    "worker_intent": "The policy limit.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n2-supplement",
@@ -3620,7 +3643,8 @@
     "source": "a supplement review"
    },
    "worker_intent": "Legit.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n2-enterprise",
@@ -3646,7 +3670,9 @@
      },
      {
       "mentions_any": [
-       "11/28"
+       "11/28",
+       "November 28",
+       "November 28th"
       ]
      },
      {
@@ -3669,7 +3695,8 @@
     "source": "a vendor reply"
    },
    "worker_intent": "Policy limit.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n2b-reserves",
@@ -3703,7 +3730,10 @@
      {
       "mentions_any": [
        "closed",
-       "close"
+       "close",
+       "closing",
+       "$0",
+       "to zero"
       ]
      }
     ]
@@ -3722,7 +3752,8 @@
     "source": "four reserve reviews (estimate: 7 minutes each)"
    },
    "worker_intent": "What each file supports today, not what it was in July.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n2b-reserve-auth",
@@ -3768,7 +3799,8 @@
     "source": "a reserve authority request"
    },
    "worker_intent": "Lyle is past my reserve limit.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n2b-conner-umpd",
@@ -3824,7 +3856,8 @@
     "source": "a spoken line"
    },
    "worker_intent": "The car hit hers, so UMPD, and its lower deductible.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n2b-conner-rental",
@@ -3877,7 +3910,8 @@
     "source": "a spoken line"
    },
    "worker_intent": "She has transportation coverage.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n2b-conner-note",
@@ -3932,7 +3966,8 @@
     "source": "a case note"
    },
    "worker_intent": "Note it.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n2b-conner-ack",
@@ -3963,7 +3998,14 @@
      },
      {
       "mentions_any": [
-       "received"
+       "received",
+       "receipt",
+       "acknowledge",
+       "acknowledges",
+       "acknowledged",
+       "acknowledgment",
+       "acknowledgement",
+       "thank you for reporting"
       ]
      },
      {
@@ -3984,7 +4026,8 @@
     "source": "an acknowledgment letter"
    },
    "worker_intent": "In writing, with the list.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n2b-flores-rs",
@@ -4032,7 +4075,8 @@
     "source": "a statement summary"
    },
    "worker_intent": "While I remember it.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": "Required information never visible before the worker does it: Flores's statement is taken in an unseen call (D2 10:00) and first appears in the worker's 10:25 summary; nobody could summarize it."
   },
   {
    "id": "n2b-olsen-approve",
@@ -4079,7 +4123,8 @@
     "source": "an estimate review"
    },
    "worker_intent": "Reasonable; the sensor was damaged in the cut.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n2b-kow-permission",
@@ -4126,7 +4171,8 @@
     "source": "a spoken line"
    },
    "worker_intent": "Ask before I record.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n2b-kow-open",
@@ -4174,7 +4220,8 @@
     "source": "a spoken line"
    },
    "worker_intent": "Let her tell it.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n2b-kow-note",
@@ -4228,7 +4275,8 @@
     "source": "a witness statement note"
    },
    "worker_intent": "Get her words down accurately.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n2b-liability",
@@ -4264,6 +4312,16 @@
       "number_equals": {
        "value": 6522.6
       }
+     },
+     {
+      "not": {
+       "to_includes": "c_benavides"
+      }
+     },
+     {
+      "not": {
+       "to_includes": "c_fry"
+      }
      }
     ]
    },
@@ -4278,7 +4336,8 @@
     "source": "a liability analysis note"
    },
    "worker_intent": "Put the reasons in the file before the letter.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n2b-benavides",
@@ -4335,7 +4394,8 @@
     "source": "a comparative-liability decision letter"
    },
    "worker_intent": "Explain it so he can follow the math.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n2b-fry",
@@ -4382,7 +4442,8 @@
     "source": "a letter to the insured"
    },
    "worker_intent": "Keep him in the loop.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n2b-hughes",
@@ -4435,7 +4496,8 @@
     "source": "a title request letter"
    },
    "worker_intent": "Only one notice so far. Statute needs two.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n2b-brianna",
@@ -4457,7 +4519,14 @@
    "check": {
     "all": [
      {
-      "target": "t1b-brianna-dm"
+      "any": [
+       {
+        "target": "t1b-brianna-dm"
+       },
+       {
+        "to_includes": "c_brianna"
+       }
+      ]
      },
      {
       "mentions_any": [
@@ -4468,7 +4537,8 @@
       "mentions_any": [
        "two written",
        "two notices",
-       "one"
+       "one",
+       "only"
       ]
      }
     ]
@@ -4486,7 +4556,8 @@
     "source": "a chat reply with a check of the file"
    },
    "worker_intent": "Check the file before saying yes.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n2b-morris-line",
@@ -4541,7 +4612,8 @@
     "source": "a spoken line"
    },
    "worker_intent": "Kind and clear. It's used up.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n2b-morris-note",
@@ -4566,8 +4638,7 @@
      {
       "action_in": [
        "update",
-       "edit",
-       "new"
+       "edit"
       ]
      },
      {
@@ -4594,7 +4665,8 @@
     "source": "a case note"
    },
    "worker_intent": "Note it.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n2b-ctor-notice",
@@ -4641,7 +4713,8 @@
     "source": "a provider notice"
    },
    "worker_intent": "What I told her I'd do.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n2b-phish",
@@ -4688,7 +4761,8 @@
     "source": "a phishing report"
    },
    "worker_intent": "Lupe doesn't do accounting, and that's not their domain.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n2b-raman-est",
@@ -4718,9 +4792,22 @@
       }
      },
      {
-      "mentions_any": [
-       "no deductible",
-       "deductible"
+      "any": [
+       {
+        "mentions_any": [
+         "no deductible",
+         "without a deductible",
+         "deductible does not apply",
+         "deductible doesn't apply"
+        ]
+       },
+       {
+        "not": {
+         "mentions_any": [
+          "deductible"
+         ]
+        }
+       }
       ]
      }
     ]
@@ -4736,7 +4823,8 @@
     "source": "an estimate review"
    },
    "worker_intent": "OEM sensor and calibration are legit.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n2b-raman-rental",
@@ -4768,7 +4856,8 @@
      },
      {
       "mentions_any": [
-       "LR-26-118158"
+       "LR-26-118158",
+       "Raman"
       ]
      }
     ]
@@ -4784,7 +4873,8 @@
     "source": "a vendor reply"
    },
    "worker_intent": "Match it to the shop's time.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n2b-whitfield",
@@ -4832,7 +4922,8 @@
     "source": "a payment entry and a short letter"
    },
    "worker_intent": "Approving the supplement isn't the same as paying it.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n2b-wu",
@@ -4884,7 +4975,8 @@
     "source": "a settlement letter on an aged claim"
    },
    "worker_intent": "Three months is too long. Give him the numbers and the next step.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n2b-dashcam",
@@ -4916,6 +5008,7 @@
      {
       "mentions_any": [
        "6 seconds",
+       "six seconds",
        "red"
       ]
      }
@@ -4932,7 +5025,8 @@
     "source": "finding the evidence in the file and a reply"
    },
    "worker_intent": "The video settles it.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n2b-pruitt",
@@ -4979,7 +5073,8 @@
     "source": "a short reply with the payment split"
    },
    "worker_intent": "Simple math, but get the supplement in.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n2b-devin-rs",
@@ -5000,7 +5095,14 @@
    "check": {
     "all": [
      {
-      "target": "t1b-devin"
+      "any": [
+       {
+        "target": "t1b-devin"
+       },
+       {
+        "to_includes": "c_devin"
+       }
+      ]
      },
      {
       "mentions_any": [
@@ -5027,7 +5129,8 @@
     "source": "a coaching reply"
    },
    "worker_intent": "Same rule for everyone.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n3b-conner-rental",
@@ -5079,7 +5182,8 @@
     "source": "a vendor authorization"
    },
    "worker_intent": "I told her I'd set it up.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n3b-jennings-timeline",
@@ -5136,7 +5240,8 @@
     "source": "a complaint timeline for Compliance"
    },
    "worker_intent": "Every date against its deadline.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   },
   {
    "id": "n3b-nolan",
@@ -5183,7 +5288,8 @@
     "source": "an estimate review and acceptance letter"
    },
    "worker_intent": "It's been sitting since yesterday.",
-   "ledger_keys": []
+   "ledger_keys": [],
+   "void": ""
   }
  ],
  "traps": [
@@ -5196,37 +5302,86 @@
     "doc-lien"
    ],
    "check": {
-    "all": [
+    "any": [
      {
-      "any": [
+      "all": [
        {
-        "to_includes": "c_finance"
+        "any": [
+         {
+          "to_includes": "c_finance"
+         },
+         {
+          "to_includes": "c_attorney"
+         }
+        ]
        },
        {
-        "to_includes": "c_attorney"
+        "mentions_any": [
+         "IOLTA"
+        ]
+       },
+       {
+        "mentions_any": [
+         "issue the check",
+         "funding today",
+         "payment is on its way",
+         "we'll fund"
+        ]
+       },
+       {
+        "not": {
+         "mentions_any": [
+          "lien",
+          "Baylor"
+         ]
+        }
        }
       ]
      },
      {
-      "mentions_any": [
-       "IOLTA"
+      "all": [
+       {
+        "to_includes": "c_attorney"
+       },
+       {
+        "before": "D5 09:29"
+       },
+       {
+        "mentions_any": [
+         "acceptable",
+         "no objection",
+         "works for us",
+         "approved as written",
+         "fine as is"
+        ]
+       },
+       {
+        "mentions_any": [
+         "bad-faith",
+         "bad faith",
+         "UIM",
+         "reservation"
+        ]
+       },
+       {
+        "not": {
+         "mentions_any": [
+          "remove",
+          "strike",
+          "delete",
+          "must come out",
+          "has to come out",
+          "needs to come out",
+          "not acceptable",
+          "can't accept",
+          "cannot accept",
+          "can't approve",
+          "cannot approve",
+          "does not conform"
+         ]
+        }
+       }
       ]
-     },
-     {
-      "mentions_any": [
-       "issue the check",
-       "funding today",
-       "payment is on its way",
-       "we'll fund"
-      ]
-     },
-     {
-      "not": {
-       "mentions_any": [
-        "lien",
-        "Baylor"
-       ]
-      }
      }
     ]
    },
@@ -5234,7 +5389,8 @@
    "severity": "high",
    "harm_usd_upper": null,
    "source": "",
-   "worker_mistakes": []
+   "worker_mistakes": [],
+   "void": ""
   },
   {
    "id": "tr5b-salvage",
@@ -5274,7 +5430,8 @@
    "severity": "medium",
    "harm_usd_upper": null,
    "source": "",
-   "worker_mistakes": []
+   "worker_mistakes": [],
+   "void": ""
   }
  ]
 }

@@ -937,7 +937,7 @@ needs:
     task: 21422
     evidence: [c1b-flores, pol-guidelines-2]
     ref: c1b-flores.6
-    check: {all: [{target: c1b-flores}, {action_in: [say]}, {mentions_any: [permission]}, {mentions_any: [record, recorded]}]}
+    check: {"all": [{"target": "c1b-flores"}, {"action_in": ["say"]}, {"mentions_any": ["permission", "may I record", "mind if I record", "okay if I record", "OK if I record", "all right if I record", "let me record", "consent", "willing to let me record", "agree to a recorded", "agree to be recorded"]}, {"mentions_any": ["record", "recorded"]}]}
     must: ["Asks permission to record; lists what is needed (photos, records, appraisal)"]
     minutes: [0.3, "a spoken line"]
     intent: "Statement, with her OK on the recording."
@@ -949,7 +949,7 @@ needs:
     due: "D1 12:00"
     evidence: [c1b-flores, pol-guidelines-2]
     ref: a1b-flores-note
-    check: {all: [{target: c1b-flores}, {action_in: [update, edit, new]}, {mentions_any: [statement]}, {mentions_any: ["11/3", tomorrow, Tuesday]}]}
+    check: {"all": [{"target": "c1b-flores"}, {"action_in": ["update", "edit"]}, {"mentions_any": ["statement"]}, {"mentions_any": ["11/3", "tomorrow", "Tuesday"]}]}
     must: ["Contact made, injury reported, no payment commitment, statement rescheduled to 11/3 10:00, items requested"]
     minutes: [4, "a case note"]
     intent: "Log it: first contact done, statement tomorrow."
@@ -971,7 +971,7 @@ needs:
     task: 21417
     evidence: [c1b-kaufman, doc-fnol-1102, pol-guidelines-2]
     ref: c1b-kaufman.4
-    check: {all: [{target: c1b-kaufman}, {action_in: [say]}, {mentions_any: [choice, "yours"]}, {mentions_any: [five-hundred, "$500", "500"]}]}
+    check: {"all": [{"target": "c1b-kaufman"}, {"action_in": ["say"]}, {"mentions_any": ["choice", "yours", "choose", "up to you", "any shop", "any repair", "any body shop"]}, {"mentions_any": ["five-hundred", "$500", "500"]}]}
     must: ["She chooses the shop; DRP only as an option; collision with a $500 deductible"]
     must_not: ["Requires Belton Collision"]
     minutes: [0.3, "a spoken line"]
@@ -982,7 +982,7 @@ needs:
     task: 21417
     evidence: [c1b-kaufman, doc-fnol-1102]
     ref: c1b-kaufman.6
-    check: {all: [{target: c1b-kaufman}, {action_in: [say]}, {mentions_any: [transportation, rental]}, {mentions_any: ["doesn't", "does not", "own cost"]}]}
+    check: {"all": [{"target": "c1b-kaufman"}, {"action_in": ["say"]}, {"mentions_any": ["transportation", "rental"]}, {"mentions_any": ["doesn't", "does not", "don't", "isn't", "is not", "not included", "no transportation", "no rental", "own cost", "own expense", "your expense", "not covered", "wouldn't be covered", "not on your policy", "lists no"]}]}
     must: ["No transportation expense coverage, so a rental is at her cost"]
     minutes: [0.3, "a spoken line"]
     intent: "Check the dec before I promise a car."
@@ -1014,7 +1014,7 @@ needs:
     task: 21421
     evidence: [c1b-olsen, pol-guidelines-2]
     ref: c1b-olsen.4
-    check: {all: [{target: c1b-olsen}, {action_in: [say]}, {mentions_any: [you choose, your choice, "choice of"]}, {mentions_any: [estimate]}]}
+    check: {"all": [{"target": "c1b-olsen"}, {"action_in": ["say"]}, {"mentions_any": ["you choose", "your choice", "choice of", "own mechanic", "any mechanic", "may choose", "can choose", "not required to use", "don't have to use", "do not have to use"]}, {"mentions_any": ["estimate"]}]}
     must: ["She chooses the shop; estimate before ordering the part"]
     minutes: [0.3, "a spoken line"]
     intent: "Her mechanic is fine."
@@ -1026,7 +1026,7 @@ needs:
     due: "D1 16:00"
     evidence: [c1b-olsen, pol-guidelines-2]
     ref: a1b-olsen-note
-    check: {all: [{target: c1b-olsen}, {action_in: [update, edit, new]}, {mentions_any: [acknowledged, acknowledgment]}, {mentions_any: [comprehensive]}]}
+    check: {"all": [{"target": "c1b-olsen"}, {"action_in": ["update", "edit"]}, {"mentions_any": ["acknowledged", "acknowledgment"]}, {"mentions_any": ["comprehensive"]}]}
     must: ["Oral acknowledgment recorded; coverage, deductible, items, no rental coverage"]
     minutes: [3, "a case note"]
     intent: "Note it."
@@ -1038,7 +1038,7 @@ needs:
     due: "D1 17:00"
     evidence: [doc-fnol-1102, pol-guidelines, pol-guidelines-2, c1b-kaufman]
     ref: a1b-ack-kaufman
-    check: {all: [{to_includes: c_kaufman}, {mentions_any: [LR-26-118292]}, {mentions_any: [received]}, {mentions_any: [estimate]}]}
+    check: {"all": [{"to_includes": "c_kaufman"}, {"mentions_any": ["LR-26-118292"]}, {"mentions_any": ["received", "receipt", "acknowledge", "acknowledges", "acknowledged", "acknowledgment", "acknowledgement", "thank you for reporting"]}, {"mentions_any": ["estimate"]}]}
     must: ["Receipt acknowledged, investigation begun, items requested, inside 15 days (by 11/17)"]
     minutes: [6, "an acknowledgment letter"]
     intent: "Statutory ack in writing, with what I need."
@@ -1050,7 +1050,7 @@ needs:
     due: "D1 17:00"
     evidence: [doc-fnol-1102, pol-guidelines, pol-guidelines-2, c1b-olsen]
     ref: a1b-ack-olsen
-    check: {all: [{to_includes: c_olsen}, {mentions_any: [LR-26-118297]}, {mentions_any: [received]}, {mentions_any: [police report]}]}
+    check: {"all": [{"to_includes": "c_olsen"}, {"mentions_any": ["LR-26-118297"]}, {"mentions_any": ["received", "receipt", "acknowledge", "acknowledges", "acknowledged", "acknowledgment", "acknowledgement", "thank you for reporting"]}, {"mentions_any": ["police report"]}]}
     must: ["Receipt acknowledged, investigation begun, items requested (estimate, police report, photos)"]
     minutes: [6, "an acknowledgment letter"]
     intent: "Same for Ms. Olsen."
@@ -1062,7 +1062,7 @@ needs:
     due: "D1 17:00"
     evidence: [t1b-raman, pol-guidelines-2, doc-pending]
     ref: a1b-raman
-    check: {all: [{to_includes: c_raman}, {mentions_any: ["don't have to", "do not have to", "your choice", "choice of repair shop is yours"]}, {mentions_any: [rental]}]}
+    check: {"all": [{"to_includes": "c_raman"}, {"mentions_any": ["don't have to", "do not have to", "your choice", "choice of repair shop is yours", "not required", "may choose", "right to choose", "free to take", "any repair shop", "any shop you", "shop of your choice", "you choose"]}, {"mentions_any": ["rental"]}]}
     must: ["She does not have to use Belton; her shop is fine (Ins. Code 1952.301(b))", "Rental of a similar car for the reasonable repair time; estimate to come to Maribel"]
     must_not: ["Steers her to the DRP as a requirement", "Promises the rental without limit"]
     minutes: [12, "a claimant letter correcting a misstatement"]
@@ -1087,7 +1087,7 @@ needs:
     due: "D1 17:00"
     evidence: [t1b-ruiz]
     ref: a1b-ruiz
-    check: {all: [{to_includes: c_agent}, {mentions_any: [Raman, "Ms. Raman", her]}, {mentions_any: [court papers, suit, lawsuit]}]}
+    check: {"all": [{"to_includes": "c_agent"}, {"mentions_any": ["Raman", "Ms. Raman", "her"]}, {"mentions_any": ["court papers", "suit", "lawsuit", "legal papers", "summons", "legal documents", "court documents"]}]}
     must: ["Handled with the claimant; the insured refers calls to Maribel and sends any suit papers"]
     minutes: [4, "a short reply"]
     intent: "Hank just wants to know it's handled."
@@ -1099,7 +1099,7 @@ needs:
     due: "D1 17:00"
     evidence: [t1b-salinas, doc-dec-open]
     ref: a1b-salinas
-    check: {all: [{to_includes: c_salinas}, {mentions_any: [my name and number, "254-555-0180"]}, {mentions_any: [court papers, lawsuit]}]}
+    check: {"all": [{"to_includes": "c_salinas"}, {"mentions_any": ["my name and number", "254-555-0180", "give her my number", "my number", "refer her to me", "direct her to me"]}, {"mentions_any": ["court papers", "lawsuit", "legal papers", "summons", "suit papers"]}]}
     must: ["We're handling it with the claimant; refer her to Maribel; forward any suit papers at once"]
     must_not: ["Discusses the claimant's damages or tells him to pay her"]
     minutes: [6, "a letter to the insured"]
@@ -1125,7 +1125,7 @@ needs:
     due: "D2 17:00"
     evidence: [doc-morris-pip, doc-ctor-bill, pol-guidelines-2, doc-dec-open]
     ref: a2b-pip-letter
-    check: {all: [{to_includes: c_morris}, {mentions_any: [exhausted, "used up", "limit has been reached"]}, {number_equals: {value: 320}}]}
+    check: {"all": [{"to_includes": "c_morris"}, {"mentions_any": ["exhausted", "exhausts", "exhaust", "used up", "limit has been reached", "reached the policy limit", "limit reached", "reached the limit", "have reached", "no further PIP"]}, {"number_equals": {"value": 320}}]}
     must: ["The $2,500 PIP limit is used up with this payment; the $320 balance and future bills go to her health insurance"]
     minutes: [12, "a coverage letter to the insured"]
     intent: "She needs to know the next bill isn't ours."
@@ -1137,7 +1137,7 @@ needs:
     due: "D2 13:30"
     evidence: [t1b-garza, doc-garza-file, cal-team]
     ref: a1b-garza
-    check: {all: [{to_includes: c_defense}, {mentions_any: ["12/9", "December 9"]}, {mentions_any: [recorded statement]}, {mentions_any: [photos]}]}
+    check: {"all": [{"to_includes": "c_defense"}, {"mentions_any": ["12/9", "December 9"]}, {"mentions_any": ["recorded statement"]}, {"mentions_any": ["photos", "photographs", "pictures"]}]}
     must: ["Available dates, who attends with authority, the statement, photos and CR-3 for the 11/13 disclosures"]
     minutes: [25, "gathering the statement, photos and CR-3 from the file and a reply to counsel"]
     intent: "Paul needs dates and the file pieces."
@@ -1149,13 +1149,14 @@ needs:
     due: "D2 17:00"
     evidence: [t1b-kemp, doc-garza-file, doc-dec-open]
     ref: a1b-kemp
-    check: {all: [{to_includes: c_kemp}, {mentions_any: [Whitaker]}, {mentions_any: [within your, "50,000"]}]}
+    check: {"all": [{"to_includes": "c_kemp"}, {"any": [{"mentions_any": ["Whitaker", "Paul"]}, {"to_includes": "c_defense"}]}, {"mentions_any": ["within your", "50,000"]}]}
     must: ["Counsel advises on attendance; demand is within his limit"]
     must_not: ["Tells him he doesn't need to go, against a court order"]
     minutes: [6, "a letter to the insured"]
     intent: "He's anxious. Paul answers the court part."
   - id: n1b-bell-statement
     title: Summarize the insured's statement
+    void: "Required information never visible before the worker does it: Bell's account is taken in an unseen call (D1 12:00 noop) and only the worker's 12:45 summary reveals it; the 5 credits are 08:15 briefings."
     kind: doc
     task: 21422
     from: "D1 08:12"
@@ -1200,7 +1201,7 @@ needs:
     due: "D1 17:00"
     evidence: [t1b-mendez, doc-pending]
     ref: a1b-mendez
-    check: {all: [{to_includes: c_mendez}, {mentions_any: [statement]}, {mentions_any: [phone number, contact]}, {mentions_any: [review, another look, reconsider]}]}
+    check: {"all": [{"to_includes": "c_mendez"}, {"mentions_any": ["statement", "account", "speak with him", "talk with him", "talk to him", "interview"]}, {"mentions_any": ["phone number", "contact", "telephone", "number to reach", "reach him", "have him call", "call me"]}, {"mentions_any": ["review", "another look", "reconsider", "re-review", "re-evaluate", "reopen"]}]}
     must: ["Takes the new witness seriously: asks for his contact details to take a statement; will review and decide in writing"]
     must_not: ["Repeats the denial without hearing the witness", "Promises to pay"]
     minutes: [10, "a claimant letter reopening an investigation"]
@@ -1238,7 +1239,7 @@ needs:
     due: "D1 17:00"
     evidence: [t4-wade, doc-fnol-1102, pol-guidelines]
     ref: a1b-initial-reserves
-    check: {all: [{mentions_any: [LR-26-118292]}, {mentions_any: [LR-26-118294]}, {mentions_any: [LR-26-118297]}, {mentions_any: [reserve]}]}
+    check: {"all": [{"mentions_any": ["LR-26-118292"]}, {"mentions_any": ["LR-26-118294"]}, {"mentions_any": ["LR-26-118297"]}, {"mentions_any": ["initial reserve", "initial reserves", "opening reserve", "reserve recommendation", "recommended reserve", "set reserves", "set the reserves"]}, {"mentions_any": ["BI", "bodily injury"]}, {"not": {"mentions_any": ["accomplishments", "completed"]}}]}
     must: ["A reasoned reserve on each feature, BI included, within authority"]
     minutes: [8, "initial reserves on four features"]
     intent: "Every new feature gets a real number on day one."
