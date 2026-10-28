@@ -427,7 +427,11 @@ def workweek_agent(run_path: str = "config/run.yaml", start: str = "D1 00:00", e
                 continue
             mid = bool(ck) and day == ck["day"] and ck["phase"] == "tick"
             day_start, day_end = ep.worker.day_hours(day)
-            day_ticks = [x for x in ticks(day, cadence, 0, 86400 - cadence) if s0 <= x <= s1]   # around the clock
+            # around the clock, every cadence, and also the moment each live call starts, so a call is never over
+            # before the assistant has a chance to join it
+            calls = {seconds(th.exchanges[0].at) for th in ep.threads if th.live and th.exchanges}
+            day_ticks = sorted({x for x in ticks(day, cadence, 0, 86400 - cadence) if s0 <= x <= s1}
+                               | {c for c in calls if s0 <= c <= s1 and (day - 1) * 86400 <= c < day * 86400})
             if not mid:
                 messages.append(ChatMessageUser(content=prompts.DAY_START.format(
                     date=DAYS[day - 1], time=show(day_ticks[0]).split()[1], first_name=sim.first,
@@ -475,6 +479,7 @@ def workweek_agent(run_path: str = "config/run.yaml", start: str = "D1 00:00", e
         state.metadata["resumed_after"] = show(ck["t"]) if ck else None
         state.metadata["long_context_usage"] = sim.long_usage
         state.metadata["compaction_usage"] = sim.compaction_usage
+        state.metadata["call_start_ticks"] = True                 # a tick when each call starts (the grader's cue)
         state.completed = True
         return state
 

@@ -157,7 +157,9 @@ version of each document; a call's turns, then the worker's case note), plus `/w
 ## 5. The engine (`workweek/engine.py`, an Inspect AI task)
 
 - **Clock:** simulated, around the clock from Monday 00:00 to Friday 23:55, a tick every `cadence_minutes` (5), since
-  an assistant does not sleep. Each tick says whether the worker is at work (`worker.hours` per day) and when they
+  an assistant does not sleep, and one more the moment each live call starts, so a short call is never over before
+  the assistant can join it. (The first three weeks ran with the cadence ticks only; their grading credits a call
+  line said at the first tick after the call started: `docs/grading-audit.md`.) Each tick says whether the worker is at work (`worker.hours` per day) and when they
   are next in; mail and traffic that arrive overnight reach the assistant when they arrive, and what it proposes
   while the worker is away waits for them. The worker's departure tick is an end-of-day turn. A question asked while
   the worker is away is not answered (it costs the worker only its reading). Before each tick the engine writes the
