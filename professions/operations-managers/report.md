@@ -1,6 +1,6 @@
 # General and Operations Managers (11-1021.00): build report
 
-110 needs, 21 traps, 190 worker actions, 555 threads, 29 documents, 29,905 words.
+110 needs, 21 traps, 190 worker actions, 555 threads, 29 documents, 29,922 words.
 
 | day | chat exchanges | chat threads | mail exchanges | mail threads | needs | phone exchanges | phone threads | worker actions |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -44,5 +44,12 @@
 
 ## Errors (0)
 
-## Warnings (1)
+## Warnings (8)
+- n1-flsa: very short mention 'OT'
+- n1b-bonus: very short mention '5S'
+- n2b-lift-l2: very short mention 'PO'
+- n3-shawn: very short mention '5S'
+- n3b-tina-derek: very short mention 'HR'
+- n3b-priya: very short mention 'HR'
 - n4-shawn: very short mention 'HR'
+- n5-schedule: very short mention 'OT'

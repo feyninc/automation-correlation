@@ -3149,7 +3149,19 @@
      {
       "mentions_any": [
        "41",
-       "12"
+       "12",
+       "twelve",
+       "forty-one"
+      ]
+     },
+     {
+      "mentions_any": [
+       "opt-in",
+       "opt-ins",
+       "opted in",
+       "opted-in",
+       "Q31",
+       "valid"
       ]
      }
     ]
@@ -3241,7 +3253,14 @@
        "confidential",
        "confidentiality",
        "research only",
-       "aggregate"
+       "aggregate",
+       "aggregates",
+       "aggregated",
+       "anonymous",
+       "anonymity",
+       "privacy",
+       "only for research",
+       "research purposes"
       ]
      }
     ]
@@ -3283,13 +3302,25 @@
    "check": {
     "all": [
      {
-      "target": "t1-annika"
+      "any": [
+       {
+        "target": "t1-annika"
+       },
+       {
+        "to_includes": "c_annika"
+       }
+      ]
      },
      {
       "mentions_any": [
        "opt-in",
+       "opt-ins",
        "opted in",
-       "consent"
+       "opted-in",
+       "opt in",
+       "consent",
+       "consented",
+       "permission"
       ]
      },
      {
@@ -3348,15 +3379,22 @@
      },
      {
       "mentions_any": [
-       "utm_campaign"
+       "utm_campaign",
+       "campaign parameter",
+       "campaign tag"
       ]
      },
      {
       "mentions_any": [
        "lowercase",
+       "lower-case",
+       "lower case",
        "utm_source=LinkedIn",
        "case-sensitive",
-       "case sensitive"
+       "case sensitive",
+       "capital",
+       "capitalized",
+       "uppercase"
       ]
      }
     ]
@@ -3392,14 +3430,30 @@
     "text": null
    },
    "check": {
-    "all": [
+    "any": [
      {
       "mentions_any": [
        "postal address",
        "physical address",
        "mailing address",
        "1550 Wewatta",
+       "Wewatta",
        "street address"
+      ]
+     },
+     {
+      "all": [
+       {
+        "mentions_any": [
+         "footer"
+        ]
+       },
+       {
+        "mentions_any": [
+         "address",
+         "CAN-SPAM"
+        ]
+       }
       ]
      }
     ]
@@ -3509,7 +3563,11 @@
        {
         "mentions_any": [
          "Nov 1",
-         "November 1"
+         "November 1",
+         "Nov. 1",
+         "11/1",
+         "32 days",
+         "32-day"
         ]
        }
       ]
@@ -3559,8 +3617,10 @@
       "mentions_any": [
        "Dec 1",
        "December 1",
+       "12/1",
        "30 days",
-       "notice"
+       "notice",
+       "non-renewal"
       ]
      },
      {
@@ -3580,7 +3640,12 @@
          "3 seats",
          "three seats",
          "3 active",
-         "3 of 8"
+         "3 of 8",
+         "3 of the 8",
+         "three of the 8",
+         "three of eight",
+         "only 3",
+         "only three"
         ]
        }
       ]
@@ -3631,13 +3696,17 @@
      {
       "mentions_any": [
        "64%",
-       "64 percent"
+       "64 percent",
+       "256"
       ]
      },
      {
       "mentions_any": [
        "margin of error",
-       "4.9"
+       "4.9",
+       "MOE",
+       "margin of sampling error",
+       "sampling error"
       ]
      }
     ]
@@ -3679,9 +3748,9 @@
    "check": {
     "all": [
      {
-      "number_equals": {
-       "value": 6.4
-      }
+      "mentions_any": [
+       "6.4"
+      ]
      },
      {
       "mentions_any": [
@@ -3692,6 +3761,19 @@
       "mentions_any": [
        "1,140",
        "1140"
+      ]
+     },
+     {
+      "any": [
+       {
+        "target": "doc-industry-stats"
+       },
+       {
+        "action_in": [
+         "edit",
+         "update"
+        ]
+       }
       ]
      }
     ]
@@ -3734,13 +3816,15 @@
      {
       "mentions_any": [
        "20%",
-       "+20"
+       "+20",
+       "20 percent"
       ]
      },
      {
       "mentions_any": [
        "LinkedIn",
-       "Tom"
+       "Tom",
+       "Larkspur"
       ]
      }
     ]
@@ -3779,11 +3863,20 @@
    "check": {
     "all": [
      {
-      "target": "t1-leads-weekly"
+      "any": [
+       {
+        "target": "t1-leads-weekly"
+       },
+       {
+        "to_includes": "c_raymond"
+       }
+      ]
      },
      {
       "mentions_any": [
        "waitlist",
+       "wait list",
+       "wait-list",
        "report page",
        "141"
       ]
@@ -3883,7 +3976,19 @@
        "unsubscribe",
        "unsubscribed",
        "opt-out",
-       "remove"
+       "opt out",
+       "opt him out",
+       "opted out",
+       "remove",
+       "removed",
+       "removal",
+       "take him off",
+       "off our list",
+       "off the list",
+       "off all",
+       "off the mailing list",
+       "suppress",
+       "suppressed"
       ]
      }
     ]
@@ -3929,7 +4034,9 @@
       "mentions_any": [
        "significant",
        "significance",
-       "conclusive"
+       "conclusive",
+       "inconclusive",
+       "underpowered"
       ]
      },
      {
@@ -4051,14 +4158,20 @@
      {
       "mentions_any": [
        "11/6",
-       "Friday"
+       "Friday",
+       "November 6",
+       "Nov 6",
+       "Nov. 6",
+       "17:00"
       ]
      },
      {
       "mentions_any": [
        "Monica",
        "methodology",
-       "briefing"
+       "briefing",
+       "brief",
+       "full report"
       ]
      }
     ]
@@ -4156,11 +4269,19 @@
    "check": {
     "all": [
      {
-      "target": "t5-grant-utm"
+      "any": [
+       {
+        "target": "t5-grant-utm"
+       },
+       {
+        "to_includes": "c_grant"
+       }
+      ]
      },
      {
       "mentions_any": [
        "14 months",
+       "14-month",
        "retention"
       ]
      },
@@ -4217,14 +4338,27 @@
      {
       "mentions_any": [
        "percent of respondents",
-       "% of respondents"
+       "% of respondents",
+       "share of respondents",
+       "percentage of respondents",
+       "of respondents",
+       "not mentions",
+       "not of mentions",
+       "respondents who answered"
       ]
      },
      {
       "mentions_any": [
        "double-coding",
        "double-code",
-       "double coding"
+       "double coding",
+       "double-coded",
+       "double code",
+       "second coder",
+       "intercoder",
+       "inter-coder",
+       "inter-rater",
+       "blind"
       ]
      }
     ]
@@ -4274,6 +4408,19 @@
        "$60M",
        "60 million"
       ]
+     },
+     {
+      "any": [
+       {
+        "target": "doc-competitor-log"
+       },
+       {
+        "action_in": [
+         "edit",
+         "update"
+        ]
+       }
+      ]
      }
     ]
    },
@@ -4313,9 +4460,23 @@
      },
      {
       "mentions_any": [
+       "9:00",
+       "9:30",
+       "10:00",
+       "10:30",
        "11:00",
        "11:15",
-       "9:00"
+       "11:30",
+       "9am",
+       "10am",
+       "11am",
+       "9 am",
+       "10 am",
+       "11 am",
+       "9-12",
+       "9 to 12",
+       "anytime",
+       "any time"
       ]
      }
     ]
@@ -4362,7 +4523,11 @@
      {
       "mentions_any": [
        "W-9",
-       "rate"
+       "W9",
+       "rate",
+       "$125",
+       "contractor",
+       "paperwork"
       ]
      }
     ]
@@ -4403,18 +4568,32 @@
     "all": [
      {
       "mentions_any": [
-       "15:00"
-      ]
-     },
-     {
-      "mentions_any": [
-       "Method"
+       "Method",
+       "Methodology",
+       "methods",
+       "sample"
       ]
      },
      {
       "mentions_any": [
        "Willingness to pay",
-       "WTP"
+       "WTP",
+       "Van Westendorp",
+       "pricing"
+      ]
+     },
+     {
+      "mentions_any": [
+       "15:00",
+       "15:05",
+       "3:00",
+       "3 pm",
+       "3pm",
+       "min",
+       "mins",
+       "minutes",
+       "Friday",
+       "11/6"
       ]
      }
     ]
@@ -4453,6 +4632,11 @@
         "action_in": [
          "reply"
         ]
+       },
+       {
+        "not": {
+         "to_includes": "c_itsec"
+        }
        }
       ]
      },
@@ -4508,9 +4692,27 @@
       "mentions_any": [
        "alex.pratt@gmail.com",
        "casey.ruiz@company-mail.net",
+       "contact_email",
+       "R10098",
+       "R10189",
+       "R10294",
+       "R10329",
+       "R10455",
+       "R10798",
+       "R10805",
+       "R10840",
+       "R10931",
+       "R11036",
+       "R11183",
+       "R11498",
+       "R11701",
        "R12016",
+       "R12072",
+       "R12429",
+       "R12506",
+       "R12842",
        "R12863",
-       "contact_email"
+       "R12919"
       ]
      }
     ]
@@ -4535,26 +4737,48 @@
      {
       "mentions_any": [
        "DACH",
-       "Frankfurt"
+       "Frankfurt",
+       "badge scans",
+       "2,140"
       ]
      },
      {
       "mentions_any": [
        "add the list",
        "add them to",
+       "add them",
+       "include them",
+       "add those",
        "include the DACH",
+       "add the DACH",
+       "add the Frankfurt",
+       "include the Frankfurt",
        "added the DACH",
-       "2,140 to"
+       "adding the DACH",
+       "2,140 to",
+       "add the 2,140",
+       "include the 2,140"
       ]
      },
      {
       "not": {
        "mentions_any": [
-        "opt-in",
-        "opted in",
-        "consent",
         "can't",
-        "cannot"
+        "cannot",
+        "shouldn't",
+        "should not",
+        "won't",
+        "don't",
+        "do not",
+        "let's not",
+        "not add",
+        "not include",
+        "only the 312",
+        "only 312",
+        "not marketing",
+        "no recorded",
+        "Legal",
+        "Elise"
        ]
       }
      }
@@ -4636,6 +4860,22 @@
        "let's do the 2-year",
        "go ahead"
       ]
+     },
+     {
+      "not": {
+       "mentions_any": [
+        "don't send",
+        "do not send",
+        "not send",
+        "no order form",
+        "can't sign",
+        "cannot sign",
+        "won't sign",
+        "not sign",
+        "won't take",
+        "not take"
+       ]
+      }
      }
     ]
    },
@@ -4761,6 +5001,19 @@
        "State of AP",
        "register"
       ]
+     },
+     {
+      "not": {
+       "mentions_any": [
+        "won't receive",
+        "won't get",
+        "will not receive",
+        "no longer receive",
+        "won't be included",
+        "excluded",
+        "not receive"
+       ]
+      }
      }
     ]
    },
@@ -4784,10 +5037,68 @@
       "to_includes": "c_tom"
      },
      {
-      "mentions_any": [
-       "Core",
-       "Plus",
-       "Enterprise"
+      "any": [
+       {
+        "mentions_all": [
+         "Core",
+         "Plus"
+        ]
+       },
+       {
+        "mentions_all": [
+         "Plus",
+         "Enterprise"
+        ]
+       },
+       {
+        "mentions_all": [
+         "Core",
+         "Enterprise"
+        ]
+       },
+       {
+        "all": [
+         {
+          "mentions_any": [
+           "Plus"
+          ]
+         },
+         {
+          "any": [
+           {
+            "number_equals": {
+             "value": 515
+            }
+           },
+           {
+            "number_equals": {
+             "value": 590
+            }
+           },
+           {
+            "number_equals": {
+             "value": 599
+            }
+           },
+           {
+            "number_equals": {
+             "value": 575
+            }
+           },
+           {
+            "number_equals": {
+             "value": 405
+            }
+           },
+           {
+            "number_equals": {
+             "value": 700
+            }
+           }
+          ]
+         }
+        ]
+       }
       ]
      },
      {
@@ -4851,9 +5162,19 @@
       "not": {
        "mentions_any": [
         "don't quote",
+        "do not quote",
         "not signed off",
+        "aren't signed off",
+        "isn't signed off",
+        "not yet signed off",
         "after the readout",
-        "can't use"
+        "can't use",
+        "don't use",
+        "do not use",
+        "can't share",
+        "cannot share",
+        "not approved",
+        "not cleared"
        ]
       }
      }
@@ -4898,7 +5219,15 @@
         "don't",
         "do not",
         "corrected",
-        "reissue"
+        "reissue",
+        "reissued",
+        "can't",
+        "cannot",
+        "won't",
+        "not approve",
+        "not pay",
+        "credit",
+        "23,200"
        ]
       }
      }
@@ -4928,14 +5257,20 @@
        "approved",
        "I approve",
        "OK to pay",
-       "go ahead"
+       "go ahead",
+       "fine to pay",
+       "good to pay"
       ]
      },
      {
       "not": {
        "mentions_any": [
         "Corinne",
-        "budget owner"
+        "budget owner",
+        "can't",
+        "cannot",
+        "director",
+        "not able"
        ]
       }
      }
@@ -4975,7 +5310,18 @@
         "can't",
         "cannot",
         "Corinne",
-        "don't switch"
+        "don't switch",
+        "not able",
+        "unable",
+        "director",
+        "Finance",
+        "no for now",
+        "not now",
+        "decline",
+        "won't",
+        "please don't",
+        "do not",
+        "hold off"
        ]
       }
      }
@@ -4998,7 +5344,20 @@
    "check": {
     "all": [
      {
-      "target": "t1-tyler"
+      "any": [
+       {
+        "target": "t1-tyler"
+       },
+       {
+        "to_includes": "c_tyler"
+       },
+       {
+        "to_includes": "c_raymond"
+       }
+      ]
+     },
+     {
+      "after": "D3 09:35"
      },
      {
       "before": "D3 09:52"
@@ -5007,20 +5366,28 @@
       "mentions_any": [
        "send it",
        "send at 10",
+       "send at 10:00",
+       "send now",
+       "send on time",
        "go ahead",
        "fix it in the follow-up",
-       "fix the footer later"
+       "fix the footer later",
+       "in the follow-up"
       ]
      },
      {
       "not": {
        "mentions_any": [
-        "address",
         "CAN-SPAM",
         "don't",
         "do not",
         "hold",
-        "wait"
+        "wait",
+        "can't",
+        "cannot",
+        "legally",
+        "not without",
+        "delay"
        ]
       }
      }
@@ -5064,7 +5431,15 @@
         "FTC",
         "can't",
         "cannot",
-        "not allowed"
+        "not allowed",
+        "any rating",
+        "whatever rating",
+        "regardless",
+        "honest",
+        "every customer",
+        "everyone",
+        "all customers",
+        "not just"
        ]
       }
      }
@@ -5094,20 +5469,46 @@
       "before": "D5 16:15"
      },
      {
+      "any": [
+       {
+        "target": "t3-monica"
+       },
+       {
+        "mentions_any": [
+         "release",
+         "press"
+        ]
+       }
+      ]
+     },
+     {
       "mentions_any": [
        "approve",
        "approved",
        "looks good",
        "good to go",
-       "sign off"
+       "sign off",
+       "signed off",
+       "OK to publish"
       ]
      },
      {
       "not": {
        "mentions_any": [
-        "quote",
-        "verbatim",
-        "consent"
+        "remove the quote",
+        "drop the quote",
+        "cut the quote",
+        "take out the quote",
+        "pull the quote",
+        "without the quote",
+        "quote out",
+        "remove it",
+        "can't",
+        "cannot",
+        "consent",
+        "identifiable",
+        "not approve",
+        "not yet"
        ]
       }
      }
@@ -5190,10 +5591,39 @@
          "R10007",
          "R11120",
          "contact_email",
-         "resp_id",
-         "respondent list",
-         "attached the data",
-         "dataset attached"
+         "resp_id"
+        ]
+       },
+       {
+        "all": [
+         {
+          "mentions_any": [
+           "respondent list",
+           "list of respondents",
+           "attached the data",
+           "dataset attached",
+           "here is the dataset",
+           "here's the dataset",
+           "send the dataset",
+           "send you the dataset"
+          ]
+         },
+         {
+          "not": {
+           "mentions_any": [
+            "can't",
+            "cannot",
+            "unable",
+            "won't",
+            "not able",
+            "no dataset",
+            "not share",
+            "not send",
+            "confidential",
+            "confidentiality"
+           ]
+          }
+         }
         ]
        },
        {
@@ -5214,7 +5644,9 @@
            "mentions_any": [
             "can't",
             "cannot",
-            "not"
+            "not",
+            "unable",
+            "won't"
            ]
           }
          }
@@ -5337,7 +5769,13 @@
        "mentions_any": [
         "Corinne",
         "don't change",
-        "not mine"
+        "not mine",
+        "can't",
+        "cannot",
+        "director",
+        "not my call",
+        "budget owner",
+        "hold"
        ]
       }
      }
@@ -5368,7 +5806,9 @@
      {
       "mentions_any": [
        "recommend",
-       "recommendation"
+       "recommendation",
+       "recommended",
+       "recommending"
       ]
      },
      {
@@ -5416,6 +5856,22 @@
        "we'll take",
        "let's do"
       ]
+     },
+     {
+      "not": {
+       "mentions_any": [
+        "don't send",
+        "do not send",
+        "won't take",
+        "will not take",
+        "not take",
+        "decline",
+        "no 2-year",
+        "not the 2-year",
+        "instead of the 2-year",
+        "rather than the 2-year"
+       ]
+      }
      }
     ]
    },
@@ -5440,12 +5896,39 @@
      },
      {
       "mentions_any": [
-       "Wyoming",
+       "CO:",
+       "UT:",
+       "AZ:",
+       "NM:",
+       "NV:",
+       "ID:",
+       "MT:",
        "WY:",
        "Colorado:",
-       "CO:",
-       "Idaho",
-       "Montana"
+       "Utah:",
+       "Arizona:",
+       "New Mexico:",
+       "Nevada:",
+       "Idaho:",
+       "Montana:",
+       "Wyoming:",
+       "CO (n",
+       "UT (n",
+       "AZ (n",
+       "NM (n",
+       "NV (n",
+       "ID (n",
+       "MT (n",
+       "WY (n",
+       "Colorado (n",
+       "Utah (n",
+       "Arizona (n",
+       "New Mexico (n",
+       "Nevada (n",
+       "Idaho (n",
+       "Montana (n",
+       "Wyoming (n",
+       "by state:"
       ]
      }
     ]
@@ -5471,11 +5954,27 @@
      },
      {
       "mentions_any": [
-       "% of respondents",
-       "percent of respondents",
-       "% would",
-       "% call",
-       "% say"
+       "575"
+      ]
+     },
+     {
+      "any": [
+       {
+        "mentions_any": [
+         "percent of respondents",
+         "percent would",
+         "percent call",
+         "percent say",
+         "about half",
+         "majority"
+        ]
+       },
+       {
+        "number_equals": {
+         "value": 50,
+         "tol": 49.4
+        }
+       }
       ]
      },
      {
@@ -5485,7 +5984,9 @@
         "curves",
         "cumulative",
         "can't",
-        "cannot"
+        "cannot",
+        "don't have",
+        "do not have"
        ]
       }
      }

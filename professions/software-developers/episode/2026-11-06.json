@@ -1072,7 +1072,7 @@
      ],
      "cc": [],
      "subject": null,
-     "body": "Handoff doc goes up before 5. Beyond it: Monday 09:00 sends are the first after PG17, worth a glance; SUP-8840's customer note is with Marcus and Rachel;",
+     "body": "Handoff doc goes up before 5. Beyond it: Monday 09:00 sends are the first after PG17, worth a glance; SUP-8840's customer note is with Marcus and Rachel.",
      "attachments": [],
      "meta": {}
     }
@@ -2987,17 +2987,42 @@
    "check": {
     "all": [
      {
-      "to_includes": "c_olivia"
-     },
-     {
-      "mentions_any": [
-       "3 days",
-       "three days"
+      "any": [
+       {
+        "to_includes": "c_olivia"
+       },
+       {
+        "all": [
+         {
+          "action_in": [
+           "new",
+           "edit"
+          ]
+         },
+         {
+          "mentions_any": [
+           "acceptance",
+           "Acceptance criteria"
+          ]
+         }
+        ]
+       }
       ]
      },
      {
       "mentions_any": [
-       "DST"
+       "3 days",
+       "three days",
+       "3-day",
+       "three-day",
+       "3 working days",
+       "3 dev days"
+      ]
+     },
+     {
+      "mentions_any": [
+       "DST",
+       "daylight"
       ]
      }
     ]
@@ -3083,18 +3108,23 @@
     "all": [
      {
       "mentions_any": [
-       "#1494"
+       "1494"
       ]
      },
      {
       "mentions_any": [
-       "#1496"
+       "1496"
       ]
      },
      {
       "mentions_any": [
        "carried",
-       "Carried"
+       "Carried",
+       "carry",
+       "carryover",
+       "carry-over",
+       "rolled over",
+       "spilled"
       ]
      }
     ]
@@ -3132,7 +3162,14 @@
    "check": {
     "all": [
      {
-      "target": "t2-billing-chat"
+      "any": [
+       {
+        "target": "t2-billing-chat"
+       },
+       {
+        "to_includes": "c_ben"
+       }
+      ]
      },
      {
       "mentions_any": [
@@ -3142,7 +3179,8 @@
      },
      {
       "mentions_any": [
-       "Nadia"
+       "Nadia",
+       "freeze owner"
       ]
      }
     ]
@@ -3183,12 +3221,16 @@
      {
       "mentions_any": [
        "handoff",
-       "Handoff"
+       "Handoff",
+       "hand-off",
+       "on-call"
       ]
      },
      {
       "mentions_any": [
-       "SUP-8840"
+       "SUP-8840",
+       "downstream duplicate",
+       "customer note"
       ]
      },
      {
@@ -3235,19 +3277,27 @@
      },
      {
       "mentions_any": [
-       "9/30"
+       "9/30",
+       "Sep 30",
+       "Sept 30",
+       "September 30",
+       "2026-09-30"
       ]
      },
      {
       "mentions_any": [
-       "11/5"
+       "11/5",
+       "Nov 5",
+       "November 5",
+       "2026-11-05"
       ]
      },
      {
       "mentions_any": [
        "exploitation",
        "exploited",
-       "OOM"
+       "OOM",
+       "exploit"
       ]
      }
     ]
@@ -3297,7 +3347,9 @@
      {
       "mentions_any": [
        "BIL-1512",
-       "off"
+       "off",
+       "on-call",
+       "on call"
       ]
      }
     ]
@@ -3340,7 +3392,10 @@
      {
       "mentions_any": [
        "ElastiCache",
-       "AWS"
+       "AWS",
+       "maintenance",
+       "auto-apply",
+       "auto-applied"
       ]
      },
      {
@@ -3388,7 +3443,14 @@
    "check": {
     "all": [
      {
-      "target": "t1b-platform-chat"
+      "any": [
+       {
+        "target": "t1b-platform-chat"
+       },
+       {
+        "to_includes": "c_priya"
+       }
+      ]
      },
      {
       "mentions_any": [
@@ -3398,6 +3460,7 @@
      {
       "mentions_any": [
        "search_path",
+       "search path",
        "proconfig"
       ]
      }
@@ -3436,17 +3499,28 @@
    "check": {
     "all": [
      {
-      "to_includes": "c_olivia"
-     },
-     {
-      "mentions_any": [
-       "planning",
-       "not planned"
+      "any": [
+       {
+        "to_includes": "c_olivia"
+       },
+       {
+        "to_includes": "c_ravi"
+       }
       ]
      },
      {
       "mentions_any": [
-       "freeze"
+       "planning",
+       "not planned",
+       "isn't planned",
+       "not scheduled",
+       "not committed"
+      ]
+     },
+     {
+      "mentions_any": [
+       "freeze",
+       "migration"
       ]
      }
     ]
@@ -3486,7 +3560,14 @@
    "check": {
     "all": [
      {
-      "target": "t5b-pr1499"
+      "any": [
+       {
+        "target": "t5b-pr1499"
+       },
+       {
+        "to_includes": "c_ben"
+       }
+      ]
      },
      {
       "mentions_any": [

@@ -5386,7 +5386,7 @@
     {
      "at": "D1 07:00",
      "author": "c_jas",
-     "content": "date,load,carrier,scheduled_pickup,actual_pickup,promised_delivery,actual_delivery,on_time,note\n2026-10-26,GRV-88120,Buckeye Freightways,16:00,16:10,10/27 10:00,10/27 09:40,yes,\n2026-10-27,GRV-88174,Buckeye Freightways,16:00,19:45,10/28 10:00,10/28 14:20,no,carrier missed pickup window\n2026-10-28,GRV-88231,Buckeye Freightways,16:00,16:05,10/29 10:00,10/29 09:55,yes,\n2026-10-29,GRV-88290,Buckeye Freightways,16:00,20:30,10/30 10:00,10/30 15:10,no,carrier missed pickup window\n2026-10-30,GRV-88342,Buckeye Freightways,16:00,15:50,10/31 10:00,11/2 08:30,no,load not staged until 17:20 (Groveport)\n",
+     "content": "date,load,carrier,scheduled_pickup,actual_pickup,promised_delivery,actual_delivery,on_time,note\n2026-10-26,GRV-88120,Buckeye Freightways,16:00,16:10,10/27 10:00,10/27 09:40,yes,\n2026-10-27,GRV-88174,Buckeye Freightways,16:00,19:45,10/28 10:00,10/28 14:20,no,carrier missed pickup window\n2026-10-28,GRV-88231,Buckeye Freightways,16:00,16:05,10/29 10:00,10/29 09:55,yes,\n2026-10-29,GRV-88290,Buckeye Freightways,16:00,20:30,10/30 10:00,10/30 15:10,no,carrier missed pickup window\n2026-10-30,GRV-88342,Buckeye Freightways,16:00,(missed; later run),10/31 10:00,11/2 08:30,no,load not staged until 17:20 (Groveport); the Buckeye truck left at 15:50 without it\n",
      "note": ""
     }
    ]
@@ -5973,13 +5973,32 @@
       "mentions_any": [
        "refresher",
        "retrain",
-       "retraining"
+       "retrained",
+       "retraining",
+       "training",
+       "trained"
       ]
      },
      {
       "mentions_any": [
        "evaluation",
-       "evaluated"
+       "evaluated",
+       "evaluate",
+       "evaluates",
+       "eval",
+       "re-evaluation"
+      ]
+     },
+     {
+      "mentions_any": [
+       "tonight",
+       "near miss",
+       "near-miss",
+       "RT-06",
+       "drive",
+       "drives",
+       "operate",
+       "operates"
       ]
      }
     ]
@@ -6025,13 +6044,22 @@
      {
       "mentions_any": [
        "workweek",
-       "per week"
+       "work week",
+       "per week",
+       "each week",
+       "every week",
+       "weekly",
+       "single week",
+       "week stands alone"
       ]
      },
      {
       "mentions_any": [
        "overtime",
-       "1.5"
+       "1.5",
+       "OT",
+       "time and a half",
+       "time-and-a-half"
       ]
      }
     ]
@@ -6080,14 +6108,26 @@
      },
      {
       "mentions_any": [
-       "vote"
+       "vote",
+       "voting"
       ]
      },
      {
       "mentions_any": [
        "no point",
        "not get a point",
-       "won't get"
+       "won't get",
+       "no attendance point",
+       "without a point",
+       "no points",
+       "no penalty",
+       "without penalty",
+       "won't be penalized",
+       "not be penalized",
+       "won't count",
+       "doesn't count",
+       "not count",
+       "excused"
       ]
      }
     ]
@@ -6132,7 +6172,8 @@
      },
      {
       "mentions_any": [
-       "8:30"
+       "8:30",
+       "08:30"
       ]
      }
     ]
@@ -6180,7 +6221,14 @@
      {
       "mentions_any": [
        "staged",
-       "staging"
+       "staging",
+       "stage",
+       "on us",
+       "our miss",
+       "our fault",
+       "weren't ready",
+       "wasn't ready",
+       "missed the truck"
       ]
      }
     ]
@@ -6254,7 +6302,8 @@
      },
      {
       "number_equals": {
-       "value": 19582
+       "value": 19582,
+       "tol": 20
       }
      }
     ]
@@ -6296,15 +6345,34 @@
       "to_includes": "c_lisa"
      },
      {
-      "mentions_any": [
-       "14,212",
-       "$14,212"
+      "any": [
+       {
+        "mentions_any": [
+         "14,212",
+         "$14,212"
+        ]
+       },
+       {
+        "number_equals": {
+         "value": 14212.4,
+         "tol": 15
+        }
+       },
+       {
+        "number_equals": {
+         "value": -14212.4,
+         "tol": 15
+        }
+       }
       ]
      },
      {
       "mentions_any": [
        "10,000",
-       "authority"
+       "10k",
+       "$10k",
+       "authority",
+       "limit"
       ]
      }
     ]
@@ -6347,14 +6415,37 @@
       "to_includes": "c_agency"
      },
      {
-      "number_equals": {
-       "value": 150
-      }
+      "any": [
+       {
+        "number_equals": {
+         "value": 150
+        }
+       },
+       {
+        "number_equals": {
+         "value": 4350
+        }
+       }
+      ]
      },
      {
-      "number_equals": {
-       "value": 152540
-      }
+      "any": [
+       {
+        "number_equals": {
+         "value": 152540
+        }
+       },
+       {
+        "number_equals": {
+         "value": 5260
+        }
+       },
+       {
+        "number_equals": {
+         "value": 5410
+        }
+       }
+      ]
      }
     ]
    },
@@ -6392,17 +6483,36 @@
    "check": {
     "all": [
      {
-      "target": "t1b-staff"
+      "any": [
+       {
+        "target": "t1b-staff"
+       },
+       {
+        "all": [
+         {
+          "to_includes": "c_shawn"
+         },
+         {
+          "to_includes": "c_tina"
+         }
+        ]
+       }
+      ]
      },
      {
       "mentions_any": [
-       "MBR"
+       "MBR",
+       "business review"
       ]
      },
      {
       "mentions_any": [
        "11/9",
-       "peak class"
+       "peak class",
+       "Nov 9",
+       "November 9",
+       "new class",
+       "agency class"
       ]
      },
      {
@@ -6456,7 +6566,9 @@
       "mentions_any": [
        "move",
        "moved",
-       "clear"
+       "clear",
+       "relocate",
+       "out of"
       ]
      }
     ]
@@ -6507,13 +6619,19 @@
        "GRV-88174",
        "GRV-88290",
        "7:45",
-       "8:30"
+       "8:30",
+       "10/27",
+       "10/29"
       ]
      },
      {
       "mentions_any": [
        "4:00",
-       "four"
+       "four",
+       "4 p.m.",
+       "4 pm",
+       "4pm",
+       "16:00"
       ]
      }
     ]
@@ -6561,13 +6679,18 @@
      {
       "mentions_any": [
        "10:00",
-       "Lexington"
+       "Lexington",
+       "10 a.m.",
+       "10am",
+       "delivery"
       ]
      },
      {
       "mentions_any": [
        "writing",
-       "written"
+       "written",
+       "email",
+       "e-mail"
       ]
      }
     ]
@@ -6616,7 +6739,11 @@
      },
      {
       "mentions_any": [
-       "4:00"
+       "4:00",
+       "4 p.m.",
+       "4 pm",
+       "4pm",
+       "16:00"
       ]
      },
      {
@@ -6660,7 +6787,14 @@
    "check": {
     "all": [
      {
-      "to_includes": "c_beth"
+      "any": [
+       {
+        "to_includes": "c_beth"
+       },
+       {
+        "to_includes": "c_shawn"
+       }
+      ]
      },
      {
       "mentions_any": [
@@ -6672,7 +6806,12 @@
       "mentions_any": [
        "Gina",
        "Russo",
-       "12/15"
+       "12/15",
+       "Lena",
+       "Ortiz",
+       "Becker",
+       "11/4",
+       "11/12"
       ]
      },
      {
@@ -6680,7 +6819,11 @@
        "three-year",
        "three years",
        "3 years",
-       "l)(4)(iii"
+       "3-year",
+       "l)(4)(iii",
+       "every three",
+       "36 months",
+       "hard date"
       ]
      }
     ]
@@ -6736,7 +6879,14 @@
      {
       "mentions_any": [
        "five years",
-       "5 years"
+       "5 years",
+       "five-year",
+       "5-year",
+       "1904.33",
+       "12/31/2026",
+       "end of 2026",
+       "through 2026",
+       "retention"
       ]
      }
     ]
@@ -6781,13 +6931,28 @@
      },
      {
       "number_equals": {
-       "value": 152540
+       "value": 152540,
+       "tol": 50
       }
      },
      {
-      "number_equals": {
-       "value": 4350
-      }
+      "any": [
+       {
+        "number_equals": {
+         "value": 4350
+        }
+       },
+       {
+        "number_equals": {
+         "value": 150
+        }
+       },
+       {
+        "number_equals": {
+         "value": 156890
+        }
+       }
+      ]
      }
     ]
    },
@@ -6834,7 +6999,12 @@
      {
       "mentions_any": [
        "pickers",
-       "2 of"
+       "picker",
+       "2 of",
+       "two of",
+       "people",
+       "associates",
+       "Shawn"
       ]
      }
     ]
@@ -6875,7 +7045,13 @@
      },
      {
       "mentions_any": [
-       "relieved"
+       "relieved",
+       "deduct",
+       "deduction",
+       "auto-deduct",
+       "on duty",
+       "785.19",
+       "bona fide"
       ]
      },
      {
@@ -6922,7 +7098,14 @@
    "check": {
     "all": [
      {
-      "to_includes": "c_kyle"
+      "any": [
+       {
+        "to_includes": "c_kyle"
+       },
+       {
+        "to_includes": "c_itsd"
+       }
+      ]
      },
      {
       "mentions_any": [
@@ -6933,13 +7116,23 @@
       "mentions_any": [
        "disable",
        "deactivate",
-       "disabled"
+       "disabled",
+       "deactivated",
+       "revoke",
+       "revoked",
+       "shut off",
+       "turn off",
+       "kill"
       ]
      },
      {
       "mentions_any": [
        "Wilkins",
+       "Travis",
        "resigned",
+       "separated",
+       "separation",
+       "last day",
        "10/23"
       ]
      }
@@ -6989,14 +7182,20 @@
       "mentions_any": [
        "OPS-310",
        "standard",
-       "timed"
+       "timed",
+       "time study",
+       "study",
+       "time ten",
+       "time 10"
       ]
      },
      {
       "mentions_any": [
        "Wednesday",
        "written",
-       "writing"
+       "writing",
+       "email",
+       "tomorrow"
       ]
      }
     ]
@@ -7096,9 +7295,18 @@
       ]
      },
      {
-      "number_equals": {
-       "value": 10
-      }
+      "any": [
+       {
+        "number_equals": {
+         "value": 10
+        }
+       },
+       {
+        "mentions_any": [
+         "ten"
+        ]
+       }
+      ]
      }
     ]
    },
@@ -7145,15 +7353,26 @@
      {
       "mentions_any": [
        "reporting",
-       "1904.35"
+       "1904.35",
+       "report",
+       "reported",
+       "discourage",
+       "discourages"
       ]
      },
      {
       "mentions_any": [
        "near misses",
        "near miss",
+       "near-miss",
+       "near-misses",
        "huddles",
-       "leading indicators"
+       "leading indicators",
+       "leading-indicator",
+       "safety observations",
+       "observations",
+       "5S",
+       "pre-shift"
       ]
      }
     ]
@@ -7193,9 +7412,18 @@
       "to_includes": "c_fiber"
      },
      {
-      "number_equals": {
-       "value": 208
-      }
+      "any": [
+       {
+        "number_equals": {
+         "value": 208
+        }
+       },
+       {
+        "number_equals": {
+         "value": 2496
+        }
+       }
+      ]
      },
      {
       "any": [
@@ -7207,7 +7435,8 @@
        {
         "mentions_any": [
          "floor",
-         "not less than"
+         "not less than",
+         "minimum"
         ]
        }
       ]
@@ -7255,13 +7484,26 @@
      {
       "mentions_any": [
        "15:00",
-       "3:00"
+       "3:00",
+       "3 p.m.",
+       "3pm",
+       "3 pm"
       ]
      },
      {
       "mentions_any": [
        "supervisor check",
-       "15:30"
+       "15:30",
+       "3:30"
+      ]
+     },
+     {
+      "mentions_any": [
+       "Cincinnati",
+       "Indianapolis",
+       "Louisville",
+       "Columbus city",
+       "city route"
       ]
      }
     ]
@@ -7307,8 +7549,12 @@
      },
      {
       "mentions_any": [
-       "Mon-Wed",
-       "Monday through Wednesday"
+       "target",
+       "targets",
+       "pick rate",
+       "quota",
+       "standard",
+       "indirect"
       ]
      }
     ]
@@ -7344,16 +7590,41 @@
      },
      {
       "mentions_any": [
-       "first aid",
+       "keep it as first aid",
+       "keep it first aid",
+       "log it as first aid",
+       "treat it as first aid",
+       "call it first aid",
+       "record it as first aid",
+       "it's first aid",
+       "is first aid",
+       "as a first aid case",
+       "first-aid case",
+       "not recordable",
+       "isn't recordable",
+       "keep it off the log",
        "keep it off",
-       "not recordable"
+       "off the log"
       ]
      },
      {
       "not": {
        "mentions_any": [
-        "recordable",
-        "prescription"
+        "is recordable",
+        "it's recordable",
+        "makes it recordable",
+        "be recordable",
+        "is a recordable",
+        "goes on the 300",
+        "on the 300",
+        "must be logged",
+        "can't",
+        "cannot",
+        "won't",
+        "not first aid",
+        "isn't first aid",
+        "beyond first aid",
+        "medical treatment"
        ]
       }
      }
@@ -7379,19 +7650,46 @@
       "to_includes": "c_tina"
      },
      {
+      "before": "D3 10:35"
+     },
+     {
+      "mentions_any": [
+       "Kenny",
+       "RT-06",
+       "him",
+       "he"
+      ]
+     },
+     {
       "mentions_any": [
        "ok to put him",
+       "okay to put him",
        "put him back",
        "fine for tonight",
-       "go ahead"
+       "go ahead",
+       "he can drive",
+       "he can run",
+       "back on RT-06",
+       "back on the truck",
+       "can operate tonight",
+       "fine to put him"
       ]
      },
      {
       "not": {
        "mentions_any": [
-        "refresher",
-        "retrain",
-        "evaluation"
+        "not tonight",
+        "can't",
+        "cannot",
+        "until he",
+        "until he's",
+        "before he operates",
+        "before he drives",
+        "off the truck",
+        "off RT-06",
+        "no,",
+        "don't",
+        "do not"
        ]
       }
      }
@@ -7428,15 +7726,29 @@
        "ok",
        "approved",
        "fine",
-       "go ahead"
+       "go ahead",
+       "sure",
+       "works",
+       "yes"
       ]
      },
      {
       "not": {
        "mentions_any": [
         "workweek",
+        "work week",
         "not allowed",
-        "can't"
+        "isn't allowed",
+        "can't",
+        "cannot",
+        "illegal",
+        "not legal",
+        "no,",
+        "per week",
+        "each week",
+        "won't",
+        "must pay",
+        "have to pay"
        ]
       }
      }
@@ -7481,7 +7793,22 @@
         "Dwayne",
         "Fisher",
         "overdue",
-        "10/27"
+        "10/27",
+        "can't",
+        "cannot",
+        "don't agree",
+        "doesn't work",
+        "not January",
+        "no,",
+        "before January",
+        "three years",
+        "3 years",
+        "three-year",
+        "lapse",
+        "lapsed",
+        "Lena",
+        "Tom",
+        "Gina"
        ]
       }
      }
@@ -7506,6 +7833,9 @@
       "to_includes": "c_janelle"
      },
      {
+      "before": "D4 10:00"
+     },
+     {
       "mentions_any": [
        "shred"
       ]
@@ -7515,16 +7845,23 @@
        "all of it",
        "shred all",
        "go ahead",
-       "fine"
+       "fine",
+       "everything"
       ]
      },
      {
       "not": {
        "mentions_any": [
         "2021",
+        "2022",
         "five years",
         "5 years",
-        "keep"
+        "keep",
+        "retain",
+        "retention",
+        "don't shred",
+        "not shred",
+        "hold"
        ]
       }
      }
@@ -7568,7 +7905,18 @@
        "mentions_any": [
         "paid",
         "relieved",
-        "work time"
+        "work time",
+        "can't",
+        "cannot",
+        "no,",
+        "not ok",
+        "on the clock",
+        "on duty",
+        "not with",
+        "cancel",
+        "rotation",
+        "rotate",
+        "holder"
        ]
       }
      }
@@ -7594,19 +7942,50 @@
       "to_includes": "c_shawn"
      },
      {
+      "any": [
+       {
+        "mentions_any": [
+         "warning",
+         "write-up",
+         "write her up",
+         "discipline"
+        ]
+       },
+       {
+        "all": [
+         {
+          "target": "t2-shawn"
+         },
+         {
+          "before": "D2 12:00"
+         }
+        ]
+       }
+      ]
+     },
+     {
       "mentions_any": [
        "issue it",
        "go ahead",
        "final warning is fine",
-       "ok to issue"
+       "ok to issue",
+       "issue the final warning",
+       "issue the warning",
+       "yes, issue",
+       "fine to issue"
       ]
      },
      {
       "not": {
        "mentions_any": [
         "FMLA",
-        "HR",
-        "hold"
+        "hold",
+        "don't issue",
+        "do not issue",
+        "not issue",
+        "no warning",
+        "protected",
+        "before any"
        ]
       }
      }
@@ -7642,7 +8021,12 @@
        "keep it running",
        "light loads is fine",
        "run it until",
-       "that's fine"
+       "that's fine",
+       "keep it in service",
+       "light duty is fine",
+       "ok to run",
+       "leave it running",
+       "keep it on light"
       ]
      },
      {
@@ -7650,7 +8034,14 @@
        "mentions_any": [
         "out of service",
         "tag it out",
-        "tagged out"
+        "tagged out",
+        "no,",
+        "no.",
+        "tag it",
+        "don't run",
+        "not run",
+        "can't",
+        "not even"
        ]
       }
      }
@@ -7679,7 +8070,10 @@
       "mentions_any": [
        "two POs",
        "split",
-       "separate PO"
+       "separate PO",
+       "separate POs",
+       "2 POs",
+       "another PO"
       ]
      },
      {
@@ -7688,7 +8082,10 @@
        "do it",
        "fine",
        "works",
-       "ok"
+       "ok",
+       "sure",
+       "yes",
+       "do that"
       ]
      },
      {
@@ -7696,7 +8093,22 @@
        "mentions_any": [
         "Lisa",
         "FIN-104",
-        "not two"
+        "not two",
+        "don't split",
+        "do not split",
+        "can't split",
+        "cannot split",
+        "no,",
+        "whole",
+        "evade",
+        "evading",
+        "get around",
+        "gets around",
+        "not split",
+        "won't split",
+        "regional VP",
+        "VP",
+        "doesn't work"
        ]
       }
      }
@@ -7738,7 +8150,9 @@
        "that's fine",
        "sure",
        "go ahead",
-       "no problem"
+       "no problem",
+       "yes",
+       "fine"
       ]
      },
      {
@@ -7746,7 +8160,20 @@
        "mentions_any": [
         "18",
         "can't",
-        "not on any"
+        "cannot",
+        "not on any",
+        "not on a",
+        "not on the",
+        "no forklift",
+        "no forklifts",
+        "not a forklift",
+        "minor",
+        "no,",
+        "no.",
+        "off the",
+        "won't",
+        "isn't allowed",
+        "not allowed"
        ]
       }
      }
@@ -7772,23 +8199,49 @@
       "to_includes": "c_beth"
      },
      {
-      "mentions_any": [
-       "restriction",
-       "restricted"
+      "any": [
+       {
+        "mentions_any": [
+         "restriction",
+         "restricted",
+         "300",
+         "Ana",
+         "Pruitt"
+        ]
+       },
+       {
+        "all": [
+         {
+          "target": "t3-beth"
+         },
+         {
+          "before": "D3 10:35"
+         }
+        ]
+       }
       ]
      },
      {
       "mentions_any": [
        "looks good",
        "enter it",
-       "approved"
+       "approved",
+       "looks right",
+       "go ahead"
       ]
      },
      {
       "not": {
        "mentions_any": [
         "other recordable",
-        "full duty"
+        "full duty",
+        "full-duty",
+        "no restrictions",
+        "not restricted",
+        "Kenny",
+        "correction",
+        "change it",
+        "fix"
        ]
       }
      }
@@ -7816,7 +8269,13 @@
      {
       "mentions_any": [
        "zero injuries",
-       "injury-free"
+       "injury-free",
+       "zero injury",
+       "zero-injury",
+       "injury free",
+       "no injuries",
+       "zero recordables",
+       "zero reported"
       ]
      },
      {
@@ -7824,14 +8283,29 @@
        "great idea",
        "go for it",
        "love it",
-       "do it"
+       "do it",
+       "sure",
+       "let's do",
+       "sounds good",
+       "yes"
       ]
      },
      {
       "not": {
        "mentions_any": [
         "reporting",
-        "discourage"
+        "discourage",
+        "discourages",
+        "instead",
+        "near miss",
+        "near misses",
+        "near-miss",
+        "huddles",
+        "leading",
+        "hide",
+        "not tied",
+        "rather than",
+        "1904.35"
        ]
       }
      }
@@ -7858,6 +8332,9 @@
       "to_includes": "c_shawn"
      },
      {
+      "before": "D3 13:10"
+     },
+     {
       "mentions_any": [
        "Saturday"
       ]
@@ -7868,7 +8345,12 @@
        "post it",
        "schedule it",
        "you're good",
-       "do it"
+       "do it",
+       "go ahead",
+       "yes",
+       "ok",
+       "sure",
+       "fine"
       ]
      },
      {
@@ -7876,7 +8358,15 @@
        "mentions_any": [
         "Lisa",
         "560",
-        "budget"
+        "budget",
+        "hold",
+        "not yet",
+        "don't post",
+        "wait",
+        "VP",
+        "over plan",
+        "over the plan",
+        "approval"
        ]
       }
      }
@@ -7912,7 +8402,13 @@
        "let's do it",
        "you've got it",
        "deal",
-       "starting Monday"
+       "starting Monday",
+       "start Monday",
+       "sounds good",
+       "we'll take it",
+       "we're in",
+       "it's yours",
+       "agreed"
       ]
      },
      {
@@ -7920,7 +8416,13 @@
        "mentions_any": [
         "Scott",
         "can't commit",
-        "Procurement"
+        "Procurement",
+        "won't",
+        "not commit",
+        "cannot",
+        "can't",
+        "no deal",
+        "Transportation"
        ]
       }
      }
@@ -7972,7 +8474,17 @@
         "Lisa",
         "below cost",
         "10.61",
-        "No."
+        "No.",
+        "under cost",
+        "below our cost",
+        "cost us",
+        "can't",
+        "cannot",
+        "won't",
+        "no,",
+        "formula",
+        "12.74",
+        "OPS-310"
        ]
       }
      }
@@ -7998,10 +8510,29 @@
       "to_includes": "c_tina"
      },
      {
+      "after": "D5 10:30"
+     },
+     {
       "mentions_any": [
        "clock out",
+       "clocked out",
+       "clock-out",
+       "off the clock",
+       "punch out",
+       "finish",
+       "finishing",
+       "after they clock"
+      ]
+     },
+     {
+      "mentions_any": [
        "fine",
-       "ok"
+       "ok",
+       "okay",
+       "sure",
+       "go ahead",
+       "works",
+       "yes"
       ]
      },
      {
@@ -8010,7 +8541,19 @@
         "unpaid",
         "on the clock",
         "no,",
-        "No,"
+        "no.",
+        "can't",
+        "cannot",
+        "not allowed",
+        "must be paid",
+        "has to be paid",
+        "have to be paid",
+        "paid",
+        "violation",
+        "illegal",
+        "don't let",
+        "don't have",
+        "do not"
        ]
       }
      }
@@ -8062,7 +8605,16 @@
         "Omar",
         "sheets",
         "30",
-        "won't approve"
+        "won't approve",
+        "120",
+        "not going to",
+        "not pay",
+        "won't",
+        "can't",
+        "documented",
+        "confirm",
+        "verify",
+        "verified"
        ]
       }
      }

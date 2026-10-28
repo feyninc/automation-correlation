@@ -6164,7 +6164,9 @@
      {
       "mentions_any": [
        "11/4",
-       "tonight"
+       "tonight",
+       "Wednesday",
+       "this evening"
       ]
      }
     ]
@@ -6201,7 +6203,14 @@
    "check": {
     "all": [
      {
-      "to_includes": "c_landlord"
+      "any": [
+       {
+        "to_includes": "c_landlord"
+       },
+       {
+        "to_includes": "c_paula"
+       }
+      ]
      },
      {
       "mentions_any": [
@@ -6407,12 +6416,21 @@
    "check": {
     "all": [
      {
-      "to_includes": "c_maren"
+      "any": [
+       {
+        "to_includes": "c_maren"
+       },
+       {
+        "to_includes": "c_dan"
+       }
+      ]
      },
      {
       "mentions_any": [
        "Dan",
-       "supervisor"
+       "supervisor",
+       "approval",
+       "approve"
       ]
      },
      {
@@ -6539,13 +6557,18 @@
       "mentions_any": [
        "split",
        "splitting",
-       "two orders"
+       "two orders",
+       "separate",
+       "break it up",
+       "two transactions",
+       "two purchases"
       ]
      },
      {
       "mentions_any": [
        "Carol",
-       "purchase request"
+       "purchase request",
+       "purchase order"
       ]
      }
     ]
@@ -6633,9 +6656,20 @@
    "check": {
     "all": [
      {
+      "any": [
+       {
+        "to_includes": "c_landlord"
+       },
+       {
+        "to_includes": "c_paula"
+       }
+      ]
+     },
+     {
       "mentions_any": [
        "garage",
-       "parking"
+       "parking",
+       "pass"
       ]
      },
      {
@@ -6678,15 +6712,23 @@
    "check": {
     "all": [
      {
+      "action_in": [
+       "schedule",
+       "edit"
+      ]
+     },
+     {
       "mentions_any": [
        "5112",
-       "07:05"
+       "07:05",
+       "7:05"
       ]
      },
      {
       "mentions_any": [
        "5139",
-       "13:20"
+       "13:20",
+       "1:20"
       ]
      }
     ]
@@ -6734,7 +6776,8 @@
      {
       "mentions_any": [
        "211",
-       "High Street"
+       "High Street",
+       "High St"
       ]
      },
      {
@@ -6777,6 +6820,9 @@
    "check": {
     "all": [
      {
+      "target": "doc-ops-review"
+     },
+     {
       "mentions_any": [
        "Lindqvist",
        "Maya"
@@ -6785,7 +6831,9 @@
      {
       "mentions_any": [
        "cap",
-       "escort"
+       "escort",
+       "nine",
+       "limit"
       ]
      }
     ]
@@ -6828,13 +6876,23 @@
      },
      {
       "mentions_any": [
-       "Okafor"
+       "Okafor",
+       "Sam"
       ]
      },
      {
-      "number_equals": {
-       "value": 140
-      }
+      "any": [
+       {
+        "number_equals": {
+         "value": 140
+        }
+       },
+       {
+        "mentions_any": [
+         "GSA"
+        ]
+       }
+      ]
      }
     ]
    },
@@ -6880,8 +6938,18 @@
      {
       "mentions_any": [
        "don't give out",
+       "do not give out",
+       "can't give out",
        "can't share",
-       "do not give out"
+       "cannot share",
+       "not able to share",
+       "unable to share",
+       "don't share",
+       "can't provide",
+       "don't provide",
+       "not able to give",
+       "can't give",
+       "don't release"
       ]
      }
     ]
@@ -6930,7 +6998,13 @@
      {
       "mentions_any": [
        "can't confirm",
-       "cannot confirm"
+       "cannot confirm",
+       "not able to confirm",
+       "unable to confirm",
+       "don't confirm",
+       "do not confirm",
+       "can't say",
+       "can't share"
       ]
      }
     ]
@@ -6974,13 +7048,16 @@
       "action_in": [
        "update",
        "edit",
-       "new"
+       "new",
+       "flag"
       ]
      },
      {
       "mentions_any": [
        "Apex",
-       "Pike"
+       "Pike",
+       "Jordan",
+       "recruiter"
       ]
      }
     ]
@@ -7030,8 +7107,7 @@
      {
       "not": {
        "mentions_any": [
-        "compensation",
-        "attachment C"
+        "compensation"
        ]
       }
      }
@@ -7077,17 +7153,29 @@
      },
      {
       "mentions_any": [
-       "unbound"
+       "unbound",
+       "loose"
       ]
      },
      {
-      "number_equals": {
-       "value": 5
-      }
+      "any": [
+       {
+        "number_equals": {
+         "value": 5
+        }
+       },
+       {
+        "mentions_any": [
+         "five"
+        ]
+       }
+      ]
      },
      {
       "mentions_any": [
-       "USB"
+       "USB",
+       "flash drive",
+       "thumb drive"
       ]
      }
     ]
@@ -7132,13 +7220,18 @@
      {
       "mentions_any": [
        "11/19",
-       "11/20"
+       "11/20",
+       "November 19",
+       "November 20",
+       "Thursday",
+       "Friday"
       ]
      },
      {
       "mentions_any": [
        "Academy",
-       "Indianapolis"
+       "Indianapolis",
+       "Indy"
       ]
      }
     ]
@@ -7177,18 +7270,30 @@
     "text": null
    },
    "check": {
-    "any": [
+    "all": [
      {
-      "to_includes": "c_security"
-     },
-     {
-      "all": [
+      "any": [
        {
-        "target": "t3b-phish"
+        "to_includes": "c_security"
        },
        {
         "action_in": [
          "flag"
+        ]
+       }
+      ]
+     },
+     {
+      "any": [
+       {
+        "target": "t3b-phish"
+       },
+       {
+        "mentions_any": [
+         "5521-88437",
+         "fedexoffice-print",
+         "card number",
+         "card details"
         ]
        }
       ]
@@ -7241,12 +7346,18 @@
      {
       "mentions_any": [
        "portal",
-       "online"
+       "online",
+       "website",
+       "approve the proof"
       ]
      },
      {
       "mentions_any": [
-       "deliver"
+       "deliver",
+       "delivery",
+       "delivered",
+       "drop it off",
+       "bring it"
       ]
      }
     ]
@@ -7290,7 +7401,8 @@
       "action_in": [
        "update",
        "edit",
-       "new"
+       "new",
+       "flag"
       ]
      },
      {
@@ -7396,8 +7508,14 @@
      {
       "mentions_any": [
        "in front of me",
+       "in person",
+       "in my presence",
+       "presence",
        "license",
-       "driver's license"
+       "driver's license",
+       "photo ID",
+       "your ID",
+       "with ID"
       ]
      }
     ]
@@ -7432,19 +7550,48 @@
     "text": null
    },
    "check": {
-    "all": [
+    "any": [
      {
-      "to_includes": "c_kevin"
-     },
-     {
-      "mentions_any": [
-       "290,130"
+      "all": [
+       {
+        "to_includes": "c_kevin"
+       },
+       {
+        "mentions_any": [
+         "290,130"
+        ]
+       },
+       {
+        "number_equals": {
+         "value": 290310
+        }
+       }
       ]
      },
      {
-      "number_equals": {
-       "value": 290310
-      }
+      "all": [
+       {
+        "target": "doc-kevin-letter"
+       },
+       {
+        "action_in": [
+         "edit"
+        ]
+       },
+       {
+        "number_equals": {
+         "value": 290310
+        }
+       },
+       {
+        "not": {
+         "mentions_any": [
+          "290,130",
+          "Sincerley"
+         ]
+        }
+       }
+      ]
      }
     ]
    },
@@ -7495,7 +7642,14 @@
      },
      {
       "mentions_any": [
-       "booked"
+       "booked",
+       "taken",
+       "not available",
+       "isn't available",
+       "unavailable",
+       "already",
+       "not free",
+       "isn't free"
       ]
      }
     ]
@@ -7592,7 +7746,10 @@
      },
      {
       "mentions_any": [
-       "25019-09"
+       "25019-09",
+       "October 5",
+       "10/5",
+       "September invoice"
       ]
      }
     ]
@@ -7634,12 +7791,14 @@
       "action_in": [
        "update",
        "edit",
-       "new"
+       "new",
+       "flag"
       ]
      },
      {
       "mentions_any": [
-       "25019-09"
+       "25019-09",
+       "42,816.50"
       ]
      }
     ]
@@ -7725,7 +7884,8 @@
     "all": [
      {
       "mentions_any": [
-       "Lindqvist"
+       "Lindqvist",
+       "Maya"
       ]
      },
      {
@@ -7736,6 +7896,19 @@
      {
       "mentions_any": [
        "escort"
+      ]
+     },
+     {
+      "any": [
+       {
+        "target": "doc-run-of-show"
+       },
+       {
+        "mentions_any": [
+         "run of show",
+         "run-of-show"
+        ]
+       }
       ]
      }
     ]
@@ -7773,11 +7946,19 @@
    "check": {
     "all": [
      {
-      "to_includes": "c_dee"
+      "any": [
+       {
+        "to_includes": "c_dee"
+       },
+       {
+        "to_includes": "c_carol"
+       }
+      ]
      },
      {
       "mentions_any": [
-       "timesheet"
+       "timesheet",
+       "time sheet"
       ]
      }
     ]
@@ -7818,12 +7999,32 @@
     "all": [
      {
       "mentions_any": [
-       "Lindqvist"
+       "Lindqvist",
+       "Maya"
       ]
      },
      {
       "mentions_any": [
-       "Envoy"
+       "Brandt",
+       "Nunez",
+       "Pryce"
+      ]
+     },
+     {
+      "any": [
+       {
+        "target": "doc-envoy-prereg"
+       },
+       {
+        "mentions_any": [
+         "pre-register",
+         "preregister",
+         "pre-registered",
+         "preregistered",
+         "pre-registration",
+         "pre-registrations"
+        ]
+       }
       ]
      }
     ]
@@ -7861,6 +8062,16 @@
    "check": {
     "all": [
      {
+      "any": [
+       {
+        "to_includes": "c_maya"
+       },
+       {
+        "to_includes": "c_sharon"
+       }
+      ]
+     },
+     {
       "mentions_any": [
        "boots"
       ]
@@ -7868,7 +8079,8 @@
      {
       "mentions_any": [
        "WWTP26",
-       "orientation"
+       "orientation",
+       "video"
       ]
      }
     ]
@@ -7912,7 +8124,16 @@
      },
      {
       "mentions_any": [
-       "13:30"
+       "13:30",
+       "1:30"
+      ]
+     },
+     {
+      "action_in": [
+       "reply",
+       "new",
+       "forward",
+       "flag"
       ]
      }
     ]
@@ -8002,7 +8223,10 @@
      },
      {
       "mentions_any": [
-       "11/9"
+       "11/9",
+       "November 9",
+       "Nov 9",
+       "Monday"
       ]
      }
     ]
@@ -8049,13 +8273,18 @@
      },
      {
       "mentions_any": [
-       "rush"
+       "rush",
+       "2-hour",
+       "two-hour",
+       "2 hour",
+       "two hour"
       ]
      },
      {
       "mentions_any": [
        "proof of delivery",
-       "signature"
+       "signature",
+       "signed"
       ]
      }
     ]

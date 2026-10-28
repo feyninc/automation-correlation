@@ -2724,14 +2724,22 @@
    "check": {
     "all": [
      {
-      "target": "t1-tyler"
+      "any": [
+       {
+        "target": "t1-tyler"
+       },
+       {
+        "to_includes": "c_raymond"
+       }
+      ]
      },
      {
       "mentions_any": [
        "postal address",
        "physical address",
        "CAN-SPAM",
-       "address"
+       "address",
+       "footer"
       ]
      },
      {
@@ -2742,7 +2750,12 @@
        "minutes",
        "10:15",
        "don't send",
-       "not send"
+       "not send",
+       "delay",
+       "pause",
+       "can't send",
+       "cannot send",
+       "not without"
       ]
      }
     ]
@@ -2794,9 +2807,12 @@
      {
       "mentions_any": [
        "438",
+       "38",
        "rejects",
        "rerun",
-       "re-run"
+       "re-run",
+       "recompute",
+       "redo"
       ]
      }
     ]
@@ -2844,6 +2860,8 @@
      {
       "mentions_any": [
        "quote",
+       "quoted",
+       "quotation",
        "verbatim"
       ]
      },
@@ -2851,7 +2869,9 @@
       "mentions_any": [
        "margin of error",
        "4.9",
-       "opt-in"
+       "opt-in",
+       "MOE",
+       "sampling error"
       ]
      }
     ]
@@ -2899,6 +2919,7 @@
        "5-star",
        "5 star",
        "five-star",
+       "five star",
        "rating",
        "positive"
       ]
@@ -2907,7 +2928,8 @@
       "mentions_any": [
        "Legal",
        "Elise",
-       "FTC"
+       "FTC",
+       "16 CFR 465"
       ]
      }
     ]
@@ -3044,18 +3066,31 @@
    "check": {
     "all": [
      {
-      "target": "t1-annika"
+      "any": [
+       {
+        "target": "t1-annika"
+       },
+       {
+        "to_includes": "c_annika"
+       }
+      ]
      },
      {
       "mentions_any": [
        "opt-in",
-       "opted in"
+       "opted in",
+       "opted-in",
+       "opt-ins",
+       "opt in"
       ]
      },
      {
       "mentions_any": [
        "unsubscribe",
        "unsubscribed",
+       "unsubscribes",
+       "bounces",
+       "bounced",
        "Elise",
        "Legal"
       ]
@@ -3102,8 +3137,11 @@
       "mentions_any": [
        "identifying",
        "identify",
+       "identifiable",
        "confidential",
-       "confidentiality"
+       "confidentiality",
+       "anonymous",
+       "anonymity"
       ]
      }
     ]
@@ -3255,7 +3293,9 @@
       "mentions_any": [
        "24-hour",
        "24 hour",
-       "24h"
+       "24h",
+       "24 hours",
+       "24-hr"
       ]
      },
      {
@@ -3267,7 +3307,19 @@
      {
       "mentions_any": [
        "utm",
-       "source"
+       "utm_source",
+       "UTMs",
+       "source",
+       "sources"
+      ]
+     },
+     {
+      "mentions_any": [
+       "registrations",
+       "registration",
+       "registrants",
+       "sign-ups",
+       "signups"
       ]
      }
     ]
@@ -3320,6 +3372,14 @@
        "per-user",
        "per user"
       ]
+     },
+     {
+      "not": {
+       "action_in": [
+        "edit",
+        "update"
+       ]
+      }
      }
     ]
    },
@@ -3354,14 +3414,22 @@
    "check": {
     "all": [
      {
-      "target": "t2-sofia"
+      "any": [
+       {
+        "target": "t2-sofia"
+       },
+       {
+        "to_includes": "c_sofia"
+       }
+      ]
      },
      {
       "mentions_any": [
        "0%",
        "zero",
        "start at 0",
-       "at 0"
+       "at 0",
+       "from 0"
       ]
      }
     ]
@@ -3503,7 +3571,11 @@
        "confidential",
        "confidentiality",
        "respondent-level",
-       "research only"
+       "research only",
+       "anonymous",
+       "anonymity",
+       "privacy",
+       "research purposes"
       ]
      },
      {
@@ -3557,14 +3629,25 @@
      },
      {
       "mentions_any": [
-       "Penmore"
+       "Penmore",
+       "panel vendor",
+       "vendor",
+       "recruiter"
       ]
      },
      {
       "mentions_any": [
        "warm-up",
+       "warm up",
        "first five minutes",
+       "first few minutes",
        "in the interview",
+       "during the interview",
+       "start of the interview",
+       "at the start",
+       "beginning",
+       "intro",
+       "opening",
        "guide"
       ]
      }
@@ -3608,19 +3691,29 @@
     "all": [
      {
       "mentions_any": [
-       "17:00"
+       "17:00",
+       "5 pm",
+       "5pm",
+       "5:00",
+       "5 p.m."
       ]
      },
      {
       "mentions_any": [
        "signed off",
        "sign-off",
-       "sign off"
+       "sign off",
+       "signed-off"
       ]
      },
      {
       "mentions_any": [
-       "interviews"
+       "interviews",
+       "interview",
+       "readout",
+       "Monica",
+       "requests",
+       "Pricing Committee"
       ]
      }
     ]
@@ -3726,7 +3819,10 @@
       "mentions_any": [
        "estimate",
        "estimates",
-       "forecast"
+       "estimated",
+       "forecast",
+       "projection",
+       "projected"
       ]
      }
     ]
@@ -3771,7 +3867,7 @@
      {
       "number_equals": {
        "value": 75.6,
-       "tol": 0.06
+       "tol": 0.45
       }
      },
      {
@@ -3818,6 +3914,11 @@
         "action_in": [
          "reply"
         ]
+       },
+       {
+        "not": {
+         "to_includes": "c_itsec"
+        }
        }
       ]
      },

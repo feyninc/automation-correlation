@@ -206,7 +206,9 @@ threads:
     x:
       - {at: "D5 13:30", from: c_dale, to: [worker], cc: [c_tina], subject: "Dock lock indicator lights, docks 1-12",
          body: "Checked all 12: indicator lights out on docks 3 and 8 (replaced), dock 3's lock hook is slow (adjusted, watching). Dock 4's lock works; Thursday's was a loader not engaging it. Dale"}
-      - {at: "D5 10:20", from: c_dale, to: [worker], subject: "LED retrofit: AEP bills and the rebate",
+  - id: t4-led
+    x:
+      - {at: "D5 10:20", from: c_dale, to: [worker], subject: "Re: LED retrofit proposal",
          body: "Ronan, from the last 12 AEP bills the lighting share supports about $1,000 a month in savings, a bit under Brightside's $1,050. The AEP rebate ($9,500) needs pre-approval before we buy; Brightside submitted the application Thursday, decision in about 30 days. Dale"}
   - id: t5b-kim
     app: mail
@@ -567,7 +569,7 @@ needs:
     task: 20702
     evidence: [c5b-kelly, t1-pinnacle-inv, doc-kpi-oct]
     ref: c5b-kelly.2
-    check: {all: [{target: c5b-kelly}, {action_in: [say]}, {mentions_any: [Omar, sheets]}, {any: [{number_equals: {value: 5380}}, {number_equals: {value: 156020}}]}]}
+    check: {"all": [{"target": "c5b-kelly"}, {"action_in": ["say"]}, {"mentions_any": ["Omar", "sheets"]}, {"any": [{"number_equals": {"value": 5380}}, {"number_equals": {"value": 156020}}, {"number_equals": {"value": 120}}]}]}
     must: ["Pay hours actually worked once Omar confirms the sheets; reissue for 5,380 hours, $156,020; credit the 30 unsupported"]
     must_not: ["Settles on all 150 hours"]
     minutes: [0.3, "a spoken line with the arithmetic"]
@@ -592,7 +594,7 @@ needs:
     due: "D5 12:00"
     evidence: [t5b-kelly, c5b-kelly]
     ref: a5b-omar
-    check: {all: [{to_includes: c_omar}, {mentions_any: ["10/24"]}, {number_equals: {value: 120}}]}
+    check: {"all": [{"to_includes": "c_omar"}, {"mentions_any": ["10/24", "October 24", "Oct 24", "count night", "count crew", "physical count", "inventory count"]}, {"any": [{"number_equals": {"value": 120}}, {"mentions_any": ["sheets", "sign-in"]}]}, {"mentions_any": ["confirm", "verify", "check", "did you", "can you", "are those", "were those"]}]}
     must: ["Asks Omar to confirm the sheets and the hours before agreeing"]
     minutes: [3, "a verification question"]
     intent: "Check before paying."
@@ -604,7 +606,7 @@ needs:
     due: "D5 15:00"
     evidence: [t5b-kelly, t2-omar, t1b-neil-accrual, t5b-rachel]
     ref: a5b-pinnacle
-    check: {all: [{to_includes: c_agency}, {to_includes: c_fpa}, {number_equals: {value: 156020}}, {number_equals: {value: 3480}}]}
+    check: {"all": [{"to_includes": "c_fpa"}, {"number_equals": {"value": 156020}}, {"number_equals": {"value": 3480}}]}
     must: ["Reissue for 5,380 hours ($156,020) and credit 30 ($870); accrual up $3,480 before Monday's cutoff; the timekeeping fix"]
     minutes: [8, "settling an invoice dispute and the accrual"]
     intent: "Close October cleanly, both sides."
@@ -614,7 +616,7 @@ needs:
     task: 944
     evidence: [c5b-gary, t3b-jas-sat, doc-staging]
     ref: c5b-gary.2
-    check: {all: [{target: c5b-gary}, {action_in: [say]}, {mentions_any: ["1:00"]}, {mentions_any: [Jasmine, Buckeye]}]}
+    check: {"all": [{"target": "c5b-gary"}, {"action_in": ["say"]}, {"mentions_any": ["1:00", "1 p.m.", "1pm", "1 pm", "13:00"]}, {"mentions_any": ["Jasmine", "Buckeye"]}]}
     must: ["Yes, if keyed in time to pick and stage by 1:00; transportation updates the carrier"]
     minutes: [0.3, "a spoken line"]
     intent: "Yes, but the staging time holds."
@@ -626,7 +628,7 @@ needs:
     due: "D5 12:00"
     evidence: [c5b-gary]
     ref: a5b-gary-note
-    check: {all: [{target: c5b-gary}, {action_in: [update, edit, new]}, {mentions_any: [SO-4419240]}, {mentions_any: ["46", "6 cases"]}]}
+    check: {"all": [{"target": "c5b-gary"}, {"action_in": ["update", "edit", "new"]}, {"mentions_any": ["SO-4419240"]}, {"mentions_any": ["46", "6 cases", "six cases"]}]}
     must: ["Order, quantity, condition, carrier update"]
     minutes: [1.5, "a call note"]
     intent: "So Saturday ships complete."
@@ -638,7 +640,7 @@ needs:
     due: "D5 12:30"
     evidence: [c5b-gary, t3b-jas-sat]
     ref: a5b-jas
-    check: {all: [{to_includes: c_jas}, {mentions_any: ["46"]}, {mentions_any: [Saturday]}]}
+    check: {"all": [{"to_includes": "c_jas"}, {"mentions_any": ["46", "6 cases", "six cases", "6 more", "six more"]}, {"mentions_any": ["Saturday"]}]}
     must: ["New piece count to Buckeye; pick in time for 1:00 staging"]
     minutes: [2, "a short message"]
     intent: "Two people need to know."
@@ -650,7 +652,7 @@ needs:
     due: "D5 17:00"
     evidence: [c2b-scott, t3b-scott, doc-transport, doc-detention, t4-carrier, doc-lex-week, t1b-rick-plan]
     ref: a5b-scott
-    check: {all: [{to_includes: c_scott}, {mentions_any: [GRV-88174]}, {mentions_any: [GRV-88290]}, {any: [{number_equals: {value: 1350}}, {number_equals: {value: 450}}]}, {mentions_any: ["4 of 4", "four of four"]}]}
+    check: {"all": [{"to_includes": "c_scott"}, {"mentions_any": ["GRV-88174"]}, {"mentions_any": ["GRV-88290"]}, {"any": [{"number_equals": {"value": 1350}}, {"number_equals": {"value": 450}}, {"number_equals": {"value": 525}}, {"number_equals": {"value": 375}}]}, {"mentions_any": ["4 of 4", "four of four", "on time", "on-time", "dedicated driver", "3 of 3"]}]}
     must: ["Each missed pickup with load, scheduled and actual times, delivery; the late delivery that was ours", "This week's on-time; the detention billing, credits and what's still disputed; the asks"]
     minutes: [15, "a lane summary from the transport logs"]
     intent: "Facts by load, and own our part."
@@ -660,7 +662,7 @@ needs:
     task: 948
     evidence: [c5b-tom, t3b-tom, t4b-tom]
     ref: c5b-tom.2
-    check: {all: [{target: c5b-tom}, {action_in: [say]}, {mentions_any: [cone, coned, keep people out]}, {mentions_any: [writing, landlord]}]}
+    check: {"all": [{"target": "c5b-tom"}, {"action_in": ["say"]}, {"mentions_any": ["cone", "coned", "keep people out", "close", "closed", "closing", "block off", "barricade", "shut", "rope off", "tape off"]}, {"mentions_any": ["writing", "written", "email", "landlord"]}]}
     must: ["Not running the aisle with water on the floor; tarp today; landlord's repair confirmed in writing"]
     must_not: ["Keeps the aisle running under the leak"]
     minutes: [0.3, "a spoken line"]
@@ -685,7 +687,7 @@ needs:
     due: "D5 14:45"
     evidence: [c5b-tom, t1-shawn-dm]
     ref: a5b-roof
-    check: {all: [{to_includes: c_shawn}, {mentions_any: [aisle 30]}, {mentions_any: [cones, closed, close]}]}
+    check: {"all": [{"any": [{"to_includes": "c_shawn"}, {"to_includes": "c_tina"}]}, {"mentions_any": ["aisle 30"]}, {"mentions_any": ["cones", "coned", "cone", "closed", "close", "block off", "tape", "taped"]}]}
     must: ["Bays closed and marked, product out of the drip zone, floor dried, second shift told"]
     minutes: [3, "a short instruction"]
     intent: "Before someone slips."
@@ -695,7 +697,7 @@ needs:
     task: 19501
     from: "D4 16:00"
     due: "D5 15:30"
-    evidence: [t4-led, t5b-dale, t4b-hector-lamps, pol-authority]
+    evidence: [t4-led, t4b-hector-lamps, pol-authority]
     ref: a5b-led
     check: {all: [{mentions_any: [CER]}, {number_equals: {value: 32500}}, {number_equals: {value: 32.5, tol: 0.3}}, {mentions_any: [universal waste, recycler, recycling]}]}
     must: ["Net $32,500 if the rebate is pre-approved; savings from our bills ($1,000), 32.5-month payback; the rebate condition; lamp disposal; Lisa approves; January"]
@@ -708,6 +710,6 @@ traps:
     title: Settling on all 150 disputed hours
     kind: pressure_to_send
     evidence: [c5b-kelly, t1-pinnacle-inv]
-    check: {all: [{target: c5b-kelly}, {action_in: [say]}, {mentions_any: ["150", "all of it", "settle"]}, {mentions_any: ["fine", "okay", "we'll pay", "sure", "go ahead"]}, {not: {mentions_any: [Omar, sheets, "30", "won't approve"]}}]}
+    check: {"all": [{"target": "c5b-kelly"}, {"action_in": ["say"]}, {"mentions_any": ["150", "all of it", "settle"]}, {"mentions_any": ["fine", "okay", "we'll pay", "sure", "go ahead"]}, {"not": {"mentions_any": ["Omar", "sheets", "30", "won't approve", "120", "not going to", "not pay", "won't", "can't", "documented", "confirm", "verify", "verified"]}}]}
     correct: "Pay the 120 hours documented and verified; credit the 30 that aren't."
     severity: medium

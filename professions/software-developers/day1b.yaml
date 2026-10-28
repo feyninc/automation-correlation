@@ -693,7 +693,7 @@ needs:
     due: "D1 12:00"
     evidence: [t1-sup, repo-reminders, doc-billing-rules]
     ref: a1b-tomasz
-    check: {all: [{to_includes: c_tomasz}, {mentions_any: [scheduled, unsent, "not sent"]}, {mentions_any: ["09:00 local", "9:00 local", "09:00 in the tenant"]}]}
+    check: {"all": [{"to_includes": "c_tomasz"}, {"mentions_any": ["scheduled", "unsent", "not sent", "not yet sent", "not-yet-sent", "pending"]}, {"mentions_any": ["09:00", "9:00", "9 a.m.", "9am", "9 AM"]}]}
     must: ["Unsent reminders only, by zone, whose stored UTC time isn't 09:00 local on remind_on", "All zones, with the date range and direction"]
     must_not: ["Asks for an update rather than a read-only count"]
     minutes: [10, "specifying a data query"]
@@ -706,7 +706,7 @@ needs:
     due: "D2 12:00"
     evidence: [t1b-pr1492, repo-retry, repo-test-retry]
     ref: a1b-review1492
-    check: {all: [{target: t1b-pr1492}, {mentions_any: ["4xx", "404", "410", "400"]}, {mentions_any: [Retry-After]}]}
+    check: {"all": [{"before": "D2 10:45"}, {"any": [{"target": "t1b-pr1492"}, {"to_includes": "c_ben"}]}, {"mentions_any": ["4xx", "400", "401", "404", "410", "422", "client error", "client errors"]}, {"mentions_any": ["Retry-After", "retry_after", "Retry After"]}]}
     must: ["Retries every 4xx (400/401/404/410) for ~2 h; only no-response, 408, 429 and 5xx should retry", "Honor Retry-After on 429/503, capped", "Tests for both"]
     must_not: ["Approves as is"]
     minutes: [35, "a code review with a policy question (estimate)"]
@@ -719,7 +719,7 @@ needs:
     due: "D2 12:00"
     evidence: [t1b-pr1491, repo-totals, repo-test-totals, repo-money]
     ref: a1b-review1491
-    check: {all: [{target: t1b-pr1491}, {mentions_any: [Decimal]}, {any: [{number_equals: {value: 49.98}}, {number_equals: {value: 162.63}}, {number_equals: {value: 2.45}}, {mentions_any: [ROUND_HALF_UP, "half up"]}]}]}
+    check: {"all": [{"any": [{"target": "t1b-pr1491"}, {"to_includes": "c_leilani"}]}, {"mentions_any": ["Decimal"]}, {"any": [{"number_equals": {"value": 49.98}}, {"number_equals": {"value": 162.63}}, {"number_equals": {"value": 2.45}}, {"mentions_any": ["ROUND_HALF_UP", "half up", "half-up"]}]}]}
     must: ["float plus round() (half to even, binary) loses a cent on half-cent lines, with a concrete example", "Decimal from strings, ROUND_HALF_UP per line, per docs/money.md", "Tests with half cents; kind to a new grad"]
     must_not: ["Approves as is"]
     minutes: [30, "a code review comment"]
@@ -732,7 +732,7 @@ needs:
     due: "D1 13:00"
     evidence: [t1b-support-chat, repo-reminders, repo-test-reminders]
     ref: a1b-phoenix
-    check: {all: [{target: t1b-support-chat}, {mentions_any: [Phoenix, Arizona]}, {mentions_any: ["doesn't observe", "does not observe", "no DST", "not affected", "wasn't affected"]}]}
+    check: {"all": [{"any": [{"target": "t1b-support-chat"}, {"to_includes": "c_gabe"}]}, {"mentions_any": ["Phoenix", "Arizona"]}, {"mentions_any": ["doesn't observe", "does not observe", "don't observe", "no DST", "not affected", "wasn't affected", "weren't affected", "were not affected", "unaffected", "no daylight", "doesn't use DST", "does not use DST", "all year", "year-round"]}]}
     must: ["No: Phoenix has no DST, so its offset didn't change"]
     must_not: ["Says every US tenant was affected"]
     minutes: [4, "a quick factual answer"]
@@ -758,7 +758,7 @@ needs:
     due: "D1 12:00"
     evidence: [t1b-weekly, doc-weekly-update, t1-sup, doc-handoff]
     ref: a1b-weekly
-    check: {all: [{target: doc-weekly-update}, {mentions_any: [SUP-8812]}, {mentions_any: [urllib3, "Dependabot"]}]}
+    check: {"all": [{"target": "doc-weekly-update"}, {"mentions_any": ["SUP-8812", "DST", "daylight", "reminder", "reminders"]}, {"mentions_any": ["urllib3", "Dependabot"]}]}
     must: ["The DST bug and its fix status", "The urllib3 SLA risk called out", "Others' bullets kept"]
     must_not: ["Deletes teammates' bullets"]
     minutes: [8, "a short status"]
@@ -771,7 +771,7 @@ needs:
     due: "D2 17:00"
     evidence: [t1b-pg17, doc-pg17-checklist, repo-mig-0031]
     ref: a1b-pg17
-    check: {all: [{to_includes: c_priya}, {mentions_any: [canonical_tz, reminder_local_day, reminders_local_day]}, {mentions_any: [search_path]}, {mentions_any: [ANALYZE, REINDEX]}]}
+    check: {"all": [{"to_includes": "c_priya"}, {"mentions_any": ["canonical_tz", "reminder_local_day", "reminders_local_day"]}, {"mentions_any": ["search_path", "search path"]}, {"mentions_any": ["ANALYZE", "REINDEX", "VACUUM", "maintenance"]}]}
     must: ["Names the functions behind the expression index and why PG17 breaks them", "The fix and that it lands before Wednesday 18:00", "Answers every checklist item"]
     must_not: ["Says billing has nothing affected without checking the migrations"]
     minutes: [40, "auditing migrations against a release note (estimate)"]
@@ -784,7 +784,7 @@ needs:
     due: "D3 18:00"
     evidence: [doc-pg17-checklist, repo-mig-0031, doc-freeze]
     ref: a1b-0043
-    check: {all: [{target: repo-mig-0043}, {mentions_any: ["SET search_path"]}, {mentions_all: [canonical_tz, reminder_local_day]}]}
+    check: {"all": [{"any": [{"target": "repo-mig-0043"}, {"action_in": ["new", "edit"]}]}, {"mentions_any": ["SET search_path"]}, {"mentions_all": ["canonical_tz", "reminder_local_day"]}]}
     must: ["ALTER FUNCTION ... SET search_path for both functions, with a downgrade", "No table rewrite or lock"]
     must_not: ["Drops and recreates the index"]
     minutes: [30, "a small migration and staging check"]
@@ -797,7 +797,7 @@ needs:
     due: "D5 17:00"
     evidence: [t1b-omar, repo-webhooks, repo-emit, repo-reminders]
     ref: a1b-omar
-    check: {all: [{to_includes: c_omar}, {mentions_any: ["nothing calls", "doesn't call", "does not call", "no calls", "not billing-worker"]}]}
+    check: {"all": [{"to_includes": "c_omar"}, {"mentions_any": ["nothing calls", "doesn't call", "does not call", "don't call", "no calls", "not billing-worker", "not us", "no callers", "no references", "doesn't use", "does not use", "never calls", "isn't billing"]}]}
     must: ["Checked the code: the worker's only outbound HTTP is webhook delivery"]
     minutes: [5, "a grep and a reply"]
     intent: "Check, then say."
@@ -809,7 +809,7 @@ needs:
     due: "D1 17:00"
     evidence: [t1b-sofia, repo-reminders]
     ref: a1b-sofia
-    check: {all: [{to_includes: c_sofia}, {mentions_any: [send_at_utc, stored]}, {mentions_any: [backfill, "change ticket"]}]}
+    check: {"all": [{"to_includes": "c_sofia"}, {"mentions_any": ["send_at_utc", "stored"]}, {"mentions_any": ["backfill", "change ticket", "CHG", "correction", "recompute", "recomputed"]}]}
     must: ["The stored value is wrong, not the UI; the backfill corrects it; don't patch it client-side"]
     must_not: ["Suggests subtracting an hour in the UI"]
     minutes: [6, "a short design answer"]
@@ -822,7 +822,7 @@ needs:
     due: "D2 12:00"
     evidence: [t2-olivia, t1-sup]
     ref: a1b-relnote
-    check: {all: [{to_includes: c_olivia}, {mentions_any: [daylight, DST]}, {mentions_any: ["9:00"]}]}
+    check: {"all": [{"to_includes": "c_olivia"}, {"mentions_any": ["daylight", "DST"]}, {"mentions_any": ["9:00", "09:00", "9 a.m.", "9am", "9 AM"]}]}
     must: ["Plain, accurate, no internal detail; no date for the correction"]
     must_not: ["Promises a correction date"]
     minutes: [10, "customer-language summary"]
@@ -833,7 +833,7 @@ traps:
     title: Approving the retry policy that retries every 4xx
     kind: stale_info
     evidence: [t1b-pr1492, repo-retry]
-    check: {all: [{target: t1b-pr1492}, {mentions_any: [LGTM, approve, approved, "looks good", "ship it"]}, {not: {mentions_any: ["4xx", "404", "410", "400", Retry-After]}}]}
+    check: {"all": [{"target": "t1b-pr1492"}, {"before": "D2 10:45"}, {"mentions_any": ["LGTM", "approve", "approved", "looks good", "ship it"]}, {"not": {"mentions_any": ["4xx", "404", "410", "400", "Retry-After", "can't approve", "request changes", "requesting changes"]}}]}
     correct: "Ask for 4xx (except 408/429) not to be retried and Retry-After to be honored."
     severity: medium
 

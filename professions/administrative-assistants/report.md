@@ -1,6 +1,6 @@
 # Secretaries and Administrative Assistants, Except Legal, Medical, and Executive (43-6014.00): build report
 
-176 needs, 30 traps, 274 worker actions, 704 threads, 70 documents, 30,227 words.
+176 needs, 30 traps, 274 worker actions, 704 threads, 70 documents, 30,226 words.
 
 | day | chat exchanges | chat threads | mail exchanges | mail threads | needs | phone exchanges | phone threads | worker actions |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -58,6 +58,8 @@
 
 ## Errors (0)
 
-## Warnings (2)
+## Warnings (4)
 - n1-carla: very short mention 'HR'
 - n1-actions: very short mention 'QC'
+- n5b-priya-line: very short mention 'HR'
+- n5b-priya-note: very short mention 'HR'

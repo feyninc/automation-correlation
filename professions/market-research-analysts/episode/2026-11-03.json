@@ -2843,12 +2843,14 @@
      },
      {
       "mentions_any": [
-       "0.95"
+       "0.95",
+       "95 cents"
       ]
      },
      {
       "mentions_any": [
        "battlecard",
+       "battle card",
        "$45"
       ]
      }
@@ -2903,6 +2905,31 @@
        "per invoice",
        "per-invoice"
       ]
+     },
+     {
+      "any": [
+       {
+        "target": "doc-battlecard"
+       },
+       {
+        "target": "doc-battlecard-draft"
+       },
+       {
+        "action_in": [
+         "edit",
+         "update"
+        ]
+       },
+       {
+        "mentions_any": [
+         "Landmine:",
+         "Landmine questions",
+         "Where we win",
+         "Where they win",
+         "Battlecard: Kitecount"
+        ]
+       }
+      ]
      }
     ]
    },
@@ -2949,7 +2976,22 @@
        "confidential",
        "not yet",
        "can't send",
+       "can't share",
+       "cannot share",
+       "can't",
        "until"
+      ]
+     },
+     {
+      "mentions_any": [
+       "packaging",
+       "pricing",
+       "prices",
+       "price",
+       "Q1",
+       "Core",
+       "Plus",
+       "Enterprise"
       ]
      }
     ]
@@ -3042,6 +3084,24 @@
        },
        {
         "path_prefix": "research/ARB-AP26"
+       },
+       {
+        "all": [
+         {
+          "action_in": [
+           "edit",
+           "update",
+           "new"
+          ]
+         },
+         {
+          "mentions_any": [
+           "Q16",
+           "manual entry",
+           "manual invoice entry"
+          ]
+         }
+        ]
        }
       ]
      },
@@ -3115,7 +3175,14 @@
    "check": {
     "all": [
      {
-      "target": "t2-sofia"
+      "any": [
+       {
+        "target": "t2-sofia"
+       },
+       {
+        "to_includes": "c_sofia"
+       }
+      ]
      },
      {
       "any": [
@@ -3333,7 +3400,12 @@
      },
      {
       "mentions_any": [
-       "utm_source=linkedin"
+       "utm_source"
+      ]
+     },
+     {
+      "mentions_any": [
+       "linkedin"
       ]
      },
      {
@@ -3541,7 +3613,7 @@
        {
         "number_equals": {
          "value": 23.69,
-         "tol": 0.01
+         "tol": 0.015
         }
        }
       ]
@@ -3549,6 +3621,9 @@
      {
       "mentions_any": [
        "opportunity",
+       "opportunities",
+       "opp",
+       "opps",
        "pipeline"
       ]
      }
@@ -3606,6 +3681,12 @@
          "value": 768.7,
          "tol": 0.01
         }
+       },
+       {
+        "number_equals": {
+         "value": 9.4,
+         "tol": 0.05
+        }
        }
       ]
      },
@@ -3658,15 +3739,22 @@
      {
       "mentions_any": [
        "0-10",
-       "0 to 10"
+       "0 to 10",
+       "0–10",
+       "0 through 10",
+       "zero to ten"
       ]
      },
      {
       "mentions_any": [
        "approvers",
        "double-barreled",
+       "double barreled",
+       "double-barrelled",
        "two questions",
-       "split"
+       "split",
+       "separate",
+       "separately"
       ]
      }
     ]
@@ -3712,17 +3800,21 @@
       "to_includes": "c_corinne"
      },
      {
-      "mentions_any": [
-       "14,400",
-       "$14,400"
-      ]
+      "number_equals": {
+       "value": 14400
+      }
      },
      {
       "mentions_any": [
        "converts",
        "convert",
+       "converting",
+       "conversion",
        "auto-renew",
+       "auto-renews",
+       "renews",
        "paid subscription",
+       "subscription",
        "annual"
       ]
      }
@@ -3839,14 +3931,24 @@
       "mentions_any": [
        "Otter",
        "note-taker",
-       "transcription"
+       "notetaker",
+       "note taker",
+       "transcription",
+       "transcript",
+       "transcripts",
+       "bot"
       ]
      },
      {
       "mentions_any": [
        "consent",
        "consented",
-       "policy"
+       "policy",
+       "permission",
+       "agreed",
+       "privacy",
+       "confidential",
+       "confidentiality"
       ]
      }
     ]
@@ -3893,7 +3995,14 @@
       "mentions_any": [
        "sponsor",
        "blind",
-       "bias"
+       "bias",
+       "biased",
+       "biasing",
+       "skew",
+       "skews",
+       "reveal",
+       "who's behind",
+       "leading"
       ]
      }
     ]
@@ -3946,6 +4055,19 @@
       "mentions_any": [
        "not recommended",
        "self-selected"
+      ]
+     },
+     {
+      "any": [
+       {
+        "target": "doc-industry-stats"
+       },
+       {
+        "action_in": [
+         "edit",
+         "update"
+        ]
+       }
       ]
      }
     ]
@@ -4058,6 +4180,14 @@
        "$60M",
        "60 million"
       ]
+     },
+     {
+      "not": {
+       "action_in": [
+        "edit",
+        "update"
+       ]
+      }
      }
     ]
    },

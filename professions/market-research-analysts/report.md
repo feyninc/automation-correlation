@@ -1,6 +1,6 @@
 # Market Research Analysts and Marketing Specialists (13-1161.00): build report
 
-117 needs, 29 traps, 175 worker actions, 259 threads, 79 documents, 22,261 words.
+117 needs, 29 traps, 175 worker actions, 259 threads, 79 documents, 22,263 words.
 
 | day | chat exchanges | chat threads | mail exchanges | mail threads | needs | news exchanges | news threads | worker actions |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -40,5 +40,7 @@
 
 ## Errors (0)
 
-## Warnings (1)
+## Warnings (3)
+- n1b-joan: very short mention 'W9'
+- n2-tom-q1: very short mention 'Q1'
 - n3-axis: very short mention '0%'

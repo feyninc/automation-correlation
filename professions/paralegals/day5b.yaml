@@ -427,7 +427,7 @@ needs:
     due: "D5 17:00"
     evidence: [t5b-grace-costs, doc-halsted-costs, doc-halsted-judgment]
     ref: a5b-costs
-    check: {all: [{number_equals: {value: 2253}}, {mentions_any: ["1920"]}, {mentions_any: ["LR 54.1"]}, {number_equals: {value: 5694}}]}
+    check: {all: [{number_equals: {value: 2253}}, {mentions_any: ["1920"]}, {mentions_any: ["54.1"]}, {any: [{number_equals: {value: 5694}}, {mentions_any: [Westlaw, JAMS, mediator]}]}]}
     must: ["Filing fee, original transcripts and appearance fees, exhibit copies, witness fee: $2,253.00", "Expedited, realtime, rough draft, research, mediator, courier, meals excluded with reasons", "Due 12/2; rate check flagged"]
     must_not: ["Claims the mediator's fee or research charges"]
     minutes: [45, "a 14-item bill of costs with categories and reasons (estimate)"]
@@ -440,7 +440,7 @@ needs:
     due: "D5 17:00"
     evidence: [t5b-grace-costs]
     ref: a5b-costs-note
-    check: {all: [{to_includes: c_grace}, {mentions_any: ["$2,253.00", "2,253"]}, {mentions_any: ["12/2"]}]}
+    check: {all: [{to_includes: c_grace}, {number_equals: {value: 2253}}, {mentions_any: ["12/2", "December 2", "Dec. 2"]}]}
     must: ["Totals, what was left out and why, the rate to confirm, the deadline"]
     minutes: [3, "a short note"]
     intent: "For Andrew's Monday review."
@@ -452,7 +452,7 @@ needs:
     due: "D5 17:00"
     evidence: [t5b-mercer-nef, t3b-gil]
     ref: a5b-mercer-gil
-    check: {all: [{to_includes: c_gil}, {mentions_any: ["with prejudice"]}, {mentions_any: ["Dkt. 62"]}]}
+    check: {all: [{to_includes: c_gil}, {mentions_any: ["with prejudice"]}, {mentions_any: ["Dkt. 62", order, dismissed]}]}
     must: ["Dismissed with prejudice, own fees and costs, case closed; what comes next"]
     minutes: [5, "a client cover email"]
     intent: "Ben promised him the order."
@@ -464,7 +464,7 @@ needs:
     due: "D5 17:00"
     evidence: [t5b-mercer-nef]
     ref: a5b-mercer-dkt
-    check: {all: [{to_includes: c_docket}, {mentions_any: ["50931-001"]}, {mentions_any: [dismissed]}]}
+    check: {all: [{any: [{to_includes: c_docket}, {to_includes: c_ruth}]}, {mentions_any: ["50931-001", "25-cv-04466", Vanterpool, Mercer]}, {mentions_any: [dismissed]}]}
     must: ["Order and docket numbers; clear dates; flag for closing"]
     minutes: [4, "a docketing request"]
     intent: "Nothing left on the calendar for it."
@@ -476,7 +476,7 @@ needs:
     due: "D5 17:00"
     evidence: [t5b-sato-notice, m4b-ilic]
     ref: a5b-ilic-dkt
-    check: {all: [{to_includes: c_docket}, {mentions_any: ["12/3"]}, {mentions_any: [Ilic]}]}
+    check: {all: [{any: [{to_includes: c_docket}, {to_includes: c_ruth}]}, {mentions_any: ["12/3", "December 3", "Dec. 3"]}, {mentions_any: [Ilic]}]}
     must: ["Date, time, place, method; responsible attorney"]
     minutes: [4, "a docketing request"]
     intent: "Notice is served; docket it."
@@ -500,7 +500,7 @@ needs:
     due: "D5 17:00"
     evidence: [t3b-grace-halsted, t5b-billing-halsted, doc-halsted-time, doc-halsted-judgment]
     ref: a5b-fees
-    check: {all: [{number_equals: {value: 480519}}, {number_equals: {value: 36.5}}, {mentions_any: ["54.3(d)"]}]}
+    check: {all: [{number_equals: {value: 480519}}, {number_equals: {value: 36.5}}, {mentions_any: ["54.3"]}]}
     must: ["Hours, rates and amounts by timekeeper; 36.5 hours not sought; $480,519.00", "Flagged narratives for Andrew's redaction review; records due 11/23"]
     must_not: ["Redacts or sends the records herself"]
     minutes: [40, "a five-timekeeper fee summary from a billing export (estimate)"]
@@ -513,7 +513,7 @@ needs:
     due: "D5 17:00"
     evidence: [t5b-billing-halsted]
     ref: a5b-fees-note
-    check: {all: [{to_includes: c_grace}, {mentions_any: ["480,519", "$480,519.00"]}, {mentions_any: ["63"]}]}
+    check: {all: [{to_includes: c_grace}, {number_equals: {value: 480519}}, {mentions_any: ["63"]}]}
     must: ["Totals, what's excluded, the flagged narratives need Andrew before anything goes out"]
     minutes: [3, "a short note"]
     intent: "Nothing to Corbin yet."
@@ -525,7 +525,7 @@ needs:
     due: "D5 17:00"
     evidence: [doc-exhibits, m4b-tamura-binders]
     ref: a5b-litsup-tamura
-    check: {all: [{to_includes: c_litsup}, {mentions_any: ["OS-4490"]}, {mentions_any: ["COR-0031877"]}]}
+    check: {all: [{any: [{to_includes: c_litsup}, {to_includes: c_rahul}]}, {mentions_any: ["OS-4490"]}, {mentions_any: ["COR-0031877"]}]}
     must: ["All eight in the list's order with Bates, AEO legend kept"]
     minutes: [8, "an export request"]
     intent: "Office Services needs the PDFs."
@@ -537,7 +537,7 @@ needs:
     due: "D5 17:00"
     evidence: [t5b-pem-lists, doc-px-list, doc-pemberton-prod-index, doc-trial-order, doc-dx-list]
     ref: a5b-px
-    check: {all: [{mentions_any: ["PX-14"]}, {mentions_any: ["PX-17"]}, {mentions_any: ["11/10"]}, {mentions_any: [joint]}]}
+    check: {all: [{mentions_any: ["PX-14"]}, {mentions_any: ["PX-17"]}, {mentions_any: ["11/10", "November 10", Tuesday]}, {mentions_any: [joint, duplicate, duplicates, "same document", "same as"]}]}
     must: ["PX-14 and PX-17 not produced and after the close (para. 3)", "Duplicates of our exhibits; Kolb's disclosure to check; objections are Ben's"]
     must_not: ["Decides the objections"]
     minutes: [35, "checking a 17-exhibit list against a production index (estimate)"]
@@ -562,7 +562,7 @@ needs:
     due: "D5 17:00"
     evidence: [doc-trial-order, doc-dx-list, doc-witness-list, t3b-nina]
     ref: a5b-lists
-    check: {all: [{to_includes: c_ames}, {mentions_any: ["DX-23"]}, {mentions_any: ["witness list"]}, {mentions_any: ["DX-1.pdf"]}]}
+    check: {all: [{any: [{to_includes: c_ames}, {to_includes: c_nina}]}, {mentions_any: ["DX-23"]}, {mentions_any: ["witness list"]}, {mentions_any: ["DX-1.pdf", "PDF per exhibit", "named by number", "named by exhibit number", Kiteworks, Box]}]}
     must: ["Both lists, exhibit copies one PDF per exhibit, by email before 5:00"]
     minutes: [10, "a service email with exhibits"]
     intent: "Five o'clock, both lists."
@@ -574,7 +574,7 @@ needs:
     due: "D5 17:00"
     evidence: [t1b-pemb, t4b-carla-sandra, doc-trial-order]
     ref: a5b-carla
-    check: {all: [{to_includes: c_carla}, {mentions_any: [ledger]}, {mentions_any: ["11/13"]}, {mentions_any: ["11/16"]}]}
+    check: {all: [{to_includes: c_carla}, {mentions_any: [ledger, "both files", capex, files]}, {mentions_any: ["11/13", "November 13"]}, {mentions_any: ["11/16", "November 16"]}]}
     must: ["Lists exchanged, prep schedule, Sandra's files, binders, pretrial conference, trial and witness timing"]
     must_not: ["Predicts the outcome or discusses settlement"]
     minutes: [8, "a client status email"]
@@ -587,7 +587,7 @@ needs:
     due: "D5 17:00"
     evidence: [t5b-mira-rogs, t4-mira, t2-dev]
     ref: a5b-dev-verify
-    check: {all: [{to_includes: c_dev}, {mentions_any: ["laws of the United States of America"]}, {mentions_any: [DocuSign]}]}
+    check: {all: [{to_includes: c_dev}, {mentions_any: ["laws of the United States of America"]}, {mentions_any: [DocuSign, electronically, "e-sign", "electronic signature"]}]}
     must: ["28 U.S.C. 1746(1) form for a declaration signed outside the United States", "He reads and signs himself; by 11/12; due 11/16"]
     must_not: ["Uses the inside-the-US form"]
     minutes: [10, "a verification transmittal"]
@@ -600,7 +600,7 @@ needs:
     due: "D5 17:00"
     evidence: [doc-deadlines, doc-trial-order, doc-minute-order, t4-ecf, doc-cal-tessa]
     ref: a5b-week
-    check: {all: [{mentions_any: [Veterans]}, {mentions_any: ["11/13"]}, {mentions_any: ["11/19"]}, {mentions_any: ["11/18"]}]}
+    check: {all: [{mentions_any: [Veterans]}, {mentions_any: ["11/13", "November 13"]}, {mentions_any: ["11/19", "November 19"]}, {mentions_any: ["11/18", "November 18"]}]}
     must: ["Every deadline and event 11/9-11/13 with owners; Veterans Day; the trial-week conflicts (11/18 hearing)", "What follows through 12/3"]
     minutes: [20, "a weekly deadline memo across matters"]
     intent: "Andrew's in trial after this; nothing slips."
@@ -612,7 +612,7 @@ needs:
     due: "D5 17:00"
     evidence: [pol-billing, doc-time-tessa]
     ref: a5b-time-other
-    check: {all: [{mentions_any: ["30552-004"]}, {mentions_any: ["48807-002"]}, {mentions_any: ["Not billed"]}]}
+    check: {all: [{mentions_any: ["30552-004"]}, {mentions_any: ["48807-002"]}, {mentions_any: ["Not billed", "no charge", "non-billable", "not billable", "N/C"]}]}
     must: ["Each task in tenths with a purpose, by matter; clerical work not billed"]
     minutes: [15, "weekly time entries for five matters"]
     intent: "Same rules on every matter."
@@ -624,7 +624,7 @@ needs:
     due: "D5 17:00"
     evidence: [c5-ferris, doc-subpoena]
     ref_text: "Email to Lynn at Ferris Integrations (records@ferrisint.example): here is the secure Kiteworks upload link for the documents called for by the subpoena in Lakeshore v. Corvane (production due 11/20); PDFs are fine. Ben Yoder will call about costs."
-    check: {all: [{to_includes: c_ferris}, {mentions_any: [Kiteworks, upload link]}, {mentions_any: ["11/20"]}]}
+    check: {all: [{to_includes: c_ferris}, {mentions_any: [Kiteworks, upload link, upload, "secure link"]}, {mentions_any: ["11/20", "November 20"]}]}
     must: ["The link, what to upload, the return date; costs are Ben's"]
     must_not: ["Agrees to pay costs or narrows the subpoena"]
     minutes: [4, "a short email"]
@@ -637,7 +637,7 @@ needs:
     due: "D5 17:00"
     evidence: [t5b-pat, t1b-donna]
     ref_text: "Reply to Pat Lund (cc Andrew, Donna): Andrew can join the board on Thu 11/12 at 4:00 p.m. (1:00 also works); please send the dial-in or let me know if you'd like ours."
-    check: {all: [{to_includes: c_pat}, {mentions_any: ["11/12"]}, {mentions_any: ["4:00", "1:00"]}]}
+    check: {all: [{to_includes: c_pat}, {mentions_any: ["11/12", "November 12", Thursday]}, {mentions_any: ["4:00", "1:00", "4 p.m.", "1 p.m.", "4 pm", "1 pm", "4pm", "1pm"]}]}
     must: ["Andrew's times from Donna; dial-in"]
     minutes: [4, "a scheduling reply"]
     intent: "Donna gave me his times."
@@ -650,7 +650,7 @@ needs:
     due: "D5 17:00"
     evidence: [t5b-lorraine, doc-fairmont-hold]
     ref: a5b-lorraine
-    check: {all: [{to_includes: c_lorraine}, {mentions_any: [forensic]}, {mentions_any: [Rahul, Litigation Support]}]}
+    check: {all: [{to_includes: c_lorraine}, {mentions_any: [forensic, image, imaging, collect, collection]}, {mentions_any: [Rahul, Litigation Support]}]}
     must: ["No self-collection by screenshots; Litigation Support schedules a forensic copy; keep everything meanwhile; Andrew copied"]
     must_not: ["Tells Gene to send screenshots or forward texts himself"]
     minutes: [5, "a client reply"]

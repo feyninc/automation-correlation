@@ -2746,7 +2746,9 @@
       "mentions_any": [
        "3 seats",
        "three seats",
-       "8 to 3"
+       "8 to 3",
+       "3-seat",
+       "three-seat"
       ]
      },
      {
@@ -2795,7 +2797,20 @@
    "check": {
     "all": [
      {
-      "target": "t1-tyler"
+      "any": [
+       {
+        "target": "t1-tyler"
+       },
+       {
+        "to_includes": "c_tyler"
+       },
+       {
+        "to_includes": "c_corinne"
+       },
+       {
+        "to_includes": "c_raymond"
+       }
+      ]
      },
      {
       "number_equals": {
@@ -2844,12 +2859,21 @@
    "check": {
     "all": [
      {
-      "target": "t1-tyler"
+      "any": [
+       {
+        "target": "t1-tyler"
+       },
+       {
+        "to_includes": "c_tyler"
+       }
+      ]
      },
      {
       "mentions_any": [
        "registrants",
-       "registered"
+       "registered",
+       "registrations",
+       "signed up"
       ]
      },
      {
@@ -2898,13 +2922,25 @@
    "check": {
     "all": [
      {
-      "target": "t1-annika"
+      "any": [
+       {
+        "target": "t1-annika"
+       },
+       {
+        "to_includes": "c_annika"
+       }
+      ]
      },
      {
       "mentions_any": [
        "unsubscribed",
        "bounced",
-       "unsubscribe"
+       "unsubscribe",
+       "unsubscribes",
+       "bounces",
+       "opted out",
+       "opt-outs",
+       "suppressed"
       ]
      }
     ]
@@ -2958,6 +2994,20 @@
       "number_equals": {
        "value": 45
       }
+     },
+     {
+      "any": [
+       {
+        "target": "doc-signoff-log"
+       },
+       {
+        "action_in": [
+         "edit",
+         "update",
+         "new"
+        ]
+       }
+      ]
      }
     ]
    },
@@ -3001,10 +3051,13 @@
      {
       "mentions_any": [
        "signed off",
+       "signed-off",
        "sign off",
        "approved",
        "good to publish",
-       "OK to publish"
+       "OK to publish",
+       "cleared",
+       "good to go"
       ]
      }
     ]
@@ -3269,7 +3322,12 @@
      {
       "mentions_any": [
        "waive",
-       "change order"
+       "waived",
+       "waiving",
+       "change order",
+       "change-order",
+       "absorb",
+       "credit"
       ]
      }
     ]
@@ -3307,14 +3365,23 @@
    "check": {
     "all": [
      {
-      "target": "t5-grant-utm"
+      "any": [
+       {
+        "target": "t5-grant-utm"
+       },
+       {
+        "to_includes": "c_grant"
+       }
+      ]
      },
      {
       "mentions_any": [
        "internal",
        "within arbeline.com",
        "own site",
-       "session"
+       "session",
+       "overwrite",
+       "overwrites"
       ]
      }
     ]
@@ -3420,9 +3487,13 @@
      {
       "mentions_any": [
        "signed off",
+       "signed-off",
        "sign off",
        "approved",
-       "good to go"
+       "good to go",
+       "OK to publish",
+       "good to publish",
+       "cleared"
       ]
      }
     ]
@@ -3511,20 +3582,32 @@
    "check": {
     "all": [
      {
-      "target": "t1-tyler"
+      "any": [
+       {
+        "target": "t1-tyler"
+       },
+       {
+        "to_includes": "c_tyler"
+       }
+      ]
      },
      {
       "mentions_any": [
        "90 days",
        "engaged",
-       "opened"
+       "engagement",
+       "opened",
+       "clicked"
       ]
      },
      {
       "mentions_any": [
        "Postmaster",
        "0.10%",
-       "0.27%"
+       "0.1%",
+       "0.27%",
+       "spam rate",
+       "complaint rate"
       ]
      }
     ]
@@ -3566,14 +3649,20 @@
     "all": [
      {
       "mentions_any": [
-       "margin of error"
+       "margin of error",
+       "MOE",
+       "margin of sampling error",
+       "sampling error"
       ]
      },
      {
       "mentions_any": [
        "causation",
        "causes",
-       "cause it"
+       "cause it",
+       "causal",
+       "correlation",
+       "association"
       ]
      },
      {
@@ -3646,7 +3735,9 @@
      },
      {
       "mentions_any": [
-       "Corinne"
+       "Corinne",
+       "director",
+       "budget owner"
       ]
      }
     ]
@@ -3701,7 +3792,14 @@
        "no price",
        "don't have pricing",
        "no pricing",
-       "not public"
+       "not public",
+       "can't share",
+       "not to discuss",
+       "don't discuss",
+       "not discuss",
+       "avoid",
+       "arbeline.com",
+       "confidential"
       ]
      }
     ]
@@ -3748,7 +3846,10 @@
      {
       "mentions_any": [
        "promoters",
+       "promoter",
        "9-10",
+       "9 or 10",
+       "9–10",
        "gating"
       ]
      },
@@ -3798,7 +3899,17 @@
    "check": {
     "all": [
      {
-      "to_includes": "c_raymond"
+      "any": [
+       {
+        "to_includes": "c_raymond"
+       },
+       {
+        "action_in": [
+         "edit",
+         "update"
+        ]
+       }
+      ]
      },
      {
       "mentions_any": [
@@ -3807,12 +3918,19 @@
      },
      {
       "mentions_any": [
-       "original research"
+       "original research",
+       "new research",
+       "primary research",
+       "survey",
+       "surveyed"
       ]
      },
      {
       "mentions_any": [
-       "opt-in"
+       "opt-in",
+       "panel",
+       "panels",
+       "online"
       ]
      }
     ]
@@ -3865,6 +3983,13 @@
      {
       "mentions_any": [
        "committee"
+      ]
+     },
+     {
+      "action_in": [
+       "edit",
+       "update",
+       "new"
       ]
      }
     ]

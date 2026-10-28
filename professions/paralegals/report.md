@@ -1,6 +1,6 @@
 # Paralegals and Legal Assistants (23-2011.00): build report
 
-148 needs, 24 traps, 186 worker actions, 336 threads, 65 documents, 29,675 words.
+148 needs, 24 traps, 186 worker actions, 336 threads, 65 documents, 29,707 words.
 
 | day | chat exchanges | chat threads | mail exchanges | mail threads | needs | phone exchanges | phone threads | worker actions |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -39,4 +39,7 @@
 
 ## Errors (0)
 
-## Warnings (0)
+## Warnings (3)
+- n3b-wiley-carla: very short mention 'HR'
+- n3b-disclosures: very short mention '5%'
+- n3b-lorraine: very short mention '5%'

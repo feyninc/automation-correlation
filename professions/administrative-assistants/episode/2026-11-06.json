@@ -5936,7 +5936,8 @@
      },
      {
       "mentions_any": [
-       "CX-77310"
+       "CX-77310",
+       "LX-55120"
       ]
      },
      {
@@ -6047,7 +6048,14 @@
    "check": {
     "all": [
      {
-      "to_includes": "c_greg"
+      "any": [
+       {
+        "to_includes": "c_greg"
+       },
+       {
+        "target": "doc-greg-concur"
+       }
+      ]
      },
      {
       "number_equals": {
@@ -6285,15 +6293,33 @@
    "check": {
     "all": [
      {
-      "mentions_any": [
-       "Envoy",
-       "visitor log"
+      "any": [
+       {
+        "target": "doc-envoy"
+       },
+       {
+        "mentions_any": [
+         "Envoy",
+         "visitor log"
+        ]
+       }
       ]
      },
      {
       "mentions_any": [
        "Maya",
        "Lindqvist"
+      ]
+     },
+     {
+      "mentions_any": [
+       "sign-out",
+       "signed out",
+       "sign out",
+       "signing out",
+       "not in the log",
+       "missing from the log",
+       "isn't in the log"
       ]
      }
     ]
@@ -6495,7 +6521,10 @@
      },
      {
       "mentions_any": [
-       "February"
+       "February",
+       "Feb",
+       "2/3",
+       "2/4"
       ]
      }
     ]
@@ -6546,7 +6575,14 @@
      {
       "mentions_any": [
        "approval",
-       "approve"
+       "approve",
+       "approves",
+       "sign",
+       "signs",
+       "signature",
+       "sign off",
+       "check with",
+       "run it by"
       ]
      }
     ]
@@ -6590,7 +6626,8 @@
       "action_in": [
        "update",
        "edit",
-       "new"
+       "new",
+       "flag"
       ]
      },
      {
@@ -6642,12 +6679,19 @@
      },
      {
       "mentions_any": [
-       "Q-2290"
+       "Q-2290",
+       "book",
+       "booking",
+       "confirm",
+       "reserve"
       ]
      },
      {
       "mentions_any": [
-       "12/11"
+       "12/11",
+       "December 11",
+       "Dec 11",
+       "Dec. 11"
       ]
      }
     ]
@@ -6693,7 +6737,12 @@
      },
      {
       "mentions_any": [
-       "proof of delivery"
+       "proof of delivery",
+       "POD",
+       "signed proof",
+       "delivery receipt",
+       "delivery confirmation",
+       "signature"
       ]
      }
     ]
@@ -6735,7 +6784,8 @@
       "action_in": [
        "update",
        "edit",
-       "new"
+       "new",
+       "flag"
       ]
      },
      {
@@ -6835,7 +6885,13 @@
      },
      {
       "mentions_any": [
-       "80%"
+       "80%",
+       "80 percent",
+       "attrition",
+       "pickup",
+       "pick-up",
+       "4 room-nights",
+       "four room-nights"
       ]
      }
     ]
@@ -6884,7 +6940,9 @@
      },
      {
       "mentions_any": [
-       "Hollis"
+       "Hollis",
+       "HR",
+       "Human Resources"
       ]
      }
     ]
@@ -6928,12 +6986,14 @@
       "action_in": [
        "update",
        "edit",
-       "new"
+       "new",
+       "flag"
       ]
      },
      {
       "mentions_any": [
-       "Hollis"
+       "Hollis",
+       "HR"
       ]
      }
     ]
@@ -6979,7 +7039,11 @@
      {
       "mentions_any": [
        "salary",
-       "next steps"
+       "next steps",
+       "pay",
+       "range",
+       "compensation",
+       "offer"
       ]
      }
     ]
@@ -7062,12 +7126,15 @@
      },
      {
       "mentions_any": [
-       "11/9"
+       "11/9",
+       "Monday"
       ]
      },
      {
       "mentions_any": [
-       "10:00"
+       "10:00",
+       "10 am",
+       "10am"
       ]
      }
     ]
@@ -7108,12 +7175,29 @@
     "all": [
      {
       "mentions_any": [
-       "11/26"
+       "11/26",
+       "November 26",
+       "Thanksgiving"
       ]
      },
      {
       "mentions_any": [
        "Alicia"
+      ]
+     },
+     {
+      "any": [
+       {
+        "target": "doc-intranet"
+       },
+       {
+        "mentions_any": [
+         "office page",
+         "office info",
+         "intranet",
+         "SharePoint"
+        ]
+       }
       ]
      }
     ]
@@ -7152,7 +7236,9 @@
      {
       "mentions_any": [
        "December 11",
-       "12/11"
+       "12/11",
+       "Dec 11",
+       "Dec. 11"
       ]
      },
      {
@@ -7162,8 +7248,16 @@
      },
      {
       "mentions_any": [
-       "12/4"
+       "12/4",
+       "December 4",
+       "Dec 4",
+       "Dec. 4"
       ]
+     },
+     {
+      "not": {
+       "to_includes": "c_jess"
+      }
      }
     ]
    },

@@ -1,6 +1,6 @@
 # Software Developers (15-1252.00): build report
 
-84 needs, 18 traps, 163 worker actions, 214 threads, 51 documents, 20,731 words.
+84 needs, 18 traps, 163 worker actions, 214 threads, 51 documents, 20,734 words.
 
 | day | chat exchanges | chat threads | mail exchanges | mail threads | needs | reviews exchanges | reviews threads | tickets exchanges | tickets threads | worker actions |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -44,7 +44,9 @@
 
 ## Errors (0)
 
-## Warnings (3)
+## Warnings (5)
 - n1-intl: very short mention 'UK'
+- n1-intl: very short mention 'EU'
+- n1-review: very short mention '+1'
 - n2-ravi: very short mention 'CS'
 - n3-ravi: very short mention 'IC'

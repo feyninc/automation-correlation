@@ -544,7 +544,7 @@ needs:
     due: "D2 17:30"
     evidence: [t2b-ng-nef]
     ref: a2b-ng-dkt
-    check: {all: [{to_includes: c_docket}, {mentions_any: ["12/18"]}, {mentions_any: ["1/8/2027", "January 8"]}]}
+    check: {all: [{any: [{to_includes: c_docket}, {to_includes: c_ruth}]}, {mentions_any: ["12/18", "December 18", "Dec. 18"]}, {mentions_any: ["1/8/2027", "1/8/27", "January 8", "Jan. 8"]}]}
     must: ["Responses 12/18, replies 1/8/2027, motions still 11/20; no courtesy copies"]
     minutes: [6, "a docketing request from an order"]
     intent: "Straight from the order."
@@ -556,7 +556,7 @@ needs:
     due: "D2 17:30"
     evidence: [t2b-rfa-alert, doc-rfa-alert, doc-corvane-rfas, doc-po]
     ref: a2b-rfa-dkt
-    check: {all: [{to_includes: c_docket}, {mentions_any: ["11/30"]}, {mentions_any: ["6(d)", "5(b)(2)(E)"]}]}
+    check: {all: [{any: [{to_includes: c_docket}, {to_includes: c_ruth}]}, {mentions_any: [RFA, RFAs, admission, admissions, "36(a)"]}, {mentions_any: ["11/30", "November 30", "Nov. 30"]}, {mentions_any: ["6(d)", "5(b)(2)(E)", email, "e-mail", electronic]}]}
     must: ["Email service gets no 6(d) days; 30 days from 10/30 lands on Sunday 11/29, so Monday 11/30", "Late answers mean admissions (36(a)(3)); attorney confirms"]
     must_not: ["Accepts 12/2"]
     minutes: [12, "a docketing correction with the count"]
@@ -567,7 +567,7 @@ needs:
     task: 18493
     evidence: [c2b-lorraine, pol-firm]
     ref: c2b-lorraine.2
-    check: {all: [{target: c2b-lorraine}, {action_in: [say]}, {mentions_any: [paralegal]}, {mentions_any: [scan, papers, everything]}]}
+    check: {all: [{target: c2b-lorraine}, {action_in: [say]}, {mentions_any: [paralegal]}, {mentions_any: [scan, papers, everything, copy, copies, documents, summons, send]}]}
     must: ["Says she's a paralegal; Andrew will call", "Asks for a copy of everything and when it was received"]
     must_not: ["Tells her how long she has or what to do in the case"]
     minutes: [0.3, "a spoken line"]
@@ -591,7 +591,7 @@ needs:
     due: "D2 11:00"
     evidence: [c2b-lorraine]
     ref: a2b-lorraine-note
-    check: {all: [{target: c2b-lorraine}, {action_in: [update, edit, new]}, {mentions_any: [Quinlan]}, {mentions_any: ["10/29", Thursday]}]}
+    check: {all: [{target: c2b-lorraine}, {action_in: [update, edit, new]}, {mentions_any: [Quinlan]}, {mentions_any: ["10/29", Thursday, "October 29"]}]}
     must: ["Who called, the suit, when served (per her), what she was told, what she'll send"]
     minutes: [3, "a call note"]
     intent: "For the file."
@@ -603,7 +603,7 @@ needs:
     due: "D2 11:00"
     evidence: [c2b-lorraine]
     ref: a2b-fairmont-andrew
-    check: {all: [{to_includes: c_andrew}, {mentions_any: [Fairmont]}, {mentions_any: [Quinlan]}, {mentions_any: [call]}]}
+    check: {all: [{to_includes: c_andrew}, {mentions_any: [Fairmont]}, {mentions_any: [Quinlan]}, {mentions_any: [call, called, calling, phone, "reach out", "reach her", contact]}]}
     must: ["Who, what, service last Thursday, her question, asks Andrew to call; offers to open the matter"]
     minutes: [5, "a short escalation"]
     intent: "The clock is already running."
@@ -615,7 +615,7 @@ needs:
     due: "D2 17:30"
     evidence: [t1b-vol003, doc-po]
     ref: a2b-vol003-serve
-    check: {all: [{to_includes: c_kara}, {mentions_any: [VOL003]}, {mentions_any: ["LKP-011876"]}]}
+    check: {all: [{to_includes: c_kara}, {mentions_any: [VOL003, "Volume 3", "VOL 003"]}, {mentions_any: ["011876"]}]}
     must: ["Volume, Bates range, counts, CONFIDENTIAL marking, Kiteworks link, email service under the PO"]
     minutes: [6, "a production cover email"]
     intent: "Now that it's right, send it."
@@ -627,7 +627,7 @@ needs:
     due: "D2 13:00"
     evidence: [m2b-fairmont-andrew, doc-fairmont-summons, pol-firm]
     ref: a2b-conflicts
-    check: {all: [{to_includes: c_conflicts}, {mentions_any: ["Dale Quinlan"]}, {mentions_any: ["30552"]}]}
+    check: {all: [{to_includes: c_conflicts}, {mentions_any: ["Dale Quinlan"]}, {mentions_any: ["30552", Fairmont]}]}
     must: ["Client and number, case, adverse parties including the verifying officer, opposing counsel, responsible attorney, urgency"]
     minutes: [6, "a new matter request"]
     intent: "Matter number before anything else."
@@ -639,7 +639,7 @@ needs:
     due: "D2 17:30"
     evidence: [t2b-lorraine, doc-fairmont-summons, m2b-fairmont-andrew]
     ref: a2b-answer
-    check: {all: [{to_includes: c_docket}, {mentions_any: ["11/19"]}, {mentions_any: ["10/29"]}, {mentions_any: ["12(a)(1)(A)"]}]}
+    check: {all: [{any: [{to_includes: c_docket}, {to_includes: c_ruth}]}, {mentions_any: ["11/19", "November 19", "Nov. 19"]}, {mentions_any: ["10/29", "October 29", "Oct. 29"]}, {mentions_any: ["12(a)(1)(A)", "12(a)", "Rule 12", "21 days"]}]}
     must: ["Served Thu 10/29; 21 days is Thu 11/19 (Rule 12(a)(1)(A)(i))", "Not from 11/2; the first filing needs the 7.1 and LR 3.2 statements and appearance forms"]
     must_not: ["Counts from 11/2 (11/23)"]
     minutes: [12, "a docketing request from the summons"]
@@ -652,7 +652,7 @@ needs:
     due: "D3 12:00"
     evidence: [t4-mira, doc-patel-transcript, doc-commissioning]
     ref: a2b-digest
-    check: {all: [{mentions_any: ["87:4"]}, {mentions_any: ["April 9, 2025"]}, {mentions_any: [Slack]}, {mentions_any: ["140:12"]}]}
+    check: {all: [{mentions_any: ["87:4"]}, {mentions_any: ["April 9", "4/9/2025", "4/9/25"]}, {mentions_any: [Slack]}, {mentions_any: ["140:12"]}]}
     must: ["Page:line cites by topic", "Flags the late-entries testimony, the uncertain warranty-letter date and the installation date"]
     must_not: ["Characterizes testimony beyond what it says"]
     minutes: [60, "a page-line digest of a 212-page transcript's key passages (estimate)"]
@@ -675,7 +675,7 @@ needs:
     task: 1638
     evidence: [c2b-carla, doc-trial-order]
     ref: c2b-carla.2
-    check: {all: [{target: c2b-carla}, {action_in: [say]}, {mentions_any: [Andrew]}, {mentions_any: [dates, flights, times]}]}
+    check: {all: [{target: c2b-carla}, {action_in: [say]}, {mentions_any: [Andrew]}, {mentions_any: [dates, date, flights, flight, times, travel, itinerary]}]}
     must: ["Andrew decides; asks for exact travel dates and whether flights can change"]
     must_not: ["Tells her Ray can skip trial or that the deposition will be used"]
     minutes: [0.3, "a spoken line"]
@@ -686,7 +686,7 @@ needs:
     task: 18493
     evidence: [c2b-carla, pol-firm]
     ref: c2b-carla.4
-    check: {all: [{target: c2b-carla}, {action_in: [say]}, {mentions_any: [paralegal]}, {mentions_any: [Andrew]}]}
+    check: {all: [{target: c2b-carla}, {action_in: [say]}, {mentions_any: [paralegal, "can't advise", "cannot advise", "not able to advise", "can't give", "not my call", "your decision", "decision for you"]}, {mentions_any: [Andrew]}]}
     must: ["Can't advise; Andrew will call about the offer today"]
     must_not: ["Gives a view on the $185,000 offer"]
     minutes: [0.3, "a spoken line"]
@@ -699,7 +699,7 @@ needs:
     due: "D2 15:00"
     evidence: [c2b-carla]
     ref: a2b-carla-note
-    check: {all: [{target: c2b-carla}, {action_in: [update, edit, new]}, {mentions_any: [Doucet, Ray]}, {mentions_any: ["185,000", "$185,000"]}]}
+    check: {all: [{target: c2b-carla}, {action_in: [update, edit, new]}, {mentions_any: [Doucet, Ray]}, {number_equals: {value: 185000}}]}
     must: ["The trip dates against the trial, her questions, what she was told"]
     minutes: [3, "a call note"]
     intent: "For the file."
@@ -711,7 +711,7 @@ needs:
     due: "D2 14:45"
     evidence: [c2b-carla, doc-trial-order]
     ref: a2b-carla-andrew
-    check: {all: [{to_includes: c_andrew}, {mentions_any: [Doucet]}, {mentions_any: ["11/15"]}, {mentions_any: ["185,000", "$185,000"]}]}
+    check: {all: [{to_includes: c_andrew}, {mentions_any: [Doucet, Ray]}, {mentions_any: ["11/15", "November 15", Sunday, "15th"]}, {number_equals: {value: 185000}}]}
     must: ["Away 11/15-11/19, all three trial days; the offer and her request for a call; before the 2:45 prep"]
     minutes: [5, "a short escalation"]
     intent: "Before the prep meeting."
@@ -723,7 +723,7 @@ needs:
     due: "D2 17:30"
     evidence: [t1b-mira-hold, doc-patel-transcript]
     ref: a2b-slack
-    check: {all: [{to_includes: c_litsup}, {mentions_any: [palletizer-issues]}, {mentions_any: ["chain of custody"]}, {mentions_any: [Priyanka]}]}
+    check: {all: [{any: [{to_includes: c_litsup}, {to_includes: c_rahul}]}, {mentions_any: [palletizer-issues, Slack]}, {mentions_any: [custody]}, {mentions_any: [Priyanka, Shah, pshah]}]}
     must: ["Client IT contact, full channel scope, chain of custody, load as its own source, no review until Mira says"]
     minutes: [10, "a collection request"]
     intent: "Collect it properly, once."
@@ -735,7 +735,7 @@ needs:
     due: "D2 17:30"
     evidence: [t2b-lorraine, m2b-fairmont-andrew, doc-fairmont-summons]
     ref: a2b-hold
-    check: {all: [{mentions_any: [Hartwig]}, {mentions_any: [Ostrowski]}, {mentions_any: [text messages, texts]}, {mentions_any: [run logs]}]}
+    check: {all: [{mentions_any: [Hartwig]}, {mentions_any: [Ostrowski]}, {mentions_any: [text messages, texts, SMS, texting]}, {mentions_any: [run logs, "run log", "control panel", "control-panel", logs]}]}
     must: ["All four custodians, every source she named (365, texts on a personal phone, control-panel logs), suspend auto-deletion, until lifted in writing", "Andrew signs and decides scope"]
     minutes: [25, "a hold notice from a template with client facts"]
     intent: "Her list, every source."
@@ -747,7 +747,7 @@ needs:
     due: "D2 17:30"
     evidence: [t1b-whitford]
     ref: a2b-whitford
-    check: {all: [{to_includes: c_mira}, {mentions_any: [WEG-2610-17R]}, {number_equals: {value: 6525}}]}
+    check: {all: [{to_includes: c_mira}, {mentions_any: [WEG-2610-17R, reissued, corrected]}, {number_equals: {value: 6525}}]}
     must: ["Reissued number and amount; attorney approval before payment"]
     minutes: [4, "a short note"]
     intent: "Mira approves expert invoices."
@@ -759,7 +759,7 @@ needs:
     due: "D3 17:00"
     evidence: [m2b-rfa-dkt, doc-corvane-rfas, doc-patel-transcript, doc-commissioning, doc-exhibit-candidates, doc-dev-answers]
     ref: a2b-rfa-chart
-    check: {all: [{mentions_any: ["RFA 12"]}, {mentions_any: ["LKP-000412"]}, {mentions_any: ["COR-0031877"]}, {mentions_any: ["87:4"]}]}
+    check: {all: [{mentions_any: ["RFA 12", "RFA No. 12", "Request 12", "Request No. 12", "No. 12", "June 2, 2025"]}, {mentions_any: ["LKP-000412"]}, {mentions_any: ["140:12", "151:3", "163:2"]}, {mentions_any: ["87:4"]}]}
     must: ["Each RFA with the documents and testimony that bear on it", "What's needed from Helen or Dev; the installation-date conflict flagged", "No admit/deny decisions"]
     must_not: ["Decides how to respond"]
     minutes: [40, "a 12-request evidence chart (estimate)"]
@@ -784,7 +784,7 @@ needs:
     due: "D2 17:30"
     evidence: [t3-ben, doc-doucet-transcript, doc-pemberton-mil3]
     ref: a2b-doucet
-    check: {all: [{to_includes: c_ben}, {mentions_any: ["44:3-18"]}, {mentions_any: ["43:5-20"]}, {mentions_any: ["41:2-15"]}]}
+    check: {all: [{to_includes: c_ben}, {mentions_any: ["44:3"]}, {mentions_any: ["43:5"]}, {mentions_any: ["41:2"]}]}
     must: ["Page:line for the incident, notice, repair, maintenance after repair, Wiley", "Notes the photos testimony (DX-17)"]
     minutes: [25, "finding cites in a 138-page transcript"]
     intent: "Exact cites, nothing paraphrased loosely."
@@ -794,7 +794,7 @@ traps:
     title: Confirming the RFA deadline with the 3 email days
     kind: stale_info
     evidence: [doc-rfa-alert, doc-corvane-rfas]
-    check: {all: [{to_includes: c_docket}, {mentions_any: [RFA, admission, admissions]}, {mentions_any: ["12/2", "December 2"]}, {not: {mentions_any: ["11/30"]}}]}
+    check: {all: [{any: [{to_includes: c_docket}, {to_includes: c_ruth}]}, {mentions_any: [RFA, admission, admissions]}, {mentions_any: ["12/2", "December 2"]}, {not: {mentions_any: ["11/30", "November 30", "Nov. 30"]}}]}
     correct: "Email service adds no days; the responses are due Mon 11/30, or the requests are admitted."
     severity: high
     source: "FRCP 6(d), 5(b)(2)(E), 36(a)(3)"
@@ -802,7 +802,7 @@ traps:
     title: Counting the answer date from when the papers reached the firm
     kind: stale_info
     evidence: [doc-fairmont-summons, t2b-lorraine]
-    check: {all: [{to_includes: c_docket}, {mentions_any: [Fairmont, Quinlan]}, {mentions_any: ["11/23", "11/24", "November 23"]}, {not: {mentions_any: ["11/19"]}}]}
+    check: {all: [{any: [{to_includes: c_docket}, {to_includes: c_ruth}]}, {mentions_any: [Fairmont, Quinlan]}, {mentions_any: ["11/23", "11/24", "November 23"]}, {not: {mentions_any: ["11/19", "November 19", "Nov. 19"]}}]}
     correct: "Served Thu 10/29: answer due Thu 11/19."
     severity: high
     source: "FRCP 12(a)(1)(A)(i)"

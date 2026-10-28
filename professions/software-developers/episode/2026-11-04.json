@@ -3086,7 +3086,14 @@
    "check": {
     "all": [
      {
-      "target": "t3-inc"
+      "any": [
+       {
+        "target": "t3-inc"
+       },
+       {
+        "to_includes": "c_ben"
+       }
+      ]
      },
      {
       "mentions_any": [
@@ -3097,7 +3104,12 @@
       "mentions_any": [
        "don't",
        "do not",
-       "stop"
+       "stop",
+       "hold off",
+       "wait",
+       "shouldn't",
+       "should not",
+       "never"
       ]
      }
     ]
@@ -3134,7 +3146,14 @@
    "check": {
     "all": [
      {
-      "target": "t3-inc"
+      "any": [
+       {
+        "target": "t3-inc"
+       },
+       {
+        "to_includes": "c_marcus"
+       }
+      ]
      },
      {
       "number_equals": {
@@ -3185,20 +3204,38 @@
    "check": {
     "all": [
      {
-      "target": "t3-pr1496"
+      "any": [
+       {
+        "target": "t3-pr1496"
+       },
+       {
+        "target": "t3-inc"
+       },
+       {
+        "to_includes": "c_ben"
+       }
+      ]
      },
      {
       "mentions_any": [
        "race",
        "check-then-act",
-       "parallel"
+       "check then act",
+       "check-then-insert",
+       "parallel",
+       "two workers",
+       "both workers",
+       "at the same time",
+       "simultaneously"
       ]
      },
      {
       "mentions_any": [
        "CONCURRENTLY",
        "lock",
-       "locks"
+       "locks",
+       "locking",
+       "existing duplicates"
       ]
      }
     ]
@@ -3245,7 +3282,8 @@
      {
       "mentions_any": [
        "Marcus",
-       "IC"
+       "IC",
+       "incident commander"
       ]
      }
     ]
@@ -3300,6 +3338,13 @@
        "0042",
        "migration"
       ]
+     },
+     {
+      "not": {
+       "action_in": [
+        "edit"
+       ]
+      }
      }
     ]
    },
@@ -3341,7 +3386,21 @@
       "mentions_any": [
        "own",
        "my notes",
-       "myself"
+       "myself",
+       "independent",
+       "independently",
+       "before reading"
+      ]
+     },
+     {
+      "mentions_any": [
+       "scorecard",
+       "scorecards",
+       "notes",
+       "interview",
+       "candidate",
+       "copy",
+       "feedback"
       ]
      }
     ]
@@ -3386,12 +3445,13 @@
      {
       "mentions_any": [
        "0042",
-       "INV-2240"
+       "INV-2240",
+       "#1496"
       ]
      },
      {
       "mentions_any": [
-       "#1494",
+       "1494",
        "DST"
       ]
      }
@@ -3431,7 +3491,9 @@
      {
       "mentions_any": [
        "Recommendation",
-       "recommendation"
+       "recommendation",
+       "recommend",
+       "hire"
       ]
      },
      {
@@ -3442,7 +3504,9 @@
      {
       "mentions_any": [
        "observability",
-       "dead-letter"
+       "dead-letter",
+       "dead letter",
+       "monitoring"
       ]
      }
     ]
@@ -3488,7 +3552,10 @@
       "mentions_any": [
        "redelivery",
        "dashboard",
-       "queue"
+       "queue",
+       "watch",
+       "monitor",
+       "metrics"
       ]
      }
     ]
@@ -3529,18 +3596,35 @@
    "check": {
     "all": [
      {
-      "target": "t3-ben-scorecard"
+      "any": [
+       {
+        "target": "t3-ben-scorecard"
+       },
+       {
+        "target": "t3-inc"
+       },
+       {
+        "to_includes": "c_ben"
+       }
+      ]
      },
      {
       "mentions_any": [
        "don't",
-       "do not"
+       "do not",
+       "hold off",
+       "please wait",
+       "shouldn't",
+       "should not",
+       "not run",
+       "no hand"
       ]
      },
      {
       "mentions_any": [
        "0042",
        "CHG",
+       "change ticket",
        "second engineer"
       ]
      }
@@ -3592,7 +3676,13 @@
        "10:04",
        "before the failover",
        "isn't",
-       "not among"
+       "not among",
+       "09:41",
+       "unrelated",
+       "not affected",
+       "separate",
+       "not INC-0412",
+       "not part"
       ]
      }
     ]
@@ -3633,7 +3723,14 @@
    "check": {
     "all": [
      {
-      "target": "t3-inc"
+      "any": [
+       {
+        "target": "t3-inc"
+       },
+       {
+        "to_includes": "c_marcus"
+       }
+      ]
      },
      {
       "mentions_any": [
@@ -3645,8 +3742,14 @@
      {
       "mentions_any": [
        "returns 0 rows",
+       "0 rows",
+       "no rows",
        "0 duplicate",
-       "no duplicate"
+       "0 duplicates",
+       "no duplicate",
+       "no duplicates",
+       "zero duplicate",
+       "zero duplicates"
       ]
      }
     ]
@@ -3685,24 +3788,44 @@
     "text": null
    },
    "check": {
-    "all": [
+    "any": [
      {
-      "target": "t1b-pr1495"
-     },
-     {
-      "mentions_any": [
-       "down_revision",
-       "rebased"
+      "all": [
+       {
+        "target": "t1b-pr1495"
+       },
+       {
+        "mentions_any": [
+         "down_revision",
+         "rebased",
+         "rebase"
+        ]
+       },
+       {
+        "mentions_any": [
+         "0042"
+        ]
+       },
+       {
+        "mentions_any": [
+         "merged",
+         "merge",
+         "merging"
+        ]
+       }
       ]
      },
      {
-      "mentions_any": [
-       "0042"
-      ]
-     },
-     {
-      "mentions_any": [
-       "merged"
+      "all": [
+       {
+        "target": "repo-mig-0043"
+       },
+       {
+        "mentions_all": [
+         "down_revision",
+         "0042"
+        ]
+       }
       ]
      }
     ]
@@ -3739,7 +3862,14 @@
    "check": {
     "all": [
      {
-      "target": "t1b-platform-chat"
+      "any": [
+       {
+        "target": "t1b-platform-chat"
+       },
+       {
+        "to_includes": "c_priya"
+       }
+      ]
      },
      {
       "mentions_any": [
@@ -3749,7 +3879,9 @@
      {
       "mentions_any": [
        "prod",
-       "merged"
+       "production",
+       "merged",
+       "applied"
       ]
      }
     ]
@@ -3802,9 +3934,18 @@
       ]
      },
      {
-      "number_equals": {
-       "value": 107
-      }
+      "any": [
+       {
+        "number_equals": {
+         "value": 107
+        }
+       },
+       {
+        "number_equals": {
+         "value": 66
+        }
+       }
+      ]
      }
     ]
    },
@@ -3842,16 +3983,31 @@
    "check": {
     "all": [
      {
-      "target": "t2-billing-chat"
-     },
-     {
-      "mentions_any": [
-       "CHG-3318"
+      "any": [
+       {
+        "target": "t2-billing-chat"
+       },
+       {
+        "target": "t3-inc"
+       },
+       {
+        "to_includes": "c_ben"
+       }
       ]
      },
      {
       "mentions_any": [
-       "06:00"
+       "CHG-3318",
+       "backfill"
+      ]
+     },
+     {
+      "mentions_any": [
+       "06:00",
+       "6:00",
+       "6 a.m.",
+       "6am",
+       "6 AM"
       ]
      }
     ]
@@ -3895,12 +4051,23 @@
       "mentions_any": [
        "Never purge",
        "never purge",
-       "do not purge"
+       "do not purge",
+       "don't purge",
+       "not purge",
+       "no purge",
+       "never run celery purge",
+       "do not run celery purge",
+       "purge deletes",
+       "purging deletes",
+       "purge removes"
       ]
      },
      {
       "mentions_any": [
-       "acks_late"
+       "acks_late",
+       "redelivered",
+       "redelivery",
+       "redelivers"
       ]
      }
     ]
@@ -3943,7 +4110,8 @@
      {
       "mentions_any": [
        "timeline",
-       "Timeline"
+       "Timeline",
+       "10:04"
       ]
      },
      {
@@ -3954,6 +4122,17 @@
      {
       "mentions_any": [
        "INV-2240"
+      ]
+     },
+     {
+      "mentions_any": [
+       "postmortem",
+       "post-mortem",
+       "root cause",
+       "contributing",
+       "what went wrong",
+       "action items",
+       "actions"
       ]
      }
     ]
@@ -4004,7 +4183,17 @@
         "race",
         "lock",
         "CONCURRENTLY",
-        "#1496"
+        "1496",
+        "can't approve",
+        "cannot approve",
+        "not approve",
+        "won't approve",
+        "don't merge",
+        "do not merge",
+        "two workers",
+        "check-then-act",
+        "parallel",
+        "request changes"
        ]
       }
      }

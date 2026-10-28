@@ -5313,7 +5313,7 @@
   {
    "id": "c2b-kelly",
    "app": "phone",
-   "path": "2026-11-03/1350-kelly-hart-pinnacle",
+   "path": "2026-11-03/1412-kelly-hart-pinnacle",
    "title": "Inbound call, Kelly Hart (Pinnacle, peak class)",
    "live": true,
    "state": {},
@@ -5966,14 +5966,17 @@
      },
      {
       "mentions_any": [
-       "FMLA"
+       "FMLA",
+       "family and medical leave",
+       "protected leave"
       ]
      },
      {
       "mentions_any": [
        "dialysis",
        "parent",
-       "mother"
+       "mother",
+       "mom"
       ]
      }
     ]
@@ -6076,7 +6079,14 @@
    "check": {
     "all": [
      {
-      "to_includes": "c_carrier"
+      "any": [
+       {
+        "to_includes": "c_carrier"
+       },
+       {
+        "to_includes": "c_rick"
+       }
+      ]
      },
      {
       "number_equals": {
@@ -6085,7 +6095,12 @@
      },
      {
       "mentions_any": [
-       "appointment"
+       "appointment",
+       "appointments",
+       "appt",
+       "arrived late",
+       "arrived after",
+       "late arrival"
       ]
      }
     ]
@@ -6124,7 +6139,14 @@
    "check": {
     "all": [
      {
-      "to_includes": "c_dale"
+      "any": [
+       {
+        "to_includes": "c_dale"
+       },
+       {
+        "to_includes": "c_lisa"
+       }
+      ]
      },
      {
       "mentions_any": [
@@ -6136,7 +6158,8 @@
      {
       "mentions_any": [
        "CER",
-       "Lisa"
+       "Lisa",
+       "capital"
       ]
      }
     ]
@@ -6187,8 +6210,18 @@
      {
       "mentions_any": [
        "PO-7913",
+       "PO-7740",
+       "PO-7802",
+       "PO-7861",
+       "7913",
        "4 of",
-       "four of"
+       "four of",
+       "four late",
+       "4 late",
+       "late deliveries",
+       "deliveries late",
+       "days late",
+       "delivered late"
       ]
      }
     ]
@@ -6277,7 +6310,15 @@
       "mentions_any": [
        "out of service",
        "tag it out",
-       "tagged out"
+       "tagged out",
+       "tag it",
+       "tagged",
+       "lock it out",
+       "locked out",
+       "take it off",
+       "park it",
+       "don't run it",
+       "not run it"
       ]
      }
     ]
@@ -6332,7 +6373,10 @@
      {
       "mentions_any": [
        "Dale",
-       "purchase order"
+       "purchase order",
+       "PO",
+       "Coupa",
+       "quote"
       ]
      }
     ]
@@ -6385,7 +6429,11 @@
      {
       "mentions_any": [
        "out of service",
-       "tagged out"
+       "tagged out",
+       "tagged",
+       "tag",
+       "tag-out",
+       "locked out"
       ]
      },
      {
@@ -6431,14 +6479,32 @@
       "to_includes": "c_denise"
      },
      {
-      "number_equals": {
-       "value": 32.4
-      }
+      "any": [
+       {
+        "number_equals": {
+         "value": 32.4
+        }
+       },
+       {
+        "number_equals": {
+         "value": 21.6
+        }
+       }
+      ]
      },
      {
-      "number_equals": {
-       "value": 318
-      }
+      "any": [
+       {
+        "number_equals": {
+         "value": 318
+        }
+       },
+       {
+        "number_equals": {
+         "value": 212
+        }
+       }
+      ]
      }
     ]
    },
@@ -6479,14 +6545,36 @@
       "to_includes": "c_tina"
      },
      {
-      "number_equals": {
-       "value": 32.4
-      }
+      "any": [
+       {
+        "number_equals": {
+         "value": 32.4
+        }
+       },
+       {
+        "number_equals": {
+         "value": 21.6
+        }
+       },
+       {
+        "number_equals": {
+         "value": 12
+        }
+       },
+       {
+        "mentions_any": [
+         "regular rate"
+        ]
+       }
+      ]
      },
      {
       "mentions_any": [
        "Denise",
-       "payroll"
+       "payroll",
+       "back pay",
+       "back-pay",
+       "next check"
       ]
      }
     ]
@@ -6529,13 +6617,24 @@
      {
       "mentions_any": [
        "vote",
-       "voting"
+       "voting",
+       "voters"
       ]
      },
      {
       "mentions_any": [
        "no points",
-       "no point"
+       "no point",
+       "no attendance points",
+       "no attendance point",
+       "not get points",
+       "won't get points",
+       "don't give",
+       "without penalty",
+       "not penalized",
+       "no penalty",
+       "excused",
+       "not a point"
       ]
      }
     ]
@@ -6587,7 +6686,12 @@
       "mentions_any": [
        "counterbalance only",
        "counterbalance",
-       "EHS-204"
+       "EHS-204",
+       "evaluated",
+       "evaluation",
+       "eval",
+       "certified",
+       "authorized"
       ]
      },
      {
@@ -6634,7 +6738,10 @@
      },
      {
       "mentions_any": [
-       "paid"
+       "paid",
+       "on the clock",
+       "work time",
+       "compensable"
       ]
      },
      {
@@ -6697,10 +6804,10 @@
    "check": {
     "all": [
      {
-      "to_includes": "c_tasha"
-     },
-     {
       "any": [
+       {
+        "to_includes": "c_tasha"
+       },
        {
         "to_includes": "c_beth"
        },
@@ -6712,14 +6819,31 @@
      {
       "mentions_any": [
        "40 lb",
-       "40"
+       "40",
+       "50 lb",
+       "heavy"
       ]
      },
      {
       "mentions_any": [
        "re-slot",
+       "reslot",
        "slot",
-       "move"
+       "move",
+       "relocate",
+       "lower"
+      ]
+     },
+     {
+      "mentions_any": [
+       "top level",
+       "top levels",
+       "top-level",
+       "overhead",
+       "shoulder",
+       "14-15",
+       "aisle 14",
+       "aisles 14"
       ]
      }
     ]
@@ -6766,20 +6890,27 @@
      {
       "mentions_any": [
        "18",
-       "17"
+       "17",
+       "minor"
       ]
      },
      {
       "mentions_any": [
        "forklift",
        "reach truck",
-       "powered equipment"
+       "powered equipment",
+       "truck",
+       "trucks",
+       "equipment",
+       "pallet jack"
       ]
      },
      {
       "mentions_any": [
        "picking",
-       "on foot"
+       "on foot",
+       "pick",
+       "picker"
       ]
      }
     ]
@@ -6880,7 +7011,10 @@
      },
      {
       "mentions_any": [
-       "17"
+       "17",
+       "minor",
+       "under 18",
+       "under-18"
       ]
      }
     ]
@@ -6930,12 +7064,23 @@
       "any": [
        {
         "number_equals": {
-         "value": 9951.4
+         "value": 9951.4,
+         "tol": 2
         }
        },
        {
         "number_equals": {
          "value": 70
+        }
+       },
+       {
+        "number_equals": {
+         "value": 4861.6
+        }
+       },
+       {
+        "number_equals": {
+         "value": 5089.8
         }
        }
       ]
@@ -6983,14 +7128,20 @@
       "mentions_any": [
        "split",
        "splitting",
-       "two POs"
+       "two POs",
+       "separate PO",
+       "separate POs",
+       "2 POs",
+       "break it up",
+       "one PO"
       ]
      },
      {
       "mentions_any": [
        "Lisa",
        "authority",
-       "FIN-104"
+       "FIN-104",
+       "limit"
       ]
      }
     ]
@@ -7038,7 +7189,13 @@
      {
       "mentions_any": [
        "two of five",
-       "2 of 5"
+       "2 of 5",
+       "two missed",
+       "2 missed",
+       "missed two",
+       "two pickups",
+       "missed pickups",
+       "GRV-88174"
       ]
      },
      {
@@ -7194,8 +7351,15 @@
    "check": {
     "all": [
      {
+      "action_in": [
+       "edit",
+       "new"
+      ]
+     },
+     {
       "mentions_any": [
-       "CER"
+       "CER",
+       "capital"
       ]
      },
      {
@@ -7231,7 +7395,7 @@
    "kind": "reply",
    "onet_task_id": "20705",
    "discoverable_at": "D2 15:20",
-   "deadline": "D4 17:00",
+   "deadline": "D4 14:00",
    "evidence": [
     "t2b-janelle-orient",
     "m2b-minor",
@@ -7263,7 +7427,10 @@
       "mentions_any": [
        "under-18",
        "under 18",
-       "EHS-204"
+       "EHS-204",
+       "minor",
+       "minors",
+       "17"
       ]
      }
     ]
@@ -7328,13 +7495,27 @@
         "number_equals": {
          "value": 450
         }
+       },
+       {
+        "number_equals": {
+         "value": 525
+        }
+       },
+       {
+        "number_equals": {
+         "value": 375
+        }
        }
       ]
      },
      {
       "mentions_any": [
        "4 of 4",
-       "four of four"
+       "four of four",
+       "on time",
+       "on-time",
+       "dedicated driver",
+       "3 of 3"
       ]
      }
     ]
@@ -7368,16 +7549,35 @@
       "to_includes": "c_jas"
      },
      {
-      "mentions_any": [
-       "detention",
-       "BF-55102"
+      "any": [
+       {
+        "mentions_any": [
+         "detention",
+         "BF-55102"
+        ]
+       },
+       {
+        "all": [
+         {
+          "target": "t2-jas"
+         },
+         {
+          "before": "D2 12:00"
+         }
+        ]
+       }
       ]
      },
      {
       "mentions_any": [
        "pay it",
+       "pay the",
        "go ahead and pay",
-       "approve"
+       "approve",
+       "approved",
+       "ok to pay",
+       "go ahead",
+       "pay all"
       ]
      },
      {
@@ -7385,7 +7585,12 @@
        "mentions_any": [
         "375",
         "dispute",
-        "hold"
+        "disputed",
+        "hold",
+        "don't pay",
+        "do not pay",
+        "not pay",
+        "only"
        ]
       }
      }
@@ -7432,7 +7637,22 @@
         "paid work",
         "must be paid",
         "is paid",
-        "it's paid"
+        "it's paid",
+        "no,",
+        "no -",
+        "no:",
+        "can't",
+        "cannot",
+        "on the clock",
+        "compensable",
+        "has to be paid",
+        "needs to be paid",
+        "be paid",
+        "work time",
+        "doesn't work",
+        "won't",
+        "don't agree",
+        "not agree"
        ]
       }
      }
@@ -7457,18 +7677,45 @@
       "to_includes": "c_shawn"
      },
      {
+      "after": "D2 08:15"
+     },
+     {
+      "mentions_any": [
+       "points",
+       "point"
+      ]
+     },
+     {
       "mentions_any": [
        "give her the points",
        "ok to give",
-       "go ahead"
+       "go ahead",
+       "give her points",
+       "add the points",
+       "assign the points",
+       "points stand",
+       "count the points",
+       "give the points",
+       "yes, give"
       ]
      },
      {
       "not": {
        "mentions_any": [
         "no points",
-        "HR",
-        "FMLA"
+        "don't give",
+        "do not give",
+        "not give",
+        "hold",
+        "until HR",
+        "while HR",
+        "pending",
+        "protected",
+        "can't",
+        "cannot",
+        "retaliation",
+        "no attendance point",
+        "no point"
        ]
       }
      }

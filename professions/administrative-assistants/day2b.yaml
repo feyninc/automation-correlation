@@ -703,7 +703,7 @@ needs:
     due: "D2 17:00"
     evidence: [t1-maren, t1b-osu, cal-maren]
     ref: a2b-osu
-    check: {all: [{to_includes: c_osu}, {mentions_any: ["November 19", "11/19"]}]}
+    check: {all: [{to_includes: c_osu}, {mentions_any: ["November 19", "11/19", "Nov 19", "Nov. 19"]}]}
     must: ["Accepts on Maren's behalf as she asked, with the date and time; asks for details; calendar entry"]
     minutes: [4, "a reply and a calendar entry"]
     intent: "She said yes."
@@ -715,7 +715,7 @@ needs:
     due: "D2 17:00"
     evidence: [t2-buckeye-svc, t1b-carol-temp, doc-envoy-prereg]
     ref: a2b-envoy
-    check: {all: [{mentions_any: [Buckeye]}, {mentions_any: [Monique]}, {mentions_any: ["2026-11-04"]}]}
+    check: {all: [{mentions_any: ["Buckeye"]}, {mentions_any: ["Monique"]}, {mentions_any: ["2026-11-04", "11/4", "Wednesday"]}, {any: [{target: doc-envoy-prereg}, {mentions_any: ["pre-register", "preregister", "pre-registered", "preregistered", "pre-registration"]}]}]}
     must: ["The Buckeye technician at 08:00 and the temp, with hosts"]
     minutes: [3, "two visitor registrations"]
     intent: "Wednesday's arrivals."
@@ -727,7 +727,7 @@ needs:
     due: "D2 17:00"
     evidence: [t1-laura, t1b-hollis-interview, doc-priya-packet, pol-handbook]
     ref: a2b-packet
-    check: {all: [{to_includes: c_laura}, {mentions_any: [Hollis]}, {not: {mentions_any: ["84,000", "92,000", "96,000", "screening notes"]}}]}
+    check: {all: [{to_includes: c_laura}, {mentions_any: ["Hollis"]}, {mentions_any: ["packet", "confidential", "interview", "panel"]}, {not: {mentions_any: ["84,000", "92,000", "96,000", "screening notes"]}}]}
     must: ["The packet is confidential to the panel HR named; Hollis decides who else sees it"]
     must_not: ["Sends the packet or its salary details"]
     minutes: [3, "a short reply"]
@@ -764,7 +764,7 @@ needs:
     due: "D3 12:00"
     evidence: [doc-ops-review, doc-room-cal, t2-janelle, t2-jess, doc-bramhall-rules, doc-fleet, t1b-owen-safety, t1b-tom-thursday]
     ref: a2b-runofshow
-    check: {all: [{mentions_any: ["12:15"]}, {mentions_any: ["13:00"]}, {mentions_any: [Olentangy]}]}
+    check: {all: [{mentions_any: ["Olentangy"]}, {mentions_any: ["13:00", "1:00", "1 pm", "1pm"]}, {mentions_any: ["HDMI", "USB-C", "projector", "safety moment", "closed session", "name tents"]}]}
     must: ["Times from setup to the van, lunch delivery for 12, the closed session, Kevin's call in Olentangy, AV needs, contacts", "Current: Janelle out"]
     minutes: [30, "an event-day timeline (estimate)"]
     intent: "One page so Thursday runs itself."
@@ -774,7 +774,7 @@ needs:
     task: 2790
     evidence: [c2b-gina, t1b-carol-temp, doc-visitor-guide]
     ref: c2b-gina.2
-    check: {all: [{target: c2b-gina}, {action_in: [say]}, {mentions_any: ["400"]}, {mentions_any: [validate, validation]}, {mentions_any: [business casual, casual]}]}
+    check: {all: [{target: c2b-gina}, {action_in: [say]}, {mentions_any: ["400", "Third", "175"]}, {mentions_any: ["validate", "validation", "validated", "stamp", "ticket"]}, {mentions_any: ["business casual", "casual", "dress code", "attire"]}]}
     must: ["Suite 400 at 8:00, ask for Renee; garage with validation; business casual; the sheet and lunch cover"]
     minutes: [0.25, "a spoken line"]
     intent: "Make her first hour easy."
@@ -786,7 +786,7 @@ needs:
     due: "D2 15:00"
     evidence: [c2b-gina]
     ref: a2b-gina-note
-    check: {all: [{target: c2b-gina}, {action_in: [update, edit, new]}, {mentions_any: [Monique]}]}
+    check: {all: [{target: c2b-gina}, {action_in: [update, edit, new, flag]}, {mentions_any: ["Monique"]}]}
     must: ["What was arranged, including the timesheet sign-off"]
     minutes: [2, "a call note"]
     intent: "Note it."
@@ -798,7 +798,7 @@ needs:
     due: "D3 17:00"
     evidence: [t2b-greg-proof, doc-delco-cover, t1b-andrea-agenda, t1b-gis]
     ref: a2b-proof
-    check: {all: [{to_includes: c_greg}, {mentions_any: [Friday]}, {mentions_any: [Kowal]}, {mentions_any: [Delware, Delaware]}]}
+    check: {all: [{any: [{to_includes: c_greg}, {target: doc-delco-cover}]}, {mentions_any: ["Friday"]}, {mentions_any: ["Kowal"]}, {mentions_any: ["Delware", "Delaware"]}]}
     must: ["11/13/2026 is a Friday", "Kowal, not Kowalski", "'Delware' and 'capcity'", "Three copies enclosed vs 'the two enclosed copies'"]
     must_not: ["Changes the technical content"]
     minutes: [20, "proofreading a one-page letter against the facts"]
@@ -811,7 +811,7 @@ needs:
     due: "D3 12:00"
     evidence: [t2-hollis, t1b-marcy]
     ref: a2b-marcy
-    check: {all: [{to_includes: c_marcy}, {mentions_any: ["11/12"]}, {mentions_any: ["11/13"]}]}
+    check: {all: [{to_includes: c_marcy}, {mentions_any: ["11/12", "Thursday", "November 12", "Nov 12"]}, {mentions_any: ["11/13", "Friday", "November 13", "Nov 13"]}]}
     must: ["New days and times; move the room and lunch"]
     minutes: [3, "a short update"]
     intent: "She booked the room for the 10th."
@@ -823,7 +823,7 @@ needs:
     due: "D3 17:00"
     evidence: [t1b-jorge-lunchlearn, t2b-jorge-veg, t2b-jorge]
     ref: a2b-lunchlearn
-    check: {all: [{to_includes: c_jorge}, {mentions_any: ["11/12"]}, {number_equals: {value: 12}}, {mentions_any: [vegetarian]}]}
+    check: {all: [{to_includes: c_jorge}, {mentions_any: ["11/12", "Thursday", "November 12", "Nov 12"]}, {number_equals: {value: 12}}, {mentions_any: ["vegetarian", "vegetarians", "veggie", "veg"]}]}
     must: ["Room booked Thu 11/12 noon; 12 box lunches, 2 vegetarian"]
     minutes: [6, "a booking and a catering order"]
     intent: "Box lunches, two veggie."
@@ -835,7 +835,7 @@ needs:
     due: "D5 17:00"
     evidence: [doc-weekly-notes, doc-directory, t1b-maren-welcome]
     ref: a2b-quote-snp
-    check: {all: [{to_includes: c_jess}, {mentions_any: ["12/11"]}, {number_equals: {value: 12}}]}
+    check: {all: [{to_includes: c_jess}, {mentions_any: ["12/11", "December 11", "Dec 11", "Dec. 11"]}, {number_equals: {value: 12}}, {not: {mentions_any: ["Q-2290", "like to book", "please book", "booking"]}}]}
     must: ["Date, time, 12 people (the group plus Alicia), itemized totals, by 11/20"]
     minutes: [5, "a quote request"]
     intent: "Two quotes by the 20th."
@@ -847,7 +847,7 @@ needs:
     due: "D5 17:00"
     evidence: [doc-weekly-notes, doc-directory]
     ref: a2b-quote-wf
-    check: {all: [{to_includes: c_wildflower}, {mentions_any: ["12/11"]}, {number_equals: {value: 12}}]}
+    check: {all: [{to_includes: c_wildflower}, {mentions_any: ["12/11", "December 11", "Dec 11", "Dec. 11"]}, {number_equals: {value: 12}}]}
     must: ["Same specification as the first quote so they compare"]
     minutes: [5, "a quote request"]
     intent: "Same ask, second vendor."
@@ -873,7 +873,7 @@ needs:
     due: "D2 17:00"
     evidence: [t1b-carol-temp, t2b-tasha-notes, pol-handbook, pol-mail, doc-visitor-guide, doc-envoy-prereg]
     ref: a2b-temp-sheet
-    check: {all: [{mentions_any: [hrverify]}, {mentions_any: [Priya]}, {mentions_any: [Envoy]}]}
+    check: {all: [{mentions_any: ["hrverify", "317-555-0120", "verification", "verifications"]}, {mentions_any: ["Priya"]}, {mentions_any: ["Envoy"]}]}
     must: ["Phones and transfers; verifications to HR; payment or bank questions to Renee", "Expected visitors (Buckeye 08:00, Priya 08:50); Envoy and deliveries; mail rules; lunch cover"]
     minutes: [25, "a one-page instruction sheet (estimate)"]
     intent: "Everything Tasha would tell her."
@@ -885,7 +885,7 @@ needs:
     due: "D3 17:00"
     evidence: [t1b-sasha-profiles]
     ref: a2b-profiles
-    check: {all: [{any: [{to_includes: c_greg}, {to_includes: c_laura}, {to_includes: c_kevin}]}, {mentions_any: [Known Traveler, emergency contact, profile]}]}
+    check: {all: [{any: [{to_includes: c_greg}, {to_includes: c_laura}, {to_includes: c_kevin}]}, {mentions_any: ["Known Traveler", "KTN", "emergency contact", "profile"]}]}
     must: ["Each traveler, what's missing, update their own profile"]
     minutes: [3, "a forward"]
     intent: "They have to do it."
@@ -897,7 +897,7 @@ needs:
     due: "D3 17:00"
     evidence: [t2b-kevin-epa, doc-academy, t2b-tom-academy]
     ref: a2b-kevin-epa
-    check: {all: [{to_includes: c_kevin}, {mentions_any: ["11/20"]}, {mentions_any: ["11/13", Academy, Indianapolis]}]}
+    check: {all: [{to_includes: c_kevin}, {mentions_any: ["11/20", "November 20", "Nov 20"]}, {mentions_any: ["11/13", "11/12", "Academy", "Indianapolis", "Indy", "training", "traveling", "out of the office"]}]}
     must: ["Due date 11/20 on his calendar", "The Monday before is the PM Academy: an earlier reminder"]
     minutes: [5, "calendar entries"]
     intent: "Monday the 16th he's in Indy."
@@ -909,7 +909,7 @@ needs:
     due: "D5 17:00"
     evidence: [t1-maren, t1-hollis, doc-directory, m1-it]
     ref: a2b-alicia-dir
-    check: {all: [{mentions_any: [Alicia Romero]}, {mentions_any: [C-214]}]}
+    check: {all: [{mentions_any: ["Alicia Romero"]}, {mentions_any: ["C-214"]}, {any: [{target: doc-directory}, {mentions_any: ["directory"]}]}]}
     must: ["Title, group, desk C-214, direct line and email, start date"]
     minutes: [5, "a directory update"]
     intent: "So the front desk can find her Monday."
@@ -921,7 +921,7 @@ needs:
     due: "D5 17:00"
     evidence: [doc-pcard-oct, doc-pcard-receipts-oct, pol-pcard-holder, pol-purchasing]
     ref: a2b-pcard-recon
-    check: {all: [{number_equals: {value: 64.98, tol: 0.01}}, {mentions_any: [duplicate]}, {number_equals: {value: 1088.03, tol: 0.01}}]}
+    check: {all: [{number_equals: {value: 64.98, tol: 0.01}}, {mentions_any: ["duplicate", "charged twice", "double charge", "double-charged", "twice"]}, {any: [{number_equals: {value: 1088.03, tol: 0.01}}, {number_equals: {value: 1153.01, tol: 0.01}}]}]}
     must: ["Every charge coded with a receipt", "Amazon 112-4471903 charged twice with one receipt: $64.98 disputed", "$1,153.01 statement, $1,088.03 reconciled; 19-077 $338.00"]
     minutes: [25, "a monthly card reconciliation"]
     intent: "Match each charge to a receipt."

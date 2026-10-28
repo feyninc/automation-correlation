@@ -2172,7 +2172,7 @@
    "id": "m3-server",
    "app": "mail",
    "path": "sent/lasalle-ferris-subpoena",
-   "title": "Rush service today: subpoena to Ferris Integrations LLC (Downers Grove)",
+   "title": "Rush service today: subpoena to Ferris Integrations LLC (registered agent, Chicago)",
    "live": false,
    "state": {},
    "state_changes": [],
@@ -2185,8 +2185,8 @@
       "c_server"
      ],
      "cc": [],
-     "subject": "Rush service today: subpoena to Ferris Integrations LLC (Downers Grove)",
-     "body": "Please serve the attached subpoena on Ferris Integrations LLC's registered agent (Illinois Registered Agents Inc., 1400 Ogden Ave, Downers Grove, IL 60515) today, with the witness fee check, and return an affidavit of service. Notice to the parties was served at 10:40. Tessa Novak, Ostrander Hale LLP",
+     "subject": "Rush service today: subpoena to Ferris Integrations LLC (registered agent, Chicago)",
+     "body": "Please serve the attached subpoena on Ferris Integrations LLC's registered agent (Illinois Registered Agents Inc., 120 S. Clark St., Suite 900, Chicago, IL 60603) today, with the witness fee check, and return an affidavit of service. Notice to the parties was served at 10:40. Tessa Novak, Ostrander Hale LLP",
      "attachments": [
       "doc-subpoena"
      ],
@@ -2678,7 +2678,7 @@
     {
      "at": "D3 10:00",
      "author": "c_ben",
-     "content": "# SUBPOENA TO PRODUCE DOCUMENTS (FRCP 45), Lakeshore Packaging Co. v. Corvane Robotics, Inc., No. 1:26-cv-03418\n\nTo: Ferris Integrations LLC, 1400 Ogden Ave, Downers Grove, IL 60515. Produce by 11/20/2026 at Ostrander Hale LLP:\nall installation, commissioning and service records for the Corvane PX-9 palletizers at Lakeshore's Elk Grove\nVillage plant, 2025-2026. Signed: /s/ Mira Desai (11/4/2026).\n",
+     "content": "# SUBPOENA TO PRODUCE DOCUMENTS (FRCP 45), Lakeshore Packaging Co. v. Corvane Robotics, Inc., No. 1:26-cv-03418\n\nTo: Ferris Integrations LLC (office: 1400 Ogden Ave, Downers Grove, IL 60515), c/o its registered agent, Illinois\nRegistered Agents Inc., 120 S. Clark St., Suite 900, Chicago, IL 60603. Produce by 11/20/2026 at Ostrander Hale LLP:\nall installation, commissioning and service records for the Corvane PX-9 palletizers at Lakeshore's Elk Grove\nVillage plant, 2025-2026. Signed: /s/ Mira Desai (11/4/2026).\n",
      "note": ""
     }
    ]
@@ -3260,7 +3260,9 @@
      },
      {
       "mentions_any": [
-       "45(a)(4)"
+       "45(a)(4)",
+       "45(a)",
+       "Rule 45"
       ]
      },
      {
@@ -3302,7 +3304,14 @@
    "check": {
     "all": [
      {
-      "to_includes": "c_server"
+      "any": [
+       {
+        "to_includes": "c_server"
+       },
+       {
+        "to_includes": "c_prairie"
+       }
+      ]
      },
      {
       "mentions_any": [
@@ -3312,7 +3321,8 @@
      {
       "mentions_any": [
        "affidavit",
-       "witness fee"
+       "witness fee",
+       "proof of service"
       ]
      }
     ]
@@ -3409,7 +3419,10 @@
      },
      {
       "mentions_any": [
-       "chronological"
+       "chronological",
+       "chronologically",
+       "date order",
+       "by date"
       ]
      }
     ]
@@ -3460,7 +3473,11 @@
      },
      {
       "mentions_any": [
-       "delete"
+       "delete",
+       "deleting",
+       "keep",
+       "preserve",
+       "hold"
       ]
      }
     ]
@@ -3503,7 +3520,11 @@
      {
       "mentions_any": [
        "texts",
-       "personal phones"
+       "personal phones",
+       "personal phone",
+       "text messages",
+       "texted",
+       "texting"
       ]
      }
     ]
@@ -3601,7 +3622,11 @@
      {
       "mentions_any": [
        "W-2",
-       "Ash HR"
+       "Ash HR",
+       "HR",
+       "human resources",
+       "payroll",
+       "personnel"
       ]
      }
     ]
@@ -3641,12 +3666,16 @@
      },
      {
       "mentions_any": [
-       "phishing"
+       "phishing",
+       "phish",
+       "spoofed",
+       "fake",
+       "suspicious"
       ]
      },
      {
       "mentions_any": [
-       "pacer-uscourts-verify.example"
+       "pacer-uscourts-verify"
       ]
      }
     ]
@@ -3687,12 +3716,16 @@
      },
      {
       "mentions_any": [
-       "Exhibit A"
+       "Exhibit A",
+       "acknowledgment",
+       "acknowledgement"
       ]
      },
      {
       "mentions_any": [
-       "DocuSign"
+       "DocuSign",
+       "sign",
+       "signature"
       ]
      }
     ]
@@ -3889,12 +3922,14 @@
      },
      {
       "mentions_any": [
-       "Priya"
+       "Priya",
+       "Raman"
       ]
      },
      {
       "mentions_any": [
-       "exhibits"
+       "exhibits",
+       "exhibit"
       ]
      }
     ]
@@ -3934,7 +3969,8 @@
      },
      {
       "mentions_any": [
-       "exhibits"
+       "exhibits",
+       "exhibit"
       ]
      },
      {
@@ -4031,16 +4067,27 @@
    "check": {
     "all": [
      {
-      "to_includes": "c_jon"
-     },
-     {
-      "mentions_any": [
-       "J-10611"
+      "any": [
+       {
+        "to_includes": "c_jon"
+       },
+       {
+        "to_includes": "c_kara"
+       }
       ]
      },
      {
       "mentions_any": [
-       "remote"
+       "exhibits",
+       "exhibit"
+      ]
+     },
+     {
+      "mentions_any": [
+       "remote",
+       "link",
+       "realtime",
+       "J-10611"
       ]
      }
     ]
@@ -4084,7 +4131,9 @@
      },
      {
       "mentions_any": [
-       "11/16"
+       "11/16",
+       "November 16",
+       "Monday"
       ]
      },
      {
@@ -4094,7 +4143,13 @@
      },
      {
       "mentions_any": [
-       "8:30"
+       "8:30",
+       "8:45",
+       "9:00",
+       "9:15",
+       "9:30",
+       "10:00",
+       "10 a.m."
       ]
      }
     ]
@@ -4138,7 +4193,7 @@
      },
      {
       "mentions_any": [
-       "ASH-001881-001884"
+       "ASH-001881"
       ]
      },
      {
@@ -4184,7 +4239,10 @@
      },
      {
       "mentions_any": [
-       "23 tabs"
+       "23 tabs",
+       "23 tab",
+       "DX-23",
+       "23 exhibits"
       ]
      },
      {
@@ -4236,12 +4294,17 @@
      },
      {
       "mentions_any": [
-       "confer"
+       "confer",
+       "conferral",
+       "conferring",
+       "meet-and-confer"
       ]
      },
      {
       "mentions_any": [
-       "12/9"
+       "12/9",
+       "December 9",
+       "Dec. 9"
       ]
      }
     ]
@@ -4287,17 +4350,24 @@
      },
      {
       "mentions_any": [
-       "LR 3.2"
+       "LR 3.2",
+       "Local Rule 3.2",
+       "L.R. 3.2",
+       "3.2"
       ]
      },
      {
       "mentions_any": [
-       "5% or more"
+       "5%",
+       "five percent",
+       "5 percent"
       ]
      },
      {
       "mentions_any": [
-       "83.16"
+       "83.16",
+       "appearance form",
+       "appearance forms"
       ]
      }
     ]
@@ -4341,17 +4411,24 @@
      },
      {
       "mentions_any": [
-       "5% or more"
+       "5%",
+       "five percent",
+       "5 percent"
       ]
      },
      {
       "mentions_any": [
-       "10%"
+       "10%",
+       "10 percent",
+       "ten percent"
       ]
      },
      {
       "mentions_any": [
-       "incorporated"
+       "incorporated",
+       "incorporation",
+       "organized",
+       "articles"
       ]
      }
     ]
@@ -4399,9 +4476,20 @@
       ]
      },
      {
-      "number_equals": {
-       "value": 250
-      }
+      "any": [
+       {
+        "number_equals": {
+         "value": 250
+        }
+       },
+       {
+        "mentions_any": [
+         "4 hours 10",
+         "4 h 10",
+         "4:10"
+        ]
+       }
+      ]
      }
     ]
    },
@@ -4442,7 +4530,10 @@
      },
      {
       "mentions_any": [
-       "clerical"
+       "clerical",
+       "administrative",
+       "non-billable",
+       "no charge"
       ]
      },
      {
@@ -4490,12 +4581,14 @@
      },
      {
       "mentions_any": [
-       "COR-0020411"
+       "COR-0020411",
+       "service reports"
       ]
      },
      {
       "mentions_any": [
-       "Kiteworks"
+       "Kiteworks",
+       "secure"
       ]
      }
     ]
@@ -4538,7 +4631,10 @@
      },
      {
       "mentions_any": [
-       "12/3"
+       "12/3",
+       "December 3",
+       "Dec. 3",
+       "Thursday"
       ]
      }
     ]
@@ -4580,7 +4676,10 @@
      },
      {
       "mentions_any": [
-       "4 sets"
+       "4 sets",
+       "four sets",
+       "4 copies",
+       "four copies"
       ]
      },
      {
@@ -4590,7 +4689,14 @@
      },
      {
       "mentions_any": [
-       "11/16"
+       "11/12",
+       "11/13",
+       "11/16",
+       "11/17",
+       "November 12",
+       "November 13",
+       "November 16",
+       "November 17"
       ]
      }
     ]
@@ -4640,7 +4746,7 @@
      },
      {
       "mentions_any": [
-       "54.3(d)"
+       "54.3"
       ]
      }
     ]
@@ -4677,9 +4783,15 @@
      },
      {
       "mentions_any": [
-       "conflict",
+       "conflict of interest",
+       "a conflict with",
+       "we have a conflict",
+       "there is a conflict",
+       "there's a conflict",
        "Westfield is a client",
-       "represent Westfield"
+       "Westfield is a current client",
+       "represent Westfield",
+       "Whitley"
       ]
      }
     ]
@@ -4711,6 +4823,11 @@
         "action_in": [
          "reply"
         ]
+       },
+       {
+        "not": {
+         "to_includes": "c_it"
+        }
        }
       ]
      }
@@ -4746,6 +4863,14 @@
        {
         "target": "c3b-jon"
        }
+      ]
+     },
+     {
+      "mentions_any": [
+       "exhibit",
+       "exhibits",
+       "Tamura",
+       "deposition"
       ]
      },
      {

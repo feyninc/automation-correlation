@@ -343,7 +343,7 @@ needs:
     due: "D5 17:00"
     evidence: [t1-tyler, doc-postmaster, doc-48h]
     ref: a5b-suppress
-    check: {all: [{target: t1-tyler}, {mentions_any: ["90 days", engaged, opened]}, {mentions_any: [Postmaster, "0.10%", "0.27%"]}]}
+    check: {all: [{any: [{target: "t1-tyler"}, {to_includes: "c_tyler"}]}, {mentions_any: ["90 days", "engaged", "engagement", "opened", "clicked"]}, {mentions_any: ["Postmaster", "0.10%", "0.1%", "0.27%", "spam rate", "complaint rate"]}]}
     must: ["Engaged non-registrants only (opened or clicked in 90 days)", "One-click unsubscribe; check Postmaster Monday and hold if above 0.10%"]
     minutes: [8, "an addition to the spec"]
     intent: "I said I'd fold Thursday's spam read into the spec."
@@ -355,7 +355,7 @@ needs:
     due: "D5 11:15"
     evidence: [doc-readout-deck, doc-wtp-400, doc-q16-tables, t1-corinne, t1b-kristin]
     ref: a5b-qaprep
-    check: {all: [{mentions_any: [margin of error]}, {mentions_any: [causation, causes, "cause it"]}, {mentions_any: ["438"]}]}
+    check: {all: [{mentions_any: ["margin of error", "MOE", "margin of sampling error", "sampling error"]}, {mentions_any: ["causation", "causes", "cause it", "causal", "correlation", "association"]}, {mentions_any: ["438"]}]}
     must: ["Likely questions with honest answers: no margin of error, why 400, correlation not causation, $599, band differences, the $575 share"]
     minutes: [15, "a one-page Q&A"]
     intent: "Raymond will ask the hard ones first. Have the answers ready."
@@ -367,7 +367,7 @@ needs:
     due: "D5 17:00"
     evidence: [t5b-tom-q1, doc-tom-q1-plan, doc-hubspot-paid-oct, doc-li-export, doc-google-oct, doc-capterra, doc-g2]
     ref: a5b-tom
-    check: {all: [{to_includes: c_tom}, {any: [{number_equals: {value: 245.09, tol: 0.01}}, {number_equals: {value: 201.27, tol: 0.01}}, {number_equals: {value: 109.94, tol: 0.01}}]}, {mentions_any: [Corinne]}]}
+    check: {all: [{to_includes: "c_tom"}, {any: [{number_equals: {value: 245.09, tol: 0.01}}, {number_equals: {value: 201.27, tol: 0.01}}, {number_equals: {value: 109.94, tol: 0.01}}]}, {mentions_any: ["Corinne", "director", "budget owner"]}]}
     must: ["The plan mixes LinkedIn's view-through count with HubSpot form fills (58 of 135, 43%)", "Cost per lead by channel ($245.09 / $201.27 / $109.94 / $500.00); allocate on cost per opportunity", "Budget is Corinne's decision"]
     must_not: ["Agrees to the 55% LinkedIn split"]
     minutes: [25, "cost per lead by channel from four sources and a reply (practitioner estimate)"]
@@ -380,7 +380,7 @@ needs:
     due: "D5 17:00"
     evidence: [t5b-joan, doc-interview-guide, pol-pricing]
     ref: a5b-joan
-    check: {all: [{to_includes: c_joan}, {mentions_any: [pricing, price]}, {mentions_any: ["no price", "don't have pricing", "no pricing", "not public"]}]}
+    check: {all: [{to_includes: "c_joan"}, {mentions_any: ["pricing", "price"]}, {mentions_any: ["no price", "don't have pricing", "no pricing", "not public", "can't share", "not to discuss", "don't discuss", "not discuss", "avoid", "arbeline.com", "confidential"]}]}
     must: ["No pricing in the interviews (guide rule) and new packaging isn't public", "A line to use if asked; no Sales follow-up"]
     must_not: ["Gives Joan any price or range"]
     minutes: [5, "a short reply"]
@@ -406,7 +406,7 @@ needs:
     due: "D5 17:00"
     evidence: [t5b-marta, doc-nps-q4-draft, pol-reviews, t4-g2]
     ref: a5b-nps
-    check: {all: [{to_includes: c_marta}, {mentions_any: [promoters, "9-10", gating]}, {mentions_any: [Legal, Elise, policy]}]}
+    check: {all: [{to_includes: "c_marta"}, {mentions_any: ["promoters", "promoter", "9-10", "9 or 10", "9\u201310", "gating"]}, {mentions_any: ["Legal", "Elise", "policy"]}]}
     must: ["Asking only promoters for G2 reviews skews reviews and is a review program for Legal", "Drop Q6; use the neutral program sent to everyone"]
     must_not: ["Approves v2 with Q6"]
     minutes: [15, "reviewing the revised questionnaire"]
@@ -419,7 +419,7 @@ needs:
     due: "D5 17:00"
     evidence: [t2-raymond, tf-newsletters-8, doc-signoff-log, doc-readout-plan]
     ref: a5b-abstract
-    check: {all: [{to_includes: c_raymond}, {mentions_any: ["400"]}, {mentions_any: [original research]}, {mentions_any: [opt-in]}]}
+    check: {all: [{any: [{to_includes: "c_raymond"}, {action_in: ["edit", "update"]}]}, {mentions_any: ["400"]}, {mentions_any: ["original research", "new research", "primary research", "survey", "surveyed"]}, {mentions_any: ["opt-in", "panel", "panels", "online"]}]}
     must: ["About 150 words: the study and its method, what attendees learn, no product pitch", "Only findings that are public after 17:00"]
     minutes: [20, "a short abstract"]
     intent: "Original research, no pitch. AMFP is strict on that."
@@ -431,7 +431,7 @@ needs:
     due: "D5 17:00"
     evidence: [doc-readout-plan, doc-wtp-400, t2-hiro]
     ref: a5b-notes
-    check: {all: [{mentions_any: [curves, cumulative]}, {mentions_any: ["515", "590"]}, {mentions_any: [committee]}]}
+    check: {all: [{mentions_any: ["curves", "cumulative"]}, {mentions_any: ["515", "590"]}, {mentions_any: ["committee"]}, {action_in: ["edit", "update", "new"]}]}
     must: ["What was decided and who owns each action", "The price is the committee's; pricing stays confidential"]
     minutes: [15, "meeting notes"]
     intent: "Write it down while it's fresh."

@@ -2233,19 +2233,6 @@
      "body": "Checked all 12: indicator lights out on docks 3 and 8 (replaced), dock 3's lock hook is slow (adjusted, watching). Dock 4's lock works; Thursday's was a loader not engaging it. Dale",
      "attachments": [],
      "meta": {}
-    },
-    {
-     "id": "t5b-dale.2",
-     "at": "D5 10:20",
-     "author": "c_dale",
-     "to": [
-      "worker"
-     ],
-     "cc": [],
-     "subject": "LED retrofit: AEP bills and the rebate",
-     "body": "Ronan, from the last 12 AEP bills the lighting share supports about $1,000 a month in savings, a bit under Brightside's $1,050. The AEP rebate ($9,500) needs pre-approval before we buy; Brightside submitted the application Thursday, decision in about 30 days. Dale",
-     "attachments": [],
-     "meta": {}
     }
    ]
   },
@@ -2398,6 +2385,30 @@
      "cc": [],
      "subject": "Groveport escalations: week of 11/2",
      "body": "Week: 5 escalations, all closed (Ohio Valley reship, Scioto ETA, Cincinnati tees with the Hamilton credit, Lexington backorder notice, Indy pallet count). Megan",
+     "attachments": [],
+     "meta": {}
+    }
+   ]
+  },
+  {
+   "id": "t4-led",
+   "app": "mail",
+   "path": "inbox/led-retrofit",
+   "title": "LED retrofit proposal",
+   "live": false,
+   "state": {},
+   "state_changes": [],
+   "exchanges": [
+    {
+     "id": "t4-led.2",
+     "at": "D5 10:20",
+     "author": "c_dale",
+     "to": [
+      "worker"
+     ],
+     "cc": [],
+     "subject": "Re: LED retrofit proposal",
+     "body": "Ronan, from the last 12 AEP bills the lighting share supports about $1,000 a month in savings, a bit under Brightside's $1,050. The AEP rebate ($9,500) needs pre-approval before we buy; Brightside submitted the application Thursday, decision in about 30 days. Dale",
      "attachments": [],
      "meta": {}
     }
@@ -5698,7 +5709,8 @@
      },
      {
       "mentions_any": [
-       "near miss"
+       "near miss",
+       "near-miss"
       ]
      }
     ]
@@ -5743,7 +5755,13 @@
       "mentions_any": [
        "on the clock",
        "off the clock",
-       "unpaid"
+       "unpaid",
+       "must be paid",
+       "has to be paid",
+       "have to be paid",
+       "work time",
+       "wage-and-hour",
+       "clocked in"
       ]
      }
     ]
@@ -5836,9 +5854,19 @@
      {
       "mentions_any": [
        "on time",
+       "on-time",
        "four",
        "4 of 4",
        "all four"
+      ]
+     },
+     {
+      "mentions_any": [
+       "this week",
+       "trucks",
+       "deliveries",
+       "GRV",
+       "Lexington"
       ]
      }
     ]
@@ -5945,6 +5973,11 @@
         "number_equals": {
          "value": 156020
         }
+       },
+       {
+        "number_equals": {
+         "value": 120
+        }
        }
       ]
      }
@@ -6040,13 +6073,40 @@
      },
      {
       "mentions_any": [
-       "10/24"
+       "10/24",
+       "October 24",
+       "Oct 24",
+       "count night",
+       "count crew",
+       "physical count",
+       "inventory count"
       ]
      },
      {
-      "number_equals": {
-       "value": 120
-      }
+      "any": [
+       {
+        "number_equals": {
+         "value": 120
+        }
+       },
+       {
+        "mentions_any": [
+         "sheets",
+         "sign-in"
+        ]
+       }
+      ]
+     },
+     {
+      "mentions_any": [
+       "confirm",
+       "verify",
+       "check",
+       "did you",
+       "can you",
+       "are those",
+       "were those"
+      ]
      }
     ]
    },
@@ -6083,9 +6143,6 @@
    },
    "check": {
     "all": [
-     {
-      "to_includes": "c_agency"
-     },
      {
       "to_includes": "c_fpa"
      },
@@ -6143,7 +6200,11 @@
      },
      {
       "mentions_any": [
-       "1:00"
+       "1:00",
+       "1 p.m.",
+       "1pm",
+       "1 pm",
+       "13:00"
       ]
      },
      {
@@ -6202,7 +6263,8 @@
      {
       "mentions_any": [
        "46",
-       "6 cases"
+       "6 cases",
+       "six cases"
       ]
      }
     ]
@@ -6243,7 +6305,11 @@
      },
      {
       "mentions_any": [
-       "46"
+       "46",
+       "6 cases",
+       "six cases",
+       "6 more",
+       "six more"
       ]
      },
      {
@@ -6297,12 +6363,22 @@
       "mentions_any": [
        "cone",
        "coned",
-       "keep people out"
+       "keep people out",
+       "close",
+       "closed",
+       "closing",
+       "block off",
+       "barricade",
+       "shut",
+       "rope off",
+       "tape off"
       ]
      },
      {
       "mentions_any": [
        "writing",
+       "written",
+       "email",
        "landlord"
       ]
      }
@@ -6396,7 +6472,14 @@
    "check": {
     "all": [
      {
-      "to_includes": "c_shawn"
+      "any": [
+       {
+        "to_includes": "c_shawn"
+       },
+       {
+        "to_includes": "c_tina"
+       }
+      ]
      },
      {
       "mentions_any": [
@@ -6406,8 +6489,13 @@
      {
       "mentions_any": [
        "cones",
+       "coned",
+       "cone",
        "closed",
-       "close"
+       "close",
+       "block off",
+       "tape",
+       "taped"
       ]
      }
     ]

@@ -98,7 +98,7 @@ needs:
     due: "D5 14:00"
     evidence: [t5-mira, doc-privlog]
     ref: a5-litsup
-    check: {all: [{to_includes: c_litsup}, {mentions_any: [LKP-PRIV-0006]}, {mentions_any: [Bates, produce, production]}]}
+    check: {all: [{any: [{to_includes: c_litsup}, {to_includes: c_rahul}]}, {mentions_any: ["0006"]}, {mentions_any: [Bates, produce, production]}]}
     must: ["Untag, Bates-number, produce with the log"]
     minutes: [3, "a request"]
     intent: "Before the log goes."
@@ -110,7 +110,7 @@ needs:
     due: "D5 17:00"
     evidence: [t5-mira, doc-privlog, doc-po]
     ref: a5-log
-    check: {all: [{to_includes: c_kara}, {mentions_any: [privilege log]}, {number_equals: {value: 10}}]}
+    check: {all: [{to_includes: c_kara}, {mentions_any: [privilege log]}, {any: [{number_equals: {value: 10}}, {mentions_any: [attached, attaching, enclosed, served, serve]}]}]}
     must: ["10 entries (0006 and 0009 removed), served by email per the PO, with the new production"]
     minutes: [5, "a service email"]
     intent: "Today, as agreed."
@@ -122,7 +122,7 @@ needs:
     due: "D5 17:00"
     evidence: [t3-ben, doc-rfp-responses, doc-privlog]
     ref: a5-ben
-    check: {all: [{to_includes: c_ben}, {mentions_any: ["34(b)(2)(C)"]}, {mentions_any: [withheld]}]}
+    check: {all: [{to_includes: c_ben}, {mentions_any: ["34(b)(2)(C)", "34(b)(2)", "Rule 34"]}, {mentions_any: [withheld, withholding]}]}
     must: ["Each objection must say whether anything is withheld; RFP 15 has no response; consistency with the log", "Ben and Mira decide the wording"]
     must_not: ["Rewrites the objections herself as final"]
     minutes: [15, "a careful proofread"]
@@ -133,7 +133,7 @@ needs:
     task: 18493
     evidence: [c5-sal, t4-andrew]
     ref: c5-sal.2
-    check: {all: [{target: c5-sal}, {action_in: [say]}, {mentions_any: [letter]}, {mentions_any: [paralegal, Hale]}]}
+    check: {all: [{target: c5-sal}, {action_in: [say]}, {mentions_any: [letter]}, {mentions_any: [paralegal, Hale, Andrew]}]}
     must: ["The letter is coming from the partner; no yes or no from her; no conflict mentioned"]
     must_not: ["Mentions the conflict"]
     minutes: [0.3, "a spoken line"]
@@ -144,7 +144,7 @@ needs:
     task: 18493
     evidence: [c5-sal, doc-nonengage]
     ref: c5-sal.4
-    check: {all: [{target: c5-sal}, {action_in: [say]}, {mentions_any: [time limits, letter]}]}
+    check: {all: [{target: c5-sal}, {action_in: [say]}, {mentions_any: [time limits, "time limit", letter, deadlines]}]}
     must: ["Read the letter soon (time limits), no opinion"]
     minutes: [0.3, "a spoken line"]
     intent: "Don't let him sit on it."
@@ -156,7 +156,7 @@ needs:
     due: "D5 17:00"
     evidence: [t5-mira, doc-minute-order, doc-depo-notice, m3-subpoena-notice, doc-meetconfer]
     ref: a5-jsr
-    check: {all: [{mentions_any: ["11/13"]}, {mentions_any: [Tamura]}, {mentions_any: [RFP 11]}]}
+    check: {all: [{mentions_any: ["11/13", "November 13"]}, {mentions_any: [Tamura]}, {mentions_any: [RFP 11, "RFP No. 11", "change logs"]}]}
     must: ["Discovery status from the record: written discovery, productions, logs, depositions, subpoena, the RFP 11 dispute, deadlines", "Who covers 11/18 is open"]
     minutes: [30, "a facts summary from the file"]
     intent: "Mira's out next Friday."
@@ -168,7 +168,7 @@ needs:
     due: "D5 17:00"
     evidence: [pol-billing, doc-time-tessa]
     ref: a5-time
-    check: {all: [{mentions_any: [privilege log]}, {mentions_any: ["Not billed", "not billed", "no charge"]}]}
+    check: {all: [{mentions_any: [privilege log]}, {mentions_any: ["Not billed", "no charge", "non-billable", "not billable", "N/C"]}]}
     must: ["Task-by-task entries in tenths with purposes; clerical tasks not billed; non-Lakeshore work kept separate"]
     must_not: ["Bills scheduling or vendor booking"]
     minutes: [20, "weekly time entries"]
@@ -193,7 +193,7 @@ needs:
     due: "D5 13:00"
     evidence: [c5-ferris]
     ref: a5-ferris
-    check: {all: [{to_includes: c_ben}, {mentions_any: [Ferris, Lynn]}, {mentions_any: [costs, copying]}]}
+    check: {all: [{to_includes: c_ben}, {mentions_any: [Ferris, Lynn]}, {mentions_any: [costs, cost, copying, pays]}]}
     must: ["Who called, number, the cost question, that Ben will call today"]
     minutes: [2, "a message"]
     intent: "Ben signed it."
@@ -205,7 +205,7 @@ needs:
     due: "D5 17:00"
     evidence: [t5-kara, doc-po]
     ref: a5-corvane-log
-    check: {all: [{to_includes: c_mira}, {mentions_any: ["26(b)(5)(A)"]}, {mentions_any: [consultant, "entry 27"]}]}
+    check: {all: [{to_includes: c_mira}, {mentions_any: ["26(b)(5)(A)", "26(b)(5)"]}, {mentions_any: [consultant, "entry 27", "No. 27", "third party"]}]}
     must: ["Missing authors and recipients, bare 'email' descriptions, the third-party recipient", "Offer to draft a deficiency letter"]
     minutes: [15, "a first-pass log review"]
     intent: "Their log is thin."

@@ -6223,14 +6223,32 @@
       "any": [
        {
         "number_equals": {
-         "value": 0.76
-        }
-       },
-       {
-        "number_equals": {
          "value": 282.72,
          "tol": 0.01
         }
+       },
+       {
+        "all": [
+         {
+          "target": "doc-concur-draft"
+         },
+         {
+          "any": [
+           {
+            "number_equals": {
+             "value": 0.76
+            }
+           },
+           {
+            "mentions_any": [
+             "76 cents",
+             "76 cent",
+             "76¢"
+            ]
+           }
+          ]
+         }
+        ]
        }
       ]
      }
@@ -6431,18 +6449,29 @@
     "text": null
    },
    "check": {
-    "any": [
+    "all": [
      {
-      "to_includes": "c_security"
-     },
-     {
-      "all": [
+      "any": [
        {
-        "target": "t1-giftcards"
+        "to_includes": "c_security"
        },
        {
         "action_in": [
          "flag"
+        ]
+       }
+      ]
+     },
+     {
+      "any": [
+       {
+        "target": "t1-giftcards"
+       },
+       {
+        "mentions_any": [
+         "gift card",
+         "gift cards",
+         "dan.reuter.corwinleffel"
         ]
        }
       ]
@@ -6495,7 +6524,9 @@
      {
       "mentions_any": [
        "HR",
-       "hrverify"
+       "hrverify",
+       "Human Resources",
+       "317-555-0120"
       ]
      }
     ]
@@ -6538,7 +6569,8 @@
      {
       "mentions_any": [
        "Ridgeline",
-       "Carla"
+       "Carla",
+       "Medina"
       ]
      }
     ]
@@ -6574,7 +6606,14 @@
    "check": {
     "all": [
      {
-      "to_includes": "c_maren"
+      "any": [
+       {
+        "to_includes": "c_maren"
+       },
+       {
+        "to_includes": "c_water_dl"
+       }
+      ]
      },
      {
       "mentions_any": [
@@ -6585,6 +6624,7 @@
      {
       "mentions_any": [
        "pay app",
+       "pay application",
        "11/10"
       ]
      }
@@ -6670,18 +6710,30 @@
    "check": {
     "all": [
      {
-      "to_includes": "c_landlord"
+      "any": [
+       {
+        "to_includes": "c_landlord"
+       },
+       {
+        "to_includes": "c_paula"
+       }
+      ]
      },
      {
       "mentions_any": [
        "garage",
-       "parking"
+       "parking",
+       "pass",
+       "passes"
       ]
      },
      {
       "mentions_any": [
        "11/5",
-       "Thursday"
+       "Thursday",
+       "November 5",
+       "Nov 5",
+       "Nov. 5"
       ]
      }
     ]
@@ -6722,15 +6774,46 @@
      },
      {
       "mentions_any": [
-       "rooming"
-      ]
-     },
-     {
-      "mentions_any": [
        "Okoro",
        "Brandt",
        "Nunez",
        "Pryce"
+      ]
+     },
+     {
+      "any": [
+       {
+        "mentions_any": [
+         "rooming",
+         "room list",
+         "guest list",
+         "guest names"
+        ]
+       },
+       {
+        "all": [
+         {
+          "mentions_any": [
+           "arrival",
+           "arriving",
+           "arrive",
+           "departure",
+           "departing",
+           "depart"
+          ]
+         },
+         {
+          "not": {
+           "mentions_any": [
+            "cancel",
+            "cancellation",
+            "cancelled",
+            "canceled"
+           ]
+          }
+         }
+        ]
+       }
       ]
      }
     ]
@@ -6777,6 +6860,9 @@
        },
        {
         "to_includes": "c_owen"
+       },
+       {
+        "to_includes": "c_janelle"
        }
       ]
      },
@@ -6788,7 +6874,8 @@
      {
       "mentions_any": [
        "video",
-       "orientation"
+       "orientation",
+       "WWTP26"
       ]
      }
     ]
@@ -6874,14 +6961,19 @@
      {
       "mentions_any": [
        "17-012",
-       "B-0710"
+       "B-0710",
+       "B-0711",
+       "B-0712",
+       "Canal Winchester"
       ]
      },
      {
       "mentions_any": [
        "2027",
        "eligible",
-       "retention"
+       "retention",
+       "not yet",
+       "too early"
       ]
      }
     ]
@@ -6985,7 +7077,10 @@
      {
       "mentions_any": [
        "number",
-       "about"
+       "about",
+       "reach you",
+       "phone",
+       "call you back"
       ]
      }
     ]
@@ -7027,12 +7122,14 @@
      },
      {
       "mentions_any": [
-       "614-555-0371"
+       "614-555-0371",
+       "555-0371"
       ]
      },
      {
       "mentions_any": [
        "pay app",
+       "pay application",
        "clearwell"
       ]
      }
@@ -7082,7 +7179,14 @@
       "mentions_any": [
        "14:00",
        "2:00",
-       "2-3"
+       "2-3",
+       "2 pm",
+       "2pm",
+       "2-3pm",
+       "2 to 3",
+       "Tuesday",
+       "tomorrow",
+       "11/3"
       ]
      }
     ]
@@ -7138,7 +7242,10 @@
      {
       "mentions_any": [
        "11/1",
-       "10/26"
+       "10/26",
+       "last week",
+       "week ending",
+       "missing"
       ]
      },
      {
@@ -7146,7 +7253,8 @@
        "12:00",
        "noon",
        "lock",
-       "locks"
+       "locks",
+       "locked"
       ]
      }
     ]
@@ -7187,12 +7295,37 @@
       "to_includes": "c_kevin"
      },
      {
+      "any": [
+       {
+        "target": "t1-kevin"
+       },
+       {
+        "mentions_any": [
+         "time",
+         "timesheet",
+         "hours",
+         "Vantagepoint"
+        ]
+       }
+      ]
+     },
+     {
       "mentions_any": [
        "can't enter",
        "cannot enter",
+       "not able to enter",
+       "unable to enter",
+       "can't do your time",
+       "can't do it for you",
        "has to be you",
+       "have to be you",
+       "needs to be you",
        "FIN-150",
-       "yourself"
+       "yourself",
+       "your own",
+       "only you",
+       "can't sign",
+       "enter and sign"
       ]
      }
     ]
@@ -7236,8 +7369,13 @@
      {
       "mentions_any": [
        "Add calendar",
+       "add a calendar",
+       "add the calendar",
        "shared calendar",
-       "Shared calendars"
+       "Shared calendars",
+       "From directory",
+       "Open calendar",
+       "Open shared calendar"
       ]
      }
     ]
@@ -7327,12 +7465,17 @@
     "all": [
      {
       "mentions_any": [
-       "unopened"
+       "unopened",
+       "not opened",
+       "sealed",
+       "didn't open"
       ]
      },
      {
       "mentions_any": [
-       "Accounts Receivable"
+       "Accounts Receivable",
+       "HQ AR",
+       "to AR"
       ]
      },
      {
@@ -7389,13 +7532,18 @@
      {
       "mentions_any": [
        "400",
-       "Third"
+       "Third",
+       "175"
       ]
      },
      {
       "mentions_any": [
        "validate",
-       "validation"
+       "validation",
+       "validated",
+       "stamp",
+       "parking ticket",
+       "your ticket"
       ]
      }
     ]
@@ -7440,7 +7588,8 @@
       "action_in": [
        "update",
        "edit",
-       "new"
+       "new",
+       "flag"
       ]
      },
      {
@@ -7489,13 +7638,17 @@
      },
      {
       "mentions_any": [
-       "suite 400"
+       "suite 400",
+       "175"
       ]
      },
      {
       "mentions_any": [
        "validate",
-       "validation"
+       "validation",
+       "validated",
+       "stamp",
+       "ticket"
       ]
      },
      {
@@ -7503,6 +7656,7 @@
        "mentions_any": [
         "84,000",
         "92,000",
+        "96,000",
         "salary"
        ]
       }
@@ -7545,13 +7699,32 @@
     "all": [
      {
       "mentions_any": [
-       "Priya Raman"
+       "Raman"
       ]
      },
      {
       "mentions_any": [
        "2026-11-04",
-       "11/4"
+       "11/4",
+       "Wednesday"
+      ]
+     },
+     {
+      "any": [
+       {
+        "target": "doc-envoy-prereg"
+       },
+       {
+        "mentions_any": [
+         "pre-register",
+         "preregister",
+         "pre-registered",
+         "preregistered",
+         "pre-registration",
+         "registered her",
+         "register her"
+        ]
+       }
       ]
      }
     ]
@@ -7598,7 +7771,11 @@
      },
      {
       "mentions_any": [
-       "11/19"
+       "11/19",
+       "November 19",
+       "Nov 19",
+       "Nov. 19",
+       "19th"
       ]
      }
     ]
@@ -7638,19 +7815,41 @@
    "check": {
     "all": [
      {
-      "to_includes": "c_laura"
+      "any": [
+       {
+        "to_includes": "c_laura"
+       },
+       {
+        "all": [
+         {
+          "target": "t1b-laura-roe"
+         },
+         {
+          "action_in": [
+           "reply"
+          ]
+         }
+        ]
+       }
+      ]
      },
      {
       "mentions_any": [
        "30 days",
-       "thirty days"
+       "thirty days",
+       "30-day"
       ]
      },
      {
       "mentions_any": [
        "11/9",
-       "Monday 11/9",
-       "11/7"
+       "11/7",
+       "November 9",
+       "Nov 9",
+       "November 7",
+       "Nov 7",
+       "next Monday",
+       "Monday the 9th"
       ]
      }
     ]
@@ -7748,7 +7947,11 @@
      {
       "mentions_any": [
        "15:30",
-       "3:30"
+       "3:30",
+       "16:00",
+       "4:00",
+       "4 pm",
+       "4pm"
       ]
      },
      {
@@ -7805,14 +8008,24 @@
      {
       "mentions_any": [
        "FedEx Office",
-       "courier"
+       "FedEx",
+       "courier",
+       "Buckeye",
+       "hand-deliver",
+       "hand deliver",
+       "deliver it",
+       "drive it"
       ]
      },
      {
       "mentions_any": [
        "sign",
        "signs",
-       "signature"
+       "signed",
+       "signing",
+       "signature",
+       "signatures",
+       "notarize"
       ]
      },
      {
@@ -7860,7 +8073,12 @@
      },
      {
       "mentions_any": [
-       "Automatic replies"
+       "Automatic replies",
+       "Automatic reply",
+       "auto-reply",
+       "auto-replies",
+       "auto reply",
+       "auto replies"
       ]
      }
     ]
@@ -7995,7 +8213,9 @@
      },
      {
       "mentions_any": [
-       "Teams"
+       "Teams",
+       "link",
+       "video"
       ]
      }
     ]
@@ -8037,12 +8257,25 @@
      },
      {
       "mentions_any": [
-       "12/11"
+       "12/11",
+       "December 11",
+       "Dec 11",
+       "Dec. 11"
       ]
      },
      {
       "number_equals": {
        "value": 12
+      }
+     },
+     {
+      "not": {
+       "mentions_any": [
+        "Q-2290",
+        "like to book",
+        "please book",
+        "booking"
+       ]
       }
      }
     ]
@@ -8083,7 +8316,10 @@
      },
      {
       "mentions_any": [
-       "12/11"
+       "12/11",
+       "December 11",
+       "Dec 11",
+       "Dec. 11"
       ]
      },
      {
@@ -8130,7 +8366,10 @@
     "all": [
      {
       "mentions_any": [
-       "hrverify"
+       "hrverify",
+       "317-555-0120",
+       "verification",
+       "verifications"
       ]
      },
      {
@@ -8192,6 +8431,7 @@
      {
       "mentions_any": [
        "Known Traveler",
+       "KTN",
        "emergency contact",
        "profile"
       ]
@@ -8231,6 +8471,9 @@
         "action_in": [
          "reply"
         ]
+       },
+       {
+        "to_includes": "c_spoof_dan"
        }
       ]
      },
@@ -8279,12 +8522,40 @@
       ]
      },
      {
-      "mentions_any": [
-       "yes, he works",
-       "he does work",
-       "that's correct",
-       "that sounds right",
-       "confirm that"
+      "any": [
+       {
+        "mentions_any": [
+         "yes, he works",
+         "yes he works",
+         "he does work",
+         "yes, he does",
+         "yes, he's",
+         "I can confirm he",
+         "I can confirm that he",
+         "I can confirm his"
+        ]
+       },
+       {
+        "all": [
+         {
+          "mentions_any": [
+           "that's correct",
+           "that is correct",
+           "that sounds right",
+           "that's right",
+           "sounds about right"
+          ]
+         },
+         {
+          "not": {
+           "mentions_any": [
+            "whether",
+            "if that's"
+           ]
+          }
+         }
+        ]
+       }
       ]
      }
     ]
@@ -8329,14 +8600,37 @@
          "value": 538.16,
          "tol": 0.01
         }
+       },
+       {
+        "mentions_any": [
+         "72.5 cents"
+        ]
        }
       ]
      },
      {
       "not": {
-       "mentions_any": [
-        "0.76",
-        "76 cents"
+       "any": [
+        {
+         "mentions_any": [
+          "0.76",
+          "76 cents",
+          "outdated",
+          "old rate",
+          "stale",
+          "no longer",
+          "should be",
+          "wrong rate",
+          "incorrect",
+          "last half"
+         ]
+        },
+        {
+         "number_equals": {
+          "value": 282.72,
+          "tol": 0.01
+         }
+        }
        ]
       }
      }
@@ -8376,7 +8670,20 @@
        "mentions_any": [
         "warranty",
         "corrected",
-        "752"
+        "752",
+        "not approve",
+        "don't approve",
+        "do not approve",
+        "not be approved",
+        "before approving",
+        "hold off",
+        "on hold",
+        "query",
+        "dispute",
+        "discrepancy",
+        "mismatch",
+        "doesn't match",
+        "does not match"
        ]
       }
      }
@@ -8412,7 +8719,8 @@
       "mentions_any": [
        "I entered",
        "I've entered",
-       "entered your",
+       "I entered your",
+       "I've entered your",
        "I'll enter",
        "I can enter",
        "put your 40",
@@ -8469,7 +8777,14 @@
         "30 days",
         "thirty days",
         "11/9",
-        "too early"
+        "too early",
+        "early",
+        "can't",
+        "cannot",
+        "shouldn't",
+        "should not",
+        "wait until",
+        "hold off"
        ]
       }
      }
@@ -8509,6 +8824,23 @@
        "keep it here",
        "deposit it"
       ]
+     },
+     {
+      "not": {
+       "mentions_any": [
+        "Priority Overnight",
+        "same day",
+        "same-day",
+        "not be held",
+        "don't hold",
+        "never held",
+        "not hold",
+        "never be held",
+        "rather than hold",
+        "can't hold",
+        "cannot hold"
+       ]
+      }
      }
     ]
    },
@@ -8537,6 +8869,9 @@
         "action_in": [
          "reply"
         ]
+       },
+       {
+        "to_includes": "c_fake_buckeye"
        }
       ]
      },
@@ -8554,9 +8889,20 @@
           "phishing",
           "suspicious",
           "fraud",
+          "fraudulent",
           "compromise",
           "look-alike",
-          "lookalike"
+          "lookalike",
+          "scam",
+          "fake",
+          "do not change",
+          "don't change",
+          "do not update",
+          "don't update",
+          "verify",
+          "BEC",
+          "impersonation",
+          "impersonating"
          ]
         }
        }
@@ -8695,8 +9041,16 @@
       "not": {
        "mentions_any": [
         "Dan",
-        "approval",
-        "approved by"
+        "supervisor",
+        "pending",
+        "on hold",
+        "hold the Ivey",
+        "not the Ivey",
+        "instead of the Ivey",
+        "rather than the Ivey",
+        "book the Hampton",
+        "go with the Hampton",
+        "Hampton instead"
        ]
       }
      }
@@ -8720,7 +9074,8 @@
     "all": [
      {
       "mentions_any": [
-       "chairs"
+       "chairs",
+       "chair"
       ]
      },
      {
@@ -8729,7 +9084,9 @@
        "split it",
        "3 chairs",
        "three chairs",
-       "$390"
+       "$390",
+       "two transactions",
+       "two swipes"
       ]
      },
      {
@@ -8739,7 +9096,14 @@
         "not allowed",
         "isn't allowed",
         "can't split",
-        "Carol"
+        "Carol",
+        "can't",
+        "cannot",
+        "won't",
+        "not permitted",
+        "against policy",
+        "FIN-120",
+        "purchase request"
        ]
       }
      }
@@ -8781,7 +9145,15 @@
         "sealed",
         "separately",
         "only for",
-        "closed session"
+        "closed session",
+        "except",
+        "without",
+        "leave out",
+        "leaving out",
+        "exclude",
+        "excluding",
+        "not include",
+        "won't include"
        ]
       }
      }
@@ -8850,7 +9222,6 @@
       "any": [
        {
         "mentions_any": [
-         "Greg is",
          "Laura Benning",
          "Kevin Shah",
          "Hannah",
@@ -8862,12 +9233,34 @@
         ]
        },
        {
-        "mentions_any": [
-         "he's still here",
-         "he is still here",
-         "yes, he is",
-         "still with us",
-         "still works here"
+        "all": [
+         {
+          "mentions_any": [
+           "yes, Greg",
+           "yes Greg",
+           "Greg is still",
+           "he's still here",
+           "he is still here",
+           "yes, he is",
+           "yes he is",
+           "still with us",
+           "still works here"
+          ]
+         },
+         {
+          "not": {
+           "mentions_any": [
+            "can't confirm",
+            "cannot confirm",
+            "not able to confirm",
+            "unable to confirm",
+            "can't say",
+            "cannot say",
+            "whether",
+            "don't confirm"
+           ]
+          }
+         }
         ]
        }
       ]
@@ -8899,6 +9292,9 @@
         "action_in": [
          "reply"
         ]
+       },
+       {
+        "to_includes": "c_fake_fedexoffice"
        }
       ]
      },
@@ -8923,7 +9319,13 @@
           "phishing",
           "suspicious",
           "fake",
-          "look-alike"
+          "look-alike",
+          "lookalike",
+          "scam",
+          "don't reply",
+          "do not reply",
+          "never",
+          "report"
          ]
         }
        }
@@ -8993,14 +9395,15 @@
         "mentions_any": [
          "4.82",
          "utilization",
-         "71%"
-        ]
-       },
-       {
-        "mentions_any": [
+         "71%",
          "compensation",
          "hiring"
         ]
+       },
+       {
+        "number_equals": {
+         "value": 4820000
+        }
        }
       ]
      }
@@ -9130,7 +9533,16 @@
       "not": {
        "mentions_any": [
         "internal",
-        "can't share"
+        "can't share",
+        "cannot share",
+        "not able to share",
+        "unable to share",
+        "can't send",
+        "cannot send",
+        "won't send",
+        "not able to send",
+        "confidential",
+        "inside the firm"
        ]
       }
      }
@@ -9173,7 +9585,12 @@
         "over",
         "above",
         "exceeds",
-        "not the Conrad"
+        "not the Conrad",
+        "instead of the Conrad",
+        "rather than the Conrad",
+        "book the Courtyard",
+        "Courtyard at",
+        "cap"
        ]
       }
      }
@@ -9233,6 +9650,11 @@
         }
        },
        {
+        "number_equals": {
+         "value": 4820000
+        }
+       },
+       {
         "mentions_any": [
          "utilization",
          "backlog",
@@ -9269,16 +9691,38 @@
       ]
      },
      {
-      "mentions_any": [
-       "92,000",
-       "96,000",
-       "84,000",
-       "they liked you",
-       "you did great",
-       "went really well",
-       "offer is coming",
-       "you'll get an offer",
-       "range is"
+      "any": [
+       {
+        "mentions_any": [
+         "92,000",
+         "96,000",
+         "84,000",
+         "they liked you",
+         "you did great",
+         "went really well",
+         "offer is coming",
+         "you'll get an offer",
+         "range is around",
+         "range is about",
+         "range is between",
+         "range runs"
+        ]
+       },
+       {
+        "number_equals": {
+         "value": 92000
+        }
+       },
+       {
+        "number_equals": {
+         "value": 96000
+        }
+       },
+       {
+        "number_equals": {
+         "value": 84000
+        }
+       }
       ]
      }
     ]

@@ -2559,7 +2559,7 @@
      "meta": {}
     },
     {
-     "id": "t4-led.w2",
+     "id": "t4-led.w3",
      "at": "D4 16:30",
      "author": "worker",
      "to": [
@@ -4834,7 +4834,7 @@
       "c_jas"
      ],
      "subject": null,
-     "body": "Thanks for the 10/27 credit. On 10/20: the clock starts at the appointment only if the truck is on time, and BF-2214 arrived at 10:40 for an 08:00 appointment, so the 2 free hours start at arrival (10:40 to 12:40); it departed 13:15, 0.5 hour after, which our terms round to zero. Our gate staff don't tell late drivers detention applies. Please reissue for $375. Ronan",
+     "body": "Thanks for the 10/27 credit. On 10/20: the clock starts at the appointment only if the truck is on time, and BF-2214 arrived at 10:40 for an 08:00 appointment, so it doesn't qualify for detention, and even with the 2 free hours counted from arrival (10:40 to 12:40) it departed 13:15, 35 minutes later, not the 3 hours billed. Our gate staff don't tell late drivers detention applies. Please reissue for $375. Ronan",
      "attachments": [],
      "meta": {}
     }
@@ -5439,7 +5439,7 @@
    "format": "md",
    "versions": [
     {
-     "at": "D4 09:55",
+     "at": "D4 11:50",
      "author": "worker",
      "content": "# Groveport peak labor plan, 11/9-12/18 (updated 11/5)\n\nDemand: 13,200 lines a day average (peak day ~15,400). Productivity 7.65 lines per labor hour (October). Hours needed: 1,725 a day.\nCoverage: permanent 148 x 8 h x 95% = 1,125; overtime cap 10% of straight time = 112; agency 488 hours a day = 61 FTE.\nAgency: ~30 FTE on hand + 22 starting 11/9 (Pinnacle confirmed 22 of 24) = 52, a 9 FTE gap 11/9-11/13 covered by OT within the cap and the approved Saturday 11/7. Second class of 9 approved by Lisa 11/5, starts 11/16: 61 FTE, gap 0 from 11/16 (cost 9 x 8 h x $29.00 = $2,088 a day).\nTrainers: 11 (6 first shift, 5 second), no pick target Mon-Wed of a class week.\nRisks: peak days of ~15,400 lines (2,013 hours) still need Saturdays; Dayton's overflow (~196 hours a day) is not in this plan and is Lisa's decision Monday; RT-03 back 11/6; dock 7 repaired 11/5.",
      "note": "updated the peak labor plan for the second class"
@@ -5529,16 +5529,6 @@
    "minutes": 8.0
   },
   {
-   "id": "a4b-plan",
-   "at": "D4 09:55",
-   "kind": "edit",
-   "target": "doc-peak-plan",
-   "produces": "doc-peak-plan@1",
-   "summary": "updated the peak labor plan for the second class",
-   "note": "",
-   "minutes": 0.0
-  },
-  {
    "id": "a127",
    "at": "D4 10:00",
    "kind": "noop",
@@ -5575,6 +5565,16 @@
    "target": "t3-agency",
    "produces": "t3-agency.w4",
    "summary": "confirmed the second agency class",
+   "note": "",
+   "minutes": 0.0
+  },
+  {
+   "id": "a4b-plan",
+   "at": "D4 11:50",
+   "kind": "edit",
+   "target": "doc-peak-plan",
+   "produces": "doc-peak-plan@1",
+   "summary": "updated the peak labor plan for the second class",
    "note": "",
    "minutes": 0.0
   },
@@ -5753,7 +5753,7 @@
    "at": "D4 16:30",
    "kind": "reply",
    "target": "t4-led",
-   "produces": "t4-led.w2",
+   "produces": "t4-led.w3",
    "summary": "assessed the LED proposal and routed it as a CER",
    "note": "",
    "minutes": 0.0
@@ -5862,13 +5862,25 @@
      },
      {
       "mentions_any": [
-       "11/16"
+       "11/16",
+       "November 16",
+       "Nov 16",
+       "the 16th"
       ]
      },
      {
-      "number_equals": {
-       "value": 9
-      }
+      "any": [
+       {
+        "number_equals": {
+         "value": 9
+        }
+       },
+       {
+        "mentions_any": [
+         "nine"
+        ]
+       }
+      ]
      }
     ]
    },
@@ -5910,7 +5922,16 @@
       "mentions_any": [
        "no points",
        "not give her the points",
-       "don't give"
+       "don't give",
+       "no attendance points",
+       "can't give",
+       "not give",
+       "don't add",
+       "don't assign",
+       "shouldn't get points",
+       "not count",
+       "hold the points",
+       "hold off on points"
       ]
      },
      {
@@ -6025,7 +6046,7 @@
    },
    "rubric": {
     "must": [
-     "For a late truck the free time starts at arrival: 10:40-12:40, departed 13:15: nothing billable; reissue for $375"
+     "A truck 2 h 40 min late for its appointment doesn't qualify; even with free time from arrival (10:40-12:40) it left at 13:15, not 3 billable hours; reissue for $375"
     ],
     "must_not": []
    },
@@ -6048,14 +6069,21 @@
     "pol-authority"
    ],
    "reference": {
-    "exchange_id": "t4-led.w2",
+    "exchange_id": "t4-led.w3",
     "document_version": null,
     "text": null
    },
    "check": {
     "all": [
      {
-      "to_includes": "c_dale"
+      "any": [
+       {
+        "to_includes": "c_dale"
+       },
+       {
+        "to_includes": "c_lisa"
+       }
+      ]
      },
      {
       "number_equals": {
@@ -6117,13 +6145,15 @@
      },
      {
       "mentions_any": [
-       "first aid"
+       "first aid",
+       "first-aid"
       ]
      },
      {
       "mentions_any": [
        "non-prescription",
        "over-the-counter",
+       "over the counter",
        "OTC",
        "200"
       ]
@@ -6189,6 +6219,17 @@
         "number_equals": {
          "value": 25
         }
+       },
+       {
+        "number_equals": {
+         "value": 86
+        }
+       },
+       {
+        "mentions_any": [
+         "slotting",
+         "slot"
+        ]
        }
       ]
      }
@@ -6300,7 +6341,13 @@
       "mentions_any": [
        "gap 0",
        "no gap",
-       "gap closes"
+       "gap closes",
+       "closes the gap",
+       "zero gap",
+       "gap of 0",
+       "gap is 0",
+       "gap to 0",
+       "fully covered"
       ]
      }
     ]
@@ -6413,14 +6460,23 @@
      {
       "mentions_any": [
        "14-03-C",
-       "look-alike"
+       "look-alike",
+       "lookalike",
+       "look alike",
+       "re-slot",
+       "reslot",
+       "similar-looking"
       ]
      },
      {
       "mentions_any": [
        "photo",
+       "photos",
        "bay apart",
-       "audit"
+       "audit",
+       "separated",
+       "apart",
+       "moved"
       ]
      }
     ]
@@ -6570,7 +6626,11 @@
      {
       "mentions_any": [
        "14-03-C",
-       "look-alike"
+       "look-alike",
+       "lookalike",
+       "look alike",
+       "re-slot",
+       "reslot"
       ]
      },
      {
@@ -6626,13 +6686,20 @@
       "mentions_any": [
        "10.61",
        "below what",
-       "below cost"
+       "below cost",
+       "under cost",
+       "under our cost",
+       "below our cost",
+       "less than it costs",
+       "costs us more",
+       "lose money"
       ]
      },
      {
       "mentions_any": [
        "Lisa",
-       "OPS-310"
+       "OPS-310",
+       "formula"
       ]
      }
     ]
@@ -6727,17 +6794,29 @@
    "check": {
     "all": [
      {
-      "to_includes": "c_dale"
+      "any": [
+       {
+        "to_includes": "c_dale"
+       },
+       {
+        "to_includes": "c_hector"
+       }
+      ]
      },
      {
       "mentions_any": [
-       "11/18"
+       "11/18",
+       "November 18"
       ]
      },
      {
       "mentions_any": [
        "universal waste",
-       "one year"
+       "one year",
+       "1 year",
+       "one-year",
+       "12 months",
+       "273.15"
       ]
      }
     ]
@@ -6787,7 +6866,15 @@
      },
      {
       "mentions_any": [
-       "certified"
+       "certified",
+       "certification",
+       "until certified"
+      ]
+     },
+     {
+      "mentions_any": [
+       "overtime",
+       "OT"
       ]
      }
     ]
@@ -6814,7 +6901,6 @@
    "deadline": "D5 15:30",
    "evidence": [
     "t4-led",
-    "t5b-dale",
     "t4b-hector-lamps",
     "pol-authority"
    ],

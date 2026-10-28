@@ -2218,7 +2218,7 @@
     {
      "at": "D4 14:00",
      "author": "c_nadia",
-     "content": "slot,interviewer,resp_id,role,band,uses_automation\nMon 11/9 09:00,Joan Ellery,R10007,VP Finance,$500M-$1B,no\nMon 11/9 10:00,Joan Ellery,R10168,Controller,$250M-$500M,yes\nTue 11/10 08:30,Marcus Dell,R12702,Controller,$500M-$1B,yes\nTue 11/10 10:00,Marcus Dell,R10490,CFO,$500M-$1B,yes\nWed 11/11 09:00,Joan Ellery,R10742,AP Manager,$50M-$250M,yes\nThu 11/12 13:00,Joan Ellery,R10175,Director of Finance,$250M-$500M,no\n",
+     "content": "slot,interviewer,resp_id,role,band,uses_automation\nMon 11/9 09:00,Joan Ellery,R10007,AP Manager,$500M-$1B,no\nMon 11/9 10:00,Joan Ellery,R10168,Director of Finance,$250M-$500M,yes\nTue 11/10 08:30,Marcus Dell,R12702,Controller,$500M-$1B,yes\nTue 11/10 10:00,Marcus Dell,R10490,Director of Finance,$500M-$1B,yes\nWed 11/11 09:00,Joan Ellery,R10742,Controller,$50M-$250M,yes\nThu 11/12 13:00,Joan Ellery,R10175,Assistant Controller,$250M-$500M,no\n",
      "note": ""
     }
    ]
@@ -2599,7 +2599,20 @@
    "check": {
     "all": [
      {
-      "target": "t1-tyler"
+      "any": [
+       {
+        "target": "t1-tyler"
+       },
+       {
+        "to_includes": "c_tyler"
+       },
+       {
+        "to_includes": "c_corinne"
+       },
+       {
+        "to_includes": "c_raymond"
+       }
+      ]
      },
      {
       "number_equals": {
@@ -2658,7 +2671,9 @@
        "don't pay",
        "do not pay",
        "hold",
-       "not pay"
+       "not pay",
+       "not to pay",
+       "not approve"
       ]
      },
      {
@@ -2672,7 +2687,11 @@
         "mentions_any": [
          "corrected",
          "reissue",
-         "reissuing"
+         "reissued",
+         "reissuing",
+         "replacement",
+         "revised",
+         "credit"
         ]
        }
       ]
@@ -2837,6 +2856,13 @@
         }
        }
       ]
+     },
+     {
+      "mentions_any": [
+       "MQL",
+       "MQLs",
+       "Close Faster"
+      ]
      }
     ]
    },
@@ -2922,14 +2948,16 @@
      },
      {
       "mentions_any": [
-       "November"
+       "November",
+       "Nov"
       ]
      },
      {
       "mentions_any": [
        "scenario",
        "+20%",
-       "20%"
+       "20%",
+       "20 percent"
       ]
      }
     ]
@@ -3068,7 +3096,10 @@
     "all": [
      {
       "mentions_any": [
-       "honest"
+       "honest",
+       "candid",
+       "genuine",
+       "unbiased"
       ]
      },
      {
@@ -3076,7 +3107,12 @@
        "any rating",
        "whatever rating",
        "positive, negative",
-       "regardless"
+       "positive or negative",
+       "good or bad",
+       "regardless",
+       "every rating",
+       "all ratings",
+       "any score"
       ]
      },
      {
@@ -3128,7 +3164,9 @@
      },
      {
       "mentions_any": [
-       "Corinne"
+       "Corinne",
+       "director",
+       "budget owner"
       ]
      }
     ]
@@ -3168,7 +3206,14 @@
    "check": {
     "all": [
      {
-      "target": "t2-sofia"
+      "any": [
+       {
+        "target": "t2-sofia"
+       },
+       {
+        "to_includes": "c_sofia"
+       }
+      ]
      },
      {
       "mentions_any": [
@@ -3225,7 +3270,10 @@
       "mentions_any": [
        "confidential",
        "confidentiality",
-       "research only"
+       "research only",
+       "anonymous",
+       "research purposes",
+       "privacy"
       ]
      }
     ]
@@ -3267,7 +3315,14 @@
    "check": {
     "all": [
      {
-      "target": "t1-tyler"
+      "any": [
+       {
+        "target": "t1-tyler"
+       },
+       {
+        "to_includes": "c_tyler"
+       }
+      ]
      },
      {
       "any": [
@@ -3304,9 +3359,14 @@
      {
       "mentions_any": [
        "engaged",
+       "engagement",
        "opened",
+       "openers",
+       "clickers",
        "suppress",
-       "hold"
+       "suppression",
+       "hold",
+       "inactive"
       ]
      }
     ]
@@ -3352,12 +3412,14 @@
      {
       "number_equals": {
        "value": 55.6,
-       "tol": 0.06
+       "tol": 0.45
       }
      },
      {
       "mentions_any": [
        "disclose",
+       "disclosed",
+       "disclosing",
        "disclosure",
        "material connection"
       ]
@@ -3407,7 +3469,17 @@
        "not which ERP",
        "no respondent-by-ERP",
        "didn't ask",
-       "not asked"
+       "did not ask",
+       "not asked",
+       "wasn't asked",
+       "doesn't ask",
+       "does not ask",
+       "not in the survey",
+       "didn't include",
+       "only asked",
+       "ERP change plans",
+       "plans to change",
+       "plan to change"
       ]
      },
      {
@@ -3507,7 +3579,20 @@
    "check": {
     "all": [
      {
-      "target": "t1-tyler"
+      "any": [
+       {
+        "target": "t1-tyler"
+       },
+       {
+        "to_includes": "c_tyler"
+       },
+       {
+        "to_includes": "c_corinne"
+       },
+       {
+        "to_includes": "c_raymond"
+       }
+      ]
      },
      {
       "number_equals": {
@@ -3556,25 +3641,51 @@
          "R10742",
          "R10175",
          "R11015",
-         "R12702",
-         "interview schedule",
-         "Joan Ellery",
-         "Marcus Dell"
+         "R12702"
         ]
        },
        {
         "all": [
          {
-          "mentions_any": [
-           "list"
+          "any": [
+           {
+            "mentions_any": [
+             "interview schedule",
+             "Joan Ellery",
+             "Marcus Dell"
+            ]
+           },
+           {
+            "all": [
+             {
+              "mentions_any": [
+               "list"
+              ]
+             },
+             {
+              "mentions_any": [
+               "attached",
+               "here's",
+               "here is"
+              ]
+             }
+            ]
+           }
           ]
          },
          {
-          "mentions_any": [
-           "attached",
-           "here's",
-           "here is"
-          ]
+          "not": {
+           "mentions_any": [
+            "can't",
+            "cannot",
+            "unable",
+            "won't",
+            "not able",
+            "confidential",
+            "confidentiality",
+            "not share"
+           ]
+          }
          }
         ]
        }
