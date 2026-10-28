@@ -37,7 +37,7 @@ The full design is [`docs/design.md`](docs/design.md).
   did) and may read, propose up to three drafts, ask the worker (a simulated worker answers), join a live call or
   wait. Nothing it writes is delivered, so the week is identical for every model. The model keeps one conversation
   for the week at its largest context window, compacted in OpenCode's style at 80% of the window and at midnight.
-- **Grading.** Code checks match proposals to needs and traps; a panel of seven judges from seven model families
+- **Grading.** Code checks match proposals to needs and traps; a panel of six judges from six model families
   scores each proposal 0-100 (the chance the worker sends it unchanged) and writes the minimal fix. The tested
   model's own family is left out of the weighted mean. The edit distance to that fix gives the worker's fix time.
 - **Value.** Loaded wage times (minutes saved x score - reading - expected fixing) minus token cost, per worker-week.

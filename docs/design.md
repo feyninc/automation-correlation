@@ -209,7 +209,7 @@ version of each document; a call's turns, then the worker's case note), plus `/w
    call is say, anything changing a document is an edit; flag, new, forward and schedule keep their names). A need is
    earned by the last matching proposal inside its window, and one proposal can earn several needs (see "Crediting
    work" below); a trap fires on any matching proposal.
-2. **Judges:** a panel of seven from seven families (weights in the config, summing to 1). Each judge gets a fixed
+2. **Judges:** a panel of six from six families (equal weights in the config, summing to 1). Each judge gets a fixed
    system prompt (`JUDGE_SYSTEM`: what is graded and how, the parts of the case, the checklist, the score bands, the
    reply format; then `<job>`, the person and profession prompt, and `<policies>`, the employer's policies as of
    Monday morning: the same for every proposal in a profession, so it is the cached prefix of every judge request)
@@ -283,7 +283,9 @@ dispute that was Marisol's planned work scores 69 rather than 27. So the packet 
 about 60% more judge cost ($0.16 a proposal against $0.10).
 
 The disagreement that remains is mostly in level, not ranking: each judge correlates 0.72-0.94 with the mean of the
-other six, and with judges' offsets removed the seven-judge panel's reliability is ICC(3,k) 0.90-0.94. The offsets
+others, and with judges' offsets removed the panel's reliability is ICC(3,k) 0.90-0.94 (0.93 for the six judges on
+the claims sample's 71 proposals, against 0.95 for seven with Qwen3.8 Max Prime, which is left out because it was a
+quarter of the judging cost and among the slowest). The offsets
 are large (Claude Opus 5.5 about -12 points, Kimi K3 +8, GLM-5.3 +6); without calibration, leaving out the tested
 family would shift scores by family (Claude models +1.8 points, Kimi -1.4, GLM -1.0), and with offsets calibrated
 over the run the shift is -0.2, -0.1 and 0.0.
@@ -384,9 +386,9 @@ runs at high:
 | Kimi K2.5, K2.6 (Azure) | thinks | `reasoning_effort: "medium"` |
 | Kimi K3 (Bedrock) | thinks | `reasoning_effort: "medium"` (passed by `workweek/providers.py`; K3 thinks at every setting, on Moonshot's API too) |
 | Kimi K2 Thinking, K3.1 Pro (OpenRouter) | thinks | `reasoning: {effort: "medium"}` |
-| DeepSeek V4.1 Flash 1017 (OpenRouter, DeepInfra fp8) | thinks | `reasoning: {effort: "high"}` (no medium) |
+| DeepSeek V4.1 Flash 1017 (OpenRouter, fp8: Morph, then inference.net, then SiliconFlow) | thinks | `reasoning: {effort: "high"}` (no medium) |
 | GLM-4.7, GLM-5 (Bedrock) | thinks only at high | `reasoning_effort: "high"` (GLM thinking is on/off; `workweek/providers.py` passes it, which Inspect's Bedrock route did not) |
-| GLM-5.1 to 5.3, Gemini 4 Argon, Qwen3.8 Max Prime (OpenRouter) | varies | `reasoning: {effort: "medium"}` |
+| GLM-5.1 to 5.3, Gemini 4 Argon (OpenRouter) | varies | `reasoning: {effort: "medium"}` |
 
 Evidence: `scripts/probe_reasoning.py` asked each model one short scheduling question on its own route with no setting
 and at low, medium and high (`data/reasoning-probe*.csv`). That shows whether thinking is on and the setting accepted;
@@ -406,9 +408,14 @@ it does not measure how much a model thinks on real work. Caveats:
 - GLM-4.7 and GLM-5 on Bedrock sometimes write a tool call as text in GLM's own syntax instead of a structured call;
   `workweek/providers.py` recovers those, and each run records how many (`recovered_tool_calls`).
 
-The judges are each provider's best model at medium: Claude Opus 5.5 (Bedrock), GPT-6 Astra (OpenAI, through
-the Batch API), Gemini 4 Argon (OpenRouter, Google Vertex), Kimi K3.1 Pro (OpenRouter, Moonshot), DeepSeek V4.1
-Flash 1017 at high (OpenRouter, DeepInfra), Qwen3.8 Max Prime (OpenRouter, Alibaba) and GLM-5.3 (OpenRouter, Z.ai).
+The judges are each provider's best model at medium: Claude Opus 5.5 (Bedrock), GPT-6 Astra (OpenAI), Gemini 4
+Argon (OpenRouter, Google Vertex), Kimi K3.1 Pro (OpenRouter, Moonshot), DeepSeek V4.1 Flash 1017 at high
+(OpenRouter, fp8) and GLM-5.3 (OpenRouter, Z.ai). Gemini is the panel's one family not under test. Astra is called
+directly: Inspect sends batch requests one or two at a time, each taking 1-3 minutes, which stalls grading. On the
+107 operations-manager proposals, GPT-6.1 Sol as a judge agrees with Astra (r 0.90, same mean, 93% agreement on
+accept) at a third of the cost; Astra stays as OpenAI's strongest model, the saving being about $280 a seed of
+OpenAI credits. DeepSeek 1017 runs on the fastest fp8 providers (Morph about 150 tokens a second, against 47 on
+DeepInfra), which sets the pace of grading.
 The simulated worker is Gemini 4 Argon at medium. The smoke test (`data/smoke-models.csv`) has every model, judge and
 the simulated worker make its tool call on its route at these settings.
 
@@ -419,8 +426,8 @@ run's cost split the same way:
 | --- | --- | --- |
 | Bedrock credits | Claude Opus 4.5, 4.7, 5, 5.5; Kimi K3; GLM-4.7 (6) | judge Claude Opus 5.5 |
 | Azure credits | Kimi K2.6; DeepSeek V3.2, V4 Flash, V4 Flash 0731 (4) | none |
-| OpenAI credits | GPT-5.2, 5.5, 5.6 Sol, 6.1 Sol (4) | judge GPT-6 Astra (Batch API) |
-| OpenRouter (paid) | Kimi K2 Thinking, K3.1 Pro; DeepSeek V4.1 Flash 1017; GLM-5.1, 5.2, 5.3 (6) | judges Gemini 4 Argon, Kimi K3.1 Pro, DeepSeek V4.1 Flash 1017, Qwen3.8 Max Prime, GLM-5.3; the simulated worker (Gemini 4 Argon) |
+| OpenAI credits | GPT-5.2, 5.5, 5.6 Sol, 6.1 Sol (4) | judge GPT-6 Astra |
+| OpenRouter (paid) | Kimi K2 Thinking, K3.1 Pro; DeepSeek V4.1 Flash 1017; GLM-5.1, 5.2, 5.3 (6) | judges Gemini 4 Argon, Kimi K3.1 Pro, DeepSeek V4.1 Flash 1017, GLM-5.3; the simulated worker (Gemini 4 Argon) |
 
 `workweek.config.load()` refuses duplicate names, unknown families, a model string without a provider prefix, a
 model without a release date, price or context window, judge weights that do not sum to 1, two judges from one
@@ -443,7 +450,7 @@ most of these tasks.
   live call; claims Monday 11:00-11:10, a live call and then the written offer): every model completed every sample.
   In the first, four models asked six questions (GPT-6.1 Sol, Claude Opus 5, DeepSeek V3.2 three, GLM-5); the
   simulated worker answered each from the worker's intents.
-- The claims sample, graded with all seven judges: 497 judge calls, no errors; 15 models caught each of the three
+- The claims sample, graded with seven judges (the six plus Qwen3.8 Max Prime): 497 judge calls, no errors; 15 models caught each of the three
   needs in the window (both call lines and the written offer); mean panel score 0.43 to 0.92 by model; token cost
   $0.003 to $0.50 a model for the 10 minutes.
 - Compaction runs end to end: with the window set to 30,000 tokens, budget analysts Monday 16:00 to Tuesday 08:30,
@@ -467,17 +474,18 @@ Neither model compacts during the day: the largest context is under a fifth of a
 which OpenAI's long-context price starts. Models with windows near 200k (Opus 4.5, GLM-4.7, GLM-5.1) or 131k
 (DeepSeek V3.2) compact on heavy days.
 
-One seed of the 20-model run (20 models x 55 profession-days) is about $19,000-22,000:
+One seed of the 20-model run (20 models x 55 profession-days) is about $16,000-19,000:
 
 - Tested models about $13,400: each model on its family's token profile (from the 27-model samples and a full-day
   pilot on budget analysts and operations managers), at its own prices, scaled to the current harness by the change
   measured on the same day (Claude x0.51, GPT x0.37; the other caching routes taken at about x0.45, up to x1.0 for
   the upper figure), with the two routes that do not cache (DeepSeek V3.2 on Azure, GLM-4.7 on Bedrock) at about
   x1.3 for the larger context. Claude is about $6,600 of it.
-- Judges about $5,900: about 33 proposals a profession-day (the current harness's mean on this day, 50-57, against
-  the trimmed pilot's 56-68, applied to the pilot's 38.6) at $0.16 a proposal.
-- By billing: Bedrock credits about $11,100, OpenAI credits $1,500, Azure credits $2,000, OpenRouter $4,700 (the only
-  cash; $3,200 of it judging). A batch of three professions is 3/11 of a seed.
+- Judges about $3,000: about 36,600 proposals (33 a profession-day) at about $0.08 each with the six judges, the
+  shared cached prefix and Astra called directly (Astra measured at $0.012 a proposal; Opus 5.5 about $0.033,
+  Gemini $0.020, Kimi $0.010, GLM-5.3 $0.005, DeepSeek $0.003).
+- By billing: Bedrock credits about $10,100, Azure credits $2,000, OpenAI credits $1,400, OpenRouter $2,900 (the
+  only cash; $1,400 of it judging). A batch of three professions is 3/11 of a seed: about $4,500, $800 of it cash.
 - The clock: about a quarter to a third of a day's input goes to ticks before 7:00 and after 18:00, when the worker
   is away and a model mostly waits.
 - Wall clock: a profession-day takes 39-97 minutes by model (DeepSeek on Azure is the slowest); the batch's slowest
