@@ -96,8 +96,9 @@ def main():
             ax.tick_params(labelsize=8)
             if key == "value":
                 ax.axhline(0, color="black", lw=0.6)
-            else:
-                ax.set_ylim(bottom=0)
+        if key != "value":      # once, after every panel is drawn: the panels share the axis
+            top = max(t[key] for t in table) * (100 if percent else 1)
+            axes[0].set_ylim(0, top * 1.08)
         axes[0].set_ylabel(ylabel)
         fig.tight_layout()
         fig.savefig(out / fname, dpi=160)
