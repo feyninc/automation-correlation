@@ -446,35 +446,39 @@ most of these tasks.
 - Compaction runs end to end: with the window set to 30,000 tokens, budget analysts Monday 16:00 to Tuesday 08:30,
   GPT-6.1 Sol compacts at midnight and at 04:55 and Claude Opus 4.8 at 19:35, midnight and 08:30; each summary
   request reads 95-98% of its input from the cache, and each checkpoint is about 10,000 tokens.
-- Running: the cost of a full day in the current harness (Claude Opus 4.8 and GPT-6.1 Sol, operations managers,
-  Monday 00:00-23:55, full windows; `logs/cost-check-ops-d1`).
 
 ### Cost
 
-A full day was measured with per-tick trimming of tool outputs older than six ticks (`logs/pilot-volume-d1`):
-Claude Opus 4.8, GPT-6.1 Sol and DeepSeek V4.1 Flash on budget analysts (the lightest week, 79 inbound items a day)
-and operations managers (the heaviest, 272), Monday 00:00-23:55.
+A full day in the current harness (`logs/cost-check-ops-d1`: operations managers, the heaviest week with 272 inbound
+items a day, Monday 00:00-23:55, full context windows), beside the same day with per-tick trimming of tool outputs
+older than six ticks (`logs/pilot-volume-d1`):
 
-| Model | Profession | Calls | Input (cache share) | Output | Proposals | Cost | Wall clock |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| Claude Opus 4.8 | budget analysts | 495 | 26.7M (91%) | 77k | 26 | $29.61 | 48 min |
-| Claude Opus 4.8 | operations managers | 636 | 46.7M (85%) | 100k | 56 | $64.88 | 60 min |
-| GPT-6.1 Sol | budget analysts | 445 | 11.0M (92%) | 16k | 26 | $2.90 | 24 min |
-| GPT-6.1 Sol | operations managers | 597 | 23.8M (84%) | 33k | 68 | $9.74 | 43 min |
-| DeepSeek V4.1 Flash | budget analysts | 501 | 28.9M (96%) | 91k | 17 | $1.30 | 53 min |
+| Model | Harness | Calls | Largest context | Input (from cache) | Cache writes | Proposals | Cost | Wall clock |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Claude Opus 4.8 | current | 635 | 177k | 59.3M (100%) | 0.18M ($1.11) | 50 | $33.24 | 40 min |
+| Claude Opus 4.8 | trimmed | 636 | 138k | 46.7M (85%) | 6.79M ($42.42) | 56 | $64.88 | 60 min |
+| GPT-6.1 Sol | current | 584 | 101k | 31.4M (100%) | 0.10M ($0.20) | 57 | $3.64 | 39 min |
+| GPT-6.1 Sol | trimmed | 597 | 76k | 23.8M (84%) | 3.70M ($7.40) | 68 | $9.74 | 43 min |
 
-On those token profiles (Claude on Opus 4.8's, each Claude model scaled by its cost relative to Opus 4.8 on the
-27-model samples; GPT on GPT-6.1 Sol's; the rest on DeepSeek's), at each model's own prices, with full input price on
-the routes that do not cache (DeepSeek V3.2 on Azure, GLM-4.7 on Bedrock), one seed of the 20-model run (20 models x
-55 profession-days) is about $30,000: tested models $23,400 (Claude $13,000, Opus 5 alone $5,900), judges $6,800
-(38.6 proposals a profession-day at $0.16). By billing: Bedrock credits about $18,000, OpenAI credits $3,200, Azure
-credits $2,000, OpenRouter $7,100 (the only cash; $3,700 of it judging). A batch of three professions is 3/11 of a
-seed. The current harness rewrites the cache only after a compaction, so its cost is expected to be lower; the
-running measurement replaces these figures.
+Neither model compacts during the day: the largest context is under a fifth of a 1M window and under the 272k at
+which OpenAI's long-context price starts. Models with windows near 200k (Opus 4.5, GLM-4.7, GLM-5.1) or 131k
+(DeepSeek V3.2) compact on heavy days.
 
-- The clock: 24-34% of a day's input tokens go to ticks before 7:00 and after 18:00, when the worker is away and a
-  model mostly waits.
-- Wall clock: a profession-day takes 24-97 minutes; the batch's slowest model sets its pace.
+One seed of the 20-model run (20 models x 55 profession-days) is about $19,000-22,000:
+
+- Tested models about $13,400: each model on its family's token profile (from the 27-model samples and a full-day
+  pilot on budget analysts and operations managers), at its own prices, scaled to the current harness by the change
+  measured on the same day (Claude x0.51, GPT x0.37; the other caching routes taken at about x0.45, up to x1.0 for
+  the upper figure), with the two routes that do not cache (DeepSeek V3.2 on Azure, GLM-4.7 on Bedrock) at about
+  x1.3 for the larger context. Claude is about $6,600 of it.
+- Judges about $5,900: about 33 proposals a profession-day (the current harness's mean on this day, 50-57, against
+  the trimmed pilot's 56-68, applied to the pilot's 38.6) at $0.16 a proposal.
+- By billing: Bedrock credits about $11,100, OpenAI credits $1,500, Azure credits $2,000, OpenRouter $4,700 (the only
+  cash; $3,200 of it judging). A batch of three professions is 3/11 of a seed.
+- The clock: about a quarter to a third of a day's input goes to ticks before 7:00 and after 18:00, when the worker
+  is away and a model mostly waits.
+- Wall clock: a profession-day takes 39-97 minutes by model (DeepSeek on Azure is the slowest); the batch's slowest
+  model sets its pace.
 
 ## 10. Open
 

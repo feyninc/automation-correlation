@@ -54,7 +54,7 @@ The full design is [`docs/design.md`](docs/design.md).
 ## Status
 
 All 11 weeks are written and compile with 0 audit errors; the engine, compaction and grader run end to end, and every
-model route passes a tool-call smoke test. Running: the cost of a full day in the current harness. Next: hand grades
+model route passes a tool-call smoke test. Next: hand grades
 for judge accuracy, then the full run in batches of three professions.
 
 ## Layout
