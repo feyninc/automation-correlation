@@ -16,6 +16,13 @@ week, the models' names hidden), under rules fixed before looking:
   one can join), the need is voided for every model (`void` in the source); where the intended reading is
   unambiguous (a queue address that is a person's), the grading accepts it (a contact alias).
 
+Two of customer service's voids were then replaced by adjustments (owner's call): where the window of a need
+opened minutes after the item it answers arrived, it opens when the item became visible (39 needs); and a line said
+on a call at the assistant's first chance after joining at the first tick after the call started counts as on time
+(`workweek.grade.call_grace`, applied only to runs without a tick at each call's start; 13 call lines). Call lines
+and traps on calls that were over before that first tick stay voided (158 needs, 99 minutes; 29 traps): no assistant
+could join them. From the second batch on, each call's start is a tick of its own.
+
 Low-confidence findings and fixes that would change the world are listed, not applied. The weeks that had not run
 yet were fixed in their sources before running instead.
 

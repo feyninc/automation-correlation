@@ -119,14 +119,30 @@ def call_timing(ep: Episode, p: dict, speed: tuple[float, float] | None) -> dict
             "on_time": latency + read_s <= patience, "on_time_streaming": latency + read_s <= speaking + patience}
 
 
-def outcomes(ep: Episode, props: list[checks.Prop], late: set[int] = frozenset()) -> tuple[
+def call_grace(ep: Episode, n, cadence_s: int) -> int | None:
+    """For a run without a tick at each call's start (the first three weeks), the latest time a line said on the call
+    still counts: the assistant's first chance to speak after joining at the first tick after the call started (the
+    caller's next turn, or the call's end). None when the line was reachable anyway, or the call was over by then."""
+    th = next((t for t in ep.threads if t.live and t.id in n.evidence), None)
+    if th is None or not th.exchanges:
+        return None
+    t1 = -(-seconds(th.exchanges[0].at) // cadence_s) * cadence_s
+    if t1 <= seconds(n.deadline) or th.call_end() < t1:
+        return None
+    nxt = [seconds(x.at) for x in th.exchanges if seconds(x.at) > t1 and not x.meta.get("case_note")]
+    return min(nxt) if nxt else th.call_end()
+
+
+def outcomes(ep: Episode, props: list[checks.Prop], late: set[int] = frozenset(), grace_s: int = 0) -> tuple[
         list[dict], list[dict], dict[int, list[str]], dict[int, list[str]]]:
     """Need outcomes, trap firings, the needs each proposal earns, and the needs each proposal matches.
 
     A need is earned by the last proposal that matches it inside its window: later versions supersede earlier ones,
     as the worker would send the latest. One proposal can earn several needs (docs/design.md, section 6). A line said
     on a call earns only call needs (it is not the letter or email a need asks for). A call line that would have
-    arrived too late (`late`) earns nothing; traps still match it, as they measure what was proposed.
+    arrived too late (`late`) earns nothing; traps still match it, as they measure what was proposed. With `grace_s`
+    (the cadence of a run that had no tick at each call's start), a line said at the first chance after joining the
+    call at the first tick counts as on time (`call_grace`).
     """
     earned: dict[int, list[str]] = {}
     matched: dict[int, list[str]] = {}
@@ -135,6 +151,8 @@ def outcomes(ep: Episode, props: list[checks.Prop], late: set[int] = frozenset()
         if n.void:                       # left out: the week as run made it impossible (docs/design.md, section 6)
             continue
         a, b = seconds(n.discoverable_at), seconds(n.deadline)
+        if grace_s and n.kind == "call_line":
+            b = call_grace(ep, n, grace_s) or b
         hits = [i for i, p in enumerate(props) if i not in late and a <= p.t <= b
                 and (p.action != "say" or n.kind == "call_line") and checks.matches(n.check, p) is not None]
         for i in hits:
@@ -571,7 +589,8 @@ async def grade_log(log, run: cfgmod.RunConfig, judges, gate) -> list[dict]:
         props = [to_prop(ep, idx, p) for p in props_raw]
         timing = [call_timing(ep, p, speed.get(spec.name) if spec else None) for p in props_raw]
         late = {i for i, tm in enumerate(timing) if tm and tm["on_time"] is False}
-        needs, traps, earned, matched = outcomes(ep, props, late)
+        grace = 0 if s.metadata.get("call_start_ticks") else int(run.run.cadence_minutes * 60)
+        needs, traps, earned, matched = outcomes(ep, props, late, grace)
         by_id = {n.id: n for n in ep.needs}
         u = (s.model_usage or {}).get(model_name)     # the tested model only, not the simulated worker
         # compaction is the harness's, not the model's: its tokens are not charged
