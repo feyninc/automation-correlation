@@ -104,7 +104,7 @@ class Sim:
         self.tick_index = 0
         self.first = ep.worker.name.split()[0]
         self.user_model: Model = get_model(run.user_model.model, config=GenerateConfig(**run.generate_for(run.user_model)),
-                                           **run.user_model.model_args)
+                                           **run.model_args_for(run.user_model))
 
     async def sync(self, t: int, new: list[Event]) -> None:
         sb = sandbox()
@@ -280,13 +280,22 @@ async def overnight(sim: Sim, model: Model, messages: list) -> None:
 async def replace(sim: Sim, model: Model, messages: list, fn) -> None:
     """Replace the conversation with fn's; its calls' tokens are tallied apart and not charged."""
     usage: list[dict] = []
-    for attempt in range(FILTER_ATTEMPTS):      # a summary call can meet a content filter too
+    filtered = failed = 0
+    while True:                                 # the summary call gets the same retries as any other call
         try:
             messages[:] = await fn(model, messages, TOOLS, usage)
             break
         except Exception as e:
-            if not providers.content_filtered(e) or attempt == FILTER_ATTEMPTS - 1:
-                raise
+            if providers.content_filtered(e):
+                filtered += 1
+                if filtered == FILTER_ATTEMPTS:
+                    raise
+            else:
+                failed += 1
+                if failed == CALL_ATTEMPTS:
+                    raise
+                sim.call_retries += 1
+                await asyncio.sleep(5 * 2 ** (failed - 1))
     sim.measured = None
     sim.compactions += 1
     tally = sim.compaction_usage.setdefault(str(model), {})

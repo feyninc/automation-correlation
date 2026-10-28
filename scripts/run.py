@@ -37,7 +37,7 @@ def main():
     specs = cfg.run_models() if a.models == "run" else [m for m in cfg.models if names is None or m.name in names]
     if names and len(specs) != len(names):
         raise SystemExit(f"unknown models: {names - {m.name for m in specs}}")
-    models = [get_model(m.model, config=GenerateConfig(**cfg.generate_for(m)), **m.model_args) for m in specs]
+    models = [get_model(m.model, config=GenerateConfig(**cfg.generate_for(m)), **cfg.model_args_for(m)) for m in specs]
     n_prof = len(list((ROOT / "professions").glob("*/episode"))) if a.professions == "all" else len(a.professions.split(","))
     logs = inspect_eval(workweek(professions=a.professions, start=a.start, end=a.end), model=models,
                         log_dir=a.log_dir, max_samples=a.max_samples or n_prof, max_tasks=a.max_models or len(models), max_sandboxes=a.max_sandboxes, display="none",

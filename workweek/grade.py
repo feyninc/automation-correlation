@@ -361,7 +361,7 @@ async def judge_all(run: cfgmod.RunConfig, judges, prompt: tuple[str, str]) -> d
                "max_connections": JUDGE_CONNECTIONS}
         if NO_BATCH:
             gen.pop("batch", None)
-        model = get_model(j.model, config=GenerateConfig(**gen), **j.model_args)
+        model = get_model(j.model, config=GenerateConfig(**gen), **run.model_args_for(j))
         last = {"error": "no attempt"}
         for attempt in range(JUDGE_ATTEMPTS):
             if attempt:

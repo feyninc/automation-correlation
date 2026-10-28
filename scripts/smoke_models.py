@@ -27,7 +27,7 @@ async def one(spec):
     row = {"name": spec.name, "model": spec.model, "tool_call": False, "final": "", "input": 0, "output": 0,
            "reasoning": "", "cache_read": "", "error": ""}
     try:
-        model = get_model(spec.model, config=GenerateConfig(**cfg.generate_for(spec)), **spec.model_args)
+        model = get_model(spec.model, config=GenerateConfig(**cfg.generate_for(spec)), **cfg.model_args_for(spec))
         msgs = [ChatMessageSystem(content="You are a careful assistant. Use tools when asked."),
                 ChatMessageUser(content="Use the add tool to add 2 and 3, then tell me the result in one word.")]
         out = await model.generate(msgs, tools=[ADD])

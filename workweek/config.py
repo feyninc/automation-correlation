@@ -160,6 +160,14 @@ class RunConfig(BaseModel):
     def spec(self, model: str) -> ModelSpec:
         return next(m for m in self.models if m.model == model)
 
+    def model_args_for(self, m: ModelSpec) -> dict[str, Any]:
+        """Provider arguments: Bedrock's client waits 60 s for a reply by default, less than a long reasoning reply
+        or an overnight summary takes, so Bedrock models wait up to 15 minutes."""
+        args = dict(m.model_args)
+        if m.model.startswith("bedrock/"):
+            args.setdefault("read_timeout", 900)
+        return args
+
     def generate_for(self, m: ModelSpec) -> dict[str, Any]:
         return {**self.defaults.get("generate", {}), **m.generate,
                 "max_tokens": self.run.max_output_tokens_per_call}
