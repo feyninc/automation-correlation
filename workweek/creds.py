@@ -17,3 +17,4 @@ def load() -> None:
     put("AZURE_BASE_URL", CONF / "azure-endpoint")
     put("AWS_BEARER_TOKEN_BEDROCK", CONF / "bedrock-token")   # or from the environment, if set there
     os.environ.setdefault("AWS_REGION", "us-east-1")
+    os.environ.setdefault("AWS_DEFAULT_REGION", os.environ["AWS_REGION"])   # the one botocore reads
