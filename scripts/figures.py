@@ -395,8 +395,7 @@ def main():
 
     # appendix: noticing against doing, and the pace in each profession
     fig, ax = figure("Newer models notice more of the work; how well they do it changes less",
-                     "Share of planned work each model attempted, against the share of what it attempted done well "
-                     "enough to send; mean over the professions")
+                     "Share of the planned work each model attempted, and how much of that it did well enough to send")
     for m in sorted({t["model"] for t in table}):
         ts = [t for t in table if t["model"] == m]
         dot(ax, mean(t["attempted"] * 100 for t in ts), mean(t["done_right"] * 100 for t in ts), LABS[ts[0]["lab"]][1])
