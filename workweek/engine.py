@@ -182,7 +182,8 @@ async def run_tool(sim: Sim, call, t: int) -> tuple[str, bool]:
         sim.note_reads(str(a.get("command", "")))
         t0 = time.monotonic()
         try:
-            r = await sandbox().exec(["bash", "-lc", str(a.get("command", ""))], user="assistant",
+            # a null byte cannot be passed to a process; the shell would stop at it anyway
+            r = await sandbox().exec(["bash", "-lc", str(a.get("command", "")).replace("\x00", "")], user="assistant",
                                      cwd="/home/assistant", timeout=60)
         except (TimeoutError, RuntimeError) as e:     # the model's own command: tell it, as a shell would
             sim.work["tool_s"] += time.monotonic() - t0
