@@ -678,13 +678,16 @@ def main():
     ap.add_argument("--no-batch", action="store_true", help="call batch-enabled judges directly (quick checks)")
     ap.add_argument("--professions", default="",
                     help="grade only these (comma-separated): shards that fill one judgements file each, merged later")
+    ap.add_argument("--judge-connections", type=int, default=0,
+                    help="open calls per judge (default JUDGE_CONNECTIONS); raise it when one judge is slow")
     ap.add_argument("--cached-only", action="store_true",
                     help="no judge calls: saved judgements only (a preliminary read while other graders run)")
     ap.add_argument("--watch", action="store_true",
                     help="grade each log as it finishes, until the batch's DONE file appears (scripts/batch.py)")
     a = ap.parse_args()
-    global NO_BATCH, JUDGED_FILE, CACHED_ONLY
+    global NO_BATCH, JUDGED_FILE, CACHED_ONLY, JUDGE_CONNECTIONS
     NO_BATCH, CACHED_ONLY = a.no_batch, a.cached_only
+    JUDGE_CONNECTIONS = a.judge_connections or JUDGE_CONNECTIONS
     creds.load()
     run = cfgmod.load(ROOT / "config/run.yaml")
     judges = [] if a.judges == "none" else [j for j in run.judges if a.judges == "all" or j.name in a.judges.split(",")]
