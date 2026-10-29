@@ -17,6 +17,11 @@
 - `occupations_screen.csv`: `scripts/screen_occupations.py` over O*NET 31.0: job zone, Work Context ratings
   (E-Mail, Face-to-Face, Telephone; 1-5), Working with Computers importance (1-5), task counts.
 - `shortlist.csv`: the 20 candidate occupations, banded by observed exposure, with the 11 chosen (`chosen` = 1).
+- `handgrades-2026-10-29.csv`: 100 rows graded by hand, blind to the model and the panel's score: 92 proposals that
+  do planned work, drawn by profession x panel-score band (under 35, 35-69, 70 and up) x lab from the final run, and
+  8 of them shown twice (`repeat_of`; the grader recognized the repeats, so they do not measure self-agreement).
+  Verdict (send as is, small edit, rewrite, don't send), minutes to fix, harmful, notes; `scripts/calibrate.py`
+  fits the panel to them.
 - `releases/`: each lab's release history (`<lab>.tsv`, from the labs' own announcements; `pre-window.tsv` for the
   models before 2026; `deepseek-updates.csv` for DeepSeek's dated checkpoints), merged by `scripts/timeline.py` into
   `releases/all.csv`. `models.csv` is the 27-model set it selects (every main-line model from the one in force on

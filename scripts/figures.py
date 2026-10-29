@@ -19,6 +19,7 @@ model did well enough to send unchanged: for each need earned by a proposal, its
 probability that the worker sends it unchanged; the sum over the week's planned minutes.
 """
 import csv
+import math
 import datetime as dt
 import json
 import sys
@@ -56,15 +57,36 @@ plt.rcParams.update({"font.family": ["Liberation Sans", "DejaVu Sans"], "font.si
                      "grid.linewidth": 0.8, "axes.axisbelow": True, "xtick.major.size": 0, "ytick.major.size": 0})
 
 
-def measures(row: dict, minutes: dict[str, float]) -> dict:
-    score = {i: (g["panel"].get("score") or 0) / 100 for i, g in enumerate(row["graded"])}   # needs name proposals by position
+def calibrated(cal: dict | None, which: str, s: float) -> float:
+    """The panel's score as a person's decision (scripts/calibrate.py: "as_is" or "use"); the raw score without it."""
+    if not cal:
+        return s
+    a, b = cal["curves"][which]
+    return 1 / (1 + math.exp(-(a + b * s)))
+
+
+def measures(row: dict, minutes: dict[str, float], cal: dict | None = None, wage: float = 0.0) -> dict:
+    raw = {i: (g["panel"].get("score") or 0) / 100 for i, g in enumerate(row["graded"])}   # needs name proposals by position
+    score = {i: calibrated(cal, "as_is", s) for i, s in raw.items()}
     planned = sum(minutes.get(n["need"], 0) for n in row["needs"]) or 1
     caught = [n for n in row["needs"] if n["caught"]]
     done = sum(minutes.get(n["need"], 0) * score.get(n["proposal"], 0) for n in caught)
     attempted = sum(minutes.get(n["need"], 0) for n in caught)
+    if cal:     # value as the hand grades decide: sent as is, used after a small edit (its fix time), or not used
+        value = 0.0
+        for i, g in enumerate(row["graded"]):
+            v = g["value"]
+            if v.get("suppressed"):
+                value += v["value_usd"]
+                continue
+            p_as, p_use = score[i], calibrated(cal, "use", raw[i])
+            saved = v["do_min"] * p_use - v["read_min"] - (p_use - p_as) * v["fix_min"] if v["do_min"] else -v["read_min"]
+            value += saved * wage / 60 - v["token_cost_usd_share"]
+    else:
+        value = sum(g["value"]["value_usd"] for g in row["graded"])
     return {"press_enter": done / planned, "attempted": attempted / planned,
             "done_right": done / attempted if attempted else 0.0,
-            "value": sum(g["value"]["value_usd"] for g in row["graded"]) - row.get("questions_cost_usd", 0),
+            "value": value - row.get("questions_cost_usd", 0),
             "cost": row.get("token_cost_usd") or 0, "traps": sum(t["fired"] for t in row["traps"]),
             "needs_caught": len(caught), "needs": len(row["needs"])}
 
@@ -241,15 +263,17 @@ def main():
     cfg = config.load(ROOT / "config/run.yaml")
     spec = {m.name: m for m in cfg.models}
     rows = [json.loads(line) for line in (res / "graded.jsonl").read_text().splitlines()]
-    minutes = {}
+    minutes, wages = {}, {}
     for prof in {r["profession"] for r in rows}:
         ep = load_episode(ROOT / "professions" / prof / "episode")
         minutes[prof] = {n.id: n.minutes.do for n in ep.needs}
+        wages[prof] = ep.economics.loaded_hourly
+    cal = json.loads((res / "calibration.json").read_text()) if (res / "calibration.json").exists() else None
     table = []
     for r in rows:
         m = spec[r["model"]]
         table.append({"model": m.name, "lab": m.family, "released": m.released, "profession": r["profession"],
-                      **measures(r, minutes[r["profession"]])})
+                      **measures(r, minutes[r["profession"]], cal, wages[r["profession"]])})
     with open(out / "table.csv", "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=list(table[0]))
         w.writeheader()

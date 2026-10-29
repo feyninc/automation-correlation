@@ -518,11 +518,24 @@ One seed of the 20-model run (20 models x 55 profession-days) is about $16,000-1
 - Wall clock: a profession-day takes 39-97 minutes by model (DeepSeek on Azure is the slowest); the batch's slowest
   model sets its pace.
 
+## 9b. Calibration to hand grades
+
+The panel's score is meant as the chance the worker sends a proposal unchanged. 92 proposals graded by hand
+(`data/handgrades-2026-10-29.csv`), drawn by profession x panel-score band x lab from the proposals that do planned
+work, show the panel ranks proposals much as a person does (rank correlation 0.66) but is too generous about
+sending unchanged (52% on average where the grader sent 27%). `scripts/calibrate.py` fits, with the sample's design
+weights, two logistic curves from the panel score to the grader's decision: "send as is" (the press-enter rate) and
+"use it" (as is or after a small edit). Net value then counts a proposal used after a small edit at its minutes
+less the fix time, and one that would be rewritten or not used at its reading time only. The script reports a test
+that the panel is not more generous to newer models (release date added to the curve), intervals from resampling
+the models and the hand grades together, and a prediction-powered estimate of the levels (Angelopoulos et al.
+2023) as a cross-check that does not rely on the curve's shape; `scripts/figures.py` uses the curves when
+`<results>/calibration.json` is present.
+
 ## 10. Open
 
 - Coverage: needs are 26-59% of the hours present (section 3); value is per benchmark week and the press-enter rate
   is over that work, not the whole job, unless scaled by task time shares.
 - ECI factor on 2026-10-30.
-- Hand grades (about 100 proposals) for judge accuracy; judge agreement on the full run; the friction (1.5) and
-  rewrite threshold (0.5) sensitivity.
+- The friction (1.5) and rewrite threshold (0.5) sensitivity.
 - How many seeds: `run.seeds` repeats each week (`scripts/run.py --seeds`); the run-to-run noise check sizes it.
