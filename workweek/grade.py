@@ -672,7 +672,7 @@ def finish(run: cfgmod.RunConfig, rows: list[dict], offsets: dict[str, float]) -
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("logs")
+    ap.add_argument("logs", nargs="+", help="one or more log directories, graded as one run (one set of judge offsets)")
     ap.add_argument("--judges", default="all")
     ap.add_argument("--out", default=None)
     ap.add_argument("--no-batch", action="store_true", help="call batch-enabled judges directly (quick checks)")
@@ -688,7 +688,7 @@ def main():
     creds.load()
     run = cfgmod.load(ROOT / "config/run.yaml")
     judges = [] if a.judges == "none" else [j for j in run.judges if a.judges == "all" or j.name in a.judges.split(",")]
-    out = Path(a.out or ROOT / "results" / Path(a.logs).name)
+    out = Path(a.out or ROOT / "results" / Path(a.logs[0]).name)
     out.mkdir(parents=True, exist_ok=True)
     saved = out / "judgements.jsonl"
     if saved.exists():
@@ -712,8 +712,8 @@ def main():
     async def watch():
         seen, tasks = set(), []
         while True:
-            finished = (Path(a.logs) / "DONE").exists()
-            for info in await asyncio.to_thread(list_eval_logs, a.logs):
+            finished = (Path(a.logs[0]) / "DONE").exists()
+            for info in await asyncio.to_thread(list_eval_logs, a.logs[0]):
                 if info.name in seen:
                     continue
                 head = await asyncio.to_thread(read_eval_log, info.name, header_only=True)
@@ -736,7 +736,7 @@ def main():
     if a.watch:
         rows = asyncio.run(watch())
     else:
-        logs = [read_eval_log(l.name) for l in list_eval_logs(a.logs)       # read before the event loop starts
+        logs = [read_eval_log(l.name) for d in a.logs for l in list_eval_logs(d)   # read before the event loop starts
                 if wanted(read_eval_log(l.name, header_only=True))]
         rows = asyncio.run(grade_all(logs))
     # a week run more than once (a rerun after an error) counts once: the one with the most ticks
