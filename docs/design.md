@@ -261,8 +261,10 @@ version of each document; a call's turns, then the worker's case note), plus `/w
    OpenRouter's week averages for 2026-10-20 to 2026-10-27, best provider, at the run's reasoning levels, read from
    the model pages (`run.speed_file`, `data/openrouter/speed-week-2026-10-20.csv`; `scripts/speed.py`
    snapshots the last 30 minutes per route as a cross-check, `speed-snapshot-2026-10-27.csv`), adds the worker
-   reading the line's first 10 words, and compares with the caller's patience (strict) or the caller's line plus
-   patience (streaming, as if the assistant heard the line as it was spoken: an upper bound). A late line is dropped
+   reading the line's first 10 words, and compares with the caller's line plus patience (streaming: the assistant
+   hears the line as it is spoken, as a live-call assistant with transcription does; this is the rule) or with the
+   caller's patience from the end of the line (strict, kept for sensitivity: under it reasoning models at 4-9 s lose
+   most call lines, so the measure becomes provider speed). A line late under the rule is dropped
    before the worker sees it, as any assistant would once the worker has started answering: it earns no need and
    costs nothing but its tokens (`value_if_shown` keeps what it would have cost if shown anyway, for sensitivity);
    traps still fire on it, since they measure what was proposed. Provider-neutral speeds rather than our own

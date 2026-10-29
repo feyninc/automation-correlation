@@ -101,7 +101,8 @@ def call_timing(ep: Episode, p: dict, speed: tuple[float, float] | None) -> dict
     """Would a line proposed on a call have reached the worker in time? Computed offline: the model's output tokens for
     the turn at its p50 speed, plus its tool time, plus the worker reading the line's first words, against the
     caller's patience (strict: from the end of the caller's line) and against the caller's line plus patience
-    (streaming: as if the assistant heard the line as it was spoken)."""
+    (streaming: as if the assistant heard the line as it was spoken, which is the rule; strict is kept for the
+    sensitivity analysis)."""
     w = p.get("work") or {}
     if p["action"] != "say" or not w.get("answers"):
         return None
@@ -589,7 +590,7 @@ async def grade_log(log, run: cfgmod.RunConfig, judges, gate) -> list[dict]:
         props_raw = s.metadata.get("proposals", [])
         props = [to_prop(ep, idx, p) for p in props_raw]
         timing = [call_timing(ep, p, speed.get(spec.name) if spec else None) for p in props_raw]
-        late = {i for i, tm in enumerate(timing) if tm and tm["on_time"] is False}
+        late = {i for i, tm in enumerate(timing) if tm and tm["on_time_streaming"] is False}   # as it was spoken
         grace = 0 if s.metadata.get("call_start_ticks") else int(run.run.cadence_minutes * 60)
         needs, traps, earned, matched = outcomes(ep, props, late, grace)
         by_id = {n.id: n for n in ep.needs}
@@ -657,7 +658,7 @@ def finish(run: cfgmod.RunConfig, rows: list[dict], offsets: dict[str, float]) -
             g["panel"] = panel(run, js, family, offsets) if js else {"score": None}
             j_for_value = {"score": g["panel"]["score"], "fixes": fixes(run, js, family)} if js else None
             g["value"] = value(ep, g["proposal"], j_for_value, gets, price, share, read_words)
-            if g.get("timing") and g["timing"]["on_time"] is False:
+            if g.get("timing") and g["timing"]["on_time_streaming"] is False:
                 # a late call line is dropped before the worker sees it, as any assistant would once the worker has
                 # started answering; what it would have cost if shown anyway is kept for the sensitivity analysis
                 g["value_if_shown"] = g["value"]
