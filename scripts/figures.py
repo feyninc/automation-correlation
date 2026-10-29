@@ -47,7 +47,6 @@ TITLES = {"claims-adjusters": "Claims adjusters", "accountants": "Accountants",
           "paralegals": "Paralegals", "market-research-analysts": "Market research analysts",
           "software-developers": "Software developers", "administrative-assistants": "Administrative assistants"}
 CALLOUTS = {"DeepSeek V4.1 Flash 1017", "GPT-6.1 Sol", "Claude Opus 5.5", "GPT-5.5"}   # named in the cost figure
-NEWEST = dt.date(2026, 9, 1)            # a lab's newest model: released on or after this date
 JAN1 = dt.date(2026, 1, 1)
 
 plt.rcParams.update({"font.family": ["Liberation Sans", "DejaVu Sans"], "font.size": 10,
@@ -265,7 +264,10 @@ def main():
         xs = list(xs)
         return sum(xs) / len(xs) if xs else 0.0
 
-    newest = [t for t in table if t["released"] >= NEWEST]
+    latest = {}                                       # each lab's newest model
+    for t in table:
+        latest[t["lab"]] = max(latest.get(t["lab"], t["released"]), t["released"])
+    newest = [t for t in table if t["released"] == latest[t["lab"]]]
     on_jan1 = {}
     for t in table:                                   # each lab's model in force on 1 January
         if t["released"] <= JAN1:
@@ -282,9 +284,9 @@ def main():
     fig, ax = figure("The rise shows up in every occupation",
                      "Best model in force on 1 January against the best model today, same week of work", (7.2, 4.8))
     best = lambda ts, p: max((t["press_enter"] * 100 for t in ts if t["profession"] == p), default=0)  # noqa: E731
-    order = sorted(profs, key=lambda p: best(newest, p))
+    order = sorted(profs, key=lambda p: best(table, p))   # today: every model released so far is available
     for i, p in enumerate(order):
-        a, b = best(jan, p), best(newest, p)
+        a, b = best(jan, p), best(table, p)
         ax.plot([a, b], [i, i], color=GRID, lw=2, zorder=1)
         dot(ax, a, i, MUTED)
         dot(ax, b, i, LABS["openai"][1])
@@ -293,7 +295,7 @@ def main():
     ax.set_yticks(range(len(order)), [TITLES.get(p, p) for p in order])
     ax.grid(axis="y", visible=False)
     pct(ax, "x")
-    ax.set_xlim(0, max(best(newest, p) for p in profs) + 10)
+    ax.set_xlim(0, max(best(table, p) for p in profs) + 10)
     save(fig, out / "professions.png", legend=[key(MUTED, "Best on 1 January"), key(LABS["openai"][1], "Best today")])
 
     # 3. capability against usage
@@ -314,7 +316,7 @@ def main():
     save(fig, out / "usage.png", labels=(ax, items))
 
     # 4. net value
-    fig, ax = figure("It pays where the work is substantial, and only breaks even on small tasks",
+    fig, ax = figure("It pays where the work is substantial, and costs money on small tasks",
                      "Newest models' mean net value per worker-week: time saved, less checking and fixing time and "
                      "compute", (7.2, 4.8))
     vals = {p: mean(t["value"] for t in newest if t["profession"] == p) for p in profs}
