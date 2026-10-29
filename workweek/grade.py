@@ -564,6 +564,7 @@ class LiveGate:
 FAILED: list[dict] = []         # weeks that ended in an error, left out of the results
 JUDGED: dict[str, dict] = {}    # saved judgements by proposal key (<out>/judgements.jsonl), so a restart pays nothing twice
 JUDGED_FILE = None
+CACHED_ONLY = False             # --cached-only: grade from saved judgements alone; unjudged proposals get no score
 
 
 def judged_key(s, p: dict, prompt: tuple[str, str]) -> str:
@@ -617,6 +618,8 @@ async def grade_log(log, run: cfgmod.RunConfig, judges, gate) -> list[dict]:
             key = judged_key(s, p, prompt)
             if key in JUDGED:
                 js = JUDGED[key]
+            elif CACHED_ONLY:                # a preliminary read while other graders are still judging: no new calls
+                js = {}
             else:
                 async with gate:
                     js = await judge_all(run, judges, prompt) if judges else {}
@@ -674,11 +677,13 @@ def main():
     ap.add_argument("--no-batch", action="store_true", help="call batch-enabled judges directly (quick checks)")
     ap.add_argument("--professions", default="",
                     help="grade only these (comma-separated): shards that fill one judgements file each, merged later")
+    ap.add_argument("--cached-only", action="store_true",
+                    help="no judge calls: saved judgements only (a preliminary read while other graders run)")
     ap.add_argument("--watch", action="store_true",
                     help="grade each log as it finishes, until the batch's DONE file appears (scripts/batch.py)")
     a = ap.parse_args()
-    global NO_BATCH, JUDGED_FILE
-    NO_BATCH = a.no_batch
+    global NO_BATCH, JUDGED_FILE, CACHED_ONLY
+    NO_BATCH, CACHED_ONLY = a.no_batch, a.cached_only
     creds.load()
     run = cfgmod.load(ROOT / "config/run.yaml")
     judges = [] if a.judges == "none" else [j for j in run.judges if a.judges == "all" or j.name in a.judges.split(",")]
