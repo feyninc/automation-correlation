@@ -64,7 +64,7 @@ for judge accuracy, then the full run in batches of three professions.
 | `professions/<name>/` | one week: `overview.md` (start here), `week.yaml`, `day1.yaml`..`day5.yaml` and `day1b.yaml`..`day5b.yaml` (the forms), `episode/` and `report.md` (compiled) |
 | `workweek/` | schema, compiler and audit, the world, the engine (Inspect AI task), checks, grader, config, provider patches, sandbox image |
 | `config/run.yaml` | models, routes, prices, context windows, judges, the simulated worker, run settings (cadence, compaction, snapshot dates) |
-| `scripts/` | `run.py`, `batch.py`, `calibrate.py`, `figures.py`, `smoke_models.py`, `probe_reasoning.py`, `speed.py`, `timeline.py`, `screen_occupations.py` |
+| `scripts/` | `run.py`, `batch.py`, `calibrate.py`, `economics.py`, `figures.py`, `smoke_models.py`, `probe_reasoning.py`, `speed.py`, `timeline.py`, `screen_occupations.py` |
 | `data/` | O*NET, Economic Index, wages, ECEC, ECI, release timelines, probe outputs; see `data/README.md` |
 | `docs/` | `design.md`, `grading-audit.md` (every check changed or need voided in the first three weeks), the model timeline chart |
 
@@ -82,4 +82,5 @@ Credentials live outside the repository (`~/.config/automation-correlation/`).
         --log-dir logs/batch-1                                                # the 20 run models, a full week
     uv run python -m workweek.grade logs/try                                 # grade it into results/
     uv run python scripts/calibrate.py results/final data/handgrades-2026-10-29.csv   # the panel to the hand grades
+    uv run python scripts/economics.py results/final                         # Acemoglu's inputs, measured; tasks vs use
     uv run python scripts/figures.py results/final                           # the figures (calibrated if it ran)

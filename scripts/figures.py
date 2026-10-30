@@ -11,8 +11,10 @@ behind every figure). Main figures:
 - value.png: net value per worker-week of the newest models, by profession;
 - cost.png: compute per worker-week against the press-enter rate, closed and open-weight models;
 - harm.png: harmful proposals per week against the press-enter rate.
-Appendix: noticing.png (share of planned work attempted against the share of it done well) and one pace chart per
-profession (pace-<profession>.png).
+With <results>/economics.json (scripts/economics.py): savings.png (net labor-cost saving by job, the models of 1
+January against the newest) and tasks.png (the newest models' press-enter rate on each O*NET task, by whether the
+Economic Index observes AI use on it). Appendix: noticing.png (share of planned work attempted against the share of it
+done well) and one pace chart per profession (pace-<profession>.png).
 
 Press-enter rate: the share of the week's planned work, weighted by the minutes each need takes the worker, that the
 model did well enough to send unchanged: for each need earned by a proposal, its minutes times the panel's
@@ -407,7 +409,67 @@ def main():
     for p in profs:
         pace(out, table, f"pace-{p}.png", TITLES.get(p, p),
              "Share of the week's planned work done unasked, sendable as is, by release date", prof=p)
+    if (res / "economics.json").exists():          # scripts/economics.py
+        econ = json.loads((res / "economics.json").read_text())
+        savings(out, econ)
+        tasks_use(out, econ)
     print("wrote", sorted(x.name for x in out.iterdir()))
+
+
+def savings(out: Path, econ: dict):
+    """Net labor-cost saving by job, the models of 1 January against the newest, and the employment-weighted total."""
+    fig, ax = figure("The saving went from nothing to an eighth of these jobs' labor cost",
+                     "Net saving as a share of the worker's labor cost, after checking and compute; if fully adopted",
+                     (7.2, 5.0))
+    jobs = sorted(econ["newest"]["jobs"], key=lambda p: econ["newest"]["jobs"][p]["saving"])
+    rows = [(TITLES.get(p, p), econ["jan1"]["jobs"][p]["saving"] * 100, econ["newest"]["jobs"][p]["saving"] * 100)
+            for p in jobs]
+    rows.insert(0, ("All eight, by employment", econ["jan1"]["weighted"]["saving"] * 100,
+                    econ["newest"]["weighted"]["saving"] * 100))
+    for i, (name, a, b) in enumerate(rows):
+        ax.plot([a, b], [i, i], color=GRID, lw=2, zorder=1)
+        dot(ax, a, i, MUTED)
+        dot(ax, b, i, LABS["openai"][1])
+        ax.annotate(f"{b:.0f}%", (b, i), xytext=(8 if b >= a else -8, 0), textcoords="offset points", va="center",
+                    ha="left" if b >= a else "right", fontsize=8.5, color=INK_2, fontweight="bold" if i == 0 else None)
+    ax.axvline(0, color=INK_2, lw=0.8)
+    ax.set_yticks(range(len(rows)), [r[0] for r in rows])
+    ax.get_yticklabels()[0].set_fontweight("bold")
+    ax.grid(axis="y", visible=False)
+    pct(ax, "x")
+    save(fig, out / "savings.png", legend=[key(MUTED, "Models of 1 January"), key(LABS["openai"][1], "Newest models")])
+
+
+def tasks_use(out: Path, econ: dict):
+    """Each O*NET task in the weeks: the newest models' press-enter rate on it, by whether the Economic Index sees AI
+    used on it; dot size is the task's planned minutes, the bar each group's minute-weighted mean."""
+    import random
+    rows = [t for t in econ["tasks"]["rows"] if t["usage"] is not None]
+    groups = [("No observed AI use", [t for t in rows if t["usage"] == 0]),
+              ("Observed AI use", [t for t in rows if t["usage"] > 0])]
+    fig, ax = figure("AI does as much of the work no one uses it for",
+                     "Newest models' share of each O*NET task's planned work sent as is; dot size is the task's minutes",
+                     (7.2, 4.6))
+    rng = random.Random(7)
+    top = max(t["press_enter"] for t in rows) * 100
+    for gi, (name, ts) in enumerate(groups):
+        xs = [gi + rng.uniform(-0.28, 0.28) for _ in ts]
+        sizes = [12 + 260 * (t["minutes"] / max(r["minutes"] for r in rows)) ** 0.5 for t in ts]
+        ax.scatter(xs, [t["press_enter"] * 100 for t in ts], s=sizes, color=LABS["openai"][1], alpha=0.35,
+                   edgecolors=SURFACE, linewidths=1, zorder=2)
+        m = sum(t["press_enter"] * t["minutes"] for t in ts) / sum(t["minutes"] for t in ts) * 100
+        ax.plot([gi - 0.36, gi + 0.36], [m, m], color=INK, lw=2.4, zorder=3)
+        ax.annotate(f"{m:.0f}%", (gi + 0.36, m), xytext=(6, 0), textcoords="offset points", va="center",
+                    fontsize=9, color=INK, fontweight="bold")
+        mins = sum(t["minutes"] for t in ts)
+        groups[gi] = (f"{name}\n{len(ts)} tasks, {100 * mins / sum(r['minutes'] for r in rows):.0f}% of the minutes", ts)
+    ax.set_xticks([0, 1], [g[0] for g in groups])
+    ax.set_xlim(-0.6, 1.75)
+    ax.set_ylim(0, top * 1.08 + 2)
+    ax.grid(axis="x", visible=False)
+    pct(ax)
+    ax.set_ylabel("sent as is")
+    save(fig, out / "tasks.png")
 
 
 if __name__ == "__main__":
