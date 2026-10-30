@@ -7,7 +7,7 @@ behind every figure). Each figure's title states its one finding; its subtitle s
 
 The style is the Feyn website's charts (feyn/website, the Pulpie article's charts and the design tokens in
 src/styles/global.css): a raised-paper card in a 1px ink frame; a header (Archivo title, Lora subtitle, mono key)
-and a footer (the source) set off by hairline rules; uppercase IBM Plex Mono for axis titles, keys and panel names;
+and a footer (the source) set off by hairline rules; IBM Plex Mono, in sentence case, for axis titles, keys and panel names;
 warm-ink gridlines at 12%; orange for the measure the chart is about. A lab keeps its own brand color everywhere.
 
 Over time, the charts use four dates: each lab's model in force on 1 January, 30 April and 31 July, and its newest
@@ -90,6 +90,7 @@ def measures(row: dict, minutes: dict[str, float], cal: dict | None = None, wage
     planned = sum(minutes.get(n["need"], 0) for n in row["needs"]) or 1
     caught = [n for n in row["needs"] if n["caught"]]
     done = sum(minutes.get(n["need"], 0) * score.get(n["proposal"], 0) for n in caught)
+    usable = sum(minutes.get(n["need"], 0) * calibrated(cal, "use", raw.get(n["proposal"], 0)) for n in caught)
     attempted = sum(minutes.get(n["need"], 0) for n in caught)
     if cal:     # value as the hand grades decide: sent as is, used after a small edit (its fix time), or not used
         value = 0.0
@@ -103,7 +104,7 @@ def measures(row: dict, minutes: dict[str, float], cal: dict | None = None, wage
             value += saved * wage / 60 - v["token_cost_usd_share"]
     else:
         value = sum(g["value"]["value_usd"] for g in row["graded"])
-    return {"press_enter": done / planned, "attempted": attempted / planned,
+    return {"press_enter": done / planned, "usable": usable / planned, "attempted": attempted / planned,
             "done_right": done / attempted if attempted else 0.0,
             "value": value - row.get("questions_cost_usd", 0),
             "cost": row.get("token_cost_usd") or 0, "traps": sum(t["fired"] for t in row["traps"]),
@@ -119,9 +120,12 @@ def figure(title: str, subtitle: str, size=(7.2, 4.6), ncols=1, nrows=1, source:
     fig, axes = plt.subplots(nrows, ncols, figsize=size, sharey=nrows * ncols > 1)
     px = 0.26 / w
     y = 1 - 0.26 / h
-    fig.text(px, y, title, fontfamily=[SANS] + FALLBACK, fontweight=700, fontsize=13.5, color=INK, va="top")
+    t = fig.text(px, y, title, fontfamily=[SANS] + FALLBACK, fontweight=700, fontsize=13.5, color=INK, va="top")
+    r = fig.canvas.get_renderer()
+    while t.get_window_extent(r).width > fig.bbox.width * (1 - 2 * px) and t.get_fontsize() > 10:
+        t.set_fontsize(t.get_fontsize() - 0.25)                       # a long title shrinks rather than overflow
     lines = textwrap.wrap(subtitle, int(w * 13.5))
-    y -= 0.36 / h
+    y -= t.get_window_extent(r).height / fig.bbox.height + 0.14 / h       # the subtitle sits under the title as set
     fig.text(px, y, "\n".join(lines), fontfamily=[SERIF] + FALLBACK, fontsize=9.5, color=BODY, va="top",
              linespacing=1.4)
     fig._px, fig._head = px, y - (0.19 * len(lines) + 0.06) / h
@@ -156,11 +160,11 @@ def save(fig, path: Path, legend=None, labels=None):
 
 
 def key(color, label, marker="o"):
-    return Line2D([], [], color=color, lw=0, marker=marker, markersize=6.5, markeredgecolor=color, label=label.upper())
+    return Line2D([], [], color=color, lw=0, marker=marker, markersize=6.5, markeredgecolor=color, label=label)
 
 
 def line_key(color, label, **kw):
-    return Line2D([], [], color=color, label=label.upper(), **kw)
+    return Line2D([], [], color=color, label=label, **kw)
 
 
 def style(ax, cats: str | None = None):
@@ -180,13 +184,13 @@ def style(ax, cats: str | None = None):
 def axis_title(ax, x: str | None = None, y: str | None = None):
     kw = {"fontfamily": [MONO] + FALLBACK, "fontsize": 7.5, "color": SOFT}
     if x:
-        ax.set_xlabel(x.upper(), labelpad=8, **kw)
+        ax.set_xlabel(x[0].upper() + x[1:], labelpad=8, **kw)
     if y:
-        ax.set_ylabel(y.upper(), labelpad=8, **kw)
+        ax.set_ylabel(y[0].upper() + y[1:], labelpad=8, **kw)
 
 
 def panel_title(ax, text: str):
-    ax.set_title(text.upper(), loc="left", fontfamily=[MONO_M] + FALLBACK, fontweight=500, fontsize=7.5, color=INK, pad=8)
+    ax.set_title(text, loc="left", fontfamily=[MONO_M] + FALLBACK, fontweight=500, fontsize=7.5, color=INK, pad=8)
 
 
 def value_label(ax, x, y, text, big=False, color=INK, below=False):
@@ -259,8 +263,8 @@ def per_model(table: list[dict]) -> dict[str, dict]:
     out = {}
     for m in sorted({t["model"] for t in table}):
         ts = [t for t in table if t["model"] == m]
-        row = {k: sum(t[k] for t in ts) / len(ts) for k in ("press_enter", "attempted", "done_right", "value", "cost",
-                                                            "traps", "hours_done")}
+        row = {k: sum(t[k] for t in ts) / len(ts) for k in ("press_enter", "usable", "attempted", "done_right", "value",
+                                                            "cost", "traps", "hours_done")}
         row.update(lab=ts[0]["lab"], released=ts[0]["released"])
         row["cost_per_hour"] = row["cost"] / row["hours_done"] if row["hours_done"] else float("nan")
         out[m] = row
@@ -393,13 +397,13 @@ def main():
         return sum(models[m]["cost"] for m in ms) / sum(models[m]["hours_done"] for m in ms)
     wage = mean(wages.values())
     hours = [per_hour(at(i)) for i in range(len(SNAPSHOTS))]
-    fig, ax = figure(f"An hour of finished work now takes ${hours[-1]:.0f} of compute, down from ${hours[0]:.0f}",
-                     "Compute per hour of work sent as is, the five labs' models on each date")
+    fig, ax = figure(f"An hour of finished work now costs ${hours[-1]:.0f} in inference, down from ${hours[0]:.0f}",
+                     "Inference cost per hour of work sent as is, the five labs' models on each date")
     ax.bar(range(4), hours, 0.56, color=ORANGE, zorder=2)
     for i, y in enumerate(hours):
         value_label(ax, i, y, f"${y:,.0f}", big=True)
     ax.axhline(wage, color=SOFT, lw=0.9, ls=(0, (4, 3)), zorder=1.5)
-    ax.annotate(f"the worker's own hour, ${wage:.0f}".upper(), (1, wage), xycoords=("axes fraction", "data"),
+    ax.annotate(f"The worker's own hour, ${wage:.0f}", (1, wage), xycoords=("axes fraction", "data"),
                 xytext=(0, 5), textcoords="offset points", ha="right", va="bottom", fontfamily=[MONO] + FALLBACK,
                 fontsize=7.5, color=SOFT)
     ax.yaxis.set_major_formatter(matplotlib.ticker.FuncFormatter(lambda v, _: f"${v:,.0f}"))
@@ -411,16 +415,16 @@ def main():
     # 3. what it is worth: on each date, then by job
     a, b = group_mean(jan, "value"), group_mean(newest, "value")
     fig, axes = figure(f"The help is now worth {money(round(b, -1))} a worker-week, up from "
-                       f"{'nothing' if abs(a) < 50 else money(a)}",
-                       "Net value per worker-week after checking and compute, by the model in force on each date",
+                       + (f"a {money(-a)} loss in January" if a < 0 else f"{money(a)} in January"),
+                       "Net value per worker-week after checking time and inference cost, on each date",
                        (7.2, 5.4), ncols=3, nrows=2)
     lab_panels(axes, models, snap, lambda r: r["value"], money)
     for ax in axes.flat:
         ax.yaxis.set_major_formatter(matplotlib.ticker.FuncFormatter(lambda v, _: money(v)))
     save(fig, out / "value.png")
 
-    fig, ax = figure("The newest models pay most where tasks are large",
-                     "Net value per worker-week, mean of the five labs' models", (7.2, 5.0))
+    fig, ax = figure("Net value follows task size",
+                     "Net value per worker-week by job, mean of the five labs' models", (7.2, 5.0))
     vals = {p: (mean(t["value"] for t in jan if t["profession"] == p), mean(t["value"] for t in newest
                                                                              if t["profession"] == p)) for p in profs}
     order = sorted(profs, key=lambda p: vals[p][1])
@@ -431,42 +435,56 @@ def main():
     ax.get_yticklabels()[-1].set_fontweight(700)
     save(fig, out / "value-jobs.png", legend=[key(FAINT, "Models of 1 January"), key(ORANGE, "Newest models")])
 
-    # 4. noticing against quality: what the models attempted, and inside it what was sent as is
+    # 4. noticing against quality: what the models attempted, split by what the worker would do with it
     att = [mean(models[m]["attempted"] * 100 for m in at(i)) for i in range(len(SNAPSHOTS))]
+    use = [mean(models[m]["usable"] * 100 for m in at(i)) for i in range(len(SNAPSHOTS))]
     done = [mean(models[m]["press_enter"] * 100 for m in at(i)) for i in range(len(SNAPSHOTS))]
-    right = [mean(models[m]["done_right"] * 100 for m in at(i)) for i in range(len(SNAPSHOTS))]
     fig, ax = figure("Newer models attempt twice as much of the week, and do it a little better",
                      "Share of the week's work, mean of the five labs' models on each date", (7.2, 4.8))
+    edit = "#e3a27a"                                   # between the tint and the orange
     for i in range(len(SNAPSHOTS)):
-        ax.bar(i, att[i], 0.56, color=TINT, zorder=2)
-        ax.bar(i, done[i], 0.56, color=ORANGE, zorder=2.2)
-        value_label(ax, i, att[i], f"{att[i]:.0f}%", big=True)
-        value_label(ax, i, done[i], f"{done[i]:.0f}%", big=True, color=ORANGE)
-    date_axis(ax, [f"{d}\n{r:.0f}% of attempts sendable" for d, r in zip(SNAPSHOTS, right)])
+        ax.bar(i, att[i], 0.5, color=TINT, zorder=2)
+        ax.bar(i, use[i], 0.5, color=edit, zorder=2.1)
+        ax.bar(i, done[i], 0.5, color=ORANGE, zorder=2.2)
+        value_label(ax, i, att[i], f"{att[i]:.0f}% attempted", big=True)
+        for lo, hi, color in ((0, done[i], ORANGE), (done[i], use[i], "#b8693c"), (use[i], att[i], SOFT)):
+            ax.annotate(f"{hi - lo:.0f}%", (i + 0.25, (lo + hi) / 2), xytext=(6, 0), textcoords="offset points",
+                        va="center", fontfamily=[MONO_M] + FALLBACK, fontweight=500, fontsize=8, color=color)
+    date_axis(ax, SNAPSHOTS)
     style(ax, cats="x")
     pct(ax)
     ax.set_ylim(0, max(att) * 1.15)
-    save(fig, out / "noticing.png", legend=[key(TINT, "Attempted", "s"), key(ORANGE, "Sent as is", "s")])
+    save(fig, out / "noticing.png", legend=[key(ORANGE, "Sent as is", "s"), key(edit, "Sent after a small edit", "s"),
+                                            key(TINT, "Attempted, not usable", "s")])
 
-    # 5. every occupation: the best model then and now; today's named
+    # 5. every occupation: the best model then and now, each named beside its number
     fig, ax = figure("In every job, the best model today does more than January's best",
-                     "Share of the week's work sent as is, best model then and now", (7.2, 5.3))
+                     "Share of the week's work sent as is, best model then and now", (7.2, 5.0))
     best = lambda ts, p: max((t for t in ts if t["profession"] == p), key=lambda t: t["press_enter"])  # noqa: E731
     order = sorted(profs, key=lambda p: best(table, p)["press_enter"])
-    dumbbell(ax, [(TITLES.get(p, p), best(jan, p)["press_enter"] * 100, best(table, p)["press_enter"] * 100)
-                  for p in order], pct0, bold_last=False)
     for i, p in enumerate(order):
-        t = best(table, p)
-        ax.annotate(t["model"], (t["press_enter"] * 100, i), xytext=(0, 7), textcoords="offset points",
-                    ha="center", va="bottom", fontsize=7.5, color=BODY)
-    jan_best = sorted({best(jan, p)["model"] for p in profs})
+        j, t = best(jan, p), best(table, p)
+        a_, b_ = j["press_enter"] * 100, t["press_enter"] * 100
+        ax.plot([a_, b_], [i, i], color=HAIR, lw=2.2, zorder=1, solid_capstyle="butt")
+        dot(ax, a_, i, FAINT)
+        dot(ax, b_, i, ORANGE)
+        ax.annotate(f"{a_:.0f}%", (a_, i), xytext=(-8, 0), textcoords="offset points", va="center", ha="right",
+                    fontfamily=[MONO] + FALLBACK, fontsize=7.5, color=SOFT)
+        ax.annotate(j["model"], (a_, i), xytext=(-34, 0), textcoords="offset points", va="center", ha="right",
+                    fontsize=8, color=SOFT)
+        ax.annotate(f"{b_:.0f}%", (b_, i), xytext=(8, 0), textcoords="offset points", va="center", ha="left",
+                    fontfamily=[MONO_M] + FALLBACK, fontweight=500, fontsize=8.5, color=INK)
+        ax.annotate(t["model"], (b_, i), xytext=(36, 0), textcoords="offset points", va="center", ha="left",
+                    fontsize=8, color=BODY)
+    ax.set_yticks(range(len(order)), [TITLES.get(p, p) for p in order])
+    ax.grid(axis="y", visible=False)
+    ax.spines["left"].set_visible(False)
     pct(ax, "x")
-    ax.set_xlim(0, max(best(table, p)["press_enter"] for p in profs) * 100 + 8)
-    ax.set_ylim(-0.6, len(order) - 0.3)
+    lo = min(best(jan, p)["press_enter"] for p in profs) * 100
+    ax.set_xlim(lo - 14, max(best(table, p)["press_enter"] for p in profs) * 100 + 16)
+    ax.set_xticks([x for x in range(0, 50, 10) if x >= ax.get_xlim()[0]])
     style(ax, cats="y")
-    jan_label = (f"Best on 1 January ({jan_best[0]} in every job)" if len(jan_best) == 1
-                 else "Best on 1 January (" + ", ".join(jan_best) + ")")
-    save(fig, out / "professions.png", legend=[key(FAINT, jan_label), key(ORANGE, "Best today, named")])
+    save(fig, out / "professions.png", legend=[key(FAINT, "Best on 1 January"), key(ORANGE, "Best today")])
 
     # 6. capability against use, by job
     fig, ax = figure("AI can do a similar share of each job, however much it is used there",
@@ -539,8 +557,8 @@ def acemoglu(out: Path, econ: dict):
     as he assumed them and as measured here with the newest models, with 90% intervals."""
     a = econ["acemoglu"]
     n = econ["newest"]
-    fig, ax = figure("Both numbers behind the leading productivity estimate are larger here",
-                     "Assumed for the US economy against measured in eight jobs, with 90% intervals", (7.2, 4.6),
+    fig, ax = figure("LLMs can take on more work, and cut more of its labor cost, than assumed",
+                     "Acemoglu's 2024 assumptions for the US economy, against our measures in eight jobs", (7.2, 4.6),
                      source="Assumed: Acemoglu, \"The Simple Macroeconomics of AI\", NBER working paper 32487 (2024), "
                             "pages 6 and 30.")
     groups = [("Share of work AI takes on", a["share_of_tasks"], n["weighted"]["affected"],
@@ -564,7 +582,7 @@ def acemoglu(out: Path, econ: dict):
     ax.set_ylim(0, 80)
     style(ax, cats="x")
     save(fig, out / "acemoglu.png", legend=[key(FAINT, "Assumed in the estimate", "s"),
-                                            key(ORANGE, "Measured in these eight jobs", "s")])
+                                            key(ORANGE, "Measured here, newest models, 90% interval", "s")])
 
 
 def tasks_use(out: Path, econ: dict):
