@@ -13,7 +13,7 @@ warm-ink gridlines at 12%; orange for the measure the chart is about. A lab keep
 Over time, the charts use four dates: each lab's model in force on 1 January, 30 April and 31 July, and its newest
 (config/run.yaml takes four models from each lab that way):
 - pace.png: the press-enter rate, the five labs' mean and each lab on its own, as small multiples on one scale;
-- cost.png: compute per hour of work sent as is, the five labs together, against the worker's own hour;
+- cost.png: inference cost per finished hour, the five labs together, against the cost of a labor hour;
 - value.png: net value per worker-week, as pace.png;
 - noticing.png: the share of planned work attempted, with the share sent as is inside it;
 - pace-jobs.png (appendix): the five labs' mean press-enter rate in each job.
@@ -64,9 +64,10 @@ TITLES = {"claims-adjusters": "Claims adjusters", "accountants": "Accountants",
           "customer-service-representatives": "Customer service reps", "operations-managers": "Operations managers",
           "paralegals": "Paralegals", "market-research-analysts": "Market research analysts",
           "software-developers": "Software developers", "administrative-assistants": "Administrative assistants"}
-SNAPSHOTS = ["1 January", "30 April", "31 July", "Today"]      # each lab's model in force on each date (run.yaml)
-SHORT = ["1 Jan", "30 Apr", "31 Jul", "Today"]
+SNAPSHOTS = ["1st January", "30th April", "31st July", "Latest"]      # each lab's model in force on each date (run.yaml)
+SHORT = ["1st\nJan", "30th\nApr", "31st\nJul", "Latest"]
 JAN1 = dt.date(2026, 1, 1)
+CAPTIONS = "--captions" in sys.argv       # no title or subtitle in the image: the document's caption carries them
 
 plt.rcParams.update({"font.family": [SANS] + FALLBACK, "font.size": 9, "text.parse_math": False,
                      "figure.facecolor": RAISED, "savefig.facecolor": RAISED, "axes.facecolor": RAISED,
@@ -113,19 +114,29 @@ def measures(row: dict, minutes: dict[str, float], cal: dict | None = None, wage
 
 # --- the card: header, footer, frame -------------------------------------------------------------------------------
 
-def figure(title: str, subtitle: str, size=(7.2, 4.6), ncols=1, nrows=1, source: str | None = None):
+def figure(title: str, subtitle: str, size=(7.2, 4.6), ncols=1, nrows=1, source: str | None = None,
+           sharey: bool | None = None):
     """A chart card: the title states the finding, the subtitle says in a line what is plotted; the source, when the
     data is someone else's, sits in a footer. The key and the header's rule are added by save()."""
     w, h = size
-    fig, axes = plt.subplots(nrows, ncols, figsize=size, sharey=nrows * ncols > 1)
+    if CAPTIONS:
+        h -= 0.75                                     # the header's height, which the caption replaces
+    fig, axes = plt.subplots(nrows, ncols, figsize=(w, h), sharey=nrows * ncols > 1 if sharey is None else sharey)
     px = 0.26 / w
     y = 1 - 0.26 / h
+    fig._captioned = CAPTIONS
+    if CAPTIONS:
+        title, subtitle = "", ""
     t = fig.text(px, y, title, fontfamily=[SANS] + FALLBACK, fontweight=700, fontsize=13.5, color=INK, va="top")
     r = fig.canvas.get_renderer()
     while t.get_window_extent(r).width > fig.bbox.width * (1 - 2 * px) and t.get_fontsize() > 10:
         t.set_fontsize(t.get_fontsize() - 0.25)                       # a long title shrinks rather than overflow
     lines = textwrap.wrap(subtitle, int(w * 13.5))
-    y -= t.get_window_extent(r).height / fig.bbox.height + 0.14 / h       # the subtitle sits under the title as set
+    if CAPTIONS:
+        lines = []
+        y = 1 - 0.14 / h
+    else:
+        y -= t.get_window_extent(r).height / fig.bbox.height + 0.14 / h   # the subtitle sits under the title as set
     fig.text(px, y, "\n".join(lines), fontfamily=[SERIF] + FALLBACK, fontsize=9.5, color=BODY, va="top",
              linespacing=1.4)
     fig._px, fig._head = px, y - (0.19 * len(lines) + 0.06) / h
@@ -140,7 +151,7 @@ def figure(title: str, subtitle: str, size=(7.2, 4.6), ncols=1, nrows=1, source:
     return fig, axes
 
 
-def save(fig, path: Path, legend=None, labels=None):
+def save(fig, path: Path, legend=None, labels=None, dpi=320):
     h = fig.get_size_inches()[1]
     top = fig._head
     if legend:      # the key under the subtitle: the marks' row, then any line's
@@ -151,11 +162,12 @@ def save(fig, path: Path, legend=None, labels=None):
                        handlelength=1.3, handletextpad=0.6, columnspacing=1.8, borderaxespad=0)
             top -= 0.22 / h
     rule = top - (0.08 if legend else 0.02) / h
-    fig.add_artist(Line2D([0, 1], [rule, rule], transform=fig.transFigure, color=HAIR, lw=0.8))
+    if not (fig._captioned and not legend):           # a rule under the header or the key, if there is one
+        fig.add_artist(Line2D([0, 1], [rule, rule], transform=fig.transFigure, color=HAIR, lw=0.8))
     fig.tight_layout(rect=(0.015, fig._foot, 0.985, rule - 0.1 / h))
     if labels:      # after the layout is final, so the free spots are measured where they will be
         place(fig, *labels)
-    fig.savefig(path, dpi=220)
+    fig.savefig(path, dpi=dpi)
     plt.close(fig)
 
 
@@ -331,7 +343,7 @@ def dumbbell(ax, rows, fmt, bold_last=True):
 
 def main():
     res = Path(sys.argv[1])
-    out = res / "figures"
+    out = res / "figures" / "captioned" if CAPTIONS else res / "figures"
     out.mkdir(parents=True, exist_ok=True)
     for old in ["savings.png"] + [p.name for p in out.glob("pace-*.png") if p.name != "pace-jobs.png"]:
         (out / old).unlink(missing_ok=True)            # replaced: a figure no longer drawn is not left behind
@@ -403,7 +415,7 @@ def main():
     for i, y in enumerate(hours):
         value_label(ax, i, y, f"${y:,.0f}", big=True)
     ax.axhline(wage, color=SOFT, lw=0.9, ls=(0, (4, 3)), zorder=1.5)
-    ax.annotate(f"The worker's own hour, ${wage:.0f}", (1, wage), xycoords=("axes fraction", "data"),
+    ax.annotate(f"A labor hour, ${wage:.0f}", (1, wage), xycoords=("axes fraction", "data"),
                 xytext=(0, 5), textcoords="offset points", ha="right", va="bottom", fontfamily=[MONO] + FALLBACK,
                 fontsize=7.5, color=SOFT)
     ax.yaxis.set_major_formatter(matplotlib.ticker.FuncFormatter(lambda v, _: f"${v:,.0f}"))
@@ -433,7 +445,7 @@ def main():
     ax.xaxis.set_major_formatter(matplotlib.ticker.FuncFormatter(lambda v, _: money(v)))
     style(ax, cats="y")
     ax.get_yticklabels()[-1].set_fontweight(700)
-    save(fig, out / "value-jobs.png", legend=[key(FAINT, "Models of 1 January"), key(ORANGE, "Newest models")])
+    save(fig, out / "value-jobs.png", legend=[key(FAINT, "Models of 1st January"), key(ORANGE, "Latest models")])
 
     # 4. noticing against quality: what the models attempted, split by what the worker would do with it
     att = [mean(models[m]["attempted"] * 100 for m in at(i)) for i in range(len(SNAPSHOTS))]
@@ -454,7 +466,7 @@ def main():
     style(ax, cats="x")
     pct(ax)
     ax.set_ylim(0, max(att) * 1.15)
-    save(fig, out / "noticing.png", legend=[key(ORANGE, "Sent as is", "s"), key(edit, "Sent after a small edit", "s"),
+    save(fig, out / "noticing.png", legend=[key(ORANGE, "Accepted unchanged", "s"), key(edit, "Accepted after a small edit", "s"),
                                             key(TINT, "Attempted, not usable", "s")])
 
     # 5. every occupation: the best model then and now, each named beside its number
@@ -484,11 +496,11 @@ def main():
     ax.set_xlim(lo - 14, max(best(table, p)["press_enter"] for p in profs) * 100 + 16)
     ax.set_xticks([x for x in range(0, 50, 10) if x >= ax.get_xlim()[0]])
     style(ax, cats="y")
-    save(fig, out / "professions.png", legend=[key(FAINT, "Best on 1 January"), key(ORANGE, "Best today")])
+    save(fig, out / "professions.png", legend=[key(FAINT, "Best on 1st January"), key(ORANGE, "Best today")])
 
     # 6. capability against use, by job
     fig, ax = figure("AI can do a similar share of each job, however much it is used there",
-                     "Each dot is a job; newest models, mean of the five labs",
+                     "Each dot is a job; latest models, mean of the five labs",
                      source="Observed AI use: observed exposure, Massenkoff and McCrory, Anthropic, 2026.")
     items = []
     for p in profs:
@@ -503,28 +515,23 @@ def main():
     style(ax)
     save(fig, out / "usage.png", labels=(ax, items))
 
-    # 7. harm: each lab's newest model is named, and the extremes on either axis
-    import numpy as np
-    fig, ax = figure("Models that do more of the week set off fewer traps, not more",
-                     "Each dot is a model; named: each lab's newest, and the extremes")
-    named = {t["model"] for t in newest}
-    named |= {max(models, key=lambda m: models[m]["traps"]), max(models, key=lambda m: models[m]["press_enter"]),
-              min(models, key=lambda m: models[m]["press_enter"])}
-    items = []
-    for m, r in models.items():
-        dot(ax, r["press_enter"] * 100, r["traps"], LABS[r["lab"]][1])
-        if m in named:
-            items.append((r["press_enter"] * 100, r["traps"], m))
-    xs = np.array([r["press_enter"] * 100 for r in models.values()])   # the trend across models, least squares
-    k, c = np.polyfit(xs, [r["traps"] for r in models.values()], 1)
-    ax.plot([xs.min(), xs.max()], [k * xs.min() + c, k * xs.max() + c], color=SOFT, lw=0.9, ls=(0, (5, 3)), zorder=1.5)
-    pct(ax, "x")
-    axis_title(ax, "share of the week done unasked", "harmful proposals per week")
-    ax.set_ylim(-0.45, max(r["traps"] for r in models.values()) * 1.12)
-    ax.set_yticks([0, 0.5, 1, 1.5, 2, 2.5])
-    style(ax)
-    save(fig, out / "harm.png", legend=[key(c, n) for n, c in LABS.values()]
-         + [line_key(SOFT, "Trend across the 20 models", lw=0.9, ls=(0, (5, 3)))], labels=(ax, items))
+    # 7. harm on the four dates: the share of the week done beside the harmful proposals a week
+    fig, (ax1, ax2) = figure("Models that do more of the week now set off fewer traps",
+                             "Mean of the five labs' models on each date", (7.2, 4.2), ncols=2,
+                             sharey=False)
+    done = [mean(models[m]["press_enter"] * 100 for m in at(i)) for i in range(len(SNAPSHOTS))]
+    harm = [mean(models[m]["traps"] for m in at(i)) for i in range(len(SNAPSHOTS))]
+    for ax, ys, fmt, t in ((ax1, done, pct0, "Share of the week done unasked"),
+                           (ax2, harm, lambda v: f"{v:.2f}", "Harmful proposals a week")):
+        ax.bar(range(4), ys, 0.58, color=ORANGE if ax is ax1 else INK, zorder=2)
+        for i, y in enumerate(ys):
+            value_label(ax, i, y, fmt(y), big=True)
+        panel_title(ax, t)
+        date_axis(ax)
+        style(ax)
+        ax.set_ylim(0, max(ys) * 1.2)
+    pct(ax1)
+    save(fig, out / "harm.png")
 
     # appendix: the pace in every job, the five labs' mean on each date
     fig, axes = figure("The rise shows up in every job",
@@ -559,11 +566,10 @@ def acemoglu(out: Path, econ: dict):
     n = econ["newest"]
     fig, ax = figure("LLMs can take on more work, and cut more of its labor cost, than assumed",
                      "Acemoglu's 2024 assumptions for the US economy, against our measures in eight jobs", (7.2, 4.6),
-                     source="Assumed: Acemoglu, \"The Simple Macroeconomics of AI\", NBER working paper 32487 (2024), "
-                            "pages 6 and 30.")
-    groups = [("Share of work AI takes on", a["share_of_tasks"], n["weighted"]["affected"],
+                     source="Assumed: Acemoglu, \"The Simple Macroeconomics of AI\", NBER working paper 32487 (2024).")
+    groups = [("Share of all labor hours AI takes on", a["share_of_tasks"], n["weighted"]["affected"],
                n["weighted_90"]["affected"]),
-              ("Cost saving on that work", a["labor_cost_saving_on_them"], n["per_affected"],
+              ("Net saving on those hours", a["labor_cost_saving_on_them"], n["per_affected"],
                n["weighted_90"]["per_affected"])]
     w = 0.32
     for i, (name, assumed, measured, (lo, hi)) in enumerate(groups):
@@ -582,7 +588,7 @@ def acemoglu(out: Path, econ: dict):
     ax.set_ylim(0, 80)
     style(ax, cats="x")
     save(fig, out / "acemoglu.png", legend=[key(FAINT, "Assumed in the estimate", "s"),
-                                            key(ORANGE, "Measured here, newest models, 90% interval", "s")])
+                                            key(ORANGE, "Measured here, latest models, 90% interval", "s")])
 
 
 def tasks_use(out: Path, econ: dict):
@@ -593,9 +599,8 @@ def tasks_use(out: Path, econ: dict):
     groups = [("No recorded AI use", [t for t in rows if t["usage"] == 0]),
               ("Some recorded AI use", [t for t in rows if t["usage"] > 0])]
     fig, ax = figure("AI does as much on tasks with no recorded AI use as on tasks with some",
-                     "Each dot is an O*NET task, sized by its minutes; newest models", (7.2, 5.0),
-                     source="Recorded AI use: the Anthropic Economic Index, which maps Claude conversations to O*NET "
-                            "tasks.")
+                     "Each dot is an O*NET task, sized by its minutes; latest models", (7.2, 5.0),
+                     source="Recorded AI use: the Anthropic Economic Index.")
     rng = random.Random(7)
     top = max(t["press_enter"] for t in rows) * 100
     for gi, (name, ts) in enumerate(groups):
@@ -613,7 +618,7 @@ def tasks_use(out: Path, econ: dict):
     ax.set_ylim(0, top * 1.08 + 2)
     ax.grid(axis="x", visible=False)
     pct(ax)
-    axis_title(ax, y="share sent as is")
+    axis_title(ax, y="share accepted unchanged")
     style(ax, cats="x")
     save(fig, out / "tasks.png")
 
