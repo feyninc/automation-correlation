@@ -7,6 +7,10 @@
   task, from the same release (only 1,354 of its 17,998 tasks have any usage above 0). `aei/wage_data.csv` is the
   2025-02-10 release's wage table; its salaries are older and patchy (none for computer occupations), so wages come
   from BLS OEWS instead. See `aei/README.md`.
+- `eloundou/full_labelset.tsv`: Eloundou, Manning, Mishkin and Rock's task labels ("GPTs are GPTs", Science 2024),
+  from github.com/openai/GPTs-are-GPTs at commit 0471612f (`data/full_labelset.tsv`, MIT, `eloundou/LICENSE`).
+  `scripts/economics.py` applies Acemoglu's exposure rule to it (a task is exposed when its `automation` index is
+  above 0.5) for the run's jobs.
 - `wages-onetonline-2026-10-26.csv`: BLS OEWS May 2025 medians (released 2026-05-15, the newest OEWS) and the
   2025-35 projections, read from O*NET OnLine's summary pages, saved in `onetonline/` (bls.gov refuses scripted
   requests, so the figures come through O*NET OnLine).
