@@ -40,6 +40,13 @@ BOOT = 1000
 EXPOSED_US, PROFITABLE = 0.199, 0.23    # Acemoglu's two factors of his 4.6%: Eloundou et al. x Svanberg et al. (p. 24)
 
 
+# O*NET 31.0 task statements the Economic Index holds under their older wording, too far apart for the fuzzy match
+RENAMED = {
+    "23994": "Prepare legal documents, including briefs, pleadings, appeals, wills, contracts, and real estate closing "
+             "statements.",   # 31.0 adds "edit, or review" and "legislation"
+}
+
+
 def sig(b, s):
     return 1 / (1 + np.exp(-(b[0] + b[1] * s)))
 
@@ -84,7 +91,7 @@ def main():
     pen_keys = list(pen)
 
     def usage(task_id):
-        t = statements.get(str(task_id))
+        t = RENAMED.get(str(task_id)) or statements.get(str(task_id))
         if not t:
             return None
         k = norm(t)
@@ -361,7 +368,7 @@ def post(res: Path, cal: dict, econ: dict, weeks: list[dict], eps: dict, bill: d
                      "share_accepted_unchanged_latest_models", "ai_use_recorded", "economic_index_usage"])
         for t in econ["tasks"]["rows"]:
             wr.writerow([t["job"], t["task_id"], t["statement"], t["minutes"], round(t["press_enter"], 4),
-                         "yes" if t["usage"] else "no", t["usage"]])
+                         "unknown" if t["usage"] is None else "yes" if t["usage"] else "no", t["usage"]])
 
     c, j = cal, econ["jan1"]
     pct = lambda v: f"{v * 100:.1f}%"  # noqa: E731
