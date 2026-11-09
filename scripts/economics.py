@@ -278,7 +278,8 @@ def eloundou_exposed(socs: dict[str, str]) -> tuple[dict[str, float], float]:
 def post(res: Path, cal: dict, econ: dict, weeks: list[dict], eps: dict, bill: dict, b_as, measure) -> None:
     """Every number the write-up quotes that the other outputs do not hold, in <results>/post/: post.json (the five
     labs' means on the four dates, the within-lab pace with each lab left out, the halving time of inference cost per
-    finished hour, the worked example, late call lines, Acemoglu's rule on the run's jobs), workweek-tasks.csv (the
+    finished hour, the worked example, late call lines, Acemoglu's rule on the run's jobs, the press-enter rate with
+    every piece of work counted once, the panel's rank correlation with the hand grades), workweek-tasks.csv (the
     task scatter) and intervals.md (the headline intervals)."""
     out = res / "post"
     out.mkdir(exist_ok=True)
@@ -293,7 +294,9 @@ def post(res: Path, cal: dict, econ: dict, weeks: list[dict], eps: dict, bill: d
         per[w["model"]].append({**x, "attempted": att, "finished_h": x["press_enter"] * w["planned"] / 60,
                                 "usable": x["affected"] * eps[w["profession"]]["present_min"] / max(w["planned"], 1e-9),
                                 "cost": w["cost_usd"], "read_h": w["read"].sum() / 60, "proposals": w["proposals"],
-                                "fired": w["fired"], "trap_share": w["fired"] / max(w["traps"], 1)})
+                                "fired": w["fired"], "trap_share": w["fired"] / max(w["traps"], 1),
+                                # robustness: every piece of planned work counted once, not by its minutes
+                                "press_enter_equal": float(sig(b_as, w["caught_s"]).sum()) / max(len(w["need_ids"]), 1)})
     models = {m: {k: float(np.mean([x[k] for x in v])) for k in v[0]} for m, v in per.items()}
     for m, v in per.items():
         models[m]["proposals_range"] = [min(x["proposals"] for x in v), max(x["proposals"] for x in v)]
@@ -303,8 +306,8 @@ def post(res: Path, cal: dict, econ: dict, weeks: list[dict], eps: dict, bill: d
         ms = [models[m] for m in models if rank[m] == i]
         mean = lambda k: float(np.mean([x[k] for x in ms]))  # noqa: E731
         dates.append({"models": sorted(m for m in models if rank[m] == i),
-                      **{k: mean(k) for k in ("press_enter", "usable", "attempted", "value", "finished_h", "cost",
-                                              "read_h", "fired", "trap_share")},
+                      **{k: mean(k) for k in ("press_enter", "press_enter_equal", "usable", "attempted", "value",
+                                              "finished_h", "cost", "read_h", "fired", "trap_share")},
                       "quality": mean("press_enter") / mean("attempted"),
                       "cost_per_finished_h": sum(x["cost"] for x in ms) / sum(x["finished_h"] for x in ms)})
 
@@ -321,6 +324,21 @@ def post(res: Path, cal: dict, econ: dict, weeks: list[dict], eps: dict, bill: d
     first = {m: next(w for w in weeks if w["model"] == m) for m in models}
     X = np.array([[years(first[m])] + [first[m]["lab"] == lab for lab in labs] for m in models], float)
     slope = np.linalg.lstsq(X, np.log([models[m]["cost_per_finished_h"] for m in models]), rcond=None)[0][0]
+
+    # how the panel ranks the hand-graded proposals against the person: Spearman's rho of the panel score and the
+    # verdict (do not use < rewrite < small edit < send as is), each distinct proposal once, ties at their mean rank
+    order = {"Don't send": 0, "Rewrite": 1, "Small edit": 2, "Send as is": 3}
+    hg = [h for h in csv.DictReader(open(ROOT / cal["hand_grades"])) if not h["repeat_of"]]
+
+    def ranks(a):
+        a = np.asarray(a, float)
+        r = np.empty(len(a))
+        r[a.argsort(kind="stable")] = np.arange(len(a))
+        for v in np.unique(a):
+            r[a == v] = r[a == v].mean()
+        return r
+    rho = float(np.corrcoef(ranks([float(h["panel_score"]) for h in hg]),
+                            ranks([order[h["verdict"]] for h in hg]))[0, 1])
 
     # Claude Opus 5.5 in the claims adjuster's week, piece by piece
     w = next(w for w in weeks if w["model"] == "Claude Opus 5.5" and w["profession"] == "claims-adjusters")
@@ -359,7 +377,8 @@ def post(res: Path, cal: dict, econ: dict, weeks: list[dict], eps: dict, bill: d
                            "finished_minutes": float(sum(x["finished_minutes"] for x in example))},
                "late_call_lines": {**{m: 1 - float(np.mean(v)) for m, v in calls.items()},
                                    "pooled": 1 - float(np.mean([x for v in calls.values() for x in v]))},
-               "acemoglu_same_jobs": acem}
+               "acemoglu_same_jobs": acem,
+               "hand_grades": {"n": len(hg), "spearman_panel_vs_verdict": rho}}
     (out / "post.json").write_text(json.dumps(summary, indent=1, default=float) + "\n")
 
     with open(out / "workweek-tasks.csv", "w", newline="") as f:
@@ -398,7 +417,7 @@ def post(res: Path, cal: dict, econ: dict, weeks: list[dict], eps: dict, bill: d
               f"| Hand-graded calibration | n = {c['n']} distinct proposals | release-date term "
               f"{c['release_date_term']['log_odds_per_year']} log-odds a year {c['release_date_term']['interval_90']} |"]
     (out / "intervals.md").write_text("\n".join(lines) + "\n")
-    print(json.dumps({"dates": [{k: d[k] for k in d if k != "models"} for d in dates],
+    print(json.dumps({"dates": [{k: d[k] for k in d if k != "models"} for d in dates], "spearman": rho,
                       "pace_without_lab": summary["pace_without_lab"],
                       "halving_months": summary["cost_per_finished_h_halving_months"],
                       "late_call_lines": summary["late_call_lines"], "acemoglu_same_jobs": acem}, indent=1, default=float))
