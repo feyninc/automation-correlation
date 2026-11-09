@@ -3,6 +3,9 @@
 How much of a real job's ordinary work can an AI assistant do without being asked, well enough that the worker only
 has to press enter, and how fast is that share growing as models improve?
 
+The write-up is [Press Enter: Can AI Do Work Unasked?](https://usefeyn.com/blog/press-enter/). The run's results are
+[feyninc/press-enter](https://huggingface.co/datasets/feyninc/press-enter) on Hugging Face.
+
 ## Why this question
 
 Most benchmarks hand a model a task and score the answer. Real work does not arrive as tasks: it arrives as an inbox,
@@ -23,7 +26,9 @@ and with time?
 The full design is [`docs/design.md`](docs/design.md).
 
 - **Occupations.** 11 O*NET 31.0 occupations whose work runs through email, chat, calls and documents, spread across
-  observed exposure from 0.07 (budget analysts) to 0.70 (customer service representatives). Wages are BLS OEWS May
+  observed exposure from 0.07 (budget analysts) to 0.70 (customer service representatives). 8 were run, from 0.08
+  (claims adjusters) to 0.70; budget analysts, event planners and public relations specialists are written but were
+  not run. Wages are BLS OEWS May
   2025 medians, loaded with BLS ECEC (June 2026) and aged with the Employment Cost Index.
 - **Weeks.** For each occupation, one working week (Monday 2026-11-02 to Friday 11-06) at a fictional employer with
   real rules, regulators and software, built from primary sources: 84 to 554 needs (1,922 in all, 13,598 minutes of
@@ -53,9 +58,9 @@ The full design is [`docs/design.md`](docs/design.md).
 
 ## Status
 
-All 11 weeks are written and compile with 0 audit errors; the engine, compaction and grader run end to end, and every
-model route passes a tool-call smoke test. Next: hand grades
-for judge accuracy, then the full run in batches of three professions.
+The run is complete: 8 weeks x 20 models, 160 graded weeks, calibrated to 92 hand-graded proposals. All 11 weeks
+compile with 0 audit errors. Every number in the write-up comes from `scripts/calibrate.py` and
+`scripts/economics.py` (its `results/<run>/post/`), except the run-to-run noise check.
 
 ## Layout
 
@@ -81,6 +86,12 @@ Credentials live outside the repository (`~/.config/automation-correlation/`).
     uv run python scripts/run.py --professions claims-adjusters,paralegals,accountants \
         --log-dir logs/batch-1                                                # the 20 run models, a full week
     uv run python -m workweek.grade logs/try                                 # grade it into results/
+    hf download feyninc/press-enter --repo-type dataset --local-dir results/final   # the run's results
     uv run python scripts/calibrate.py results/final data/handgrades-2026-10-29.csv   # the panel to the hand grades
-    uv run python scripts/economics.py results/final                         # Acemoglu's inputs, measured; tasks vs use
+    uv run python scripts/economics.py results/final                         # every other number in the write-up
     uv run python scripts/figures.py results/final                           # the figures (calibrated if it ran)
+
+## License
+
+The code is MIT (`LICENSE`). The weeks, the hand grades and the results are CC BY 4.0 (`LICENSE-DATA`). Third-party
+data under `data/` keeps its own terms.
