@@ -260,7 +260,7 @@ def main():
                           "jobs": {p: {kk: round(vv, 3) for kk, vv in j.items() if kk != "value"} for p, j in v["jobs"].items()}}
                       for k, v in s.items()}, indent=1))
     print(json.dumps({k: v for k, v in out["tasks"].items() if k != "rows"}, indent=1))
-    post(res, cal, out, weeks, eps, bill, b_as, lambda w: week_measures(w, b_as, b_use))
+    post(res, cal, out, weeks, eps, bill, b_as, lambda w: week_measures(w, b_as, b_use), (x, y_as, y_use, wt))
 
 
 def eloundou_exposed(socs: dict[str, str]) -> tuple[dict[str, float], float]:
@@ -275,7 +275,8 @@ def eloundou_exposed(socs: dict[str, str]) -> tuple[dict[str, float], float]:
     return share, float(np.mean([np.mean(v) for k, v in by.items() if k.endswith(".00")]))
 
 
-def post(res: Path, cal: dict, econ: dict, weeks: list[dict], eps: dict, bill: dict, b_as, measure) -> None:
+def post(res: Path, cal: dict, econ: dict, weeks: list[dict], eps: dict, bill: dict, b_as, measure,
+         graded: tuple) -> None:
     """Every number the write-up quotes that the other outputs do not hold, in <results>/post/: post.json (the five
     labs' means on the four dates, the within-lab pace with each lab left out, the halving time of inference cost per
     finished hour, the worked example, late call lines, Acemoglu's rule on the run's jobs, the press-enter rate with
@@ -340,6 +341,18 @@ def post(res: Path, cal: dict, econ: dict, weeks: list[dict], eps: dict, bill: d
     rho = float(np.corrcoef(ranks([float(h["panel_score"]) for h in hg]),
                             ranks([order[h["verdict"]] for h in hg]))[0, 1])
 
+    # the calibration figure: each curve over the hand grades, as the design-weighted share accepted in each band of
+    # 20 points of panel score (the last band includes 100), with the number of hand grades in it
+    gx, g_as, g_use, gw = graded
+    bins = []
+    for lo in range(0, 100, 20):
+        m = (gx * 100 >= lo) & ((gx * 100 < lo + 20) | (lo == 80))
+        if m.any():
+            share = lambda y: float((y[m] * gw[m]).sum() / gw[m].sum())  # noqa: E731
+            bins.append({"from": lo, "to": lo + 20, "n": int(m.sum()), "score": share(gx) * 100,
+                         "unchanged": share(g_as), "usable": share(g_use)})
+    calibration = {"curves": cal["curves"], "form": cal["curve_form"], "bins": bins}
+
     # Claude Opus 5.5 in the claims adjuster's week, piece by piece
     w = next(w for w in weeks if w["model"] == "Claude Opus 5.5" and w["profession"] == "claims-adjusters")
     chance = dict(zip(w["caught_ids"], sig(b_as, w["caught_s"])))
@@ -378,7 +391,7 @@ def post(res: Path, cal: dict, econ: dict, weeks: list[dict], eps: dict, bill: d
                "late_call_lines": {**{m: 1 - float(np.mean(v)) for m, v in calls.items()},
                                    "pooled": 1 - float(np.mean([x for v in calls.values() for x in v]))},
                "acemoglu_same_jobs": acem,
-               "hand_grades": {"n": len(hg), "spearman_panel_vs_verdict": rho}}
+               "hand_grades": {"n": len(hg), "spearman_panel_vs_verdict": rho}, "calibration": calibration}
     (out / "post.json").write_text(json.dumps(summary, indent=1, default=float) + "\n")
 
     with open(out / "workweek-tasks.csv", "w", newline="") as f:
